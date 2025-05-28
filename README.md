@@ -20,17 +20,20 @@ A modern web application built with Next.js 15, featuring the App Router, Tailwi
 ## 🛠️ Installation
 
 1. Clone the repository:
+
 ```bash
 git clone <repository-url>
 cd bazar-booking-web
 ```
 
 2. Install dependencies:
+
 ```bash
 pnpm install
 ```
 
 3. Run the development server:
+
 ```bash
 pnpm dev
 ```
@@ -39,62 +42,13 @@ Open [http://localhost:3000](http://localhost:3000) in your browser to see the a
 
 ## 📝 Available Scripts
 
-| Command | Description |
-|---------|-------------|
-| `pnpm dev` | Start development server with Turbopack |
-| `pnpm build` | Build the application for production |
-| `pnpm start` | Start the production server |
-| `pnpm lint` | Run ESLint to check code quality |
-| `pnpm format` | Format code using Prettier |
-
-## 🎨 UI Components with shadcn/ui
-
-This project uses shadcn/ui for consistent and accessible UI components. 
-
-### Adding New Components
-
-To add a new shadcn/ui component to your project:
-
-```bash
-# Add a specific component (e.g., button)
-npx shadcn@latest add button
-
-# Add multiple components at once
-npx shadcn@latest add button card dialog
-
-# Add all available components
-npx shadcn@latest add --all
-```
-
-### Popular Components Commands
-
-```bash
-# Essential UI components
-npx shadcn@latest add button
-npx shadcn@latest add input
-npx shadcn@latest add card
-npx shadcn@latest add dialog
-npx shadcn@latest add form
-npx shadcn@latest add toast
-npx shadcn@latest add dropdown-menu
-npx shadcn@latest add navigation-menu
-npx shadcn@latest add sheet
-npx shadcn@latest add table
-npx shadcn@latest add tabs
-npx shadcn@latest add select
-npx shadcn@latest add checkbox
-npx shadcn@latest add radio-group
-npx shadcn@latest add textarea
-npx shadcn@latest add label
-npx shadcn@latest add badge
-npx shadcn@latest add avatar
-npx shadcn@latest add separator
-npx shadcn@latest add skeleton
-npx shadcn@latest add alert
-npx shadcn@latest add progress
-```
-
-All components will be added to the `components/ui` directory and are fully customizable.
+| Command       | Description                             |
+| ------------- | --------------------------------------- |
+| `pnpm dev`    | Start development server with Turbopack |
+| `pnpm build`  | Build the application for production    |
+| `pnpm start`  | Start the production server             |
+| `pnpm lint`   | Run ESLint to check code quality        |
+| `pnpm format` | Format code using Prettier              |
 
 ## 📁 Project Structure
 
@@ -105,7 +59,7 @@ bazar-booking-web/
 │   ├── layout.tsx         # Root layout
 │   └── page.tsx           # Home page
 ├── components/            # React components
-│   └── ui/               # shadcn/ui components
+│   └── ui/
 ├── lib/                  # Utility functions
 ├── public/               # Static assets
 ├── styles/               # Additional stylesheets
@@ -135,6 +89,7 @@ pnpm build
 ```
 
 Or deploy to other platforms like:
+
 - [Netlify](https://www.netlify.com/)
 - [Railway](https://railway.app/)
 - [DigitalOcean App Platform](https://www.digitalocean.com/products/app-platform/)
