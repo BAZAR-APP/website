@@ -52,9 +52,22 @@
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
-  --primary: red;
+  --primary: #19191A;
+  --secondary: #484A4C;
+  --primary-blue: #29397E;
+  --white: #ffffff;
+  --cream-white: #FDFDFE;
+  --green: #059669;
+  --yellow-light: #FBBF24;
+  --yellow-dark: #FFCC00;
+  --light-gray: #FFFBEB00;
+  --gray: #8E8E93;
+  --gray-100: #F3F4F6;
+  --gray-900: #101828;
+  --text-disabled: #9EA0A2;
+  --black: #000000;
+
   --primary-foreground: #FDFDFE;
-  --secondary: oklch(0.97 0 0);
   --secondary-foreground: oklch(0.205 0 0);
   --muted: oklch(0.97 0 0);
   --muted-foreground: oklch(0.556 0 0);
@@ -117,6 +130,7 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
