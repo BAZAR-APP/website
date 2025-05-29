@@ -1,86 +1,56 @@
 'use client'
-import Header from '@/components/Header/Header';
-import React from 'react';
+import FilterSidebar from '@/components/FilterSidebar'
+import Footer from '@/components/Footer'
+import Header from '@/components/Header/Header'
+import Pagination from '@/components/Pagination'
+import { PropertyCard } from '@/components/PropertyCard'
+import SearchHeader from '@/components/SearchHeader'
+import SearchResults from '@/components/SearchResults'
+import { mockProperties } from '@/lib/utils'
+import { Grid, Heading } from '@radix-ui/themes'
+import React, { useState } from 'react'
 
 const Index = () => {
-  // const { properties, loading } = useProperties();
-  // const [currentPage, setCurrentPage] = useState(1);
-  // // const [sortBy, setSortBy] = useState('recommended');
-  
-  // const propertiesPerPage = 9;
-  // const totalPages = Math.ceil(properties.length / propertiesPerPage);
-  
-  // const currentProperties = properties.slice(
-  //   (currentPage - 1) * propertiesPerPage,
-  //   currentPage * propertiesPerPage
-  // );
-
-  // if (loading) {
-  //   return (
-  //     <div className="min-h-screen bg-gray-50">
-  //       <Header />
-  //       {/* <SearchHeader /> */}
-  //       <div className="flex">
-  //         <div className="w-80 bg-white border-r border-gray-200 p-6">
-  //           <div className="animate-pulse">
-  //             <div className="h-4 bg-gray-200 rounded w-3/4 mb-4"></div>
-  //             <div className="space-y-2">
-  //               {[...Array(8)].map((_, i) => (
-  //                 <div key={i} className="h-3 bg-gray-200 rounded w-full"></div>
-  //               ))}
-  //             </div>
-  //           </div>
-  //         </div>
-  //         <div className="flex-1 p-6">
-  //           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-  //             {[...Array(9)].map((_, i) => (
-  //               <div key={i} className="bg-white rounded-xl shadow-md animate-pulse">
-  //                 <div className="h-48 bg-gray-200 rounded-t-xl"></div>
-  //                 <div className="p-4">
-  //                   <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
-  //                   <div className="h-3 bg-gray-200 rounded w-1/2 mb-2"></div>
-  //                   <div className="h-3 bg-gray-200 rounded w-full"></div>
-  //                 </div>
-  //               </div>
-  //             ))}
-  //           </div>
-  //         </div>
-  //       </div>
-  //     </div>
-  //   );
-  // }
-
+  const [sortBy, setSortBy] = useState('recommended')
+  const [currentPage, setCurrentPage] = useState(1)
+  const itemsPerPage = 9
+  const totalPages = Math.ceil(mockProperties.length / itemsPerPage)
   return (
-    <div className="min-h-screen bg-[#FDFDFE]">
+    <div className="min-h-screen bg-primary-foreground">
       <Header />
-      {/* <SearchHeader /> */}
-      
-      <div className="flex">
-        {/* <FilterSidebar /> */}
-        
-        <div className="flex-1 p-6">
-          {/* <ResultsHeader
+      <Heading className="font-semibold text-[39px] pl-14 leading-11 text-primary">
+        Explore Chalets
+      </Heading>
+
+      <div className="flex lg:flex-row flex-col px-9 py-6">
+        <div>
+          <FilterSidebar />
+        </div>
+        <div className="flex-1">
+          <SearchHeader />
+          <SearchResults
             location="Al Khobar"
             totalResults={2555}
             sortBy={sortBy}
             onSortChange={setSortBy}
-          /> */}
-          
-          {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {currentProperties.map((property) => (
+          />
+
+          <Grid columns={{ initial: '1', md: '2', lg: '3', xl: '4' }} gap="5" width="100%">
+            {mockProperties.map((property) => (
               <PropertyCard key={property.id} {...property} />
             ))}
-          </div> */}
-          
-          {/* <Pagination
+          </Grid>
+
+          <Pagination
             currentPage={currentPage}
             totalPages={totalPages}
             onPageChange={setCurrentPage}
-          /> */}
+          />
         </div>
       </div>
+      <Footer />
     </div>
-  );
-};
+  )
+}
 
-export default Index;
+export default Index
