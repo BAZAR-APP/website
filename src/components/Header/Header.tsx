@@ -1,3 +1,4 @@
+'use client'
 import React, { useState } from 'react'
 import Navigation from '../Navigation'
 import UserProfile from './UserProfile'
@@ -53,7 +54,7 @@ const Header: React.FC<HeaderProps> = ({ className = '' }) => {
                     <NotificationIcon />
                     <UserProfile
                       userName="Fahd Al-Mutiri"
-                      avatarSrc=""
+                      avatarSrc="/images/Image.svg"
                       onLogout={() => console.log('User logged out')}
                     />
                   </div>

@@ -10,7 +10,7 @@ import { mockProperties } from '@/lib/utils'
 import { Grid, Heading } from '@radix-ui/themes'
 import React, { useState } from 'react'
 
-const Index = () => {
+const ExploreChalets = () => {
   const [sortBy, setSortBy] = useState('recommended')
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 9
@@ -18,7 +18,7 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-primary-foreground">
       <Header />
-      <Heading className="font-semibold text-[39px] pl-14 leading-11 text-primary">
+      <Heading className="font-semibold text-[39px] pl-14 leading-11 text-[#19191A]">
         Explore Chalets
       </Heading>
 
@@ -53,4 +53,4 @@ const Index = () => {
   )
 }
 
-export default Index
+export default ExploreChalets
