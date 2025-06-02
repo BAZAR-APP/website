@@ -4,14 +4,14 @@ import { useState } from "react";
 import CommonButton from "@/components/Button/Button";
 import OneTimePassword from "@/components/OTPInput";
 
-const VerifyAccount = () => {
+const PasswordVerified = () => {
     const [otp, setOtp] = useState("");
 
     const handleOtpChange = (value: string) => {
-        setOtp(value); // Update OTP state
+        setOtp(value);
     };
 
-    const isOtpFilled = otp.trim().length > 0;
+    const isOtpFilled = otp.trim().length > 5;
 
     return (
         <div className="flex flex-col items-center justify-center h-full">
@@ -54,4 +54,4 @@ const VerifyAccount = () => {
     );
 };
 
-export default VerifyAccount;
+export default PasswordVerified;

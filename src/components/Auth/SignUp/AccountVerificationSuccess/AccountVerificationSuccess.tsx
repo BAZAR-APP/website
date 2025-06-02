@@ -18,7 +18,6 @@ const AccountVerificationSuccess = () => {
                         <p className='!text-secondary font-600 text-[16px]'>Your phone number has been verified. You’re all set to continue!</p>
                     </div>
                     <CommonButton children={"Continue"} className="w-[360px] h-[48px] bg-[#29397E] text-white gap-2 pt-3 pr-5 pb-3 pl-5 rounded-lg" />
-
                 </div>
             </div >
         </>
