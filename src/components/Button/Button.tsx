@@ -1,24 +1,50 @@
-import React from "react";
-import { Button } from "@radix-ui/themes";
+// components/ReusableButton.tsx
+import React from 'react';
 
-type CommonButtonProps = {
-    className?: string;
-    icon: React.ReactNode;
+type ReusableButtonProps = {
     children: React.ReactNode;
     onClick?: () => void;
+    loading?: boolean;
+    disabled?: boolean;
+    className?: string;
+    type?: 'button' | 'submit' | 'reset';
 };
 
-const CommonButton: React.FC<CommonButtonProps> = ({
-    className,
-    icon,
+const ReusableButton: React.FC<ReusableButtonProps> = ({
     children,
     onClick,
+    loading = false,
+    disabled = false,
+    className = '',
+    type = 'button',
 }) => {
+    const isDisabled = loading || disabled;
+
     return (
-        <Button className={className} onClick={onClick}>
-            {icon} {children}
-        </Button>
+        <button
+            type={type}
+            onClick={!isDisabled ? onClick : undefined}
+            disabled={isDisabled}
+            className={className}
+        >
+            {loading && (
+                <svg
+                    className="animate-spin h-5 w-5 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                >
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                    ></path>
+                </svg>
+            )}
+            {children}
+        </button >
     );
 };
 
-export default CommonButton;
+export default ReusableButton;

@@ -22,7 +22,7 @@ const Login = () => {
         <CommonInput name="phone" placeholder='Enter your phone number' type='tel' label='Phone' className={'bg-[#F9FAFB]'} onChange={handleChange} />
         <CommonInput name="password" placeholder='Enter your password' type='password' label='Password' className={'bg-[#F9FAFB]'} onChange={handleChange} />
         <CheckboxLabel label={"Remember Me"} />
-        <CommonButton children={undefined} icon={undefined} />
+        <CommonButton children={"Sign In"} />
 
       </div>
     </div>

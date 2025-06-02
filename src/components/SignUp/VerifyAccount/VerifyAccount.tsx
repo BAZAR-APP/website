@@ -1,8 +1,6 @@
 "use client"
 
 import CommonButton from "@/components/Button/Button";
-import CheckboxLabel from "@/components/CheckBox/CheckBox";
-import CommonInput from "@/components/CommonInput/Input";
 import OneTimePassword from "@/components/OTPInput";
 
 const VerifyAccount = () => {
@@ -19,13 +17,20 @@ const VerifyAccount = () => {
                         <p className='!text-secondary font-600 text-[16px]'>Enter the 5-digit code sent to your phone to complete verification.</p>
                     </div>
                     <OneTimePassword className="flex gap-[8px]" onChange={handleOtpChange} />
-                    <CommonButton children={undefined} icon={undefined} className='bg-[#F3F4F6] text-[#1F2A37] rounded-2 px-2 py-4' />
+                    <div className="flex justify-between">
+                        <div className="text-[#484A4C] font-normal">Didn’t Receive a Code? <span className="text-[#29397E] font-bold">Resend</span></div>
+
+                        <div className="text-[#29397E] font-bold">
+                            01:50
+                        </div>
+                    </div>
+                    <CommonButton children={"Verify"} icon={undefined} className='bg-[#F3F4F6] text-[#1F2A37] rounded-2 px-2 py-4' />
                     <div className="flex items-center space-x-1 text-[14px]">
                         <span className="text-[#484A4C]">Already have an account?</span>
                         <a href="/login" className="text-[#29397E] font-bold">Log in</a>
                     </div>
                 </div>
-            </div>
+            </div >
         </>
     );
 

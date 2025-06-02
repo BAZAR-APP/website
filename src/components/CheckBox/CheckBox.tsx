@@ -1,7 +1,7 @@
 import React from "react";
-import { Text, Flex, Checkbox } from "@radix-ui/themes";
+import { Text, Flex, Checkbox as RadixCheckbox } from "@radix-ui/themes";
 
-type CheckboxLabelProps = {
+type CheckboxProps = {
     label: React.ReactNode;
     checked?: boolean;
     defaultChecked?: boolean;
@@ -10,7 +10,7 @@ type CheckboxLabelProps = {
     className?: string;
 };
 
-const CheckboxLabel: React.FC<CheckboxLabelProps> = ({
+const Checkbox: React.FC<CheckboxProps> = ({
     label,
     checked,
     defaultChecked,
@@ -21,7 +21,7 @@ const CheckboxLabel: React.FC<CheckboxLabelProps> = ({
     return (
         <Text as="label" className={className}>
             <Flex gap="2" align="center">
-                <Checkbox
+                <RadixCheckbox
                     checked={checked}
                     defaultChecked={defaultChecked}
                     onCheckedChange={(checked) => {
@@ -34,4 +34,4 @@ const CheckboxLabel: React.FC<CheckboxLabelProps> = ({
     );
 };
 
-export default CheckboxLabel;
+export default Checkbox;
