@@ -1,7 +1,7 @@
-import Footer from '@/components/Footer'
-import Header from '@/components/Header/Header'
+
 import React from 'react'
 import AddDetails from './AddDetails'
+import { Footer, Header } from '@/components'
 
 const page = () => {
   return (

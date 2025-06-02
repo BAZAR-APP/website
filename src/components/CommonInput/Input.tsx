@@ -3,6 +3,8 @@
 import { TextField, Text, Flex } from '@radix-ui/themes';
 import { ReactNode } from 'react';
 
+
+
 type CommonInputProps = {
     label?: string;
     placeholder?: string;
@@ -46,8 +48,6 @@ const CommonInput: React.FC<CommonInputProps> = ({
             {label && (
                 <Text
                     as="label"
-                    size="2"
-                    weight="bold"
                     htmlFor={inputId}
                     className="!text-primary text-[14px] font-normal"
                 >
@@ -56,24 +56,27 @@ const CommonInput: React.FC<CommonInputProps> = ({
             )}
             <TextField.Root
                 id={inputId}
+                name={name}
+                type={type}
                 placeholder={placeholder}
                 value={value}
                 onChange={onChange}
-                type={type}
-                name={name}
+                variant="surface"
                 className={className}
             >
-                {icon && (
-                    <TextField.Slot className="pl-2 text-[#484A4C]">
+                {icon && !prefix && (
+                    <TextField.Slot className="pl-2">
                         {icon}
                     </TextField.Slot>
                 )}
-                {prefix && (
-                    <TextField.Slot className="pl-1 pr-1 text-[#484A4C] text-sm font-medium">
-                        {prefix}
+                {prefix && icon && (
+                    <TextField.Slot className="pr-1 text-[#484A4C] text-sm font-medium">
+                        {icon} {prefix}
                     </TextField.Slot>
                 )}
             </TextField.Root>
+
+
         </Flex>
     );
 };
