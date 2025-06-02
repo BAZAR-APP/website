@@ -1,25 +1,51 @@
 'use client'
-import { Button, Checkbox } from '@radix-ui/themes'
+import { Checkbox } from '@radix-ui/themes'
+import {
+  PartyPopper,
+  Flame,
+  Flower,
+  Cake,
+  Heart,
+  Bath,
+  Wifi,
+  Droplets,
+  MoreHorizontal,
+  Baby,
+  ToyBrick,
+  Clapperboard,
+  SwordIcon,
+} from 'lucide-react'
 import React, { useState } from 'react'
 
 const services = [
   {
     title: 'Luxury',
     items: [
-      'BBQ setup with private chef',
-      'Swimming pool presentation',
-      'Flower Arrangement',
-      'Birthday Setup',
-      'Anniversary Setup',
+      { name: 'BBQ setup with private chef', icon: <Flame size={16} /> },
+      { name: 'Swimming pool presentation', icon: <Droplets size={16} /> },
+      { name: 'Flower Arrangement', icon: <Flower size={16} /> },
+      { name: 'Birthday Setup', icon: <Cake size={16} /> },
+      { name: 'Anniversary Setup', icon: <Heart size={16} /> },
     ],
   },
   {
     title: 'Essentials',
-    items: ['Towels', 'Tissues', 'Cleaning Services', 'WiFi', 'Extra Water', 'Others'],
+    items: [
+      { name: 'Towels', icon: <Bath size={16} /> },
+      { name: 'Tissues', icon: <PartyPopper size={16} /> },
+      { name: 'Cleaning Services', icon: <Clapperboard size={16} /> },
+      { name: 'WiFi', icon: <Wifi size={16} /> },
+      { name: 'Extra Water', icon: <Droplets size={16} /> },
+      { name: 'Others', icon: <MoreHorizontal size={16} /> },
+    ],
   },
   {
     title: 'Kids',
-    items: ['Pool Floaties/Toys', 'Personal Swimming Trainer', 'Baby Bed'],
+    items: [
+      { name: 'Pool Floaties/Toys', icon: <ToyBrick size={16} /> },
+      { name: 'Personal Swimming Trainer', icon: <SwordIcon size={16} /> },
+      { name: 'Baby Bed', icon: <Baby size={16} /> },
+    ],
   },
 ]
 
@@ -31,7 +57,12 @@ export default function AddDetails() {
   const handleToggle = (item: string) => {
     setSelected((prev) => (prev.includes(item) ? prev.filter((i) => i !== item) : [...prev, item]))
   }
-
+  const itemIconMap: Record<string, React.ReactNode> = {}
+  services.forEach((section) => {
+    section.items.forEach((item) => {
+      itemIconMap[item.name] = item.icon
+    })
+  })
   return (
     <div className="max-w-7xl mx-auto lg:px-22 md:px-18 px-12 py-10">
       <h2 className="text-[39px] leading-[47px] font-semibold text-[#19191A] flex items-center">
@@ -43,29 +74,32 @@ export default function AddDetails() {
       </p>
 
       <div className="flex flex-col lg:flex-row gap-10 justify-between">
-        <div className="flex flex-col items-start gap-[40px] w-[463px] h-[975px]">
+        <div className="flex flex-col items-start gap-[40px] w-[463px]">
           {services.map((section) => (
             <div key={section.title} className="w-full">
               <h2 className="text-xl pb-4 leading-6 font-bold text-[#19191A] flex items-center">
                 {section.title}
               </h2>
               <ul className="space-y-4">
-                {section.items.map((item) => (
-                  <li key={item} className="flex justify-between items-center w-full">
+                {section.items.map(({ name, icon }) => (
+                  <li key={name} className="flex justify-between items-center w-full">
                     <div className="flex items-center gap-2">
-                      <label htmlFor={item} className="text-sm">
-                        {item}{' '}
-                        {(item.includes('Birthday') || item.includes('Anniversary')) && (
-                          <span className="text-blue-500 text-xs ml-1">Requires 24h Notice</span>
+                      <span className="text-[#29397E]">{icon}</span>
+                      <label htmlFor={name} className="text-sm">
+                        {name}{' '}
+                        {(name.includes('Birthday') || name.includes('Anniversary')) && (
+                          <span className="text-[#29397E] bg-[#E1F3FF] py-1 px-1.5 rounded-md text-xs ml-1">
+                            Requires 24h Notice
+                          </span>
                         )}
                       </label>
                     </div>
                     <div className="flex items-center gap-2">
                       <span className="text-sm">{prices} KWD</span>
                       <Checkbox
-                        id={item}
-                        checked={selected.includes(item)}
-                        onCheckedChange={() => handleToggle(item)}
+                        id={name}
+                        checked={selected.includes(name)}
+                        onCheckedChange={() => handleToggle(name)}
                         className="w-4 h-4 border rounded"
                       />
                     </div>
@@ -89,7 +123,7 @@ export default function AddDetails() {
           </div>
         </div>
 
-        <div className="flex flex-col items-start gap-[24px] w-[370px] h-[242px] bg-[#F9FAFB] p-6 rounded">
+        <div className="flex flex-col items-start gap-[24px] w-[370px] h-fit bg-[#F9FAFB] p-6 rounded">
           <h3 className="text-[25px] leading-8 font-semibold text-[#19191A] flex items-center">
             Add-Ons
           </h3>
@@ -98,8 +132,11 @@ export default function AddDetails() {
           </p>
           <ul className="space-y-2 w-full text-sm">
             {selected.map((item) => (
-              <li key={item} className="flex justify-between">
-                <span>{item}</span>
+              <li key={item} className="flex justify-between items-center">
+                <div className="flex items-center gap-2">
+                  <span className="text-[#29397E]">{itemIconMap[item]}</span>
+                  <span>{item}</span>
+                </div>
                 <span>{prices} KWD</span>
               </li>
             ))}

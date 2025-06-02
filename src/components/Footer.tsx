@@ -10,7 +10,7 @@ export const Footer: React.FC = () => {
   return (
     <>
       <footer className="flex flex-col m-4 md:m-10 p-8 md:p-16 gap-8 bg-[#F9FAFB] rounded-[20px] md:rounded-[40px]">
-        <div className="flex flex-col md:flex-row w-full xl:justify-evenly justify-between flex-wrap gap-10">
+        <div className="flex flex-col md:flex-row w-full xl:justify-evenly justify-between flex-wrap lg:gap-0 gap-8">
           <div className="flex flex-col gap-5 max-w-full lg:max-w-[350px]">
             <Logo />
             <Text className="text-[16px] leading-[19px] font-normal text-[#484A4C] pr-0 md:pr-2">
@@ -20,17 +20,15 @@ export const Footer: React.FC = () => {
             </Text>
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-10 justify-between">
-            <QuickLinks />
-            <ContactInfo />
-          </div>
+          <QuickLinks />
+          <ContactInfo />
 
-          <div className="hidden xl:flex md:w-auto justify-end">
+          <div className="max-[1221px]:hidden md:w-auto justify-end">
             <Image
               src={FooterImg}
               alt="Footer Tree Illustration"
-              width={230}
-              height={230}
+              width={290}
+              height={260}
               className="max-w-full h-auto"
             />
           </div>

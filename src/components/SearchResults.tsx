@@ -20,12 +20,12 @@ const SearchResults: React.FC<SearchResultsProps> = ({
 }) => {
   return (
     <div className="flex sm:flex-row flex-col items-center justify-between md:mx-2 mx-3 my-8">
-      <h2 className="md:text-[25px] text-xl leading-[30px] font-normal text-[#19191A] text-center">
+      <h2 className="md:text-[25px] text-xl leading-[30px] font-normal text-[#19191A] pb-1 sm:pb-0 text-center">
         {location}: {totalResults.toLocaleString()} search results found
       </h2>
 
       <Select.Root value={sortBy} onValueChange={onSortChange}>
-        <Select.Trigger className="w-48 inline-flex items-center justify-between bg-[#F9FAFB] cursor-pointer rounded-lg px-4 py-4 text-sm font-medium text-gray-700 focus:outline-none focus:border-none">
+        <Select.Trigger className="sm:w-48 w-full inline-flex items-center justify-between bg-[#F9FAFB] cursor-pointer rounded-lg px-4 py-4 text-sm font-medium text-gray-700 focus:outline-none focus:border-none">
           <div className="flex flex-col items-start gap-1">
             <span className="text-[12px] leading-3 font-normal text-[#9EA0A2] flex-none">
               Sort by
