@@ -18,7 +18,7 @@ const Navigation: React.FC<NavigationProps> = ({ className = '' }) => {
           <li key={label}>
             <Link
               href={href}
-              className={`cursor-pointer ${pathname === href ? 'text-black font-semibold' : 'text-gray-600'}`}
+              className={`cursor-pointer ${pathname === href ? 'text-black font-semibold' : 'text-[#29397E]'}`}
             >
               <Text size="2" weight="medium">
                 {label}

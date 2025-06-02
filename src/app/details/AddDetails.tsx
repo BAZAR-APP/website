@@ -1,5 +1,6 @@
 'use client'
-import { Checkbox } from '@radix-ui/themes'
+import CheckboxLabel from '@/components/CheckBox/CheckBox'
+
 import {
   PartyPopper,
   Flame,
@@ -96,11 +97,12 @@ export default function AddDetails() {
                     </div>
                     <div className="flex items-center gap-2">
                       <span className="text-sm">{prices} KWD</span>
-                      <Checkbox
-                        id={name}
+                      <CheckboxLabel
+                        label={null}
                         checked={selected.includes(name)}
-                        onCheckedChange={() => handleToggle(name)}
-                        className="w-4 h-4 border rounded"
+                        onChange={() => handleToggle(name)}
+                        className="!m-0"
+                        size="2"
                       />
                     </div>
                   </li>

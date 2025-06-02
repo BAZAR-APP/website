@@ -3,16 +3,8 @@ import FilterSection from './FilterSection'
 import { amenities, locations } from '@/lib/utils'
 import Image from 'next/image'
 import Like from '../../public/images/Like.svg'
-
-const CheckboxItem = ({ label }: { label: string }) => (
-  <label className="flex items-center space-x-2">
-    <input
-      type="checkbox"
-      className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-    />
-    <span className="text-sm text-gray-700">{label}</span>
-  </label>
-)
+import CheckboxLabel from './CheckBox/CheckBox'
+import { Slider } from 'radix-ui'
 
 const FilterSidebar = () => {
   const [value, setValue] = React.useState(50)
@@ -28,42 +20,38 @@ const FilterSidebar = () => {
 
       <FilterSection title="Location">
         {locations.map((location) => (
-          <CheckboxItem key={location} label={location} />
+          <CheckboxLabel key={location} label={location} className="text-sm text-gray-700" />
         ))}
       </FilterSection>
 
       <FilterSection title="Price">
         <div className="mt-5 w-full">
-          <div className="w-full relative">
-            <div className="relative w-full h-2 bg-[#E5E7EB] rounded-full">
-              <div
-                className="absolute h-2 bg-[#29397E] rounded"
-                style={{ width: `${(value / 100) * 100}%` }}
-              />
-              <input
-                type="range"
-                min="0"
-                max="100"
-                value={value}
-                onChange={(e) => setValue(Number(e.target.value))}
-                className="absolute w-full h-2 opacity-0 cursor-pointer"
-              />
-              <div
-                className="absolute top-1/2 transform -translate-y-1/2 -translate-x-1/2 w-[22px] h-[22px] bg-white rounded-full border border-gray-200 shadow-sm"
-                style={{ left: `${(value / 100) * 100}%` }}
-              />
-            </div>
-            <div className="flex z-10 gap-10 justify-between items-start p-0 mt-3 mb-0 text-sm font-medium text-center text-[#4B5563] max-md:mb-2.5">
-              <span className="leading-none">0 KD</span>
-              <span className="leading-none">3000 KD</span>
-            </div>
+          <Slider.Root
+            className="relative flex items-center select-none touch-none w-full h-5"
+            min={0}
+            max={100}
+            step={1}
+            value={[value]}
+            onValueChange={([val]) => setValue(val)}
+          >
+            <Slider.Track className="bg-[#E5E7EB] relative grow rounded-full h-2">
+              <Slider.Range className="absolute bg-[#29397E] h-2 rounded-full" />
+            </Slider.Track>
+            <Slider.Thumb
+              className="block w-[22px] h-[22px] bg-white border border-gray-200 rounded-full shadow-sm focus:outline-none"
+              aria-label="Price range"
+            />
+          </Slider.Root>
+          <div className="flex z-10 gap-10 justify-between items-start p-0 mt-3 mb-0 text-sm font-medium text-center text-[#4B5563] max-md:mb-2.5">
+            <span className="leading-none">0 KD</span>
+            <span className="leading-none">3000 KD</span>
           </div>
         </div>
       </FilterSection>
 
       <FilterSection title="Amenities">
         {amenities.map((amenity) => (
-          <CheckboxItem key={amenity} label={amenity} />
+          <CheckboxLabel key={amenity} label={amenity} className="text-sm text-gray-700" />
         ))}
       </FilterSection>
 
