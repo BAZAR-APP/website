@@ -7,8 +7,16 @@ import BookingWidget from '@/components/BookingWidget'
 import ChaletsRules from '@/components/ChaletsRules'
 import Calender from '@/components/Calender/Calender'
 import { propertyData } from '@/lib/utils'
-
-export async function generateMetadata() {
+export async function generateStaticParams() {
+  return [
+    { id: '1' },
+    { id: '2' },
+    { id: '3' },
+    // Add all the chalet IDs you want to pre-generate
+  ]
+}
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
   const data = propertyData
 
   return {
@@ -28,9 +36,9 @@ export async function generateMetadata() {
   }
 }
 
-export default function ChaletDetailsPage() {
-  const data = propertyData // Replace with dynamic fetch if needed
-
+export default async function ChaletDetailsPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
+  const data = propertyData
   return (
     <div className="min-h-screen bg-white">
       <div className="max-w-7xl mx-auto">

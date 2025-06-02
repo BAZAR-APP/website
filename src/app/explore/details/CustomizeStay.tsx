@@ -105,7 +105,6 @@ export default function CustomizeStay({ onNext }: CustomizeStayProps) {
                         checked={selected.includes(name)}
                         onChange={() => handleToggle(name)}
                         className="!m-0"
-                        size="2"
                       />
                     </div>
                   </li>
