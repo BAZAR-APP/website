@@ -1,6 +1,7 @@
 "use client"
 import CommonButton from "@/components/Button/Button"
-import { CheckBox, CommonInput } from "@/components"
+import { CommonInput } from "@/components"
+import Image from "next/image"
 
 const ForgetPasswordVerify = () => {
 
@@ -10,7 +11,7 @@ const ForgetPasswordVerify = () => {
 
         <div className='flex flex-col items-center justify-center h-[100%]'>
             <div className='max-w-[360px] flex flex-col gap-[24px] pt-[120px]'>
-                <img src={"/images/Logo.svg"} alt='' className='w-[150px] h-[48px]' />
+                <Image src={"/images/Logo.svg"} alt='' className='w-[150px] h-[48px]' />
                 <div className='flex flex-col gap-[12px]'>
                     <h2 className='!text-primary font-semibold text-[39px]'>Forget Password</h2>
                     <p className='text-secondary font-400 text-[16px]'>Enter your phone number to reset your password.</p>

@@ -1,7 +1,5 @@
 'use client'
 import FilterSidebar from '@/components/FilterSidebar'
-import Footer from '@/components/Footer'
-import Header from '@/components/Header/Header'
 import Pagination from '@/components/Pagination'
 import { PropertyCard } from '@/components/PropertyCard'
 import SearchHeader from '@/components/SearchHeader'

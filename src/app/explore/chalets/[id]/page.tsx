@@ -28,9 +28,9 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   }
 }
 
-export default function ChaletDetailsPage() {
-  const data = propertyData // Replace with dynamic fetch if needed
-
+export default async function ChaletDetailsPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
+  const data = propertyData
   return (
     <div className="min-h-screen bg-white">
       <div className="max-w-7xl mx-auto">

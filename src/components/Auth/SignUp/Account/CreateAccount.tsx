@@ -1,6 +1,7 @@
 "use client"
 import CommonButton from "@/components/Button/Button"
 import { CheckBox, CommonInput } from "@/components"
+import Image from "next/image"
 
 const CreateAccount = () => {
 
@@ -26,8 +27,8 @@ const CreateAccount = () => {
                     <div className="flex-grow border-t border-[#DEDEDF]"></div>
                 </div>
                 <div className='flex justify-center items-center gap-4 w-full'>
-                    <img src={"/images/googleRounded.svg"} alt='' className='shrink-0' />
-                    <img src={"/images/appleRounded.svg"} alt='' className='shrink-0' />
+                    <Image src={"/images/googleRounded.svg"} alt='' className='shrink-0' />
+                    <Image src={"/images/appleRounded.svg"} alt='' className='shrink-0' />
                 </div>
                 <div className="flex items-center space-x-1 text-[14px]">
                     <span className="text-[#484A4C]">Already have an account?</span>

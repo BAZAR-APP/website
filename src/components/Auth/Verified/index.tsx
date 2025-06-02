@@ -1,7 +1,6 @@
-'use client';
-
 import React from 'react';
 import CommonButton from '@/components/Button/Button';
+import Image from 'next/image';
 
 interface VerifiedProps {
     title: string;
@@ -21,7 +20,7 @@ const Verified: React.FC<VerifiedProps> = ({
     return (
         <div className='flex flex-col items-center justify-center h-full'>
             <div className='max-w-[360px] h-[90vh] overflow-y-auto flex flex-col gap-[24px]'>
-                <img src="/images/Logo.svg" alt="Logo" className='w-[150px] h-[48px] mb-[80px]' />
+                <Image src="/images/Logo.svg" alt="Logo" className='w-[150px] h-[48px] mb-[80px]' />
                 <div className='flex flex-col gap-[12px]'>
                     {iconSrc && <img src={iconSrc} alt="Status Icon" className='w-[120px] h-[120px]' />}
                     <h2 className='!text-primary font-600 text-[39px]'>{title}</h2>

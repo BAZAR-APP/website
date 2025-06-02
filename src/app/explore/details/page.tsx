@@ -1,8 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import Header from '@/components/Header/Header'
-import Footer from '@/components/Footer'
 import CustomizeStay from './CustomizeStay'
 import UserInfo from './UserInfo'
 import Payment from './Payment'

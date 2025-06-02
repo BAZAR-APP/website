@@ -7,7 +7,8 @@ export { default as VerifyAccount } from "./Auth/SignUp/VerifyAccount/VerifyAcco
 export { default as ChangePassword } from "./Auth/ForgetPassword/ChangePassword"
 export { default as Verified } from "./Auth/Verified"
 export { default as ChangePasswordVerified } from "./Auth/ForgetPassword/ChangePasswordVerified"
-
+export { default as HomeHeader } from "./Home/Header"
+export { default as SearchHeader } from "./SearchHeader"
 
 
 

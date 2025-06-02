@@ -1,5 +1,7 @@
 "use client"
 
+import Image from "next/image";
+
 
 const AuthLayout = ({ children }: { children: React.ReactNode }) => {
     return (
@@ -15,7 +17,7 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
                     backgroundRepeat: 'no-repeat',
                     borderRadius: "24px",
                 }}>
-                <img
+                <Image
                     src="/images/Logo-white.svg"
                     alt="Bazar"
                 />

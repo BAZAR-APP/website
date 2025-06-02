@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
-import { Geist, Geist_Mono, Inter } from 'next/font/google'
+import { Geist, Geist_Mono } from 'next/font/google'
 import '@radix-ui/themes/styles.css'
-import { Theme, ThemeContext, ThemePanel } from '@radix-ui/themes'
+import { Theme } from '@radix-ui/themes'
 import './globals.css'
 
 const geistSans = Geist({
@@ -9,10 +9,10 @@ const geistSans = Geist({
   subsets: ['latin'],
 })
 
-const inter = Inter({
-  variable: '--font-inter',
-  subsets: ['latin'],
-})
+// const inter = Inter({
+//   variable: '--font-inter',
+//   subsets: ['latin'],
+// })
 
 const geistMono = Geist_Mono({
   variable: '--font-geist-mono',
