@@ -52,8 +52,10 @@ const services = [
 ]
 
 const prices = 30
-
-export default function AddDetails() {
+type CustomizeStayProps = {
+  onNext: () => void
+}
+export default function CustomizeStay({ onNext }: CustomizeStayProps) {
   const [selected, setSelected] = useState<string[]>([])
 
   const handleToggle = (item: string) => {
@@ -120,7 +122,10 @@ export default function AddDetails() {
             <Button className="cursor-pointer bg-[#F3F4F6] text-[#19191A] py-2 rounded-lg text-sm font-medium w-[150px]">
               Skip For Now
             </Button>
-            <Button className="cursor-pointer bg-[#29397E] text-white py-2 rounded-lg text-sm font-medium w-[170px]">
+            <Button
+              onClick={() => onNext()}
+              className="cursor-pointer bg-[#29397E] text-white py-2 rounded-lg text-sm font-medium w-[170px]"
+            >
               Add For Booking
             </Button>
           </div>

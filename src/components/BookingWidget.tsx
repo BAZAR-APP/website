@@ -4,6 +4,7 @@ import { Radio } from '@radix-ui/themes'
 import Image from 'next/image'
 import Deposit from '../../public/images/Deposit.svg'
 import Button from './Button/Button'
+import Link from 'next/link'
 
 interface PackageOption {
   id: string
@@ -178,11 +179,12 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
           </div>
         </div>
       </div>
-
       <div className="px-5 pb-5">
-        <Button className="w-full bg-[#29397E] text-white py-2 rounded-lg font-medium cursor-pointer">
-          Book Now
-        </Button>
+        <Link href="/details">
+          <Button className="w-full mb-5 bg-[#29397E] text-white py-2 rounded-lg font-medium cursor-pointer">
+            Book Now
+          </Button>
+        </Link>
       </div>
 
       {bookingConfig.paymentOptions.partialPayment && (
