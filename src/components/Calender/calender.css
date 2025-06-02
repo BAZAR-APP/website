@@ -1,0 +1,15 @@
+.rdrDefinedRangesWrapper,
+.rdrDateDisplayWrapper {
+  display: none;
+}
+.rdrNextPrevButton,
+.rdrNextPrevButton {
+  background: transparent;
+}
+
+@media screen and (max-width: 768px) {
+  .rdrMonths {
+    margin: 0 auto;
+    flex-direction: column !important;
+  }
+}

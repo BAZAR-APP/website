@@ -2,6 +2,8 @@
 @import 'tw-animate-css';
 @import '@radix-ui/themes/styles.css';
 
+
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
@@ -47,7 +49,7 @@
   --color-primary-blue: var(--primary-blue);
   --color-white: var(--white);
   --color-cream-white: var(--cream-white);
-  --color-green: var(--green); 
+  --color-green: var(--green);
   --color-yellow-light: var(--yellow-light);
   --color-yellow-dark: var(--yellow-dark);
   --color-light-gray: var(--light-gray);
@@ -146,6 +148,7 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
