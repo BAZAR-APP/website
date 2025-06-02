@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
-import { getVisiblePages } from '@/lib/utils'
+import { getVisiblePages } from '@/lib/constant'
 
 interface PaginationProps {
   currentPage: number

@@ -2,7 +2,9 @@ import React from 'react'
 import { MapPin, Calendar } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { priceDetails } from '@/lib/utils'
+import Button from './Button/Button'
+import CommonInput from './CommonInput/Input'
+import { priceDetails } from '@/lib/constant'
 
 type PriceRowProps = {
   label: string
@@ -20,9 +22,16 @@ const PriceRow: React.FC<PriceRowProps> = ({ label, amount }) => (
     <span className="font-medium text-[#19191A] text-[16px] leading-[19px]">{amount}</span>
   </div>
 )
-
-const BookingSummary: React.FC = () => {
- 
+type BookingSummaryProps = {
+  showBookButton?: boolean
+  couponCode?: boolean
+  onNext?: () => void
+}
+const BookingSummary: React.FC<BookingSummaryProps> = ({
+  showBookButton = false,
+  couponCode = false,
+  onNext
+}) => {
   return (
     <div className="w-full md:max-w-sm rounded-lg">
       <div className="p-0">
@@ -73,17 +82,34 @@ const BookingSummary: React.FC = () => {
 
             <div className="flex justify-between text-[16px] leading-[150%] font-medium text-[#19191A]">
               <span>Total</span>
-              <span>630 KWD</span> 
+              <span>630 KWD</span>
             </div>
           </div>
 
           <p className="flex items-center mb-2 mt-4 text-[14px] font-normal leading-[17px] text-[#9EA0A2] self-stretch">
             Deposit will be returned after your stay, subject to property condition.
           </p>
-
-          <Link href={''} className="text-sm text-[#29397E] font-medium cursor-pointer">
+          {couponCode && (
+            <CommonInput
+              name="redeemCode"
+              type="text"
+              onChange={() => {}}
+              placeholder="Apply redeemed code here"
+              className={'!bg-[#F9FAFB] !text-[#484A4C] my-1 !rounded-[8px] !border-none !h-[42px]'}
+            />
+          )}
+          <Link href={''} className="text-sm text-[#29397E] font-medium cursor-pointer underline">
             Redeem Gifts & Discounts ›
           </Link>
+          {showBookButton && (
+            <Button
+              type="submit"
+              onClick={() => onNext}
+              className="w-full my-2 cursor-pointer px-3.5 text-white py-3 bg-[#29397E] rounded-md font-medium"
+            >
+              Book Now
+            </Button>
+          )}
         </div>
       </div>
     </div>

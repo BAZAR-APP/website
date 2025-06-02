@@ -6,7 +6,7 @@ import ReviewsSection from '@/components/ReviewsSection'
 import BookingWidget from '@/components/BookingWidget'
 import ChaletsRules from '@/components/ChaletsRules'
 import Calender from '@/components/Calender/Calender'
-import { propertyData } from '@/lib/utils'
+import { propertyData } from '@/lib/constant'
 
 export async function generateMetadata({ params }: { params: { slug: string } }) {
   const data = propertyData

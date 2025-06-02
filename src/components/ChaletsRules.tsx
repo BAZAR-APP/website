@@ -7,7 +7,7 @@ import SecuitryIcon from '../../public/images/secuirty.svg'
 import CleanIcon from '../../public/images/cleanless.svg'
 import CautionIcon from '../../public/images/caution.svg'
 import PoolIcon from '../../public/images/swimming-pool.svg'
-import { chaletRules } from '@/lib/utils'
+import { chaletRules } from '@/lib/constant'
 
 interface CheckInOut {
   checkIn: string
