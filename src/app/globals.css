@@ -64,10 +64,9 @@
   --gray: #8E8E93;
   --gray-100: #F3F4F6;
   --gray-900: #101828;
-  --light-grey : #F9FAFB;
+  --light-grey: #F9FAFB;
   --text-disabled: #9EA0A2;
   --black: #000000;
-
   --primary-foreground: #FDFDFE;
   --secondary-foreground: oklch(0.205 0 0);
   --muted: oklch(0.97 0 0);
