@@ -3,6 +3,7 @@ import { ChevronDown } from 'lucide-react'
 import { Radio } from '@radix-ui/themes'
 import Image from 'next/image'
 import Deposit from '../../public/images/Deposit.svg'
+import Button from './Button/Button'
 
 interface PackageOption {
   id: string
@@ -80,8 +81,16 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
   bookingConfig = {
     refundableDeposit: 200,
     currency: 'KWD',
-    paymentOptions: {},
-    refundPolicy: {},
+    paymentOptions: {
+      partialPayment: false,
+      partialPercentage: 0,
+      fullPaymentUpfront: true,
+    },
+    refundPolicy: {
+      depositAmount: 0,
+      refundTimeframe: 0,
+      currency: 'KWD',
+    },
   },
 }) => {
   const [selectedPackage, setSelectedPackage] = useState(
@@ -171,9 +180,9 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
       </div>
 
       <div className="px-5 pb-5">
-        <button className="w-full bg-[#29397E] text-white py-2 rounded-lg font-medium">
+        <Button className="w-full bg-[#29397E] text-white py-2 rounded-lg font-medium cursor-pointer">
           Book Now
-        </button>
+        </Button>
       </div>
 
       {bookingConfig.paymentOptions.partialPayment && (

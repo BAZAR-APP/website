@@ -1,5 +1,6 @@
 'use client'
-import CheckboxLabel from '@/components/CheckBox/CheckBox'
+import Button from '@/components/Button/Button'
+import Checkbox from '@/components/CheckBox/CheckBox'
 
 import {
   PartyPopper,
@@ -97,7 +98,7 @@ export default function AddDetails() {
                     </div>
                     <div className="flex items-center gap-2">
                       <span className="text-sm">{prices} KWD</span>
-                      <CheckboxLabel
+                      <Checkbox
                         label={null}
                         checked={selected.includes(name)}
                         onChange={() => handleToggle(name)}
@@ -116,12 +117,12 @@ export default function AddDetails() {
             placeholder="Let us know if you need anything specific..."
           />
           <div className="flex gap-4">
-            <button className="cursor-pointer bg-[#F3F4F6] text-[#19191A] py-2 rounded-lg text-sm font-medium w-[150px]">
+            <Button className="cursor-pointer bg-[#F3F4F6] text-[#19191A] py-2 rounded-lg text-sm font-medium w-[150px]">
               Skip For Now
-            </button>
-            <button className="cursor-pointer bg-[#29397E] text-white py-2 rounded-lg text-sm font-medium w-[170px]">
+            </Button>
+            <Button className="cursor-pointer bg-[#29397E] text-white py-2 rounded-lg text-sm font-medium w-[170px]">
               Add For Booking
-            </button>
+            </Button>
           </div>
         </div>
 

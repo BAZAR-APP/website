@@ -6,6 +6,7 @@ import UnlikeStar from '../../public/images/Unlike.svg'
 import Image from 'next/image'
 import { reviews } from '@/lib/utils'
 import Link from 'next/link'
+import Button from './Button/Button'
 
 interface ReviewsSectionProps {
   rating: number
@@ -79,9 +80,9 @@ const ReviewsSection = ({ rating, reviewCount }: ReviewsSectionProps) => {
           <span className="border-b-1 border-[#19191A]">Show more</span>{' '}
           <ChevronRight className="w-3.5 h-3.5" strokeWidth={3} />
         </Link>
-        <button className="cursor-pointer bg-transparent border border-[#19191A] text-[#19191A] py-2 rounded-lg text-sm font-medium w-[170px]">
+        <Button className="cursor-pointer bg-transparent border border-[#19191A] text-[#19191A] py-2 rounded-lg text-sm font-medium w-[170px]">
           Show all 200 reviews
-        </button>
+        </Button>
       </div>
     </section>
   )

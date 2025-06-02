@@ -3,7 +3,7 @@ import FilterSection from './FilterSection'
 import { amenities, locations } from '@/lib/utils'
 import Image from 'next/image'
 import Like from '../../public/images/Like.svg'
-import CheckboxLabel from './CheckBox/CheckBox'
+import Checkbox from './CheckBox/CheckBox'
 import { Slider } from 'radix-ui'
 
 const FilterSidebar = () => {
@@ -20,7 +20,7 @@ const FilterSidebar = () => {
 
       <FilterSection title="Location">
         {locations.map((location) => (
-          <CheckboxLabel key={location} label={location} className="text-sm text-gray-700" />
+          <Checkbox key={location} label={location} className="text-sm text-gray-700" />
         ))}
       </FilterSection>
 
@@ -51,7 +51,7 @@ const FilterSidebar = () => {
 
       <FilterSection title="Amenities">
         {amenities.map((amenity) => (
-          <CheckboxLabel key={amenity} label={amenity} className="text-sm text-gray-700" />
+          <Checkbox key={amenity} label={amenity} className="text-sm text-gray-700" />
         ))}
       </FilterSection>
 

@@ -10,7 +10,7 @@ type ReusableButtonProps = {
     type?: 'button' | 'submit' | 'reset';
 };
 
-const ReusableButton: React.FC<ReusableButtonProps> = ({
+const Button: React.FC<ReusableButtonProps> = ({
     children,
     onClick,
     loading = false,
@@ -47,4 +47,4 @@ const ReusableButton: React.FC<ReusableButtonProps> = ({
     );
 };
 
-export default ReusableButton;
+export default Button;

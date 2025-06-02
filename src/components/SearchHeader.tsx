@@ -1,6 +1,7 @@
 import React from 'react'
 import { Search } from 'lucide-react'
 import { fields } from '@/lib/utils'
+import Button from './Button/Button'
 
 const SearchHeader = () => {
   return (
@@ -14,9 +15,9 @@ const SearchHeader = () => {
         ))}
       </div>
 
-      <button className="min-w-13 min-h-13 cursor-pointer bg-[#29397E] rounded-full flex items-center justify-center hover:bg-blue-900 transition">
+      <Button className="min-w-13 min-h-13 cursor-pointer bg-[#29397E] rounded-full flex items-center justify-center hover:bg-blue-900 transition">
         <Search className="text-white w-4 h-4" />
-      </button>
+      </Button>
     </div>
   )
 }
