@@ -8,7 +8,7 @@ import ChaletsRules from '@/components/ChaletsRules'
 import Calender from '@/components/Calender/Calender'
 import { propertyData } from '@/lib/utils'
 
-export async function generateMetadata({ params }: { params: { slug: string } }) {
+export async function generateMetadata() {
   const data = propertyData
 
   return {

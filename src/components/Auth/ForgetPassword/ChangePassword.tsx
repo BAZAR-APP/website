@@ -1,6 +1,6 @@
 "use client"
 import CommonButton from "@/components/Button/Button"
-import { CheckBox, CommonInput } from "@/components"
+import { CommonInput } from "@/components"
 
 const ChangePassword
     = () => {

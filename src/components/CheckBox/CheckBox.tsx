@@ -6,7 +6,6 @@ type CheckboxProps = {
     checked?: boolean;
     defaultChecked?: boolean;
     onChange?: (checked: boolean) => void;
-    size?: string | number;
     className?: string;
 };
 
@@ -15,7 +14,6 @@ const Checkbox: React.FC<CheckboxProps> = ({
     checked,
     defaultChecked,
     onChange,
-    size = "2",
     className = "",
 }) => {
     return (

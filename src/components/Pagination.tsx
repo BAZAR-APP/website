@@ -11,7 +11,6 @@ interface PaginationProps {
 }
 
 const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPageChange }) => {
-  const baseButtonStyles = 'px-3 py-2 text-sm font-medium rounded-lg transition-colors duration-200'
 
   const navButtonStyles =
     'flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed'
@@ -40,11 +39,10 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
               key={page}
               onClick={() => onPageChange(page)}
               aria-current={isActive ? 'page' : undefined}
-              className={`w-[40px] h-[40px] text-sm font-medium flex items-center justify-center ${
-                isActive
-                  ? 'bg-[#E1F3FF] text-[#000] rounded-full'
-                  : 'bg-white text-gray-700 rounded-[8px] border border-gray-300 hover:bg-gray-50' // inactive page
-              }`}
+              className={`w-[40px] h-[40px] text-sm font-medium flex items-center justify-center ${isActive
+                ? 'bg-[#E1F3FF] text-[#000] rounded-full'
+                : 'bg-white text-gray-700 rounded-[8px] border border-gray-300 hover:bg-gray-50' // inactive page
+                }`}
             >
               {page}
             </button>

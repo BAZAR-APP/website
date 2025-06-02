@@ -1,6 +1,4 @@
-'use client';
-
-import { ChangePassword, ChangePasswordVerified, ForgetPasswordVerify, VerifyAccount } from '@/components';
+import { ChangePasswordVerified } from '@/components';
 
 const ForgetPassword = () => {
     return (

@@ -22,12 +22,12 @@ const PriceRow: React.FC<PriceRowProps> = ({ label, amount }) => (
 )
 
 const BookingSummary: React.FC = () => {
- 
+
   return (
     <div className="w-full md:max-w-sm rounded-lg">
       <div className="p-0">
         <div className="relative">
-          <img
+          <Image
             src="https://picsum.photos/200/300"
             alt="Luxury Lakeside Retreat"
             className="w-full h-46 object-cover rounded-lg"
@@ -73,7 +73,7 @@ const BookingSummary: React.FC = () => {
 
             <div className="flex justify-between text-[16px] leading-[150%] font-medium text-[#19191A]">
               <span>Total</span>
-              <span>630 KWD</span> 
+              <span>630 KWD</span>
             </div>
           </div>
 

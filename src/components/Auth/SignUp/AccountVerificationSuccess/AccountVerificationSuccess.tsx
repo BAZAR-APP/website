@@ -3,9 +3,7 @@
 import CommonButton from "@/components/Button/Button";
 
 const AccountVerificationSuccess = () => {
-    const handleOtpChange = () => {
 
-    }
     return (
         <>
             <div className='flex flex-col items-center justify-center h-[100%]'>
