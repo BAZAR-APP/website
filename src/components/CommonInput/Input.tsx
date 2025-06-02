@@ -8,9 +8,24 @@ type CommonInputProps = {
     placeholder?: string;
     value?: string;
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    type?: "number" | "search" | "time" | "text" | "hidden" | "date" | "datetime-local" | "email" | "month" | "password" | "tel" | "url" | "week";
+    type?:
+    | 'number'
+    | 'search'
+    | 'time'
+    | 'text'
+    | 'hidden'
+    | 'date'
+    | 'datetime-local'
+    | 'email'
+    | 'month'
+    | 'password'
+    | 'tel'
+    | 'url'
+    | 'week';
     name?: string;
     className?: string;
+    icon?: ReactNode;
+    prefix?: string;
 };
 
 const CommonInput: React.FC<CommonInputProps> = ({
@@ -21,6 +36,8 @@ const CommonInput: React.FC<CommonInputProps> = ({
     type = 'text',
     name,
     className,
+    icon,
+    prefix,
 }) => {
     const inputId = name || `input-${label?.toLowerCase().replace(/\s+/g, '-')}`;
 
@@ -45,7 +62,18 @@ const CommonInput: React.FC<CommonInputProps> = ({
                 type={type}
                 name={name}
                 className={className}
-            />
+            >
+                {icon && (
+                    <TextField.Slot className="pl-2 text-[#484A4C]">
+                        {icon}
+                    </TextField.Slot>
+                )}
+                {prefix && (
+                    <TextField.Slot className="pl-1 pr-1 text-[#484A4C] text-sm font-medium">
+                        {prefix}
+                    </TextField.Slot>
+                )}
+            </TextField.Root>
         </Flex>
     );
 };

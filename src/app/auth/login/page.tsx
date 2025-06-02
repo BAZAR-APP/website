@@ -13,16 +13,16 @@ const Login = () => {
   return (
     <div className='flex flex-col items-center justify-center h-[100%]'>
       <div className='max-w-[360px] flex flex-col gap-[24px]'>
-        <img src={"/images/Logo.svg"} alt='' />
+        <img src={"/images/Logo.svg"} alt='' className='w-[150px] h-[48px]' />
         <div className='flex flex-col gap-[12px]'>
           <h2 className='!text-primary font-600 text-[39px]'>Sign In</h2>
           <p className='!text-secondary font-600 text-[16px]'>Welcome back! Log in to manage your bookings and profile.</p>
         </div>
         <CommonInput name="fullName" placeholder='Enter your full name' type='text' label='Full Name' className={''} onChange={handleChange} />
-        <CommonInput name="phone" placeholder='Enter your phone number' type='tel' label='Phone' className={'bg-[#F9FAFB]'} onChange={handleChange} />
+        <CommonInput icon={<img src={"/images/countryFlag.svg"} alt='' className='w-[16px] h-[16px]' />} prefix='+965' name="phone" placeholder='Enter your phone number' type='tel' label='Phone' className={'bg-[#F9FAFB]'} onChange={handleChange} />
         <CommonInput name="password" placeholder='Enter your password' type='password' label='Password' className={'bg-[#F9FAFB]'} onChange={handleChange} />
         <CheckboxLabel label={"Remember Me"} />
-        <CommonButton children={"Sign In"} />
+        <CommonButton children={"Continue"} className="w-[360px] h-[48px] gap-2 pt-3 pr-5 pb-3 pl-5 rounded-lg" />
 
       </div>
     </div>
