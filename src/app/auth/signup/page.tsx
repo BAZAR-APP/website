@@ -8,9 +8,11 @@ const SignUp = () => {
 
 
     return (
-        // <CreateAccount />
-        <VerifyAccount />
-        // <AccountVerificationSuccess />
+        <>
+            {/* <CreateAccount /> */}
+            < VerifyAccount />
+            {/* <AccountVerificationSuccess /> */}
+        </>
     )
 }
 

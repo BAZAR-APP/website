@@ -180,7 +180,7 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
         </div>
       </div>
       <div className="px-5 pb-5">
-        <Link href="/details">
+        <Link href="/explore/details">
           <Button className="w-full mb-5 bg-[#29397E] text-white py-2 rounded-lg font-medium cursor-pointer">
             Book Now
           </Button>

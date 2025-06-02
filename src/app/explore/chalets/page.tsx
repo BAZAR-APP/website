@@ -17,15 +17,12 @@ const ExploreChalets = () => {
   const totalPages = Math.ceil(mockProperties.length / itemsPerPage)
   return (
     <div className="min-h-screen bg-primary-foreground">
-      <Header />
       <Heading className="font-semibold text-[39px] pl-14 leading-11 text-[#19191A]">
         Explore Chalets
       </Heading>
 
       <div className="flex lg:flex-row flex-col px-9 py-6">
-        <div>
           <FilterSidebar />
-        </div>
         <div className="flex-1">
           <SearchHeader />
           <SearchResults
@@ -48,7 +45,6 @@ const ExploreChalets = () => {
           />
         </div>
       </div>
-      <Footer />
     </div>
   )
 }

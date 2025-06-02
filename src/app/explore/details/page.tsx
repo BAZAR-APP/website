@@ -26,10 +26,8 @@ const Page = () => {
 
   return (
     <div>
-      <Header />
       <BookingStepper currentStep={step} />
       <main>{renderStepContent()}</main>
-      <Footer />
     </div>
   )
 }

@@ -1,11 +1,8 @@
 'use client';
 
 import React from 'react'
-import { Card } from '@radix-ui/themes'
-import CommonInput from '@/components/CommonInput/Input'
+import { CommonInput, CheckBox } from '@/components'
 import CommonButton from '@/components/Button/Button'
-import CheckboxLabel from '@/components/CheckBox/CheckBox'
-
 const Login = () => {
 
   const handleChange = () => { }
@@ -18,12 +15,11 @@ const Login = () => {
           <h2 className='!text-primary font-600 text-[39px]'>Sign In</h2>
           <p className='!text-secondary font-600 text-[16px]'>Welcome back! Log in to manage your bookings and profile.</p>
         </div>
-        <CommonInput name="fullName" placeholder='Enter your full name' type='text' label='Full Name' className={''} onChange={handleChange} />
-        <CommonInput icon={<img src={"/images/countryFlag.svg"} alt='' className='w-[16px] h-[16px]' />} prefix='+965' name="phone" placeholder='Enter your phone number' type='tel' label='Phone' className={'bg-[#F9FAFB]'} onChange={handleChange} />
-        <CommonInput name="password" placeholder='Enter your password' type='password' label='Password' className={'bg-[#F9FAFB]'} onChange={handleChange} />
-        <CheckboxLabel label={"Remember Me"} />
-        <CommonButton children={"Continue"} className="w-[360px] h-[48px] gap-2 pt-3 pr-5 pb-3 pl-5 rounded-lg" />
-
+        <CommonInput name="fullName" placeholder='Enter your full name' type='text' label='Full Name' className={'!bg-[#F9FAFB] !text-[#484A4C] !rounded-[8px] !border-none !h-[42px]'} onChange={handleChange} />
+        <CommonInput icon={<img src={"/images/countryFlag.svg"} alt='' className='w-[16px] h-[16px]' />} prefix='+965' name="phone" className={'!bg-[#F9FAFB] !text-[#484A4C] !rounded-[8px] !border-none !h-[42px]'} placeholder='Enter your phone number' type='number' label='Phone' onChange={handleChange} />
+        <CommonInput name="password" placeholder='Enter your password' type='password' label='Password' className={'!bg-[#F9FAFB] !text-[#484A4C] !rounded-[8px] !border-none !h-[42px]'} onChange={handleChange} />
+        <CheckBox label={"Remember Me"} />
+        <CommonButton children={"Continue"} className="w-[360px] h-[48px] bg-[#29397E] text-white gap-2 pt-3 pr-5 pb-3 pl-5 rounded-lg" />
       </div>
     </div>
   )

@@ -350,3 +350,8 @@ export const chaletRules = {
     refundTimeEstimate: 'Refund Time Estimate Within 72 Hours',
   },
 }
+export const priceDetails = [
+  { label: '100 KD x 4 nights', amount: '400 KWD' },
+  { label: 'Refundable Deposit', amount: '200 KWD' },
+  { label: 'Flower Arrangement', amount: '30 KWD' },
+]

@@ -1,7 +1,6 @@
 "use client"
 import CommonButton from "@/components/Button/Button"
-import CheckboxLabel from "@/components/CheckBox/CheckBox"
-import CommonInput from "@/components/CommonInput/Input"
+import { CheckBox, CommonInput } from "@/components"
 
 const CreateAccount = () => {
 
@@ -19,7 +18,7 @@ const CreateAccount = () => {
                 <CommonInput name="" placeholder='' type='number' label='Full Name' className={'bg-[#F9FAFB] text-[#484A4C] rounded-[8px]'} onChange={handleChange} />
                 <CommonInput name="" placeholder='' type='number' label='Phone' className={'bg-[#F9FAFB]'} onChange={handleChange} />
                 <CommonInput name="" placeholder='' type='number' label='Password' className={'bg-[#F9FAFB]'} onChange={handleChange} />
-                <CheckboxLabel label={"Remember Me"} />
+                <CheckBox label={"Remember Me"} />
                 <CommonButton children={undefined} className="w-[360px] h-[48px] bg-[#29397E] text-white gap-2 pt-3 pr-5 pb-3 pl-5 rounded-lg" />
                 <div className="flex items-center my-4">
                     <div className="flex-grow border-t border-[#DEDEDF]"></div>

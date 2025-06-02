@@ -78,7 +78,7 @@ export default function CustomizeStay({ onNext }: CustomizeStayProps) {
       </p>
 
       <div className="flex flex-col lg:flex-row gap-10 justify-between">
-        <div className="flex flex-col items-start gap-[40px] w-[463px]">
+        <div className="flex flex-col items-start gap-[40px] md:w-[463px] w-full">
           {services.map((section) => (
             <div key={section.title} className="w-full">
               <h2 className="text-xl pb-4 leading-6 font-bold text-[#19191A] flex items-center">
@@ -131,7 +131,7 @@ export default function CustomizeStay({ onNext }: CustomizeStayProps) {
           </div>
         </div>
 
-        <div className="flex flex-col items-start gap-[24px] w-[370px] h-fit bg-[#F9FAFB] p-6 rounded">
+        <div className="flex flex-col items-start gap-[24px] md:w-[370px] w-full h-fit bg-[#F9FAFB] p-6 rounded">
           <h3 className="text-[25px] leading-8 font-semibold text-[#19191A] flex items-center">
             Add-Ons
           </h3>
