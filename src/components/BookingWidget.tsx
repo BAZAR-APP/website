@@ -1,3 +1,4 @@
+"use client"
 import React, { useState } from 'react'
 import { ChevronDown } from 'lucide-react'
 import { Radio } from '@radix-ui/themes'
@@ -32,13 +33,13 @@ interface BookingConfig {
 }
 
 interface BookingWidgetProps {
-  checkIn: Date | undefined
-  setCheckIn: (date: Date | undefined) => void
-  checkOut: Date | undefined
-  setCheckOut: (date: Date | undefined) => void
-  guests: number
-  setGuests: (guests: number) => void
-  maxGuests: number
+  checkIn?: Date | undefined
+  setCheckIn?: (date: Date | undefined) => void
+  checkOut?: Date | undefined
+  setCheckOut?: (date: Date | undefined) => void
+  guests?: number
+  setGuests?: (guests: number) => void
+  maxGuests?: number
   packageOptions?: PackageOption[]
   bookingConfig?: BookingConfig
 }

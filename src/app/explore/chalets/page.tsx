@@ -8,9 +8,11 @@ import SearchHeader from '@/components/SearchHeader'
 import SearchResults from '@/components/SearchResults'
 import { mockProperties } from '@/lib/utils'
 import { Grid, Heading } from '@radix-ui/themes'
+import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 
 const ExploreChalets = () => {
+  const router = useRouter()
   const [sortBy, setSortBy] = useState('recommended')
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 9
@@ -22,7 +24,7 @@ const ExploreChalets = () => {
       </Heading>
 
       <div className="flex lg:flex-row flex-col px-9 py-6">
-          <FilterSidebar />
+        <FilterSidebar />
         <div className="flex-1">
           <SearchHeader />
           <SearchResults
@@ -34,7 +36,11 @@ const ExploreChalets = () => {
 
           <Grid columns={{ initial: '1', md: '2', lg: '3', xl: '4' }} gap="5" width="100%">
             {mockProperties.map((property) => (
-              <PropertyCard key={property.id} {...property} />
+              <PropertyCard
+                key={property.id}
+                {...property}
+                onClick={() => router.push(`/explore/chalets/${property.id}`)}
+              />
             ))}
           </Grid>
 

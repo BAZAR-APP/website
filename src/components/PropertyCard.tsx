@@ -15,6 +15,7 @@ interface PropertyCardProps {
   price: number
   priceUnit: 'night' | 'hour'
   imageUrl: string
+  onClick?: () => void
 }
 
 export const PropertyCard: React.FC<PropertyCardProps> = ({
@@ -29,9 +30,10 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
   price,
   priceUnit,
   imageUrl,
+  onClick
 }) => {
   return (
-    <div className="flex flex-col lg:w-[300px] w-full p-3 gap-5 bg-[#F9FAFB] rounded-[16px] mx-auto">
+    <div onClick={onClick} className="flex flex-col lg:w-[300px] w-full p-3 gap-5 bg-[#F9FAFB] rounded-[16px] mx-auto">
       <div className="lg:w-[276px] w-full lg:h-[184px] h-[250px]">
         <img src={imageUrl} alt={title} className="w-full h-full object-cover rounded-[12px]" />
       </div>

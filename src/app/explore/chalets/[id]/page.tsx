@@ -1,64 +1,75 @@
-'use client'
-import { useState } from 'react'
 import AmenitiesList from '@/components/AmenitiesList'
 import PropertyDetails from '@/components/ChaletsDetails/PropertyDetails'
 import PropertyDetailsCard from '@/components/ChaletsDetails/PropertyDetailsCard'
 import LocationMap from '@/components/LocationMap'
 import ReviewsSection from '@/components/ReviewsSection'
 import BookingWidget from '@/components/BookingWidget'
-import { propertyData } from '@/lib/utils'
 import ChaletsRules from '@/components/ChaletsRules'
 import Calender from '@/components/Calender/Calender'
+import { propertyData } from '@/lib/utils'
 
-const ChaletsDetails = () => {
-  const [checkIn, setCheckIn] = useState<Date | undefined>()
-  const [checkOut, setCheckOut] = useState<Date | undefined>()
-  const [guests, setGuests] = useState<number>(2)
+export async function generateMetadata({ params }: { params: { slug: string } }) {
+  const data = propertyData
+
+  return {
+    title: data.title,
+    description: data.description,
+    openGraph: {
+      title: data.title,
+      description: data.description,
+      images: data.images?.[0] ? [{ url: data.images[0] }] : [],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: data.title,
+      description: data.description,
+      images: data.images?.[0] ? [data.images[0]] : [],
+    },
+  }
+}
+
+export default function ChaletDetailsPage() {
+  const data = propertyData // Replace with dynamic fetch if needed
 
   return (
     <div className="min-h-screen bg-white">
       <div className="max-w-7xl mx-auto">
         <PropertyDetailsCard
-          title={propertyData.title}
-          location={propertyData.location}
-          rating={propertyData.rating}
-          reviewCount={propertyData.reviewCount}
-          images={propertyData.images}
+          title={data.title}
+          location={data.location}
+          rating={data.rating}
+          reviewCount={data.reviewCount}
+          images={data.images}
         />
 
         <div className="py-6 xl:px-22 lg:px-18 md:px-14 px-10">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2 space-y-8">
               <PropertyDetails
-                description={propertyData.description}
-                maxGuests={propertyData.maxGuests}
-                bedrooms={propertyData.bedrooms}
-                bathrooms={propertyData.bathrooms}
-                title={propertyData.title}
-                beds={propertyData.bedrooms}
-                points={propertyData.points}
+                description={data.description}
+                maxGuests={data.maxGuests}
+                bedrooms={data.bedrooms}
+                bathrooms={data.bathrooms}
+                title={data.title}
+                beds={data.bedrooms}
+                points={data.points}
               />
-
-              <AmenitiesList amenities={propertyData.amenities} />
+              <AmenitiesList amenities={data.amenities} />
               <Calender />
             </div>
 
             <div className="lg:col-span-1">
+              {/* BookingWidget must remain a client component if it uses useState */}
               <BookingWidget
-                checkIn={checkIn}
-                setCheckIn={setCheckIn}
-                checkOut={checkOut}
-                setCheckOut={setCheckOut}
-                guests={guests}
-                setGuests={setGuests}
-                maxGuests={propertyData.maxGuests}
-                packageOptions={propertyData.packageOptions}
-                bookingConfig={propertyData.bookingConfig}
+                maxGuests={data.maxGuests}
+                packageOptions={data.packageOptions}
+                bookingConfig={data.bookingConfig}
               />
             </div>
           </div>
+
           <>
-            <ReviewsSection rating={propertyData.rating} reviewCount={propertyData.reviewCount} />
+            <ReviewsSection rating={data.rating} reviewCount={data.reviewCount} />
             <LocationMap />
             <ChaletsRules />
           </>
@@ -67,5 +78,3 @@ const ChaletsDetails = () => {
     </div>
   )
 }
-
-export default ChaletsDetails
