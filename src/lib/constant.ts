@@ -349,3 +349,68 @@ export const priceDetails = [
   { label: 'Refundable Deposit', amount: '200 KWD' },
   { label: 'Flower Arrangement', amount: '30 KWD' },
 ]
+
+// Home Page Data
+
+export const HomeChaltesData = [
+  {
+    id: 1,
+    title: 'Luxury Lakeside Retreat',
+    location: 'Al Khiran',
+    guests: '5-7 guests',
+    beds: '5 beds',
+    baths: '4 bath',
+    amenities: ['Wifi', 'Free Parking'],
+    rating: 4.7,
+    reviews: 200,
+    price: 100,
+    priceUnit: 'night' as const,
+    imageUrl:
+      'https://cdn.builder.io/api/v1/image/assets/TEMP/9df58597e3e3f82cf04ba41b5826302522a3872d?placeholderIfAbsent=true',
+  },
+  {
+    id: 2,
+    title: 'Luxury Lakeside Retreat',
+    location: 'Al Khiran',
+    guests: '5-7 guests',
+    beds: '5 beds',
+    baths: '4 bath',
+    amenities: ['Wifi', 'Free Parking'],
+    rating: 4.7,
+    reviews: 200,
+    price: 100,
+    priceUnit: 'night' as const,
+    imageUrl:
+      'https://cdn.builder.io/api/v1/image/assets/TEMP/9df58597e3e3f82cf04ba41b5826302522a3872d?placeholderIfAbsent=true',
+  },
+  {
+    id: 3,
+    title: 'Luxury Lakeside Retreat',
+    location: 'Al Khiran',
+    guests: '5-7 guests',
+    beds: '5 beds',
+    baths: '4 bath',
+    amenities: ['Wifi', 'Free Parking'],
+    rating: 4.7,
+    reviews: 200,
+    price: 100,
+    priceUnit: 'night' as const,
+    imageUrl:
+      'https://cdn.builder.io/api/v1/image/assets/TEMP/9df58597e3e3f82cf04ba41b5826302522a3872d?placeholderIfAbsent=true',
+  },
+  {
+    id: 4,
+    title: 'Luxury Lakeside Retreat',
+    location: 'Al Khiran',
+    guests: '5-7 guests',
+    beds: '5 beds',
+    baths: '4 bath',
+    amenities: ['Wifi', 'Free Parking'],
+    rating: 4.7,
+    reviews: 200,
+    price: 100,
+    priceUnit: 'night' as const,
+    imageUrl:
+      'https://cdn.builder.io/api/v1/image/assets/TEMP/9df58597e3e3f82cf04ba41b5826302522a3872d?placeholderIfAbsent=true',
+  }
+];

@@ -7,12 +7,14 @@ export { default as VerifyAccount } from "./Auth/SignUp/VerifyAccount/VerifyAcco
 export { default as ChangePassword } from "./Auth/ForgetPassword/ChangePassword"
 export { default as Verified } from "./Auth/Verified"
 export { default as ChangePasswordVerified } from "./Auth/ForgetPassword/ChangePasswordVerified"
-export { default as HomeHeader } from "./Home/Header"
+export { default as BannerSection } from "./Home/BannerSection"
 export { default as SearchHeader } from "./SearchHeader"
 export { default as LuxuryExperience } from "./Home/LuxuryExperience"
 export { default as CityCard } from "./Home/CityCard"
 export { default as DestinationSection } from "./Home/Destination"
 export { default as ChatHero } from "./Home/ChatSection"
-
-
+export { default as Button } from "./Button/Button"
+export { default as RewardsSection } from "./Home/RewardSection"
+export { default as PropertyCard } from "./PropertyCard"
+export { default as ChaletsCard } from "./Home/ChaletCardSection"
 

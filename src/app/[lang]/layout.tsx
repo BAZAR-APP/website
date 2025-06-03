@@ -2,6 +2,7 @@ import { IBM_Plex_Sans, IBM_Plex_Sans_Arabic } from 'next/font/google'
 import '@/app/globals.css'
 import { getDictionary } from '@/lib/dictionary'
 import { i18n, Locale } from '../../../i18n.config'
+import { Footer } from '@/components'
 
 // Font for English
 const plex = IBM_Plex_Sans({
@@ -41,6 +42,7 @@ export default async function RootLayout({
       className={`${plex.variable} ${plexArabic.variable}`}
     >
       <main className="flex-1">{children}</main>
+      <Footer />
     </div>
   )
 }
