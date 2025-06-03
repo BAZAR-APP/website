@@ -63,7 +63,9 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
   showBookButton = false,
   couponCode = false,
 }) => {
-  const { getValues } = useFormContext()
+  const { getValues, watch } = useFormContext()
+  const romanticWeekend = watch('romanticWeekend')
+
   const isSplitPayment = getValues()?.paymentOption === 'split'
 
   return (
@@ -115,7 +117,7 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
             {priceDetails.map(({ label, amount }) => (
               <PriceRowUI key={label} label={label} amount={amount} />
             ))}
-
+            {romanticWeekend && <PriceRowUI label={'Romantic Weekend'} amount={'25 KWD'} />}
             <hr className="my-4" />
 
             <PriceRowUI label={'Total'} amount={'420 KWD'} labelFont="medium" />

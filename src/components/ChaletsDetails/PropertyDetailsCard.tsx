@@ -1,7 +1,6 @@
-import { Button } from '@radix-ui/themes'
-import ShareIcon from '../../../public/images/share-icon.svg'
 import LikeStar from '../../../public/images/Like.svg'
 import Image from 'next/image'
+import SocialShareWrapper from '../SocialShareWrapper'
 
 interface PropertyDetailsCardProps {
   title: string
@@ -30,16 +29,7 @@ const PropertyDetailsCard = ({
               <span className="text-gray-500 font-normal">({reviewCount} reviews)</span>
             </div>
             <span>{location}</span>
-            <Button variant="ghost" className="flex items-center gap-1">
-              <Image
-                src={ShareIcon}
-                alt="Share icon"
-                className="cursor-pointer"
-                width={18}
-                height={18}
-              />
-              <span className="text-[#19191A] cursor-pointer">Share</span>
-            </Button>
+            <SocialShareWrapper />
           </div>
         </div>
       </div>

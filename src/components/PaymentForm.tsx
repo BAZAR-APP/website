@@ -2,7 +2,7 @@
 
 import React from 'react'
 import Image from 'next/image'
-import { Check, Plug, Plus } from 'lucide-react'
+import { Check, CheckCircle, Plus } from 'lucide-react'
 import clsx from 'clsx'
 import { useFormContext } from 'react-hook-form'
 import Button from './Button/Button'
@@ -12,6 +12,7 @@ export type PaymentFormData = {
   cardNumber: string
   expiry: string
   cvv: string
+  romanticWeekend: boolean
 }
 
 type PaymentFormProps = {
@@ -42,8 +43,11 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ onSubmit }) => {
     register,
     handleSubmit,
     watch,
+    setValue,
     formState: { errors },
   } = useFormContext<PaymentFormData>()
+
+  const romanticWeekend = watch('romanticWeekend')
 
   const paymentOption = watch('paymentOption')
 
@@ -158,10 +162,22 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ onSubmit }) => {
         </p>
         <Button
           intent="transperent"
-          size="md"
-          className="flex sm:gap-3 gap-1 md:text-[16px] text-sm cursor-pointer text-white border border-white md:mt-5 mt-3"
+          size={romanticWeekend ? 'sm' : 'md'}
+          className={clsx(
+            'flex sm:gap-3 gap-1 md:text-[16px] text-sm cursor-pointer border md:mt-5 mt-3 text-white border-white',
+          )}
+          onClick={() => setValue('romanticWeekend', !romanticWeekend)}
+          type="button"
         >
-          Add Now To Your Booking <Plus />
+          {romanticWeekend ? (
+            <>
+              Added <CheckCircle className="w-4 h-4" />
+            </>
+          ) : (
+            <>
+              Add Now To Your Booking <Plus className="w-4 h-4" />
+            </>
+          )}
         </Button>
       </div>
     </>
