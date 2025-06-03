@@ -10,7 +10,7 @@ type ButtonProps = {
   disabled?: boolean;
   type?: 'button' | 'submit' | 'reset';
   className?: string;
-  intent?: 'primary' | 'secondary' | 'ghost';
+  intent?: 'primary' | 'secondary' | 'ghost' | 'transperent';
   size?: 'sm' | 'md' | 'lg' | 'responsive';
   asChild?: boolean; // for Radix `Slot`
 };

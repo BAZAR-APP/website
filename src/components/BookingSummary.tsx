@@ -14,7 +14,7 @@ type PriceRowProps = {
 const PriceRow: React.FC<PriceRowProps> = ({ label, amount }) => (
   <div className="flex justify-between mb-3 last:mb-0">
     <span
-      className="flex items-center text-[#19191A] font-normal text-[16px] leading-[19px] w-[229px] h-[19px] flex-grow"
+      className="flex items-center text-[#19191A] font-normal text-[16px] leading-[19px]"
       style={{ order: 0, flexShrink: 0 }}
     >
       {label}
@@ -25,12 +25,10 @@ const PriceRow: React.FC<PriceRowProps> = ({ label, amount }) => (
 type BookingSummaryProps = {
   showBookButton?: boolean
   couponCode?: boolean
-  onNext?: () => void
 }
 const BookingSummary: React.FC<BookingSummaryProps> = ({
   showBookButton = false,
   couponCode = false,
-  onNext
 }) => {
   return (
     <div className="w-full md:max-w-sm rounded-lg">
@@ -39,12 +37,14 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
           <Image
             src="https://picsum.photos/200/300"
             alt="Luxury Lakeside Retreat"
+            width={200}
+            height={200}
             className="w-full h-46 object-cover rounded-lg"
           />
         </div>
 
         <div className="py-3">
-          <div className="flex items-start justify-between mb-3">
+          <div className="flex items-start flex-wrap justify-between mb-3">
             <h3 className="text-[16px] leading-[24px] font-medium text-[#19191A] font-inter">
               Luxury Lakeside Retreat
             </h3>
@@ -103,13 +103,11 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
             Redeem Gifts & Discounts ›
           </Link>
           {showBookButton && (
-            <Button
-              type="submit"
-              onClick={() => onNext}
-              className="w-full my-2 cursor-pointer px-3.5 text-white py-3 bg-[#29397E] rounded-md font-medium"
-            >
-              Book Now
-            </Button>
+            <Link href="/explore/details/payment-confirmed/">
+              <Button className="w-[100%] mb-5 text-white my-3.5 rounded-lg font-medium cursor-pointer">
+                Book Now
+              </Button>
+            </Link>
           )}
         </div>
       </div>
