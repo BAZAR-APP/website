@@ -12,9 +12,9 @@ export const buttonStyles = cva(
       },
       size: {
         sm: 'px-3 py-2 text-sm',
-        md: 'px-4 py-2 text-base md:w-[270px] w-full',
-        lg: 'w-[360px] h-[48px] px-5 py-3 text-base', // default desktop size
-        responsive: 'w-full px-5 py-3',
+        md: 'px-4 py-2 text-base w-full',
+        lg: 'h-[48px] px-5 py-3 text-base', // default desktop size
+        responsive: 'px-5 py-3',
       },
       disabled: {
         true: 'pointer-events-none opacity-50',

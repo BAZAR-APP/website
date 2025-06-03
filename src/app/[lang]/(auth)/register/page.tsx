@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation'
 
 const SignUp = () => {
   const router = useRouter()
-  const handleChange = () => {}
+  const handleChange = () => { }
 
   return (
     <div className="flex flex-col items-center justify-center h-[100%]">

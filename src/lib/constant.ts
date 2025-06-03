@@ -212,7 +212,7 @@ export const quickLinks = [
   { label: 'About Us', href: '#' },
   { label: 'Explore', href: '#' },
   { label: 'Terms & Conditions', href: '#' },
-  { label: 'Privacy Policy', href: '#' },
+  { label: 'Privacy Policy', href: '/terms-conditions/' },
 ]
 export const reviews = [
   {
@@ -412,5 +412,77 @@ export const HomeChaltesData = [
     priceUnit: 'night' as const,
     imageUrl:
       'https://cdn.builder.io/api/v1/image/assets/TEMP/9df58597e3e3f82cf04ba41b5826302522a3872d?placeholderIfAbsent=true',
+  }
+];
+
+
+// Terms and Conditions
+
+export const termsData = [
+  {
+      number: 1,
+      title: "Booking & Payment",
+      content: [
+          "A booking is considered confirmed only after successful payment.",
+          "You may choose to pay in full or in two parts (50% upfront and the remaining 72 hours before check-in).",
+          "If the remaining amount is not paid on time, the booking may be canceled without refund."
+      ]
+  },
+  {
+      number: 2,
+      title: "Cancellation & Refunds",
+      content: [
+          "Refundable bookings can be canceled up to 72 hours before check-in for a full refund.",
+          "Non-refundable bookings are not eligible for refunds.",
+          "Refunds (if applicable) will be processed within 7 business days."
+      ]
+  },
+  {
+      number: 3,
+      title: "Check-In & Check-Out",
+      content: [
+          "Check-in and check-out times are specified in your booking details.",
+          "Early check-in or late check-out may incur additional fees and must be requested in advance."
+      ]
+  },
+  {
+      number: 4,
+      title: "Use of Chalet",
+      content: [
+          "The number of guests must not exceed the booking limit.",
+          "The chalet must be kept in good condition. Any damage may result in a charge of up to 200 KD from the security deposit.",
+          "Parties, loud noise, or illegal activities are not allowed."
+      ]
+  },
+  {
+      number: 5,
+      title: "Loyalty Program",
+      content: [
+          "Points are earned for every eligible booking and can be redeemed for discounts.",
+          "Points are non-transferable and may expire if unused for 12 months."
+      ]
+  },
+  {
+      number: 6,
+      title: "Add-Ons & Extras",
+      content: [
+          "Add-ons such as decorations, food packages, or early check-in must be selected during booking.",
+          "Prices for add-ons are added to the total amount and are non-refundable after 72 hours before check-in."
+      ]
+  },
+  {
+      number: 7,
+      title: "Privacy & Security",
+      content: [
+          "We value your privacy. Personal data is used only for booking, communication, and loyalty program purposes.",
+          "Payment is processed securely through trusted third-party gateways."
+      ]
+  },
+  {
+      number: 8,
+      title: "Changes to Terms",
+      content: [
+          "We reserve the right to update these terms at any time. Continued use of the platform means you accept any changes."
+      ]
   }
 ];
