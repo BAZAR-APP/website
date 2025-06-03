@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useForm, FormProvider } from 'react-hook-form'
 import CustomizeStay from './CustomizeStay'
 import UserInfo from './UserInfo'
 import Payment from './Payment'
@@ -8,6 +9,7 @@ import BookingStepper from './BookingStepper'
 
 const Page = () => {
   const [step, setStep] = useState(1)
+  const methods = useForm()
 
   const renderStepContent = () => {
     switch (step) {
@@ -23,10 +25,12 @@ const Page = () => {
   }
 
   return (
-    <div>
-      <BookingStepper currentStep={step} />
-      <main>{renderStepContent()}</main>
-    </div>
+    <FormProvider {...methods}>
+      <div>
+        <BookingStepper currentStep={step} />
+        <main>{renderStepContent()}</main>
+      </div>
+    </FormProvider>
   )
 }
 
