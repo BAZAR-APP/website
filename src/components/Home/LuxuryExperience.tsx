@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 const LuxuryExperience: React.FC = () => {
     const [isHovered, setIsHovered] = useState(false);
@@ -12,13 +12,11 @@ const LuxuryExperience: React.FC = () => {
         <section className="flex flex-col items-center gap-16 self-stretch relative bg-[#FDFDFE] px-0 py-24 max-md:px-0 max-md:py-16 max-sm:px-0 max-sm:py-12">
             <div className="max-w-screen-xl flex flex-col items-start gap-8 self-stretch relative w-full mx-auto my-0 px-5 py-0 max-md:max-w-[991px] max-md:px-4 max-md:py-0 max-sm:max-w-screen-sm">
                 <div className="flex items-start gap-8 self-stretch relative max-md:flex-col max-md:gap-6">
-                    {/* Hero Section */}
                     <header className="flex max-w-[1440px] flex-col items-start gap-5 flex-[1_0_0] relative">
                         <h1 className="self-stretch text-[#101828] text-5xl font-bold relative gap-[-54px] max-md:text-4xl max-sm:text-[28px]">
                             Escape to luxury and comfort at Bazar
                         </h1>
                         <div className="flex flex-col items-start gap-[-54px] self-stretch relative">
-                            {/* Star Icon Button */}
                             <div className="flex items-center gap-2 relative p-0 rounded-[80.439px] bg-[#29397E] max-md:justify-center max-md:flex-wrap max-md:gap-4 max-sm:gap-3">
                                 <div className="flex items-start relative bg-[rgba(255,251,235,0.00)] p-[18.282px] rounded-[18279.707px] max-md:justify-center max-md:flex-wrap max-md:gap-4 max-sm:gap-3 max-sm:p-3">
                                     <div
@@ -29,7 +27,6 @@ const LuxuryExperience: React.FC = () => {
                                     />
                                 </div>
                             </div>
-                            {/* Building Icon Button */}
                             <div className="flex items-center gap-2 relative p-0 rounded-[80.439px] bg-gray-100">
                                 <div className="flex items-start relative bg-[rgba(255,251,235,0.00)] p-[18.282px] rounded-[18279.707px] max-md:justify-center max-md:flex-wrap max-md:gap-4 max-sm:gap-3 max-sm:p-3">
                                     <div
@@ -40,7 +37,6 @@ const LuxuryExperience: React.FC = () => {
                                     />
                                 </div>
                             </div>
-                            {/* Waves Icon Button */}
                             <div className="flex items-center gap-2 relative p-0 rounded-[80.439px] border border-[1.828px] border-solid">
                                 <div className="flex items-start relative bg-[rgba(255,251,235,0.00)] p-[18.282px] rounded-[18279.707px] max-md:justify-center max-md:flex-wrap max-md:gap-4 max-sm:gap-3 max-sm:p-3">
                                     <div
@@ -55,7 +51,6 @@ const LuxuryExperience: React.FC = () => {
                     </header>
 
                     <div className="flex w-[611px] flex-col items-start gap-[61px] relative max-md:w-full">
-                        {/* Image Gallery */}
                         <figure className="flex w-[611px] flex-col items-start gap-[61px] relative max-md:w-full">
                             <div className="flex h-[232px] justify-between items-start self-stretch relative max-md:flex-col max-md:h-auto max-md:gap-4">
                                 <img
@@ -92,7 +87,6 @@ const LuxuryExperience: React.FC = () => {
                             </div>
                         </figure>
 
-                        {/* Description Section */}
                         <article className="flex items-start gap-[94px] relative bottom-[content] max-md:flex-col max-md:gap-6">
                             <p className="w-[311px] h-[87px] text-gray-700 text-base italic font-normal relative max-md:w-full max-md:h-auto">
                                 where breathtaking views meet world-class hospitality. Whether
@@ -115,7 +109,6 @@ const LuxuryExperience: React.FC = () => {
                     </div>
                 </div>
 
-                {/* Testimonial Section */}
                 <section className="flex flex-col items-start gap-8 self-stretch relative">
                     <div className="flex max-w-[1440px] flex-col items-start gap-5 self-stretch relative">
                         <div className="flex w-[976px] flex-col items-start gap-[-54px] relative max-md:w-full">
