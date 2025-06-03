@@ -17,4 +17,5 @@ export { default as Button } from "./Button/Button"
 export { default as RewardsSection } from "./Home/RewardSection"
 export { default as PropertyCard } from "./PropertyCard"
 export { default as ChaletsCard } from "./Home/ChaletCardSection"
+export { default as Terms } from './Terms/Terms'
 
