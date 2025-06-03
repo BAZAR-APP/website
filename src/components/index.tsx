@@ -18,4 +18,4 @@ export { default as RewardsSection } from "./Home/RewardSection"
 export { default as PropertyCard } from "./PropertyCard"
 export { default as ChaletsCard } from "./Home/ChaletCardSection"
 export { default as Terms } from './Terms/Terms'
-
+export { default as DownloadApp } from "./DownloadApp/DownloadApp"
