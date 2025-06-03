@@ -1,7 +1,7 @@
 "use client"
 import { useState } from 'react';
 
-const LuxuryExperience: React.FC = () => {
+const LuxuryExperience: React.FC<any> = () => {
     const [isHovered, setIsHovered] = useState(false);
 
     const handleLearnMore = () => {

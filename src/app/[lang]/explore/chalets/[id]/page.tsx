@@ -6,17 +6,9 @@ import ReviewsSection from '@/components/ReviewsSection'
 import BookingWidget from '@/components/BookingWidget'
 import ChaletsRules from '@/components/ChaletsRules'
 import Calender from '@/components/Calender/Calender'
-import { propertyData } from '@/lib/utils'
-export async function generateStaticParams() {
-  return [
-    { id: '1' },
-    { id: '2' },
-    { id: '3' },
-    // Add all the chalet IDs you want to pre-generate
-  ]
-}
-export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params
+import { propertyData } from '@/lib/constant'
+
+export async function generateMetadata({ params }: { params: { slug: string } }) {
   const data = propertyData
 
   return {

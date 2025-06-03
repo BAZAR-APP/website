@@ -2,7 +2,6 @@ import { IBM_Plex_Sans, IBM_Plex_Sans_Arabic } from 'next/font/google'
 import '@/app/globals.css'
 import { getDictionary } from '@/lib/dictionary'
 import { i18n, Locale } from '../../../i18n.config'
-import { Navigation } from '@/components/Navigtion'
 
 // Font for English
 const plex = IBM_Plex_Sans({
@@ -41,9 +40,6 @@ export default async function RootLayout({
       dir={isRtl ? 'rtl' : 'ltr'}
       className={`${plex.variable} ${plexArabic.variable}`}
     >
-      <header className="border-b border-border">
-        <Navigation dictionary={dictionary} lang={lang} />
-      </header>
       <main className="flex-1">{children}</main>
     </div>
   )
