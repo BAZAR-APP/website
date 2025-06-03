@@ -116,7 +116,7 @@ const LuxuryExperience: React.FC<any> = () => {
                                 Bazar offers a luxurious escape with stunning sea views and
                                 premium amenities. Our chalets provide the perfect
                             </blockquote>
-                            <p className="w-[976px] h-[175px] relative text-[#101828] text-4xl font-normal leading-[55px] tracking-[-0.72px] gap-2 self-stretch px-[11px] py-0 top-[9px] max-md:text-[28px] max-md:leading-10 max-sm:text-2xl max-sm:leading-8">
+                            <p className="max-w-[976px] h-[175px] relative text-[#101828] text-4xl font-normal leading-[55px] tracking-[-0.72px] gap-2 self-stretch px-[11px] py-0 top-[9px] max-md:text-[28px] max-md:leading-10 max-sm:text-2xl max-sm:leading-8">
                                 blend of comfort and elegance, ensuring a memorable stay.
                                 Whether for relaxation or adventure, experience hospitality at
                                 its finest.

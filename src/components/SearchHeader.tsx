@@ -16,7 +16,7 @@ const SearchHeader = () => {
       </div>
 
       <Button className="min-w-13 min-h-13 cursor-pointer bg-[#29397E] rounded-full flex items-center justify-center hover:bg-blue-900 transition">
-        <Search className="text-white w-4 h-4" />
+        <Search className="text-white w-4 h-4 rounded-full" />
       </Button>
     </div>
   )
