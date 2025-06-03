@@ -10,7 +10,7 @@ export const Footer: React.FC = () => {
   return (
     <>
       <footer className="flex flex-col m-4 md:m-10 p-8 md:p-16 gap-8 bg-[#F9FAFB] rounded-[20px] md:rounded-[40px]">
-        <div className="flex flex-col md:flex-row w-full xl:justify-evenly justify-between flex-wrap lg:gap-0 gap-8">
+        <div className="flex flex-col md:flex-row w-full justify-between flex-wrap lg:gap-0 gap-8">
           <div className="flex flex-col gap-5 max-w-full lg:max-w-[350px]">
             <Logo />
             <Text className="text-[16px] leading-[19px] font-normal text-[#484A4C] pr-0 md:pr-2">
@@ -19,18 +19,10 @@ export const Footer: React.FC = () => {
               options, add-ons, and a loyalty program designed just for you.
             </Text>
           </div>
+          <div className='flex gap-[48px]'>
 
-          <QuickLinks />
-          <ContactInfo />
-
-          <div className="max-[1221px]:hidden md:w-auto justify-end">
-            <Image
-              src={FooterImg}
-              alt="Footer Tree Illustration"
-              width={290}
-              height={260}
-              className="max-w-full h-auto"
-            />
+            <QuickLinks />
+            <ContactInfo />
           </div>
         </div>
       </footer>
