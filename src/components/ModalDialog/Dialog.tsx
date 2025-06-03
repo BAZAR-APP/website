@@ -1,15 +1,15 @@
-import * as React from "react";
-import { X } from "lucide-react";
-import clsx from "clsx";
-import { Dialog } from "radix-ui";
-
+import * as React from 'react'
+import { X } from 'lucide-react'
+import clsx from 'clsx'
+import { Dialog } from 'radix-ui'
+import './Dialog.css'
 type ModalDialogProps = {
-  isOpen: boolean;
-  setIsOpen: (open: boolean) => void;
-  title?: string;
-  children?: React.ReactNode;
-  className?: string;
-};
+  isOpen: boolean
+  setIsOpen: (open: boolean) => void
+  title?: string
+  children?: React.ReactNode
+  className?: string
+}
 
 const ModalDialog: React.FC<ModalDialogProps> = ({
   isOpen,
@@ -24,13 +24,14 @@ const ModalDialog: React.FC<ModalDialogProps> = ({
         <Dialog.Overlay className="fixed inset-0 bg-black/50 z-40" />
         <Dialog.Content
           className={clsx(
-            "fixed z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2",
-            "bg-white rounded-lg shadow-lg p-6 w-full max-w-[90%] md:max-w-md mx-auto",
-            className
+            'fixed z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2',
+            'bg-white rounded-lg shadow-lg p-6 w-full max-w-[90%] md:max-w-md mx-auto md:my-0 my-3 max-h-[500px] overflow-y-auto',
+            'hide-scrollbar',
+            className,
           )}
         >
-          <div className="flex items-center justify-between mb-4">
-            <Dialog.Title className="text-lg font-semibold">{title}</Dialog.Title>
+          <div className="flex items-center justify-between mb-4 mt-1">
+            <Dialog.Title className="md:text-xl text-lg font-semibold">{title}</Dialog.Title>
             <Dialog.Close asChild>
               <button
                 aria-label="Close"
@@ -44,7 +45,7 @@ const ModalDialog: React.FC<ModalDialogProps> = ({
         </Dialog.Content>
       </Dialog.Portal>
     </Dialog.Root>
-  );
-};
+  )
+}
 
-export default ModalDialog;
+export default ModalDialog
