@@ -1,10 +1,10 @@
 import React from 'react'
 import FilterSection from './FilterSection'
-import { amenities, locations } from '@/lib/utils'
 import Image from 'next/image'
 import Like from '../../public/images/Like.svg'
 import Checkbox from './CheckBox/CheckBox'
 import { Slider } from 'radix-ui'
+import { amenities, locations } from '@/lib/constant'
 
 const FilterSidebar = () => {
   const [value, setValue] = React.useState(50)

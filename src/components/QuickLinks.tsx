@@ -2,7 +2,7 @@ import * as React from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import Arrow from '../../public/images/Arrow.svg'
-import { quickLinks } from '@/lib/utils'
+import { quickLinks } from '@/lib/constant'
 
 interface QuickLinksProps {
   className?: string

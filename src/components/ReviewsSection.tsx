@@ -4,9 +4,9 @@ import { ChevronRight, User } from 'lucide-react'
 import LikeStar from '../../public/images/Like.svg'
 import UnlikeStar from '../../public/images/Unlike.svg'
 import Image from 'next/image'
-import { reviews } from '@/lib/utils'
 import Link from 'next/link'
 import Button from './Button/Button'
+import { reviews } from '@/lib/constant'
 
 interface ReviewsSectionProps {
   rating: number

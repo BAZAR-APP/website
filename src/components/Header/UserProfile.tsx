@@ -2,7 +2,7 @@
 import React from 'react'
 import { DropdownMenu, Avatar, Text, Flex, Button } from '@radix-ui/themes'
 import { ChevronDown, LogOut } from 'lucide-react'
-import { getUserNameInitials } from '@/lib/utils'
+import { getUserNameInitials } from '@/lib/constant'
 
 
 type UserProfileProps = {
