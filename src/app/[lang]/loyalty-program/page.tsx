@@ -1,11 +1,14 @@
-import { Footer, HowItWork, LoyaltyBannerSection } from "@/components"
+import { DownloadApp, EarningPoints, Footer, HowItWork, JoinUs, LoyaltyBannerSection, LoyaltyTiers } from "@/components"
 
 const LoyaltyProgram = () => {
     return (
         <>
             <LoyaltyBannerSection />
             <HowItWork />
-            <Footer />
+            <LoyaltyTiers />
+            <JoinUs />
+            <EarningPoints />
+            <DownloadApp />
         </>
     );
 }
