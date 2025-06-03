@@ -8,6 +8,7 @@ import NotificationIcon from '../NotificationIcon'
 import SideNav from '../SideNav'
 import Link from 'next/link'
 import Button from '../Button/Button'
+import { useRouter } from 'next/navigation'
 
 interface HeaderProps {
   className?: string
@@ -19,7 +20,7 @@ const Header: React.FC<HeaderProps> = ({ className = '', isAuthHeader = false })
 
   const toggleSideNav = () => setIsSideNavOpen((open) => !open)
   const closeSideNav = () => setIsSideNavOpen(false)
-
+  const router = useRouter()
   const baseContainerClasses =
     'flex relative flex-col gap-16 justify-center items-center self-stretch lg:px-16 px-12 py-8 max-md:px-8 max-md:py-6 max-sm:px-5 max-sm:py-4'
 
@@ -40,17 +41,10 @@ const Header: React.FC<HeaderProps> = ({ className = '', isAuthHeader = false })
         </a>
       </nav>
       <div className="flex items-center space-x-4">
-        <Button
-          type="button"
-          className="px-4 py-2 text- border-none rounded-[8px] font-medium bg-gray-100 text-secondary hover:bg-gray-100"
-        >
+        <Button onClick={() => router.push('/en/login')} type="button" size="md" intent='ghost'>
           Sign In
         </Button>
-
-        <Button
-          type="button"
-          className="px-4 py-2 rounded-[8px] font-medium text-primary-foreground bg-primary-blue hover:bg-primary-blue"
-        >
+        <Button onClick={() => router.push('/en/register')} type="button" size="md">
           Sign Up
         </Button>
       </div>
@@ -68,7 +62,12 @@ const Header: React.FC<HeaderProps> = ({ className = '', isAuthHeader = false })
           aria-label="Open navigation menu"
         >
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M4 6h16M4 12h16M4 18h16"
+            />
           </svg>
         </button>
       </div>
