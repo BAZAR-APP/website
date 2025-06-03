@@ -36,12 +36,12 @@ const Header: React.FC<HeaderProps> = ({ className = '', isAuthHeader = false })
         <Link href="/home" className="text-primary-blue hover:text-black font-medium">
           Home
         </Link>
-        <a href="/explore" className="text-primary-blue hover:text-black font-medium">
+        <Link href="/explore/chalets" className="text-primary-blue hover:text-black font-medium">
           Explore
-        </a>
+        </Link>
       </nav>
       <div className="flex items-center space-x-4">
-        <Button onClick={() => router.push('/en/login')} type="button" size="md" intent='ghost'>
+        <Button onClick={() => router.push('/en/login')} type="button" size="md" intent="ghost">
           Sign In
         </Button>
         <Button onClick={() => router.push('/en/register')} type="button" size="md">

@@ -2,7 +2,7 @@ import { getDictionary } from '@/lib/dictionary'
 import { Locale } from '../../../i18n.config'
 import { ChatHero, DestinationSection, HomeHeader, LuxuryExperience } from '@/components'
 
-export default async function Home({ params }: { params: { lang: Locale } }) {
+export default async function Home({ params }: { params: Promise<{ lang: Locale }> }) {
   const { lang } = await params
   const { page } = await getDictionary(lang)
 

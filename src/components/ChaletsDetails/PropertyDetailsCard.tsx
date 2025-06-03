@@ -50,6 +50,8 @@ const PropertyDetailsCard = ({
             <Image
               src={images[0]}
               alt={`${title} main view`}
+              width={100}
+              height={96}
               className="w-full h-64 lg:h-96 object-cover"
             />
           )}
