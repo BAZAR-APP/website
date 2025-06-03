@@ -1,4 +1,4 @@
-import { DownloadApp, EarningPoints, Footer, HowItWork, JoinUs, LoyaltyBannerSection, LoyaltyTiers } from "@/components"
+import { DownloadApp, EarningPoints, HowItWork, JoinUs, LoyaltyBannerSection, LoyaltyTiers, SavingSection } from "@/components"
 
 const LoyaltyProgram = () => {
     return (
@@ -8,6 +8,7 @@ const LoyaltyProgram = () => {
             <LoyaltyTiers />
             <JoinUs />
             <EarningPoints />
+            <SavingSection />
             <DownloadApp />
         </>
     );
