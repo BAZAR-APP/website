@@ -4,7 +4,7 @@ import { BannerSection, ChaletsCard, ChatHero, DestinationSection, LuxuryExperie
 
 
 
-export default async function Home({ params }: { params: { lang: Locale } }) {
+export default async function Home({ params }: { params: Promise<{ lang: Locale }> }) {
   const { lang } = await params
   const { page } = await getDictionary(lang)
 
