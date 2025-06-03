@@ -1,6 +1,6 @@
 
 import * as React from "react";
-import { Button } from "@/components";
+import { BazarImageCard, Button } from "@/components";
 
 interface RewardsSectionProps {
     title?: string;
@@ -44,7 +44,7 @@ const RewardsSection: React.FC<RewardsSectionProps> = ({
 
                     <div className="mt-6">
                         <Button
-                            className="w-[190px] h-auto py-3 px-5 bg-[#29397E] text-white hover:bg-[#1f2a5f] rounded-lg font-medium"
+                            className="w-[190px] h-auto bg-[#29397E] text-white hover:bg-[#1f2a5f] rounded-lg font-medium"
                         >
                             {buttonText}
                         </Button>
@@ -52,12 +52,7 @@ const RewardsSection: React.FC<RewardsSectionProps> = ({
                 </article>
 
                 <div className="mt-10">
-                    <img
-                        src={imageUrl}
-                        alt="Rewards program illustration showing benefits and features"
-                        className="aspect-[2.78] object-contain w-[1120px] max-w-full rounded-[0px_0px_0px_0px]"
-                        loading="lazy"
-                    />
+                    <BazarImageCard />
                 </div>
             </div>
         </section>

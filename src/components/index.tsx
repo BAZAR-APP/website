@@ -19,3 +19,4 @@ export { default as PropertyCard } from "./PropertyCard"
 export { default as ChaletsCard } from "./Home/ChaletCardSection"
 export { default as Terms } from './Terms/Terms'
 export { default as DownloadApp } from "./DownloadApp/DownloadApp"
+export { default as BazarImageCard } from "./BazarImageCard"
