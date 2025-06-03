@@ -1,9 +1,10 @@
 import { authMiddleware } from '@/lib/middlewares/authMiddleware'
 import { NextRequest, NextResponse } from 'next/server'
+import { getLocaleMiddleware } from './lib/middlewares/getLocale'
 
 export async function middleware(request: NextRequest) {
-  const response = authMiddleware(request)
-  if (response.status !== 200) return response 
+  const localeResponse = getLocaleMiddleware(request)
+  if (!localeResponse || localeResponse.status !== 200) return localeResponse
   return NextResponse.next()
 }
 
