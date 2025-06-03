@@ -1,14 +1,18 @@
 import { getDictionary } from '@/lib/dictionary'
 import { Locale } from '../../../i18n.config'
-import { ChatHero, DestinationSection, HomeHeader, LuxuryExperience } from '@/components'
+import { BannerSection, ChaletsCard, ChatHero, DestinationSection, LuxuryExperience, RewardsSection } from '@/components'
+
+
 
 export default async function Home({ params }: { params: Promise<{ lang: Locale }> }) {
   const { lang } = await params
   const { page } = await getDictionary(lang)
 
+
+
   return (
     <>
-      <HomeHeader />
+      <BannerSection />
       <LuxuryExperience
         title="Escape to luxury and comfort at Bazar"
         thumbnails={[
@@ -24,7 +28,12 @@ export default async function Home({ params }: { params: Promise<{ lang: Locale 
       />
 
       <DestinationSection />
+      <ChaletsCard title={'Weekend offers'} />
+      <ChaletsCard title={'Weekday stays'} />
+      <ChaletsCard title={'Close to the Beach'} />
+      <RewardsSection />
       <ChatHero />
+
     </>
   )
 }

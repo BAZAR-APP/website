@@ -80,7 +80,11 @@ const ReviewsSection = ({ rating, reviewCount }: ReviewsSectionProps) => {
           <span className="border-b-1 border-[#19191A]">Show more</span>{' '}
           <ChevronRight className="w-3.5 h-3.5" strokeWidth={3} />
         </Link>
-        <Button className="cursor-pointer bg-transparent border border-[#19191A] text-[#19191A] py-2 rounded-lg text-sm font-medium w-[170px]">
+        <Button
+          size="md"
+          intent="transperent"
+          className="cursor-pointer border border-[#19191A] text-sm font-medium w-[170px]"
+        >
           Show all 200 reviews
         </Button>
       </div>

@@ -1,7 +1,7 @@
 import { Header, SearchHeader } from "@/components"
 
 
-const HomeHeader = () => {
+const BannerSection = () => {
     return (
         <div
             style={{
@@ -10,18 +10,22 @@ const HomeHeader = () => {
                 backgroundPosition: "center",
                 backgroundRepeat: "no-repeat",
                 width: "100%",
-                height: "800px",
+                height: "auto",
+                paddingBottom: "32px"
             }}
         >
             <Header isAuthHeader={true} />
             <div
                 style={{
                     backgroundImage: "url('/images/ImageBannerCard.svg')",
-                    backgroundSize: "contain",
+                    backgroundSize: "cover",
                     backgroundPosition: "center",
                     backgroundRepeat: "no-repeat",
-                    width: "100%",
+                    margin: "auto",
+                    width: "90%",
                     height: "640px",
+                    borderRadius: "100px",
+                    marginBottom: "32px",
                 }}
                 className="flex flex-col justify-center items-center">
                 <div className="max-w-[80%] flex flex-col gap-[80px]">
@@ -33,4 +37,4 @@ const HomeHeader = () => {
     );
 }
 
-export default HomeHeader
+export default BannerSection

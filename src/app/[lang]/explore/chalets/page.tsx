@@ -1,7 +1,7 @@
 'use client'
 import FilterSidebar from '@/components/FilterSidebar'
 import Pagination from '@/components/Pagination'
-import { PropertyCard } from '@/components/PropertyCard'
+import { PropertyCard } from '@/components'
 import SearchHeader from '@/components/SearchHeader'
 import SearchResults from '@/components/SearchResults'
 import { mockProperties } from '@/lib/constant'

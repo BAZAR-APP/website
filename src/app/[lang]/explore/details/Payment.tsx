@@ -14,9 +14,9 @@ interface ContactFormData {
 const UserInfo: React.FC<UserInfoProps> = ({ onNext }) => {
 
   return (
-    <div className="max-w-7xl mx-auto lg:px-24 md:px-18 px-10 py-9">
-      <h2 className="text-2xl font-semibold text-[#19191A] mb-2">Secure Your Booking</h2>
-      <p className="text-[#484A4C] text-lg mb-8">
+    <div className="max-w-7xl mx-auto lg:px-24 md:px-18 sm:px-10 px-8 py-9">
+      <h2 className="md:text-2xl text-xl font-semibold text-[#19191A] mb-2">Secure Your Booking</h2>
+      <p className="text-[#484A4C] md:text-lg text-sm mb-8">
         Choose your payment option and complete your reservation safely.
       </p>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">

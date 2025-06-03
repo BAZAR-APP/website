@@ -3,6 +3,7 @@ import Image from 'next/image'
 import Star from '../../public/images/Like.svg'
 import React from 'react'
 
+
 interface PropertyCardProps {
   title: string
   location: string
@@ -18,7 +19,7 @@ interface PropertyCardProps {
   onClick?: () => void
 }
 
-export const PropertyCard: React.FC<PropertyCardProps> = ({
+const PropertyCard: React.FC<PropertyCardProps> = ({
   title,
   location,
   guests,
@@ -35,7 +36,7 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
   return (
     <div onClick={onClick} className="flex flex-col lg:w-[300px] w-full p-3 gap-5 bg-[#F9FAFB] cursor-pointer rounded-[16px] mx-auto">
       <div className="lg:w-[276px] w-full lg:h-[184px] h-[250px]">
-        <Image src={imageUrl} alt={title} className="w-full h-full object-cover rounded-[12px]" width={100} height={100}/>
+        <Image src={imageUrl} alt={title} className="w-full h-full object-cover rounded-[12px]" width={100} height={100} />
       </div>
       <div className="flex flex-col gap-4 w-full">
         <div className="flex items-start justify-between w-full">
@@ -71,3 +72,5 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
     </div>
   )
 }
+
+export default PropertyCard

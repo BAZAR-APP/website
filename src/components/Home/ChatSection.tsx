@@ -1,3 +1,4 @@
+import { Button } from "@/components";
 
 const ChatHero: React.FC = () => {
 
@@ -22,12 +23,12 @@ const ChatHero: React.FC = () => {
                     </p>
                 </header>
                 <div className="relative mt-4">
-                    <button
+                    <Button
                         className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-base font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-[#29397E] text-white hover:bg-[#1f2a5f] active:bg-[#162047] h-10 px-5 py-3 w-[196px] max-w-full"
                         aria-label="Start chat with customer support"
                     >
                         Chat with Us
-                    </button>
+                    </Button>
                 </div>
             </div>
         </section>

@@ -1,10 +1,10 @@
-import { ChatHero, DestinationSection, HomeHeader, LuxuryExperience } from '@/components'
+import { ChatHero, DestinationSection, LuxuryExperience } from '@/components'
 
 
 export default function Home() {
   return (
     <>
-      <HomeHeader />
+
       <LuxuryExperience
         title="Escape to luxury and comfort at Bazar"
         thumbnails={[
