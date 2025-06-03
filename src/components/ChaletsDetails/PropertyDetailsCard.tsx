@@ -47,7 +47,7 @@ const PropertyDetailsCard = ({
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-2 rounded-xl overflow-hidden">
         <div className="lg:col-span-2">
           {images[0] && (
-            <img
+            <Image
               src={images[0]}
               alt={`${title} main view`}
               className="w-full h-64 lg:h-96 object-cover"

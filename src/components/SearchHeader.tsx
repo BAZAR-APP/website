@@ -1,7 +1,7 @@
 import React from 'react'
 import { Search } from 'lucide-react'
-import { fields } from '@/lib/utils'
 import Button from './Button/Button'
+import { fields } from '@/lib/constant'
 
 const SearchHeader = () => {
   return (

@@ -3,7 +3,7 @@
 import React from 'react'
 import * as Select from '@radix-ui/react-select'
 import { ChevronDown, Check } from 'lucide-react'
-import { sortOptions } from '@/lib/utils'
+import { sortOptions } from '@/lib/constant'
 
 interface SearchResultsProps {
   location: string

@@ -1,4 +1,3 @@
-'use client'
 import Button from '@/components/Button/Button'
 import Checkbox from '@/components/CheckBox/CheckBox'
 

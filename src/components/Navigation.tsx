@@ -1,8 +1,8 @@
-import { navItems } from '@/lib/utils'
 import React from 'react'
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'
 import { Text } from '@radix-ui/themes'
+import { navItems } from '@/lib/constant'
 
 interface NavigationProps {
   className?: string
