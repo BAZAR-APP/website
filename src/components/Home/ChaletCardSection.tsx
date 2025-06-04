@@ -25,6 +25,7 @@ const ChaletsCard: React.FC<ChaletsCardProps> = ({ title }) => {
                             key={property.id}
                             {...property}
                             onClick={() => router.push(`/explore/chalets/${property.id}`)}
+                            member
                         />
                     ))}
                 </div>

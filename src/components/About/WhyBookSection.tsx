@@ -35,24 +35,24 @@ const WhyBookSection = () => {
     ];
 
     return (
-        <div className="main-container flex w-[1440px] flex-col items-start relative overflow-hidden mx-auto my-0"
+        <div className="main-container w-full flex flex-col items-start relative overflow-hidden mx-auto my-0"
             style={{
                 background: "linear-gradient(rgba(41, 57, 126, 0.88), rgba(41, 57, 126, 0.88)), url('/images/AppSectionBackground.png')",
                 backgroundSize: "cover",
                 height: "auto",
             }}>
-            <div className="flex pt-[64px] pr-[64px] pb-[64px] pl-[64px] flex-col gap-[64px]">
+            <div className="flex pt-[64px] pr-[64px] pb-[64px] pl-[64px] flex-col gap-[64px] max-w-[1280px] mx-auto">
                 <div className="flex flex-col gap-[32px]">
                     <h2 className="font-inter text-[39px] font-semibold text-white">Why book with us?</h2>
-                    <p className="w-[506px] font-inter text-[20px] text-white">
+                    <p className="w-full md:w-[506px] font-inter text-[20px] text-white">
                         Experience comfort, trust, and flexibility—every stay, every time.
                     </p>
                 </div>
-                <div className="flex gap-[64px] flex-wrap">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-full md:max-w-[70%]">
                     {features.map((feature, index) => (
-                        <div key={index} className="flex w-[423px] h-auto bg-[rgba(249,250,251,0.3)] rounded-[20px] p-[24px] flex-col gap-[20px]">
-                            <div className="flex w-[80px] h-[80px] justify-center items-center shrink-0 bg-[#29397e] rounded-full shadow-md">
-                                <div className="w-[36.923px] h-[36.923px] bg-cover shrink-0" style={{ backgroundImage: `url(${feature.icon})` }} />
+                        <div key={index} className="bg-[rgba(249,250,251,0.3)] rounded-[20px] p-[24px] flex flex-col gap-[20px]">
+                            <div className="flex w-[80px] h-[80px] justify-center items-center bg-[#29397e] rounded-full shadow-md">
+                                <div className="w-[36.923px] h-[36.923px] bg-cover" style={{ backgroundImage: `url(${feature.icon})` }} />
                             </div>
                             <div className="flex flex-col gap-[8px]">
                                 <span className="font-inter text-[25px] font-medium text-white">{feature.title}</span>
