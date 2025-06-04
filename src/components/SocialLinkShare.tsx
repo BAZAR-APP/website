@@ -1,17 +1,9 @@
 'use client'
 import React, { useEffect, useState } from 'react'
-import {
-  Twitter,
-  Mail,
-  Instagram,
-  ClipboardCopy,
-  Telescope,
-  Wheat,
-  Send,
-  AtSign,
-  X,
-  Copy,
-} from 'lucide-react'
+import TwitterX from '../../public/images/twitterX.svg'
+import WatsapIcon from '../../public/images/whatsapp.svg'
+import Image from 'next/image'
+import { Instagram, Send, AtSign, Copy } from 'lucide-react'
 import ModalDialog from '@/components/ModalDialog/Dialog'
 import { Button, CommonInput } from '@/components'
 import { Separator } from 'radix-ui'
@@ -34,26 +26,31 @@ const SocialLinkShare: React.FC<ShareModalProps> = ({ onClose, open }) => {
       name: 'Telegram',
       icon: Send,
       url: `https://t.me/share/url?url=${encodeURIComponent(shareUrl)}`,
+      isImage: false,  
     },
     {
       name: 'Twitter',
-      icon: X,
+      icon: TwitterX,
       url: `https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}`,
+      isImage: true,
     },
     {
       name: 'WhatsApp',
-      icon: AtSign,
+      icon: WatsapIcon,
       url: `https://wa.me/?text=${encodeURIComponent(shareUrl)}`,
+      isImage: true,
     },
     {
       name: 'E-mail',
-      icon: Mail,
+      icon: AtSign,
       url: `mailto:?subject=Check this out&body=${encodeURIComponent(shareUrl)}`,
+      isImage: false,
     },
     {
       name: 'Instagram',
       icon: Instagram,
       url: '', // Instagram doesn't support direct URL sharing
+      isImage: false,
     },
   ]
 
@@ -93,9 +90,11 @@ const SocialLinkShare: React.FC<ShareModalProps> = ({ onClose, open }) => {
             onClick={() => handleShareClick(option)}
           >
             <div className="w-[72px] h-[72px] my-3 cursor-pointer rounded-[37.33px] bg-[#F9FAFB] flex items-center justify-center p-6 hover:bg-gray-100 transition-colors">
-              <span className="text-xl">
+              {option.isImage ? (
+                <Image src={option.icon} alt={option.name} width={24} height={24} />
+              ) : (
                 <option.icon className="text-[#29397E]" />
-              </span>
+              )}
             </div>
             <span className="text-xs text-[#29397E]">{option.name}</span>
           </div>
