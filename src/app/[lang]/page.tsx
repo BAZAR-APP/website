@@ -1,6 +1,6 @@
 import { getDictionary } from '@/lib/dictionary'
 import { Locale } from '../../../i18n.config'
-import { BannerSection, ChaletsCard, ChatHero, DestinationSection, DownloadApp, Footer, LuxuryExperience, RewardsSection } from '@/components'
+import { BannerSection, ChaletsCard, ChatHero, DestinationSection, DownloadApp, Footer, LuxuryExperience, RewardsSection, WhyBookSection } from '@/components'
 
 
 
@@ -26,15 +26,14 @@ export default async function Home({ params }: { params: Promise<{ lang: Locale 
         buttonText={'More About Us'}
         buttonLink={''}
       />
-
+      <WhyBookSection />
       <DestinationSection />
-      <ChaletsCard title={'Weekend offers'} />
-      <ChaletsCard title={'Weekday stays'} />
+      <ChaletsCard title={'Most Booked'} />
       <ChaletsCard title={'Close to the Beach'} />
       <RewardsSection />
       <ChatHero />
       <DownloadApp />
-      <Footer/>
+      <Footer />
     </>
   )
 }

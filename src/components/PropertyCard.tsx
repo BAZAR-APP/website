@@ -34,7 +34,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
   onClick
 }) => {
   return (
-    <div onClick={onClick} className="flex flex-col lg:w-[300px] w-full p-3 gap-5 bg-[#F9FAFB] cursor-pointer rounded-[16px] mx-auto">
+    <div onClick={onClick} className="flex flex-col  max-w-full p-3 gap-5 bg-[#F9FAFB] cursor-pointer rounded-[16px] mx-auto">
       <div className="lg:w-[276px] w-full lg:h-[184px] h-[250px]">
         <Image src={imageUrl} alt={title} className="w-full h-full object-cover rounded-[12px]" width={100} height={100} />
       </div>

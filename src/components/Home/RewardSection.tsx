@@ -27,13 +27,13 @@ const RewardsSection: React.FC<RewardsSectionProps> = ({
 
     return (
         <section
-            className="items-stretch flex flex-col justify-center bg-white px-20 py-24 max-md:px-5"
+            className="flex flex-col justify-center bg-white px-20 py-24 max-md:px-5 "
             aria-labelledby="rewards-title"
         >
-            <div className="min-h-[794px] w-full overflow-hidden bg-gray-50 p-20 rounded-[40px] max-md:max-w-full max-md:px-5">
-                <article className="min-h-[191px] w-[491px] max-w-full">
+            <div className="min-h-[794px]  w-full overflow-hidden bg-gray-50 p-20 rounded-[40px] max-md:px-5">
+                <article className="min-h-[191px] max-w-[1280px] mx-auto">
                     <header>
-                        <h1 className="text-[#19191A] text-[39px] font-semibold leading-tight max-md:max-w-full max-md:text-3xl">
+                        <h1 className="text-[#19191A] text-[39px] font-medium leading-tight max-md:max-w-full max-md:text-3xl">
                             {title}
                         </h1>
                     </header>

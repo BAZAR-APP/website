@@ -28,3 +28,10 @@ export { default as ForgetPasswordVerify } from './Auth/ForgetPassword/ForgetPas
 export { default as ChangePassword } from './Auth/ForgetPassword/ChangePassword';
 export { default as Verified } from './Auth/Verified';
 export { default as ChangePasswordVerified } from './Auth/ForgetPassword/ChangePasswordVerified';
+export { default as AboutBanner } from './About/AboutBanner'
+export { default as OurStatistics } from "./About/OurStatistics"
+export { default as WhyBookSection } from "./About/WhyBookSection"
+export { default as TestimonialCard } from "./About/TestimonialCard"
+export { default as TestimonialsSection } from "./About/AboutReview"
+export { default as Privacy } from "./Terms/Privacy"
+export { default as CompareTiers } from "./About/CompareTiers"
