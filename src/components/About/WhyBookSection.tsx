@@ -25,8 +25,6 @@ const WhyBookSection = () => {
             description: "Trusted hosts, handpicked by Bazar",
             icon: "https://codia-f2c.s3.us-west-1.amazonaws.com/image/2025-06-04/7LriOcRppj.png",
         },
-
-
         {
             title: "Stay Your Way",
             description: "Flexible bookings: from a few hours to full-month stays",
@@ -41,22 +39,22 @@ const WhyBookSection = () => {
                 backgroundSize: "cover",
                 height: "auto",
             }}>
-            <div className="flex pt-[64px] pr-[64px] pb-[64px] pl-[64px] flex-col gap-[64px] max-w-[1280px] mx-auto">
-                <div className="flex flex-col gap-[32px]">
-                    <h2 className="font-inter text-[39px] font-semibold text-white">Why book with us?</h2>
-                    <p className="w-full md:w-[506px] font-inter text-[20px] text-white">
+            <div className="flex flex-col gap-[32px] p-6 md:p-12 lg:p-16 max-w-[1280px] mx-auto">
+                <div className="flex flex-col gap-4">
+                    <h2 className="font-inter text-[32px] md:text-[39px] font-semibold text-white text-center md:text-left">Why book with us?</h2>
+                    <p className="w-full md:w-[506px] font-inter text-[16px] md:text-[20px] text-white text-center md:text-left">
                         Experience comfort, trust, and flexibility—every stay, every time.
                     </p>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-full md:max-w-[70%]">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full md:w-[80%]">
                     {features.map((feature, index) => (
-                        <div key={index} className="bg-[rgba(249,250,251,0.3)] rounded-[20px] p-[24px] flex flex-col gap-[20px]">
-                            <div className="flex w-[80px] h-[80px] justify-center items-center bg-[#29397e] rounded-full shadow-md">
+                        <div key={index} className="bg-[rgba(249,250,251,0.3)] rounded-[20px] p-4 md:p-6 flex flex-col gap-4">
+                            <div className="flex w-[60px] h-[60px] md:w-[80px] md:h-[80px] justify-center items-center bg-[#29397e] rounded-full shadow-md">
                                 <div className="w-[36.923px] h-[36.923px] bg-cover" style={{ backgroundImage: `url(${feature.icon})` }} />
                             </div>
-                            <div className="flex flex-col gap-[8px]">
-                                <span className="font-inter text-[25px] font-medium text-white">{feature.title}</span>
-                                <span className="font-inter text-[16px] text-white">{feature.description}</span>
+                            <div className="flex flex-col gap-1">
+                                <span className="font-inter text-[20px] md:text-[25px] font-medium text-white">{feature.title}</span>
+                                <span className="font-inter text-[14px] md:text-[16px] text-white">{feature.description}</span>
                             </div>
                         </div>
                     ))}

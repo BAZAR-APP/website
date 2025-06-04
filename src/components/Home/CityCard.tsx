@@ -1,4 +1,3 @@
-
 import React from 'react';
 
 interface CityCardProps {
@@ -13,13 +12,13 @@ const CityCard: React.FC<CityCardProps> = ({
     altText = ""
 }) => {
     return (
-        <article className="flex max-w-full flex-col items-start overflow-hidden rounded-3xl max-md:w-[calc(50%_-_10px)] ">
+        <article className="flex flex-col items-start overflow-hidden rounded-3xl w-full">
             <img
                 src={imageUrl}
                 alt={altText}
-                className="h-[200px] w-full object-cover"
+                className="h-48 sm:h-56 md:h-64 w-full object-cover"
             />
-            <div className="w-full text-white text-base font-normal leading-6 gap-2 box-border bg-[#29397E] px-4 py-6 max-sm:px-4 max-sm:py-5">
+            <div className="w-full text-white text-sm sm:text-base font-normal leading-6 gap-2 bg-[#29397E] px-4 py-4 sm:py-5 md:py-6">
                 {cityName}
             </div>
         </article>

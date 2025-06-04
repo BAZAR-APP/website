@@ -1,5 +1,4 @@
-import { Header, SearchHeader } from "@/components"
-
+import { Header, SearchHeader } from "@/components";
 
 const BannerSection = () => {
     return (
@@ -27,14 +26,17 @@ const BannerSection = () => {
                     borderRadius: "100px",
                     marginBottom: "32px",
                 }}
-                className="flex flex-col justify-center items-center">
+                className="flex flex-col justify-center items-center"
+            >
                 <div className="max-w-[80%] flex flex-col gap-[80px]">
-                    <div className="text-5xl text-white font-[500] text-center max-w-[800px] ">Where Will Your Next Adventure Take You?</div>
+                    <div className="text-3xl md:text-4xl lg:text-5xl text-white font-[500] text-center max-w-[800px]">
+                        Where Will Your Next Adventure Take You?
+                    </div>
                     <SearchHeader />
                 </div>
             </div>
-        </div >
+        </div>
     );
 }
 
-export default BannerSection
+export default BannerSection;
