@@ -20,7 +20,6 @@ const ICONS = {
 export const AddOns: React.FC = () => {
   const { getValues, setValue, watch } = useFormContext()
   const selectedAddons: AddOnItem[] = watch('addons') || []
-  console.log(selectedAddons)
 
   const baseAddons: Record<string, AddOnItem[]> = {
     Luxury: [
@@ -31,7 +30,7 @@ export const AddOns: React.FC = () => {
       { icon: ICONS.BBQ, label: 'Anniversary Setup', price: 30, notice: '24h Notice' },
     ],
     Essentials: [
-      { icon: ICONS.BBQ, label: 'Towels', price: 30 },
+      { icon: ICONS.BBQ, label: 'Towels Calening and some fqw', price: 30 },
       { icon: ICONS.BBQ, label: 'Cleaning Services', price: 30 },
       { icon: ICONS.BBQ, label: 'WiFi', price: 30 },
       { icon: ICONS.BBQ, label: 'Extra Water', price: 30 },
