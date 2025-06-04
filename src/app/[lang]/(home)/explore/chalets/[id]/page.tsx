@@ -41,7 +41,7 @@ export default async function ChaletDetailsPage({ params }: { params: Promise<{ 
   const data = propertyData
   return (
     <div className="min-h-screen bg-white">
-      <div className="max-w-7xl mx-auto">
+      <div className="mx-auto max-p">
         <PropertyDetailsCard
           title={data.title}
           location={data.location}

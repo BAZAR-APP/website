@@ -27,7 +27,7 @@ const Header: React.FC<HeaderProps> = ({ className = '', isAuthHeader = false })
   const baseInnerClasses =
     'bg-[#F9FAFB] backdrop-blur-[12px] rounded-full flex-none order-0 self-stretch'
 
-  const maxWidthContainer = 'max-w-screen-xl mx-auto px-8 max-md:px-4 max-sm:px-2'
+  const maxWidthContainer = 'mx-auto px-8 max-md:px-4 max-sm:px-2'
 
   const SignInHeader = () => (
     <div className="flex items-center justify-between w-full">

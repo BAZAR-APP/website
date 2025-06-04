@@ -57,8 +57,8 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ onSubmit }) => {
 
   return (
     <>
-      <form onSubmit={handleSubmit(onFormSubmit)}>
-        <div className="md:w-[528px] w-full space-y-8">
+      <form onSubmit={handleSubmit(onFormSubmit)} className='md:w-[328px] lg:w-[528px] w-full'>
+        <div className="space-y-8">
           <div className="flex flex-col items-start p-4 gap-4 bg-[#FDFDFE] shadow-[0px_4px_16px_rgba(17,34,17,0.05)] rounded-[12px]">
             <div className="space-y-4 w-full">
               {paymentOptions.map((option) => (
@@ -147,7 +147,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ onSubmit }) => {
       </form>
 
       <div
-        className="flex flex-col my-5 py-6 items-start md:px-6 px-4 w-full md:w-[528px] md:h-[194px] h-auto isolate rounded-xl bg-[url('/images/FlowerImg.jpg')] bg-cover bg-center"
+        className="flex flex-col my-5 py-6 items-start md:px-6 px-4 w-full lg:w-[528px] lg:h-[194px] h-auto isolate rounded-xl bg-[url('/images/FlowerImg.jpg')] bg-cover bg-center"
         style={{
           backgroundBlendMode: 'overlay',
           backgroundColor: 'rgba(0, 0, 0, 0.5)',

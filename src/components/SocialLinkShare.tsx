@@ -110,7 +110,7 @@ const SocialLinkShare: React.FC<ShareModalProps> = ({ onClose, open }) => {
           />
         </span>
       </div>
-      <Button size="responsive" intent="ghost" onClick={onClose} className="mt-4">
+      <Button size="responsive" intent="ghost" onClick={onClose} className="mt-4 w-full">
         Cancel
       </Button>
     </ModalDialog>

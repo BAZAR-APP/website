@@ -68,7 +68,8 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
   const isSplitPayment = getValues()?.paymentOption === 'split'
 
   return (
-    <div className="w-full md:max-w-sm rounded-lg">
+    <div className="w-full md:max-w-sm rounded-lg bg-[#F9FAFB] p-6">
+      <h3 className="text-lg font-semibold text-gray-900 mb-3">Booking Summary</h3>
       <div className="p-0">
         <div className="relative">
           <Image
@@ -85,7 +86,7 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
             <h3 className="text-[16px] leading-[24px] font-medium text-[#19191A] font-inter">
               Luxury Lakeside Retreat
             </h3>
-            <div className="flex items-center text-sm text-[#8E8E93]">
+            <div className="flex items-center text-sm text-[#8E8E93] lg:mt-0 mt-1">
               <MapPin size={16} className="mr-1" />
               Al Khiran
             </div>
@@ -100,7 +101,7 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
             You'll earn 200 points with this booking!
           </div>
 
-          <div className="flex bg-[#E1F3FF] items-center justify-between gap-1 rounded py-1 px-1.5 max-w-[101px]">
+          <div className="flex bg-[#E1F3FF] items-center justify-between gap-1 rounded py-1 px-1.5 max-w-[111px]">
             <Image src={'/images/Points.svg'} width={16} height={16} alt="Points-Icon" />
             <span className="text-[#29397E] text-sm">200 Points</span>
           </div>

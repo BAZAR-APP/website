@@ -179,3 +179,14 @@ html body * {
 .font-tenor {
   font-family: var(--font-tenor-sans), serif !important;
 }
+
+@layer utilities {
+  @media (min-width: 1640px) {
+    .w-500px-1440 {
+      width: 500px;
+    }
+    .max-p{
+      padding: 0 28px;
+    }
+  }
+}

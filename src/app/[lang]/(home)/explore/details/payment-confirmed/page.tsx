@@ -30,7 +30,7 @@ const mockData: PaymentConfirmationData = {
 }
 
 const InfoItem = ({ icon, text }: { icon: React.ReactNode; text: string }) => (
-  <div className="text-sm flex self-start leading-4 text-[#8E8E93] py-1">
+  <div className="text-sm flex self-start leading-4 text-[#8E8E93] py-2">
     <span className="mr-1 text-[#8E8E93]">{icon}</span>
     {text}
   </div>
@@ -93,12 +93,12 @@ const PaymentConfirmed = () => {
   ]
 
   return (
-    <div className="flex justify-center flex-col items-center md:w-[473px] w-full mx-auto">
+    <div className="flex justify-center flex-col items-center md:w-[473px] w-full mx-auto md:px-0 px-6">
       <Image src="/images/PayConfirm.svg" width={117} height={117} alt="Icon" />
-      <h3 className="md:text-3xl text-2xl font-semibold py-1 leading-[47px] text-[#19191A] text-center md:pt-6 pt-3 w-full">
+      <h3 className="md:text-3xl sm:text-2xl text-xl font-semibold py-1 leading-[47px] text-[#19191A] text-center md:pt-6 pt-3 w-full">
         Payment Confirmed
       </h3>
-      <p className="text-[16px] leading-[28px] py-1 text-[#484A4C] text-center">
+      <p className="md:text-[16px] text-sm md:leading-[28px] leading-5 py-1 text-[#484A4C] text-center">
         Your booking is complete. Thank you for choosing us! <br /> You earned {data.points} points. Track
         and redeem them in your profile <br /> anytime!
       </p>
@@ -112,11 +112,11 @@ const PaymentConfirmed = () => {
       />
 
       <div className="self-start pt-3">
-        <div className="flex items-center gap-3 mb-3">
+        <div className="flex items-center flex-wrap gap-3 mb-3">
           <h3 className="text-[16px] leading-[24px] font-medium text-[#19191A] font-inter">
             {data.title}
           </h3>
-          <div className="flex bg-[#E1F3FF] items-center gap-1 rounded py-1 px-1.5 max-w-[101px]">
+          <div className="flex bg-[#E1F3FF] items-center gap-1 rounded py-1 px-1.5 max-w-[108px]">
             <Image src="/images/Points.svg" width={16} height={16} alt="Points-Icon" />
             <span className="text-[#29397E] text-sm">{data.points} Points</span>
           </div>

@@ -1,6 +1,5 @@
 import { AddOns } from '@/components/Booking/add-ons/AddOns'
 import Button from '@/components/Button/Button'
-import Checkbox from '@/components/CheckBox/CheckBox'
 import { AddOnItem } from '@/lib/types/booking'
 
 import {
@@ -18,7 +17,6 @@ import {
   Clapperboard,
   SwordIcon,
 } from 'lucide-react'
-import Image from 'next/image'
 import React, { useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 
@@ -54,7 +52,6 @@ const services = [
   },
 ]
 
-const prices = 30
 type CustomizeStayProps = {
   onNext: () => void
 }
@@ -77,12 +74,12 @@ export default function CustomizeStay({ onNext }: CustomizeStayProps) {
   }, 0)
 
   return (
-    <div className="max-w-7xl mx-auto lg:px-22 md:px-18 px-12 py-10">
-      <h2 className="text-[39px] leading-[47px] font-semibold text-[#19191A] flex items-center">
+    <div className="max-w-[1800px] mx-auto lg:px-22 md:px-18 px-12 py-10">
+      <h2 className="lg:text-[39px] md:text-2xl text-xl lg:leading-[47px] leading-7 font-semibold text-[#19191A] flex items-center">
         Customize Your Stay
       </h2>
 
-      <p className="text-[20px] py-5 leading-6 font-normal text-[#484A4C] flex items-center">
+      <p className="lg:text-[20px] text-lg py-4 lg:leading-6 leading-4 font-normal text-[#484A4C] flex items-center">
         Add optional services or extras to make your experience more special.
       </p>
 
@@ -91,23 +88,12 @@ export default function CustomizeStay({ onNext }: CustomizeStayProps) {
           <AddOns />
 
           <textarea
-            className="w-full h-52 p-3 bg-[#F9FAFB] rounded resize-none text-sm"
+            className="md:w-[370px] w-full h-52 p-3 bg-[#F9FAFB] rounded resize-none text-sm"
             placeholder="Let us know if you need anything specific..."
           />
-          <div className="flex gap-4">
-            <Button className="cursor-pointer bg-[#F3F4F6] text-[#19191A] py-2 rounded-lg text-sm font-medium w-[150px]">
-              Skip For Now
-            </Button>
-            <Button
-              onClick={() => onNext()}
-              className="cursor-pointer bg-[#29397E] text-white py-2 rounded-lg text-sm font-medium w-[170px]"
-            >
-              Add For Booking
-            </Button>
-          </div>
         </div>
 
-        <div className="flex flex-col items-start gap-[24px] md:w-[370px] w-full h-fit bg-[#F9FAFB] p-6 rounded">
+        <div className="flex flex-col items-start gap-[24px] lg:w-[370px] w-full h-fit bg-[#F9FAFB] p-6 rounded">
           <h3 className="text-[25px] leading-8 font-semibold text-[#19191A] flex items-center">
             Add-Ons
           </h3>
@@ -130,6 +116,20 @@ export default function CustomizeStay({ onNext }: CustomizeStayProps) {
             <span>{total} KWD</span>
           </div>
         </div>
+      </div>
+      <div className="flex flex-wrap gap-4 border-t border-[#E5E7EB] pt-7 mt-6">
+        <Button
+          intent="ghost"
+          className="text-[#19191A] py-2 rounded-lg text-sm font-medium w-[150px]"
+        >
+          Skip For Now
+        </Button>
+        <Button
+          onClick={() => onNext()}
+          className="cursor-pointer bg-[#29397E] text-white py-2 rounded-lg text-sm font-medium w-[170px]"
+        >
+          Add For Booking
+        </Button>
       </div>
     </div>
   )

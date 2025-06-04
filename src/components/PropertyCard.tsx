@@ -38,7 +38,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
 }) => {
   return (
     <div onClick={onClick} className="flex flex-col max-w-full p-3 gap-5 bg-[#F9FAFB] cursor-pointer rounded-[16px] mx-auto">
-      <div className="lg:w-[276px] w-full lg:h-[184px] h-[250px]">
+      <div className="lg:w-[276px] w-full h-[184px]">
         <Image src={imageUrl} alt={title} className="w-full h-full object-cover rounded-[12px]" width={100} height={100} />
       </div>
       <div className="flex flex-col gap-4 w-full">
@@ -87,7 +87,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
               </>
             ) : (
               <>
-                {price} KD
+                <span className='sm:text-[18px] text-sm'>{price} KD</span>
                 <span className="text-sm leading-4 font-normal text-[#484A4C]">/{priceUnit}</span>
               </>
             )}

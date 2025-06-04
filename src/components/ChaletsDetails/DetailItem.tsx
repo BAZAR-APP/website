@@ -10,7 +10,7 @@ interface DetailItemProps {
 const DetailItem = ({ icon, text, alt = 'Detail icon' }: DetailItemProps) => (
   <div className="flex items-center gap-2">
     <Image src={icon} width={24} height={24} alt={alt} />
-    <span className='whitespace-nowrap'>{text}</span>
+    <span className='sm:whitespace-nowrap'>{text}</span>
   </div>
 )
 

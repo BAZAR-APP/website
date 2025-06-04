@@ -5,7 +5,7 @@ import Header from '@/components/Header/Header'
 
 const DefaultLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div>
+    <div className="bg-[#FDFDFE]">
       <Header />
       {children}
       <Footer />

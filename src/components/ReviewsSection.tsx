@@ -15,7 +15,7 @@ interface ReviewsSectionProps {
 
 const ReviewsSection = ({ rating, reviewCount }: ReviewsSectionProps) => {
   return (
-    <section className="border-b border-t border-[#E5E7EB] pb-8 md:pt-8 pt-6">
+    <section className="border-b border-t border-[#E5E7EB] pb-8 md:pt-8 pt-6 lg:mt-0 mt-10">
       <div className="flex items-center gap-2 mb-6">
         <span className="text-xl font-semibold">{rating}</span>
         <Image src={LikeStar} width={20} height={20} alt="Like Star" />
@@ -40,7 +40,7 @@ const ReviewsSection = ({ rating, reviewCount }: ReviewsSectionProps) => {
                   <Text as="p" size="3" weight="medium">
                     {review.name}
                   </Text>
-                  <Text as="p" size="2" color="gray">
+                  <Text as="p" size="2" className='text-[#9EA0A2] text-sm'>
                     {review.date}
                   </Text>
                 </div>
@@ -81,9 +81,8 @@ const ReviewsSection = ({ rating, reviewCount }: ReviewsSectionProps) => {
           <ChevronRight className="w-3.5 h-3.5" strokeWidth={3} />
         </Link>
         <Button
-          size="md"
           intent="transperent"
-          className="cursor-pointer border border-[#19191A] text-sm font-medium w-[170px]"
+          className="cursor-pointer border border-[#19191A] text-sm font-medium w-[180px]"
         >
           Show all 200 reviews
         </Button>

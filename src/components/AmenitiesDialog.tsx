@@ -72,7 +72,7 @@ const AmenitiesDialog: React.FC<AmenitiesDialogProps> = ({ isOpen, setIsOpen }) 
       isOpen={isOpen}
       setIsOpen={setIsOpen}
       title="Amenities"
-      className="max-w-2xl max-h-[80vh] text-[#19191A]"
+      className="max-w-2xl max-h-[90vh] min-h-[90%] text-[#19191A]"
     >
       <div className="mb-4">
         <p className="text-[#484A4C]">Everything you need for a comfortable stay.</p>
@@ -87,7 +87,7 @@ const AmenitiesDialog: React.FC<AmenitiesDialogProps> = ({ isOpen, setIsOpen }) 
         ))}
       </div>
 
-      <div className="mt-6 pt-4 border-t">
+      <div className="mt-6 pt-4">
         <Button
           onClick={() => setIsOpen(false)}
           intent='ghost'

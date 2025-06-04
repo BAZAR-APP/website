@@ -33,8 +33,10 @@ const HotelMap: React.FC<HotelMapProps> = ({ center, hotelInfo }) => {
 
   return (
     <>
-      <h2 className="text-xl font-semibold mb-6">Location</h2>
-
+      <h2 className="sm:text-xl text-lg font-semibold my-6">Location</h2>
+      <p className="text-[#484A4C] text-[16px] leading-[19px] mb-4">
+        Al Khiran, Ahmadi, Kuwait
+      </p>
       <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={14}>
         <Marker position={center} onClick={() => setShowInfo(true)} />
 

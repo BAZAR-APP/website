@@ -25,7 +25,7 @@ const PropertyDetailsCard = ({
         <div>
           <h1 className="md:text-3xl sm:text-2xl text-xl font-bold text-gray-900 mb-2">{title}</h1>
           <div className="flex items-center flex-wrap gap-4 text-sm text-gray-600">
-            <div className="flex items-center gap-1 text-gray-800">
+            <div className="flex items-center flex-wrap sm:gap-1 gap-2 text-gray-800">
               <span className="text-[#484A4C]">{rating}</span>
               <Image src={LikeStar} alt="Rating star" width={18} height={18} />
               <span className="text-[#9EA0A2]">&bull;</span>

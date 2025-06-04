@@ -15,7 +15,7 @@ const SearchHeader = () => {
         ))}
       </div>
 
-      <Button className="w-[48px] h-[48px] cursor-pointer bg-[#29397E] !rounded-full flex items-center justify-center hover:bg-blue-900 transition">
+      <Button className="w-[48px] h-[48px] sm:self-center self-start cursor-pointer bg-[#29397E] !rounded-full flex items-center justify-center hover:bg-blue-900 transition">
         <Search className="text-white min-w-[20px] min-h-[20px] rounded-full" />
       </Button>
     </div>

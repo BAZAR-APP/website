@@ -22,9 +22,9 @@ const UserInfo: React.FC<UserInfoProps> = ({ onNext }) => {
   }
   return (
     <>
-      <div className="max-w-7xl mx-auto lg:px-24 md:px-18 px-10 py-9">
-        <h2 className="text-2xl font-semibold text-[#19191A] mb-2">Your Details</h2>
-        <p className="text-[#484A4C] text-lg mb-8">
+      <div className="max-w-[1800px] mx-auto lg:px-24 md:px-18 px-10 py-9">
+        <h2 className="lg:text-[39px] md:text-2xl text-xl font-semibold text-[#19191A] mb-2">Your Details</h2>
+        <p className="text-[#484A4C] sm:text-lg text-sm mb-8">
           Please provide your name and contact info to complete the booking.
         </p>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
@@ -43,8 +43,8 @@ const UserInfo: React.FC<UserInfoProps> = ({ onNext }) => {
           <Button
             onClick={toggle}
             type="submit"
-            size="md"
-            className="cursor-pointer w-[100px] text-white py-3 font-medium"
+            size="responsive"
+            className="cursor-pointer text-white py-3 font-medium w-[200px]"
           >
             Confirm Contact Info
           </Button>

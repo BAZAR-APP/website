@@ -10,9 +10,9 @@ const FilterSidebar = () => {
   const [value, setValue] = React.useState(50)
 
   return (
-    <div className="lg:w-80 w-full p-6 h-full overflow-y-auto">
+    <div className="lg:w-80 w-full md:px-6 px-3 py-5 h-full overflow-y-auto w-500px-1440 xl:mr-3 mr-0">
       <div className="flex items-center justify-between mb-6">
-        <h3 className="text-2xl leading-8 font-semibold text-[#1F2937]">Filter By</h3>
+        <h3 className="!sm:text-2xl !text-xl leading-8 font-semibold text-[#1F2937]">Filter By</h3>
         <button className="text-[#29397E] text-base leading-6 font-normal cursor-pointer">
           Reset
         </button>

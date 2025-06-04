@@ -19,8 +19,8 @@ const SearchResults: React.FC<SearchResultsProps> = ({
   onSortChange,
 }) => {
   return (
-    <div className="flex sm:flex-row flex-col items-center justify-between md:mx-2 mx-3 my-8">
-      <h2 className="md:text-[25px] text-xl leading-[30px] font-normal text-[#19191A] pb-1 sm:pb-0 text-center">
+    <div className="flex sm:flex-row flex-col items-center justify-between my-8">
+      <h2 className="md:text-[25px] sm:text-xl text-[16px] sm:leading-[30px] leading-4 font-normal text-[#19191A] pb-1 sm:pb-0 text-center">
         {location}: {totalResults.toLocaleString()} search results found
       </h2>
 

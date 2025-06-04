@@ -1,4 +1,4 @@
-"use client"
+'use client'
 import React, { useState } from 'react'
 import { ChevronDown } from 'lucide-react'
 import { Radio } from '@radix-ui/themes'
@@ -117,13 +117,13 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
   const total = (currentPackage?.basePrice ?? 0) * nights + bookingConfig.refundableDeposit
 
   return (
-    <div className="max-w-md bg-[#F9FAFB] rounded-2xl">
-      <div className="p-5 !pb-4">
+    <div className="bg-[#F9FAFB] rounded-2xl">
+      <div className="sm:p-5 p-4 !pb-4">
+      <h3 className="font-bold xl:text-[20px] md:text-lg text-[16px] leading-[24px] text-[#19191A] pb-3">Choose Your Package</h3>
         <h2 className="md:text-lg text-sm leading-6 font-normal text-[#19191A] flex items-center">
           {selectedPackage}
         </h2>
       </div>
-
       <div className="px-6 space-y-3">
         {currentPackage && (
           <>
@@ -158,7 +158,6 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
           </>
         )}
       </div>
-
       <div className="px-5 py-3">
         <div className="w-full rounded-xl border border-[#D1D5DB] overflow-hidden text-sm text-[#19191A]">
           <div className="grid grid-cols-2 divide-x divide-[#D1D5DB]">
@@ -187,7 +186,6 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
           </Button>
         </Link>
       </div>
-
       {bookingConfig.paymentOptions.partialPayment && (
         <div className="px-5 pb-4">
           <p className="text-sm leading-4 font-normal text-[#9EA0A2]">
@@ -196,7 +194,6 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
           </p>
         </div>
       )}
-
       <div className="px-4.5 pb-6">
         <div className="bg-[#FCE7F3] rounded-lg py-1 px-1.5">
           <p className="text-[10px] text-[#EC4899] leading-relaxed">
@@ -207,7 +204,6 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
           </p>
         </div>
       </div>
-
       <div className="px-5 pb-6 space-y-3">
         <div className="flex justify-between items-center">
           <span className="text-[16px] font-normal text-[#19191A] flex items-center">

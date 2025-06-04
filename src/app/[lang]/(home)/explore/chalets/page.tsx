@@ -16,12 +16,12 @@ const ExploreChalets = () => {
   const itemsPerPage = 9
   const totalPages = Math.ceil(mockProperties.length / itemsPerPage)
   return (
-    <div className="min-h-screen bg-primary-foreground">
-      <Heading className="font-semibold text-[39px] pl-14 leading-11 text-[#19191A]">
+    <div className="min-h-screen sm:px-9 px-4">
+      <Heading className="font-semibold !md:text-[39px] !sm:text-2xl !text-xl leading-11 sm:pl-5.5 pl-3 text-[#19191A] pt-4">
         Explore Chalets
       </Heading>
 
-      <div className="flex lg:flex-row flex-col px-9 py-6">
+      <div className="flex lg:flex-row flex-col py-6">
         <FilterSidebar />
         <div className="flex-1">
           <SearchHeader />
@@ -32,7 +32,7 @@ const ExploreChalets = () => {
             onSortChange={setSortBy}
           />
 
-          <Grid columns={{ initial: '1', md: '2', lg: '3', xl: '4' }} gap="5" width="100%">
+          <Grid columns={{ initial: '1', sm: '2', lg: '3', xl: '4' }} gap="5" width="100%">
             {mockProperties.map((property) => (
               <PropertyCard
                 key={property.id}
