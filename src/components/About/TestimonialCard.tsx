@@ -1,5 +1,7 @@
 import React from 'react';
 import { CheckCircle } from 'lucide-react';
+import { StarRating } from "@/components"
+import Image from 'next/image';
 
 interface TestimonialCardProps {
     name: string;
@@ -21,16 +23,13 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({
             <div className="flex min-w-60 w-full justify-between flex-1 shrink basis-[0%]">
                 <div className="flex min-w-60 w-full flex-col items-stretch flex-1 shrink basis-[0%]">
                     <div className="flex w-full flex-col items-stretch mt-[15px]">
+                        <StarRating rating={rating} />
                         <div className="flex items-center gap-1 text-base text-[#19191A] font-bold">
                             <span className="self-stretch my-auto">
                                 {name}
                             </span>
                             {isVerified && (
-                                <CheckCircle
-                                    size={24}
-                                    className="text-blue-500 self-stretch shrink-0 my-auto"
-                                    aria-label="Verified reviewer"
-                                />
+                                <Image src="/images/greenTick.svg" alt="" width={20} height={20} />
                             )}
                         </div>
                         <p className="text-[#484A4C] text-sm font-normal mt-2">

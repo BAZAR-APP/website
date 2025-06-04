@@ -113,9 +113,8 @@ const LuxuryExperience: React.FC<any> = () => {
                 <section className="flex flex-col items-start gap-8 self-stretch relative">
                     <div className="flex max-w-[1440px] flex-col items-start gap-5 self-stretch relative">
                         <div className="flex w-[976px] flex-col items-start gap-[-54px] relative max-md:w-full">
-                            <blockquote className="h-[165px] self-stretch text-[#101828] text-4xl font-normal leading-[55px] tracking-[-0.72px] relative max-md:text-[28px] max-md:leading-10 max-sm:text-2xl max-sm:leading-8">
-                                Bazar offers a luxurious escape with stunning sea views and
-                                premium amenities. Our chalets provide the perfect
+                            <blockquote className="self-stretch text-[#101828] font-normal  text-4xl leading-[55px] tracking-[-0.72px] px-[11px] py-0 max-md:text-[28px] max-md:leading-10 max-sm:text-2xl max-sm:leading-8">
+                                Bazar offers a luxurious escape with stunning sea views and premium amenities. Our chalets provide the perfect
                             </blockquote>
                             <div className="flex flex-col items-center gap-2 relative pl-0 pr-2 py-2 max-sm:items-start">
                                 <span className="flex justify-center items-center gap-2">
