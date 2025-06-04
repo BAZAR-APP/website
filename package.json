@@ -14,6 +14,7 @@
     "@formatjs/intl-localematcher": "^0.6.1",
     "@radix-ui/react-select": "^2.2.5",
     "@radix-ui/themes": "^3.2.1",
+    "@react-google-maps/api": "^2.20.6",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
