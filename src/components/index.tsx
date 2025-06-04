@@ -21,6 +21,11 @@ export { default as PropertyCard } from './PropertyCard';
 export { default as ChaletsCard } from './Home/ChaletCardSection';
 export { default as Terms } from './Terms/Terms';
 export { default as DownloadApp } from './DownloadApp/DownloadApp';
-export { default as BazarImageCard } from './BazarImageCard'; export { default as LoyaltyBannerSection } from "./Loyalty/BannerSection"
+export { default as BazarImageCard } from './BazarImageCard';
+export { default as LoyaltyBannerSection } from "./Loyalty/BannerSection"
 export { default as HowItWork } from "./Loyalty/HowItWork"
-
+export { default as LoyaltyTiers } from "./Loyalty/LoyaltyTiers"
+export { default as LoyaltyTiersCardSection } from "./Loyalty/LoyaltyTiersCard"
+export { default as JoinUs } from "./Loyalty/JoinUs"
+export { default as EarningPoints } from "./Loyalty/EarningPoints"
+export { default as SavingSection } from "./Loyalty/SavingSection"
