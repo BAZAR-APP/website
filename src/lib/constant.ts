@@ -1,4 +1,3 @@
-
 export const getUserNameInitials = (name: string) =>
   name
     .split(' ')
@@ -251,8 +250,7 @@ export const propertyData = {
     'https://picsum.photos/200/300',
     'https://picsum.photos/200/300',
   ],
-  description:
-    'Escape to this stunning lakeside retreat featuring panoramic lake views, modern amenities, and serene surroundings. Perfect for a romantic getaway or peaceful family vacation.',
+  description: `Enjoy a relaxing stay at this spacious chalet, perfect for families and groups. It accommodates up to 5 guests, offering 3 cozy bedrooms, 5 comfortable beds, and 3 modern bathrooms. Whether you're looking to unwind or have fun, this chalet provides the perfect getaway.`,
   maxGuests: 6,
   bedrooms: 3,
   bathrooms: 2,
@@ -425,69 +423,75 @@ export const HomeChaltesData = [
 
 export const termsData = [
   {
-      number: 1,
-      title: "Booking & Payment",
-      content: [
-          "A booking is considered confirmed only after successful payment.",
-          "You may choose to pay in full or in two parts (50% upfront and the remaining 72 hours before check-in).",
-          "If the remaining amount is not paid on time, the booking may be canceled without refund."
-      ]
+    number: 1,
+    title: 'Booking & Payment',
+    content: [
+      'A booking is considered confirmed only after successful payment.',
+      'You may choose to pay in full or in two parts (50% upfront and the remaining 72 hours before check-in).',
+      'If the remaining amount is not paid on time, the booking may be canceled without refund.',
+    ],
   },
   {
-      number: 2,
-      title: "Cancellation & Refunds",
-      content: [
-          "Refundable bookings can be canceled up to 72 hours before check-in for a full refund.",
-          "Non-refundable bookings are not eligible for refunds.",
-          "Refunds (if applicable) will be processed within 7 business days."
-      ]
+    number: 2,
+    title: 'Cancellation & Refunds',
+    content: [
+      'Refundable bookings can be canceled up to 72 hours before check-in for a full refund.',
+      'Non-refundable bookings are not eligible for refunds.',
+      'Refunds (if applicable) will be processed within 7 business days.',
+    ],
   },
   {
-      number: 3,
-      title: "Check-In & Check-Out",
-      content: [
-          "Check-in and check-out times are specified in your booking details.",
-          "Early check-in or late check-out may incur additional fees and must be requested in advance."
-      ]
+    number: 3,
+    title: 'Check-In & Check-Out',
+    content: [
+      'Check-in and check-out times are specified in your booking details.',
+      'Early check-in or late check-out may incur additional fees and must be requested in advance.',
+    ],
   },
   {
-      number: 4,
-      title: "Use of Chalet",
-      content: [
-          "The number of guests must not exceed the booking limit.",
-          "The chalet must be kept in good condition. Any damage may result in a charge of up to 200 KD from the security deposit.",
-          "Parties, loud noise, or illegal activities are not allowed."
-      ]
+    number: 4,
+    title: 'Use of Chalet',
+    content: [
+      'The number of guests must not exceed the booking limit.',
+      'The chalet must be kept in good condition. Any damage may result in a charge of up to 200 KD from the security deposit.',
+      'Parties, loud noise, or illegal activities are not allowed.',
+    ],
   },
   {
-      number: 5,
-      title: "Loyalty Program",
-      content: [
-          "Points are earned for every eligible booking and can be redeemed for discounts.",
-          "Points are non-transferable and may expire if unused for 12 months."
-      ]
+    number: 5,
+    title: 'Loyalty Program',
+    content: [
+      'Points are earned for every eligible booking and can be redeemed for discounts.',
+      'Points are non-transferable and may expire if unused for 12 months.',
+    ],
   },
   {
-      number: 6,
-      title: "Add-Ons & Extras",
-      content: [
-          "Add-ons such as decorations, food packages, or early check-in must be selected during booking.",
-          "Prices for add-ons are added to the total amount and are non-refundable after 72 hours before check-in."
-      ]
+    number: 6,
+    title: 'Add-Ons & Extras',
+    content: [
+      'Add-ons such as decorations, food packages, or early check-in must be selected during booking.',
+      'Prices for add-ons are added to the total amount and are non-refundable after 72 hours before check-in.',
+    ],
   },
   {
-      number: 7,
-      title: "Privacy & Security",
-      content: [
-          "We value your privacy. Personal data is used only for booking, communication, and loyalty program purposes.",
-          "Payment is processed securely through trusted third-party gateways."
-      ]
+    number: 7,
+    title: 'Privacy & Security',
+    content: [
+      'We value your privacy. Personal data is used only for booking, communication, and loyalty program purposes.',
+      'Payment is processed securely through trusted third-party gateways.',
+    ],
   },
   {
-      number: 8,
-      title: "Changes to Terms",
-      content: [
-          "We reserve the right to update these terms at any time. Continued use of the platform means you accept any changes."
-      ]
-  }
-];
+    number: 8,
+    title: 'Changes to Terms',
+    content: [
+      'We reserve the right to update these terms at any time. Continued use of the platform means you accept any changes.',
+    ],
+  },
+]
+export const rooms = [
+  { roomNumber: 1, bedType: 'Double Bed', bedCount: 1, imageSrc: '/images/Icon.svg' },
+  { roomNumber: 2, bedType: 'Single Bed', bedCount: 2, imageSrc: '/images/Icon.svg' },
+  { roomNumber: 3, bedType: 'King Bed', bedCount: 1, imageSrc: '/images/Icon.svg' },
+  { roomNumber: 4, bedType: 'Twin Beds', bedCount: 2, imageSrc: '/images/Icon.svg' },
+]
