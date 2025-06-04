@@ -208,10 +208,10 @@ export const getVisiblePages = (currentPage: number, totalPages: number): number
 
 export const quickLinks = [
   { label: 'Home', href: '#' },
-  { label: 'About Us', href: '#' },
+  { label: 'About Us', href: '/about' },
   { label: 'Explore', href: '#' },
-  { label: 'Terms & Conditions', href: '#' },
-  { label: 'Privacy Policy', href: '/terms-conditions/' },
+  { label: 'Terms & Conditions', href: '/terms-conditions/' },
+  { label: 'Privacy Policy', href: '/privacy-policy/' },
 ]
 export const reviews = [
   {

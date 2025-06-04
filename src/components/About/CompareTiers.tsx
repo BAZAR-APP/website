@@ -2,14 +2,8 @@
 
 const CompareTiers = () => {
     return (
-        <div className="main-container flex w-[1011px] flex-col gap-[24px] items-end flex-nowrap relative mx-auto my-0">
-            <div className="flex justify-between items-center self-stretch shrink-0 flex-nowrap relative">
-                <span className="flex w-[291px] h-[32px] justify-center items-start shrink-0 basis-auto font-['Inter'] text-[25px] font-semibold leading-[32px] text-[#19191a] relative text-center whitespace-nowrap z-[1]">
-                    Compare Between Tiers
-                </span>
-                <div className="w-[24px] h-[24px] shrink-0 bg-[url(https://codia-f2c.s3.us-west-1.amazonaws.com/image/2025-06-04/fO5M0zGd1c.png)] bg-cover bg-no-repeat relative overflow-hidden z-[2]" />
-            </div>
-            <div className="flex flex-col items-start self-stretch shrink-0 flex-nowrap bg-[#fff] rounded-[12px] border-solid border border-[#f3f4f6] relative overflow-hidden shadow-[0_1px_2px_0_rgba(16,24,40,0.05)] z-[3]">
+        <div className="main-container flex w-full lg:w-[1011px] flex-col gap-[24px] items-end flex-nowrap relative mx-auto my-0">
+            <div className="flex flex-col items-start self-stretch shrink-0 flex-nowrap bg-[#fff] rounded-[12px] border-solid border border-[#f3f4f6] relative overflow-auto shadow-[0_1px_2px_0_rgba(16,24,40,0.05)] z-[3]">
                 <div className="flex items-start self-stretch shrink-0 flex-nowrap bg-[#fff] relative z-[4]">
                     <div className="flex w-[88px] flex-col items-start shrink-0 flex-nowrap relative z-[5]">
                         <div className="flex h-[62px] pt-[12px] pr-[24px] pb-[12px] pl-[24px] gap-[12px] items-center self-stretch shrink-0 flex-nowrap bg-[#f8f9fb] border-solid border-t border-t-[#eaecf0] relative z-[6]" />

@@ -1,12 +1,16 @@
 
 "use client"
-import { Terms } from '@/components';
+import { DownloadApp, Terms } from '@/components';
 
 
 
 export const TermsConditionsPage: React.FC = () => {
     return (
-        <Terms />
+        <>
+            <Terms />
+            <DownloadApp />
+        </>
+
     );
 };
 

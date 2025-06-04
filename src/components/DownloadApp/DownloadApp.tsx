@@ -3,7 +3,7 @@ import React from "react";
 
 const DownloadApp: React.FC = () => {
     return (
-        <div className="flex flex-col md:flex-row items-center gap-8 px-4 py-4 md:py-0 md:px-16 md:pt-16 relative bg-[#29397EE0] rounded-[50px] w-[90%] mx-auto overflow-hidden"
+        <div className="flex flex-col md:flex-row items-center gap-8 px-4 py-4 md:py-0 md:px-16 md:pt-16 relative bg-[#29397EE0] rounded-[50px] mx-4 md:mx-[64px] overflow-hidden"
             style={{
                 background: "linear-gradient(rgba(41, 57, 126, 0.88), rgba(41, 57, 126, 0.88)), url('/images/AppSectionBackground.png')",
                 backgroundSize: "cover",
