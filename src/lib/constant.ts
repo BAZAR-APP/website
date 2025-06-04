@@ -7,8 +7,8 @@ export const getUserNameInitials = (name: string) =>
 
 export const navItems = [
   { label: 'Home', href: '/' },
-  { label: 'Explore', href: '/' },
-  { label: 'My Bookings', href: '/' },
+  { label: 'Explore', href: '/explore/chalets' },
+  // { label: 'My Bookings', href: '/' },
   { label: 'Loyalty Points', href: '/' },
 ]
 

@@ -6,7 +6,7 @@ import Header from '@/components/Header/Header'
 const DefaultLayout = ({ children }: { children: React.ReactNode }) => {
     return (
         <div>
-            <Header isAuthHeader={true} />
+            <Header isLoggedIn={false} />
             {children}
             <Footer />
         </div>
