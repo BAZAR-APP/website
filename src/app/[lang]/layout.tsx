@@ -2,7 +2,6 @@ import { IBM_Plex_Sans, IBM_Plex_Sans_Arabic } from 'next/font/google'
 import '@/app/globals.css'
 import { getDictionary } from '@/lib/dictionary'
 import { i18n, Locale } from '../../../i18n.config'
-import { Footer, Header } from '@/components'
 
 // Font for English
 const plex = IBM_Plex_Sans({

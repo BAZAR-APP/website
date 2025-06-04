@@ -4,9 +4,11 @@ import { useState } from 'react'
 import CommonButton from '@/components/Button/Button'
 import OneTimePassword from '@/components/OTPInput'
 import Image from 'next/image'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 const VerifyAccount = () => {
+  const searchParams = useSearchParams()
+  const mode = searchParams.get('mode')
   const [otp, setOtp] = useState('')
   const router = useRouter()
   const handleOtpChange = (value: string) => {
@@ -43,17 +45,12 @@ const VerifyAccount = () => {
         <CommonButton
           intent={isOtpFilled ? 'primary' : 'secondary'}
           disabled={!isOtpFilled}
-          onClick={() => router.push('/verify-account/success')}
+          onClick={() =>
+            router.push(mode === 'reset-password' ? '/reset-password' : '/verify-account/success')
+          }
         >
           Verify
         </CommonButton>
-
-        <div className="flex items-center space-x-1 text-[14px]">
-          <span className="text-[#484A4C]">Already have an account?</span>
-          <a href="/login" className="text-[#29397E] font-bold">
-            Log in
-          </a>
-        </div>
       </div>
     </div>
   )

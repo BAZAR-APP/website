@@ -1,8 +1,11 @@
 'use client'
 
 import CommonButton from '@/components/Button/Button'
+import { useSearchParams } from 'next/navigation'
 
 const AccountVerificationSuccess = () => {
+  const searchParams = useSearchParams()
+  const mode = searchParams.get('mode')
   return (
     <>
       <div className="flex flex-col items-center justify-center h-[100%]">
@@ -11,13 +14,17 @@ const AccountVerificationSuccess = () => {
           <div className="flex flex-col gap-[12px]">
             <img src={'/images/Verified.svg'} alt="" className="w-[120px] h-[120px]" />
 
-            <h2 className="!text-primary font-600 text-[39px]">Verified Successfully</h2>
+            <h2 className="!text-primary font-semibold text-[39px]">
+              {mode === 'reset-password' && 'Password'} Verified Successfully
+            </h2>
             <p className="!text-secondary font-600 text-[16px]">
-              Your phone number has been verified. You’re all set to continue!
+              {mode === 'reset-password'
+                ? 'Your new password is set. You can now log in to your account.'
+                : 'Your phone number has been verified. You’re all set to continue!'}
             </p>
           </div>
           <CommonButton
-            children={'Continue'}
+            children={mode === 'reset-password' ? 'Go to Login' : 'Continue'}
             className="w-[360px] h-[48px] bg-[#29397E] text-white gap-2 pt-3 pr-5 pb-3 pl-5 rounded-lg"
           />
         </div>

@@ -4,10 +4,10 @@ import Image from 'next/image'
 
 const AuthLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="h-[100vh] flex p-4">
-      <div className="w-[50%]">{children}</div>
+    <div className="h-[100vh] flex flex-col md:flex-row p-4">
+      <div className="w-full md:w-1/2">{children}</div>
       <div
-        className="flex flex-col items-center justify-center px-[64px] w-[50%]"
+        className="hidden md:flex flex-col justify-center px-[64px] w-1/2"
         style={{
           backgroundImage: `url('/images/AuthBanner.svg')`,
           backgroundSize: 'cover',
@@ -16,8 +16,10 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
           borderRadius: '24px',
         }}
       >
-        <Image src="/images/Logo-white.svg" alt="Bazar" width={150} height={48} />
-        <h4 className="text-[#FDFDFE] text-[48px] font-normal">Your Escape by the Sea</h4>
+        <Image src="/images/Logo-white.svg" alt="Bazar" width={322} height={120} className="mb-5" />
+        <h4 className="text-[#FDFDFE] text-[48px] font-normal font-tenor-sans">
+          Your Escape by the Sea
+        </h4>
         <p className="text-[#FDFDFE] text-[16px] font-normal">
           Discover our handpicked sea villas—perfect for serene getaways and unforgettable moments.
         </p>
