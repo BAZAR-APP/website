@@ -33,7 +33,7 @@ const AmenitiesList = ({ amenities }: AmenitiesListProps) => {
             )
           })}
         </div>
-        <Button onClick={toggle} intent="transperent" className="border border-[#19191A] sm:w-[180px] w-full">
+        <Button onClick={toggle} intent="transperent" className="border border-[#19191A] sm:w-[200px] w-full">
           Show all Amenities
         </Button>
       </div>

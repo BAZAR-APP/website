@@ -61,7 +61,7 @@ const RedeemRewards = () => {
               {discounts.map((discount, index) => (
                 <div key={index} className="bg-[#F9FAFB] p-4 rounded-xl flex flex-col items-center">
                   <div className="mb-3">
-                    <Image src={discount.icon} alt={discount.label} width={160} height={160} />
+                    <Image src={discount.icon} alt={discount.label} width={160} height={160} className='w-[110px] h-[110px]' />
                   </div>
                   <p className="self-start text-[20px] leading-6 text-[#19191A]">
                     {discount.label}
