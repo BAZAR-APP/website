@@ -126,7 +126,6 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
           <p className={`flex items-center mb-2 mt-4 ${textStyles.body} self-stretch`}>
             Deposit will be returned after your stay, subject to property condition.
           </p>
-
           {isSplitPayment && <PaymentSplitSection />}
 
           {couponCode && <CouponSection />}

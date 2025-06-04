@@ -27,15 +27,14 @@ const UserInfo: React.FC<UserInfoProps> = ({ onNext }) => {
         <p className="text-[#484A4C] sm:text-lg text-sm mb-8">
           Please provide your name and contact info to complete the booking.
         </p>
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-          <div className="lg:col-span-2">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+          <div className="lg:col-span-2 md:grid-cols-1">
             <ContactForm onSubmit={handleFormSubmit} />
           </div>
 
-          <div className="lg:col-span-1 pb-7 md:px-3">
+          <div className="lg:col-span-1 md:grid-cols-1 pb-7 md:px-3">
             <div className="sticky top-8">
-              <h3 className="text-lg font-semibold text-gray-900 mb-3">Booking Summary</h3>
-              <BookingSummary />
+              <BookingSummary couponCode/>
             </div>
           </div>
         </div>

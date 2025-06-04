@@ -74,7 +74,7 @@ export default function CustomizeStay({ onNext }: CustomizeStayProps) {
   }, 0)
 
   return (
-    <div className="max-w-[1800px] mx-auto lg:px-22 md:px-18 px-12 py-10">
+    <div className="max-w-[1800px] mx-auto lg:px-22 md:px-18 sm:px-12 px-8 py-10">
       <h2 className="lg:text-[39px] md:text-2xl text-xl lg:leading-[47px] leading-7 font-semibold text-[#19191A] flex items-center">
         Customize Your Stay
       </h2>

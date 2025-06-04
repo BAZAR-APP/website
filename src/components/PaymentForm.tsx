@@ -57,7 +57,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ onSubmit }) => {
 
   return (
     <>
-      <form onSubmit={handleSubmit(onFormSubmit)} className='md:w-[328px] lg:w-[528px] w-full'>
+      <form onSubmit={handleSubmit(onFormSubmit)} className="md:w-[328px] lg:w-[528px] w-full">
         <div className="space-y-8">
           <div className="flex flex-col items-start p-4 gap-4 bg-[#FDFDFE] shadow-[0px_4px_16px_rgba(17,34,17,0.05)] rounded-[12px]">
             <div className="space-y-4 w-full">
@@ -96,13 +96,25 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ onSubmit }) => {
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700 mb-1">Card number</label>
               <div className="relative">
+                <div className="flex justify-start space-x-2 mb-2 lg:hidden">
+                  {['VISA', 'Mastercard', 'ApplePay', 'Gpay'].map((brand) => (
+                    <img
+                      key={brand}
+                      src={`/images/${brand}.svg`}
+                      alt={brand}
+                      className="h-5 w-auto"
+                    />
+                  ))}
+                </div>
+
                 <input
                   type="text"
                   {...register('cardNumber')}
                   placeholder="1234 1234 1234 1234"
                   className="w-full px-4 py-2 border rounded-md border-gray-300 focus:ring-2 focus:ring-blue-500"
                 />
-                <div className="absolute right-3 top-2 flex space-x-2">
+
+                <div className="absolute right-3 top-2 hidden lg:flex space-x-2">
                   {['VISA', 'Mastercard', 'ApplePay', 'Gpay'].map((brand) => (
                     <img
                       key={brand}

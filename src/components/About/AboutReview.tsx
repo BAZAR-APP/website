@@ -69,8 +69,8 @@ const TestimonialsSection: React.FC = () => {
     };
 
     return (
-        <section className="flex flex-col px-20 max-md:pl-5">
-            <div className="items-center flex w-full flex-col overflow-hidden bg-white py-16 max-md:max-w-full">
+        <section className="flex flex-col">
+            <div className="items-center flex w-full flex-col overflow-hidden bg-white pt-16 max-md:max-w-full">
                 <div className="w-full max-w-screen-xl px-16 max-md:max-w-full max-md:px-5">
                     <header className="flex w-full gap-[40px_100px] justify-between flex-wrap max-md:max-w-full">
                         <div className="min-w-60 flex-1 shrink basis-[0%] max-w-screen-md max-md:max-w-full">
@@ -100,44 +100,45 @@ const TestimonialsSection: React.FC = () => {
                         </div>
                     </header>
                 </div>
-                <div className="w-full max-w-screen-xl mt-12 max-md:mt-10">
-                    <Swiper
-                        onSwiper={(swiper) => {
-                            swiperRef.current = swiper;
-                        }}
-                        modules={[Navigation, Pagination]}
-                        spaceBetween={16}
-                        slidesPerView="auto"
-                        centeredSlides={true}
-                        loop={true}
-                        breakpoints={{
-                            320: {
-                                slidesPerView: 1,
-                                spaceBetween: 16,
-                            },
-                            768: {
-                                slidesPerView: 2,
-                                spaceBetween: 16,
-                            },
-                            1024: {
-                                slidesPerView: 3,
-                                spaceBetween: 16,
-                            },
-                        }}
-                        className="testimonials-swiper"
-                    >
-                        {testimonials.map((testimonial) => (
-                            <SwiperSlide key={testimonial.id} className="!w-[400px]">
-                                <TestimonialCard
-                                    name={testimonial.name}
-                                    rating={testimonial.rating}
-                                    review={testimonial.review}
-                                    isVerified={testimonial.isVerified}
-                                />
-                            </SwiperSlide>
-                        ))}
-                    </Swiper>
-                </div>
+
+            </div>
+            <div className="w-full mt-12 max-md:mt-10">
+                <Swiper
+                    onSwiper={(swiper) => {
+                        swiperRef.current = swiper;
+                    }}
+                    modules={[Navigation, Pagination]}
+                    spaceBetween={16}
+                    slidesPerView="auto"
+                    centeredSlides={true}
+                    loop={true}
+                    breakpoints={{
+                        320: {
+                            slidesPerView: 1,
+                            spaceBetween: 16,
+                        },
+                        768: {
+                            slidesPerView: 2,
+                            spaceBetween: 16,
+                        },
+                        1024: {
+                            slidesPerView: 3,
+                            spaceBetween: 16,
+                        },
+                    }}
+                    className="testimonials-swiper"
+                >
+                    {testimonials.map((testimonial) => (
+                        <SwiperSlide key={testimonial.id} className="!w-[400px] mb-16">
+                            <TestimonialCard
+                                name={testimonial.name}
+                                rating={testimonial.rating}
+                                review={testimonial.review}
+                                isVerified={testimonial.isVerified}
+                            />
+                        </SwiperSlide>
+                    ))}
+                </Swiper>
             </div>
         </section>
     );

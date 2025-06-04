@@ -9,6 +9,7 @@ import SideNav from '../SideNav'
 import Link from 'next/link'
 import Button from '../Button/Button'
 import { useRouter } from 'next/navigation'
+import SignInHeader from './SignHeader'
 
 interface HeaderProps {
   className?: string
@@ -20,7 +21,6 @@ const Header: React.FC<HeaderProps> = ({ className = '', isAuthHeader = false })
 
   const toggleSideNav = () => setIsSideNavOpen((open) => !open)
   const closeSideNav = () => setIsSideNavOpen(false)
-  const router = useRouter()
   const baseContainerClasses =
     'flex relative flex-col gap-16 justify-center items-center self-stretch lg:px-16 px-12 py-8 max-md:px-8 max-md:py-6 max-sm:px-5 max-sm:py-4'
 
@@ -29,27 +29,6 @@ const Header: React.FC<HeaderProps> = ({ className = '', isAuthHeader = false })
 
   const maxWidthContainer = 'mx-auto px-8 max-md:px-4 max-sm:px-2'
 
-  const SignInHeader = () => (
-    <div className="flex items-center justify-between w-full">
-      <Logo />
-      <nav className="flex items-center space-x-8">
-        <Link href="/" className="text-primary-blue hover:text-black font-medium">
-          Home
-        </Link>
-        <Link href="/explore/chalets" className="text-primary-blue hover:text-black font-medium">
-          Explore
-        </Link>
-      </nav>
-      <div className="flex items-center space-x-4">
-        <Button onClick={() => router.push('/en/login')} type="button" size="md" intent="ghost">
-          Sign In
-        </Button>
-        <Button onClick={() => router.push('/en/register')} type="button" size="md" className='text-nowrap'>
-          Sign Up
-        </Button>
-      </div>
-    </div>
-  )
 
   const AuthenticatedHeader = () => (
     <>
@@ -100,6 +79,8 @@ const Header: React.FC<HeaderProps> = ({ className = '', isAuthHeader = false })
           </div>
         </div>
       </header>
+
+
 
       {!isAuthHeader && (
         <SideNav
