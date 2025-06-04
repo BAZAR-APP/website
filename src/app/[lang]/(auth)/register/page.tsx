@@ -21,7 +21,6 @@ const SignUp = () => {
         <CommonInput
           name=""
           placeholder=""
-          type="number"
           label="Full Name"
           className={'bg-[#F9FAFB] text-[#484A4C] rounded-[8px]'}
           onChange={handleChange}
@@ -29,7 +28,6 @@ const SignUp = () => {
         <CommonInput
           name=""
           placeholder=""
-          type="number"
           label="Phone"
           className={'bg-[#F9FAFB]'}
           onChange={handleChange}
@@ -37,7 +35,6 @@ const SignUp = () => {
         <CommonInput
           name=""
           placeholder=""
-          type="number"
           label="Password"
           className={'bg-[#F9FAFB]'}
           onChange={handleChange}

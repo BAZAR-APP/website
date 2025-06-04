@@ -1,7 +1,7 @@
 'use client'
 
-import { TextField, Text, Flex } from '@radix-ui/themes'
 import { ReactNode } from 'react'
+import { Text, Flex } from '@radix-ui/themes'
 
 type CommonInputProps = {
   label?: string
@@ -36,7 +36,7 @@ const CommonInput: React.FC<CommonInputProps> = ({
   onChange,
   type = 'text',
   name,
-  className,
+  className = '',
   icon,
   prefix,
   readonly = false,
@@ -50,24 +50,30 @@ const CommonInput: React.FC<CommonInputProps> = ({
           {label}
         </Text>
       )}
-      <TextField.Root
-        id={inputId}
-        name={name}
-        type={type}
-        placeholder={placeholder}
-        value={value}
-        onChange={onChange}
-        variant="surface"
-        className={className}
-        readOnly
+      <div
+        className={`flex items-center min-h-[42px] w-full rounded-lg bg-gray-50 px-3 gap-2 ${className}`}
       >
-        {icon && !prefix && <TextField.Slot className="pl-2">{icon}</TextField.Slot>}
-        {prefix && icon && (
-          <TextField.Slot className="pr-1 text-[#484A4C] text-sm font-medium">
-            {icon} {prefix}
-          </TextField.Slot>
+        {icon && !prefix && <span className="text-gray-500">{icon}</span>}
+        {icon && prefix && (
+          <span className="flex items-center gap-1 text-[#484A4C] text-sm font-medium">
+            {icon}
+            {prefix}
+          </span>
         )}
-      </TextField.Root>
+        {!icon && prefix && (
+          <span className="text-[#484A4C] text-sm font-medium">{prefix}</span>
+        )}
+        <input
+          id={inputId}
+          name={name}
+          type={type}
+          value={value}
+          onChange={onChange}
+          placeholder={placeholder}
+          readOnly={readonly}
+          className="w-full bg-transparent outline-none text-[#19191A] placeholder:text-gray-400"
+        />
+      </div>
     </Flex>
   )
 }
