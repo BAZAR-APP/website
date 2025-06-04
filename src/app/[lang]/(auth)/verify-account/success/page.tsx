@@ -1,11 +1,12 @@
 'use client'
 
 import CommonButton from '@/components/Button/Button'
-import { useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 const AccountVerificationSuccess = () => {
   const searchParams = useSearchParams()
   const mode = searchParams.get('mode')
+  const router = useRouter()
   return (
     <>
       <div className="flex flex-col items-center justify-center h-[100%]">
@@ -26,6 +27,7 @@ const AccountVerificationSuccess = () => {
           <CommonButton
             children={mode === 'reset-password' ? 'Go to Login' : 'Continue'}
             className="w-[360px] h-[48px] bg-[#29397E] text-white gap-2 pt-3 pr-5 pb-3 pl-5 rounded-lg"
+            onClick={() => router.push('/login')}
           />
         </div>
       </div>
