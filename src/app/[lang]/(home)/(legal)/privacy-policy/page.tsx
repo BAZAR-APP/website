@@ -1,12 +1,12 @@
 
 "use client"
-import { Terms } from '@/components';
+import { Privacy } from '@/components';
 
 
 
 export const PrivacyPolicyPage: React.FC = () => {
     return (
-        <Terms />
+        <Privacy />
     );
 };
 

@@ -33,7 +33,7 @@ const Header: React.FC<HeaderProps> = ({ className = '', isAuthHeader = false })
     <div className="flex items-center justify-between w-full">
       <Logo />
       <nav className="flex items-center space-x-8">
-        <Link href="/home" className="text-primary-blue hover:text-black font-medium">
+        <Link href="/" className="text-primary-blue hover:text-black font-medium">
           Home
         </Link>
         <Link href="/explore/chalets" className="text-primary-blue hover:text-black font-medium">
@@ -44,7 +44,7 @@ const Header: React.FC<HeaderProps> = ({ className = '', isAuthHeader = false })
         <Button onClick={() => router.push('/en/login')} type="button" size="md" intent="ghost">
           Sign In
         </Button>
-        <Button onClick={() => router.push('/en/register')} type="button" size="md">
+        <Button onClick={() => router.push('/en/register')} type="button" size="md" className='text-nowrap'>
           Sign Up
         </Button>
       </div>
