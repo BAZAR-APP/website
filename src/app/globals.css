@@ -1,18 +1,16 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+/* Remove the Google Fonts import since we're using Next.js font optimization */
 @import 'tailwindcss';
 @import 'tw-animate-css';
 @import '@radix-ui/themes/styles.css';
-
-
 
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-inter); /* Changed from geist-sans to inter */
   --font-mono: var(--font-geist-mono);
-   --font-tenor-sans: 'Tenor Sans', sans-serif;
+  --font-tenor-sans: 'Tenor Sans', sans-serif;
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -109,7 +107,7 @@
   --sidebar-accent: oklch(0.97 0 0);
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --sidebar-ring: var(--sidebar-ring);
 }
 
 .dark {
@@ -150,17 +148,34 @@
   * {
     @apply border-border outline-ring/50;
     scrollbar-width: none;
-
   }
 
   *::-webkit-scrollbar {
     display: none;
-
   }
 
   body {
     @apply bg-background text-foreground;
-    font-family: 'Inter', sans-serif !important;
-
+    /* Use the CSS variable instead of hard-coded font family */
+    font-family: var(--font-inter), system-ui, sans-serif !important;
   }
+}
+
+/* Additional specificity to override any other font declarations */
+html body,
+html body * {
+  font-family:
+    var(--font-inter),
+    'Inter',
+    system-ui,
+    -apple-system,
+    sans-serif !important;
+}
+
+/* Ensure Radix UI components use Inter */
+.radix-themes {
+  font-family: var(--font-inter), 'Inter', system-ui, sans-serif !important;
+}
+.font-tenor {
+  font-family: var(--font-tenor-sans), serif !important;
 }

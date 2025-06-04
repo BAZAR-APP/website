@@ -17,7 +17,7 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
         }}
       >
         <Image src="/images/Logo-white.svg" alt="Bazar" width={322} height={120} className="mb-5" />
-        <h4 className="text-[#FDFDFE] text-[48px] font-normal font-tenor-sans">
+        <h4 className="text-[#FDFDFE] text-[48px] font-normal font-tenor">
           Your Escape by the Sea
         </h4>
         <p className="text-[#FDFDFE] text-[16px] font-normal">
