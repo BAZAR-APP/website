@@ -82,7 +82,7 @@ const ReviewsSection = ({ rating, reviewCount }: ReviewsSectionProps) => {
         </Link>
         <Button
           intent="transperent"
-          className="cursor-pointer border border-[#19191A] text-sm font-medium sm:w-[180px] w-full "
+          className="cursor-pointer border border-[#19191A] text-sm font-medium sm:w-[200px] w-full "
         >
           Show all 200 reviews
         </Button>
