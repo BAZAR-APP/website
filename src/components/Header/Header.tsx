@@ -9,15 +9,22 @@ import SideNav from '../SideNav'
 import Link from 'next/link'
 import Button from '../Button/Button'
 import { useRouter } from 'next/navigation'
-import SignInHeader from './SignHeader'
 
 interface HeaderProps {
   className?: string
   isAuthHeader?: boolean
+  isLoggedIn?: boolean
 }
 
-const Header: React.FC<HeaderProps> = ({ className = '', isAuthHeader = false }) => {
+const Header: React.FC<HeaderProps> = ({
+  className = '',
+  isAuthHeader = false,
+  isLoggedIn = true,
+}) => {
+  console.log(isLoggedIn)
+
   const [isSideNavOpen, setIsSideNavOpen] = useState(false)
+    const router = useRouter()
 
   const toggleSideNav = () => setIsSideNavOpen((open) => !open)
   const closeSideNav = () => setIsSideNavOpen(false)
@@ -28,7 +35,6 @@ const Header: React.FC<HeaderProps> = ({ className = '', isAuthHeader = false })
     'bg-[#F9FAFB] backdrop-blur-[12px] rounded-full flex-none order-0 self-stretch'
 
   const maxWidthContainer = 'mx-auto px-8 max-md:px-4 max-sm:px-2'
-
 
   const AuthenticatedHeader = () => (
     <>
@@ -50,18 +56,33 @@ const Header: React.FC<HeaderProps> = ({ className = '', isAuthHeader = false })
           </svg>
         </button>
       </div>
-
       <div className="hidden lg:flex items-center justify-between w-full">
         <Logo />
         <Navigation />
-        <div className="flex items-center space-x-4 gap-5">
-          <NotificationIcon />
-          <UserProfile
-            userName="Fahd Al-Mutiri"
-            avatarSrc="/images/Image.svg"
-            onLogout={() => console.log('User logged out')}
-          />
-        </div>
+        {isLoggedIn ? (
+          <div className="flex items-center space-x-4 gap-5">
+            <NotificationIcon />
+            <UserProfile
+              userName="Fahd Al-Mutiri"
+              avatarSrc="/images/Image.svg"
+              onLogout={() => console.log('User logged out')}
+            />
+          </div>
+        ) : (
+          <div className="flex items-center space-x-4">
+            <Button onClick={() => router.push('/en/login')} type="button" size="md" intent="ghost">
+              Sign In
+            </Button>
+            <Button
+              onClick={() => router.push('/en/register')}
+              type="button"
+              size="md"
+              className="text-nowrap"
+            >
+              Sign Up
+            </Button>
+          </div>
+        )}
       </div>
     </>
   )
@@ -73,24 +94,21 @@ const Header: React.FC<HeaderProps> = ({ className = '', isAuthHeader = false })
           <div className={baseInnerClasses}>
             <div className={maxWidthContainer}>
               <div className="flex items-center justify-between gap-4 lg:p-6 p-3">
-                {isAuthHeader ? <SignInHeader /> : <AuthenticatedHeader />}
+                <AuthenticatedHeader />
               </div>
             </div>
           </div>
         </div>
       </header>
 
-
-
-      {!isAuthHeader && (
-        <SideNav
-          isOpen={isSideNavOpen}
-          onClose={closeSideNav}
-          userName="Fahd Al-Mutiri"
-          avatarSrc=""
-          onLogout={() => console.log('User logged out')}
-        />
-      )}
+      <SideNav
+        isOpen={isSideNavOpen}
+        onClose={closeSideNav}
+        userName="Fahd Al-Mutiri"
+        avatarSrc=""
+        onLogout={() => console.log('User logged out')}
+        isLoggedIn={isLoggedIn}
+      />
     </>
   )
 }

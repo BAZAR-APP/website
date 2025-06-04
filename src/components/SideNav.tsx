@@ -3,6 +3,8 @@ import Logo from './Logo'
 import Navigation from './Navigation'
 import NotificationIcon from './NotificationIcon'
 import UserProfile from './Header/UserProfile'
+import Button from './Button/Button'
+import { useRouter } from 'next/navigation'
 
 interface SideNavProps {
   isOpen: boolean
@@ -10,6 +12,7 @@ interface SideNavProps {
   userName?: string
   avatarSrc?: string
   onLogout?: () => void
+  isLoggedIn?: boolean
 }
 
 const SideNav: React.FC<SideNavProps> = ({
@@ -18,7 +21,10 @@ const SideNav: React.FC<SideNavProps> = ({
   userName = 'Fahd Al-Mutiri',
   avatarSrc = '',
   onLogout = () => console.log('User logged out'),
+  isLoggedIn,
 }) => {
+  const router = useRouter()
+
   return (
     <>
       {isOpen && (
@@ -57,10 +63,31 @@ const SideNav: React.FC<SideNavProps> = ({
             <div className="flex flex-col space-y-6">
               <Navigation />
             </div>
-            <div className="flex gap-3 py-3 mt-3 px-3">
-              <UserProfile userName={userName} avatarSrc={avatarSrc} onLogout={onLogout} />
-              <NotificationIcon />
-            </div>
+            {isLoggedIn ? (
+              <div className="flex gap-3 py-3 mt-3 px-3">
+                <UserProfile userName={userName} avatarSrc={avatarSrc} onLogout={onLogout} />
+                <NotificationIcon />
+              </div>
+            ) : (
+              <div className="flex items-center space-x-4">
+                <Button
+                  onClick={() => router.push('/en/login')}
+                  type="button"
+                  size="md"
+                  intent="ghost"
+                >
+                  Sign In
+                </Button>
+                <Button
+                  onClick={() => router.push('/en/register')}
+                  type="button"
+                  size="md"
+                  className="text-nowrap"
+                >
+                  Sign Up
+                </Button>
+              </div>
+            )}
           </div>
         </div>
       </div>
