@@ -1,6 +1,7 @@
 import { AddOns } from '@/components/Booking/add-ons/AddOns'
 import Button from '@/components/Button/Button'
 import Checkbox from '@/components/CheckBox/CheckBox'
+import { AddOnItem } from '@/lib/types/booking'
 
 import {
   PartyPopper,
@@ -17,7 +18,9 @@ import {
   Clapperboard,
   SwordIcon,
 } from 'lucide-react'
+import Image from 'next/image'
 import React, { useState } from 'react'
+import { useFormContext } from 'react-hook-form'
 
 const services = [
   {
@@ -57,7 +60,8 @@ type CustomizeStayProps = {
 }
 export default function CustomizeStay({ onNext }: CustomizeStayProps) {
   const [selected, setSelected] = useState<string[]>([])
-
+  const { getValues, setValue, watch } = useFormContext()
+  const selectedAddons: AddOnItem[] = watch('addons') || []
   const handleToggle = (item: string) => {
     setSelected((prev) => (prev.includes(item) ? prev.filter((i) => i !== item) : [...prev, item]))
   }
@@ -67,6 +71,11 @@ export default function CustomizeStay({ onNext }: CustomizeStayProps) {
       itemIconMap[item.name] = item.icon
     })
   })
+  const total = selectedAddons.reduce((acc, item) => {
+    const qty = item.quantity ?? 0
+    return acc + item.price * qty
+  }, 0)
+
   return (
     <div className="max-w-7xl mx-auto lg:px-22 md:px-18 px-12 py-10">
       <h2 className="text-[39px] leading-[47px] font-semibold text-[#19191A] flex items-center">
@@ -106,19 +115,19 @@ export default function CustomizeStay({ onNext }: CustomizeStayProps) {
             Selected add-ons will be added to your total booking payment.
           </p>
           <ul className="space-y-2 w-full text-sm">
-            {selected.map((item) => (
-              <li key={item} className="flex justify-between items-center">
+            {selectedAddons.map((item) => (
+              <li key={item?.label} className="flex justify-between items-center">
                 <div className="flex items-center gap-2">
-                  <span className="text-[#29397E]">{itemIconMap[item]}</span>
-                  <span>{item}</span>
+                  <div dangerouslySetInnerHTML={{ __html: item.icon }} />
+                  <span>{item?.label}</span>
                 </div>
-                <span>{prices} KWD</span>
+                <span>{item?.price * (item?.quantity ?? 1)} KWD</span>
               </li>
             ))}
           </ul>
           <div className="border-t w-full pt-4 mt-2 flex justify-between font-semibold text-sm">
             <span>Total</span>
-            <span>{selected.length * prices} KWD</span>
+            <span>{total} KWD</span>
           </div>
         </div>
       </div>
