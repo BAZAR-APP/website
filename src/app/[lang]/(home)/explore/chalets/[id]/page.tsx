@@ -1,7 +1,6 @@
 import AmenitiesList from '@/components/AmenitiesList'
 import PropertyDetails from '@/components/ChaletsDetails/PropertyDetails'
 import PropertyDetailsCard from '@/components/ChaletsDetails/PropertyDetailsCard'
-import LocationMap from '@/components/LocationMap'
 import ReviewsSection from '@/components/ReviewsSection'
 import BookingWidget from '@/components/BookingWidget'
 import ChaletsRules from '@/components/ChaletsRules'
@@ -9,6 +8,7 @@ import Calender from '@/components/Calender/Calender'
 import { propertyData, rooms } from '@/lib/constant'
 import SelectablePlans from '@/components/SelectablePlans'
 import BedroomCard from '@/components/BedroomCard'
+import HotelMap from '@/components/LocationMap'
 
 export async function generateMetadata({ params }: { params: { slug: string } }) {
   const data = propertyData
@@ -29,7 +29,13 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     },
   }
 }
-
+const hotel = {
+  name: 'Grand Hotel',
+  description: 'Luxurious stay in downtown.',
+  reviews: 87,
+  lat: 24.7136,
+  lng: 46.6753,
+}
 export default async function ChaletDetailsPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
   const data = propertyData
@@ -88,7 +94,14 @@ export default async function ChaletDetailsPage({ params }: { params: Promise<{ 
 
           <>
             <ReviewsSection rating={data.rating} reviewCount={data.reviewCount} />
-            <LocationMap />
+            <HotelMap
+              center={{ lat: hotel.lat, lng: hotel.lng }}
+              hotelInfo={{
+                name: hotel.name,
+                description: hotel.description,
+                reviews: hotel.reviews,
+              }}
+            />
             <ChaletsRules />
           </>
         </div>
