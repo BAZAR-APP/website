@@ -7,6 +7,7 @@ import CommonInput from './CommonInput/Input'
 import { priceDetails } from '@/lib/constant'
 import { useFormContext } from 'react-hook-form'
 import PriceRowUI from './PriceRow'
+import RedeemRewards from './Booking/RedeemRewards'
 
 // Extracted common text styles
 const textStyles = {
@@ -48,9 +49,7 @@ const CouponSection: React.FC = () => (
       placeholder="Apply redeemed code here"
       className={'!bg-[#F9FAFB] !text-[#484A4C] my-1 !rounded-[8px] !border-none !h-[42px]'}
     />
-    <Link href={''} className="text-sm text-[#29397E] font-medium cursor-pointer underline">
-      Redeem Gifts & Discounts ›
-    </Link>
+    <RedeemRewards />
   </>
 )
 

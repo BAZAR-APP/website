@@ -7,6 +7,7 @@ import { Instagram, Send, AtSign, Copy } from 'lucide-react'
 import ModalDialog from '@/components/ModalDialog/Dialog'
 import { Button, CommonInput } from '@/components'
 import { Separator } from 'radix-ui'
+import { copyToClipboard } from '@/lib/utils'
 
 interface ShareModalProps {
   onClose: () => void
@@ -26,7 +27,7 @@ const SocialLinkShare: React.FC<ShareModalProps> = ({ onClose, open }) => {
       name: 'Telegram',
       icon: Send,
       url: `https://t.me/share/url?url=${encodeURIComponent(shareUrl)}`,
-      isImage: false,  
+      isImage: false,
     },
     {
       name: 'Twitter',
@@ -54,28 +55,18 @@ const SocialLinkShare: React.FC<ShareModalProps> = ({ onClose, open }) => {
     },
   ]
 
-  const copyToClipboard = async () => {
-    try {
-      await navigator.clipboard.writeText(shareUrl)
-      alert('Link copied to clipboard!')
-    } catch (err) {
-      // Fallback for older browsers
-      const textArea = document.createElement('textarea')
-      textArea.value = shareUrl
-      document.body.appendChild(textArea)
-      textArea.select()
-      document.execCommand('copy')
-      document.body.removeChild(textArea)
-      alert('Link copied to clipboard!')
-    }
+  const handleCopy = async () => {
+    await copyToClipboard(shareUrl)
+    onClose()
   }
 
-  const handleShareClick = (option: (typeof shareOptions)[0]) => {
+  const handleShareClick = async (option: (typeof shareOptions)[0]) => {
     if (option.url && option.name !== 'Instagram') {
       window.open(option.url, '_blank', 'width=600,height=400')
     } else if (option.name === 'Instagram') {
       // Instagram doesn't support direct URL sharing, so copy to clipboard
-      copyToClipboard()
+      copyToClipboard(shareUrl)
+
       alert('Link copied! You can paste it in Instagram.')
     }
   }
@@ -115,7 +106,7 @@ const SocialLinkShare: React.FC<ShareModalProps> = ({ onClose, open }) => {
           />
           <Copy
             className="w-4 h-4 mt-3 text-[#29397E] cursor-pointer hover:text-blue-600 transition-colors"
-            onClick={copyToClipboard}
+            onClick={handleCopy}
           />
         </span>
       </div>

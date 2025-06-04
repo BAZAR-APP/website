@@ -1,19 +1,19 @@
-import React from 'react';
-import { clsx } from 'clsx';
-import { buttonStyles } from './styles/buttonStyles';
-import { Slot } from '@radix-ui/themes';
+import React from 'react'
+import { clsx } from 'clsx'
+import { buttonStyles } from './styles/buttonStyles'
+import { Slot } from '@radix-ui/themes'
 
 type ButtonProps = {
-  children: React.ReactNode;
-  onClick?: () => void;
-  loading?: boolean;
-  disabled?: boolean;
-  type?: 'button' | 'submit' | 'reset';
-  className?: string;
-  intent?: 'primary' | 'secondary' | 'ghost' | 'transperent';
-  size?: 'sm' | 'md' | 'lg' | 'responsive';
-  asChild?: boolean; // for Radix `Slot`
-};
+  children: React.ReactNode
+  onClick?: () => void
+  loading?: boolean
+  disabled?: boolean
+  type?: 'button' | 'submit' | 'reset'
+  className?: string
+  intent?: 'primary' | 'secondary' | 'ghost' | 'transperent'
+  size?: 'sm' | 'md' | 'lg' | 'responsive'
+  asChild?: boolean // for Radix `Slot`
+}
 
 const Button: React.FC<ButtonProps> = ({
   children,
@@ -26,19 +26,11 @@ const Button: React.FC<ButtonProps> = ({
   size = 'responsive',
   asChild = false,
 }) => {
-  const isDisabled = loading || disabled;
-  const Comp = asChild ? Slot : 'button';
+  const isDisabled = loading || disabled
+  const Comp = asChild ? Slot : 'button'
 
-  return (
-    <Comp
-      type={asChild ? undefined : type}
-      onClick={!isDisabled ? onClick : undefined}
-      disabled={isDisabled}
-      className={clsx(
-        buttonStyles({ intent, size, disabled: isDisabled }),
-        className
-      )}
-    >
+  const innerContent = (
+    <>
       {loading && (
         <svg
           className="animate-spin h-5 w-5 text-white mr-2"
@@ -46,7 +38,14 @@ const Button: React.FC<ButtonProps> = ({
           fill="none"
           viewBox="0 0 24 24"
         >
-          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+          <circle
+            className="opacity-25"
+            cx="12"
+            cy="12"
+            r="10"
+            stroke="currentColor"
+            strokeWidth="4"
+          />
           <path
             className="opacity-75"
             fill="currentColor"
@@ -55,8 +54,19 @@ const Button: React.FC<ButtonProps> = ({
         </svg>
       )}
       {children}
-    </Comp>
-  );
-};
+    </>
+  )
 
-export default Button;
+  return (
+    <Comp
+      type={asChild ? undefined : type}
+      onClick={!isDisabled ? onClick : undefined}
+      disabled={isDisabled}
+      className={clsx(buttonStyles({ intent, size, disabled: isDisabled }), className)}
+    >
+      {asChild ? <span className="flex items-center">{innerContent}</span> : innerContent}
+    </Comp>
+  )
+}
+
+export default Button
