@@ -13,7 +13,7 @@ const CityCard: React.FC<CityCardProps> = ({
     altText = ""
 }) => {
     return (
-        <article className="flex w-[300px] flex-col items-start overflow-hidden rounded-3xl max-md:w-[calc(50%_-_10px)] max-sm:w-full">
+        <article className="flex max-w-full flex-col items-start overflow-hidden rounded-3xl max-md:w-[calc(50%_-_10px)] ">
             <img
                 src={imageUrl}
                 alt={altText}

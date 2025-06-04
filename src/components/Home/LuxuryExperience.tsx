@@ -1,4 +1,5 @@
 "use client"
+import Image from 'next/image';
 import { useState } from 'react';
 
 const LuxuryExperience: React.FC<any> = () => {
@@ -16,7 +17,7 @@ const LuxuryExperience: React.FC<any> = () => {
                         <h1 className="self-stretch text-[#101828] text-5xl font-bold relative gap-[-54px] max-md:text-4xl max-sm:text-[28px]">
                             Escape to luxury and comfort at Bazar
                         </h1>
-                        <div className="flex flex-col items-start gap-[-54px] self-stretch relative">
+                        <div className="flex items-start gap-[24px]">
                             <div className="flex items-center gap-2 relative p-0 rounded-[80.439px] bg-[#29397E] max-md:justify-center max-md:flex-wrap max-md:gap-4 max-sm:gap-3">
                                 <div className="flex items-start relative bg-[rgba(255,251,235,0.00)] p-[18.282px] rounded-[18279.707px] max-md:justify-center max-md:flex-wrap max-md:gap-4 max-sm:gap-3 max-sm:p-3">
                                     <div
@@ -116,28 +117,32 @@ const LuxuryExperience: React.FC<any> = () => {
                                 Bazar offers a luxurious escape with stunning sea views and
                                 premium amenities. Our chalets provide the perfect
                             </blockquote>
-                            <p className="max-w-[976px] h-[175px] relative text-[#101828] text-4xl font-normal leading-[55px] tracking-[-0.72px] gap-2 self-stretch px-[11px] py-0 top-[9px] max-md:text-[28px] max-md:leading-10 max-sm:text-2xl max-sm:leading-8">
-                                blend of comfort and elegance, ensuring a memorable stay.
-                                Whether for relaxation or adventure, experience hospitality at
-                                its finest.
-                            </p>
-                            <div className="flex justify-center items-center gap-2 relative pl-0 pr-2 py-2 bottom-[106px] max-sm:justify-start">
-                                <img
-                                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/05cdf8db84fe4a4e6febdd6351a6ca976800da74?placeholderIfAbsent=true"
-                                    alt="Guest testimonial profile"
-                                    className="w-[129px] h-[53px] relative rounded-[1000px]"
-                                />
-                                <img
-                                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/0349bf6f2a8220b4fb7d36749394cc033fcce539?placeholderIfAbsent=true"
-                                    alt="Additional guest profile"
-                                    className="w-[53px] h-[53px] relative rounded-[1000px]"
-                                />
+                            <div className="flex flex-col items-center gap-2 relative pl-0 pr-2 py-2 max-sm:items-start">
+                                <span className="flex justify-center items-center gap-2">
+                                    <span className="max-w-[976px] inline-block h-auto text-[#101828] text-4xl font-normal leading-[55px] tracking-[-0.72px] px-[11px] py-0 max-md:text-[28px] max-md:leading-10 max-sm:text-2xl max-sm:leading-8">
+                                        <Image
+                                            src="https://cdn.builder.io/api/v1/image/assets/TEMP/05cdf8db84fe4a4e6febdd6351a6ca976800da74?placeholderIfAbsent=true"
+                                            alt="Guest testimonial profile"
+                                            className="rounded-full object-cover inline-block mr-2"
+                                            height={53}
+                                            width={128}
+                                        />
+                                        <Image
+                                            src="https://cdn.builder.io/api/v1/image/assets/TEMP/0349bf6f2a8220b4fb7d36749394cc033fcce539?placeholderIfAbsent=true"
+                                            alt="Additional guest profile"
+                                            className="rounded-full object-cover inline-block mr-4"
+                                            height={53}
+                                            width={53}
+                                        />
+                                        blend of comfort and elegance, ensuring a memorable stay. Whether for relaxation or adventure, experience hospitality at its finest.
+                                    </span>
+                                </span>
                             </div>
                         </div>
                     </div>
                 </section>
-            </div>
-        </section>
+            </div >
+        </section >
     );
 };
 

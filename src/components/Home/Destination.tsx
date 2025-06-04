@@ -73,7 +73,7 @@ const DestinationSection: React.FC = () => {
                         Discover Your Next Destination
                     </h1>
                     <div
-                        className="flex items-start content-start gap-6 w-full flex-wrap max-md:gap-5 max-sm:gap-4"
+                        className="grid grid-cols-4 gap-4 w-full max-md:grid-cols-2 max-sm:grid-cols-1"
                         role="list"
                         aria-label="Available destinations"
                     >

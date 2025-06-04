@@ -363,8 +363,9 @@ export const HomeChaltesData = [
     amenities: ['Wifi', 'Free Parking'],
     rating: 4.7,
     reviews: 200,
-    price: 100,
-    priceUnit: 'night' as const,
+    price: 120,
+    newPrice: 100,
+    priceUnit: 'hour' as const,
     imageUrl:
       'https://cdn.builder.io/api/v1/image/assets/TEMP/9df58597e3e3f82cf04ba41b5826302522a3872d?placeholderIfAbsent=true',
   },
@@ -378,8 +379,9 @@ export const HomeChaltesData = [
     amenities: ['Wifi', 'Free Parking'],
     rating: 4.7,
     reviews: 200,
-    price: 100,
-    priceUnit: 'night' as const,
+    price: 130,
+    newPrice: 110,
+    priceUnit: 'hour' as const,
     imageUrl:
       'https://cdn.builder.io/api/v1/image/assets/TEMP/9df58597e3e3f82cf04ba41b5826302522a3872d?placeholderIfAbsent=true',
   },
@@ -393,8 +395,9 @@ export const HomeChaltesData = [
     amenities: ['Wifi', 'Free Parking'],
     rating: 4.7,
     reviews: 200,
-    price: 100,
-    priceUnit: 'night' as const,
+    price: 140,
+    newPrice: 120,
+    priceUnit: 'hour' as const,
     imageUrl:
       'https://cdn.builder.io/api/v1/image/assets/TEMP/9df58597e3e3f82cf04ba41b5826302522a3872d?placeholderIfAbsent=true',
   },
@@ -408,12 +411,14 @@ export const HomeChaltesData = [
     amenities: ['Wifi', 'Free Parking'],
     rating: 4.7,
     reviews: 200,
-    price: 100,
-    priceUnit: 'night' as const,
+    price: 150,
+    newPrice: 125,
+    priceUnit: 'hour' as const,
     imageUrl:
       'https://cdn.builder.io/api/v1/image/assets/TEMP/9df58597e3e3f82cf04ba41b5826302522a3872d?placeholderIfAbsent=true',
-  }
+  },
 ];
+
 
 
 // Terms and Conditions
