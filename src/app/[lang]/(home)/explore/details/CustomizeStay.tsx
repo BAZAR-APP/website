@@ -1,3 +1,4 @@
+import { AddOns } from '@/components/Booking/add-ons/AddOns'
 import Button from '@/components/Button/Button'
 import Checkbox from '@/components/CheckBox/CheckBox'
 
@@ -78,39 +79,7 @@ export default function CustomizeStay({ onNext }: CustomizeStayProps) {
 
       <div className="flex flex-col lg:flex-row gap-10 justify-between">
         <div className="flex flex-col items-start gap-[40px] md:w-[463px] w-full">
-          {services.map((section) => (
-            <div key={section.title} className="w-full">
-              <h2 className="text-xl pb-4 leading-6 font-bold text-[#19191A] flex items-center">
-                {section.title}
-              </h2>
-              <ul className="space-y-4">
-                {section.items.map(({ name, icon }) => (
-                  <li key={name} className="flex justify-between items-center w-full">
-                    <div className="flex items-center gap-2">
-                      <span className="text-[#29397E]">{icon}</span>
-                      <label htmlFor={name} className="text-sm">
-                        {name}{' '}
-                        {(name.includes('Birthday') || name.includes('Anniversary')) && (
-                          <span className="text-[#29397E] bg-[#E1F3FF] py-1 px-1.5 rounded-md text-xs ml-1">
-                            Requires 24h Notice
-                          </span>
-                        )}
-                      </label>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm">{prices} KWD</span>
-                      <Checkbox
-                        label={null}
-                        checked={selected.includes(name)}
-                        onChange={() => handleToggle(name)}
-                        className="!m-0"
-                      />
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+          <AddOns />
 
           <textarea
             className="w-full h-52 p-3 bg-[#F9FAFB] rounded resize-none text-sm"
