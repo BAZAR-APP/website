@@ -10,8 +10,8 @@ const Login = () => {
   const handleChange = () => { }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen px-4 overflow-hidden bg-white">
-      <div className="w-full max-w-[360px] max-h-[90vh] overflow-y-auto py-8 flex flex-col gap-6 sm:gap-6">
+    <div className="flex flex-col items-center justify-center h-[100%]">
+      <div className="max-w-[360px] h-[90vh] overflow-y-auto flex flex-col gap-[24px]">
         <div className="flex justify-start">
           <Image src={'/images/Logo.svg'} alt="Logo" width={150} height={48} />
         </div>
@@ -37,13 +37,12 @@ const Login = () => {
         />
 
         <CommonInput
-          name="password"
-          type="password"
+          name=""
+          placeholder=""
           label="Password"
-          className={
-            '!bg-[#F9FAFB] !text-[#484A4C] !rounded-[8px] !border-none !h-[42px] text-sm sm:text-base'
-          }
+          className={'bg-[#F9FAFB]'}
           onChange={handleChange}
+          type='password'
         />
 
         <div className="flex justify-between text-sm sm:text-base">
