@@ -1,5 +1,9 @@
+'use client'
 import { LucideIcon } from 'lucide-react'
 import * as Icons from 'lucide-react'
+import Button from './Button/Button'
+import AmenitiesDialog from './AmenitiesDialog'
+import useToggle from '@/lib/hooks/useToggle'
 
 interface Amenity {
   icon: string
@@ -11,22 +15,30 @@ interface AmenitiesListProps {
 }
 
 const AmenitiesList = ({ amenities }: AmenitiesListProps) => {
-  return (
-    <div className="border-b border-[#E5E7EB] pb-8 text-[#19191A]">
-      <h2 className="text-xl font-semibold mb-6">Amenities</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {amenities.map((amenity, index) => {
-          const IconComponent = Icons[amenity.icon as keyof typeof Icons] as LucideIcon
+  const { isOpen, toggle } = useToggle(false)
 
-          return (
-            <div key={index} className="flex items-center gap-3">
-              {IconComponent && <IconComponent className="w-5 h-5 text-gray-600" />}
-              <span>{amenity.label}</span>
-            </div>
-          )
-        })}
+  return (
+    <>
+      <div className="text-[#19191A]">
+        <h2 className="text-xl font-semibold mb-6">Amenities</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pb-6 font-medium">
+          {amenities.map((amenity, index) => {
+            const IconComponent = Icons[amenity.icon as keyof typeof Icons] as LucideIcon
+
+            return (
+              <div key={index} className="flex items-center gap-3">
+                {IconComponent && <IconComponent className="w-5 h-5 text-gray-600" />}
+                <span>{amenity.label}</span>
+              </div>
+            )
+          })}
+        </div>
+        <Button onClick={toggle} intent="transperent" className="border border-[#19191A]">
+          Show all Amenities
+        </Button>
       </div>
-    </div>
+      <AmenitiesDialog isOpen={isOpen} setIsOpen={toggle} />
+    </>
   )
 }
 

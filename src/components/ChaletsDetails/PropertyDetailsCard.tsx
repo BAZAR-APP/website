@@ -1,6 +1,8 @@
 import LikeStar from '../../../public/images/Like.svg'
 import Image from 'next/image'
 import SocialShareWrapper from '../SocialShareWrapper'
+import { MapPin } from 'lucide-react'
+import Location from '../Location'
 
 interface PropertyDetailsCardProps {
   title: string
@@ -23,13 +25,20 @@ const PropertyDetailsCard = ({
         <div>
           <h1 className="md:text-3xl sm:text-2xl text-xl font-bold text-gray-900 mb-2">{title}</h1>
           <div className="flex items-center flex-wrap gap-4 text-sm text-gray-600">
-            <div className="flex items-center gap-1 font-semibold text-gray-800">
+            <div className="flex items-center gap-1 text-gray-800">
+              <span className="text-[#484A4C]">{rating}</span>
               <Image src={LikeStar} alt="Rating star" width={18} height={18} />
-              <span>{rating}</span>
-              <span className="text-gray-500 font-normal">({reviewCount} reviews)</span>
+              <span className="text-[#9EA0A2]">&bull;</span>
+              <span className="text-gray-500 font-normal underline">{reviewCount} reviews</span>
+              <span className="text-[#9EA0A2]">&bull;</span>
+              <Location
+                icon={<MapPin className="w-4 h-4" />}
+                text={location}
+                className="text-[#9EA0A2]"
+              />
+              <span className="text-[#9EA0A2]">&bull;</span>
+              <SocialShareWrapper />
             </div>
-            <span>{location}</span>
-            <SocialShareWrapper />
           </div>
         </div>
       </div>

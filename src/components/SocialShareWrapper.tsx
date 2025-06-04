@@ -12,6 +12,7 @@ export default function SocialShareWrapper() {
     <>
       <Button variant="ghost" className="flex items-center gap-1" onClick={() => setIsOpen(true)}>
         <Image src={ShareIcon} alt="Share icon" className="cursor-pointer" width={18} height={18} />
+        <span className='text-[#19191A] cursor-pointer'>Share</span>
       </Button>
       <SocialLinkShare open={isOpen} onClose={() => setIsOpen(false)} />
     </>
