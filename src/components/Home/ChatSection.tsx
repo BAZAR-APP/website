@@ -15,7 +15,7 @@ const ChatHero: React.FC = () => {
                     className="absolute h-full w-full object-cover inset-0"
                 />
                 <section className="relative max-w-[1280px] ">
-                    <h1 className="text-[39px] font-semibold max-md:max-w-full">
+                    <h1 className="text-[32px] md:text-[39px] font-semibold max-md:max-w-full">
                         Need help? Chat with us!
                     </h1>
                     <p className="text-xl font-normal mt-4 max-md:max-w-full">

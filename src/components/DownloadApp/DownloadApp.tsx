@@ -15,7 +15,7 @@ const DownloadApp: React.FC = () => {
             <section className="max-w-[1280px] w-full flex flex-col md:flex-row relative mx-auto mb-0">
                 <div className="flex flex-col items-start gap-6 justify-center flex-1">
                     <div className="flex flex-col max-w-[420px] items-start gap-4 w-full">
-                        <h2 className="font-[500] text-white text-[28px] md:text-[32px] lg:text-[39px]">
+                        <h2 className="text-[32px] md:text-[39px] font-semibold text-white">
                             Download the App
                         </h2>
 
@@ -29,16 +29,17 @@ const DownloadApp: React.FC = () => {
                         <Image
                             src="/images/AppStore.svg"
                             alt="App Store"
-                            width={168}
-                            height={56}
-                            className="h-14"
+                            width={160}
+                            height={40}
+                            className="shirnk-0"
+
                         />
                         <Image
                             src="/images/GooglePlay.svg"
                             alt="Google Play"
-                            width={168}
-                            height={56}
-                            className="h-14"
+                            width={160}
+                            height={40}
+                            className="shirnk-0"
                         />
                     </div>
                 </div>

@@ -68,7 +68,7 @@ const DestinationSection: React.FC = () => {
                 <div className="flex flex-col items-start gap-12 w-full max-w-screen-xl">
                     <h1
                         id="destinations-heading"
-                        className="w-full text-black text-[39px] font-bold max-md:text-[32px] max-sm:text-[28px]"
+                        className="w-full text-black text-[32px] md:text-[39px] font-semibold"
                     >
                         Discover Your Next Destination
                     </h1>

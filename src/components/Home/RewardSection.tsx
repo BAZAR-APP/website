@@ -33,12 +33,12 @@ const RewardsSection: React.FC<RewardsSectionProps> = ({
             <div className="min-h-[794px]  w-full overflow-hidden bg-gray-50 p-20 rounded-[40px] max-md:px-5">
                 <article className="min-h-[191px] max-w-[1280px] mx-auto">
                     <header>
-                        <h1 className="text-[#19191A] text-[39px] font-medium leading-tight max-md:max-w-full max-md:text-3xl">
+                        <h1 className="text-[#19191A] text-[32px] md:text-[39px] font-semibold leading-tight max-md:max-w-full">
                             {title}
                         </h1>
                     </header>
 
-                    <p className="text-[#484A4C] text-xl font-normal mt-6 leading-relaxed max-md:max-w-full">
+                    <p className="text-[#484A4C] text-xl font-normal mt-6 leading-relaxed max-w-full md:max-w-lg">
                         {description}
                     </p>
 
