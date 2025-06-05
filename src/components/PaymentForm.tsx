@@ -6,6 +6,7 @@ import { Check, CheckCircle, Plus } from 'lucide-react'
 import clsx from 'clsx'
 import { useFormContext } from 'react-hook-form'
 import Button from './Button/Button'
+import { Radio } from '@radix-ui/themes'
 
 export type PaymentFormData = {
   paymentOption: 'full' | 'split'
@@ -75,14 +76,16 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ onSubmit }) => {
                     </div>
                     <div className="text-sm text-[#484A4C]">{option.description}</div>
                   </div>
-                  <input
-                    type="radio"
+                  <Radio
+                    name="paymentOption"
                     value={option.value}
-                    {...register('paymentOption')}
-                    className="mt-1 h-4 w-4 text-blue-600"
+                    className="!cursor-pointer"
+                    checked={paymentOption === option.value}
+                    onChange={() => setValue('paymentOption', option.value)}
                   />
                 </label>
               ))}
+
               <p className="text-sm text-[#29397E] flex items-center gap-1">
                 <span className="bg-[#29397E] rounded-full max-w-10">
                   <Check className="text-white w-4 h-4 p-0.5" />
@@ -154,7 +157,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ onSubmit }) => {
               <Image src={'/images/protection.svg'} alt="Secure" width={24} height={24} />
             </span>
             All payments processed securely via KNET
-            <Image src={'/images/Knet.svg'} alt="Secure" className='ml-1' width={24} height={24} />.
+            <Image src={'/images/Knet.svg'} alt="Secure" className="ml-1" width={24} height={24} />.
           </p>
         </div>
       </form>

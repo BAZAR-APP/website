@@ -61,8 +61,8 @@ export default function BookingStepper({ currentStep }: BookingStepperProps) {
               </div>
 
               <div className="mt-2 sm:text-sm text-[12px]">
-                <h3 className="sm:font-bold font-medium text-[#29397E]">{step.title}</h3>
-                <p className="text-xs text-[#29397E]">{step.subtitle}</p>
+                <h3 className="sm:font-bold font-semibold text-[#29397E]">{step.title}</h3>
+                <p className="text-xs sm:block hidden text-[#29397E]">{step.subtitle}</p>
               </div>
             </li>
           )

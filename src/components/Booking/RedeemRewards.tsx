@@ -58,7 +58,7 @@ const RedeemRewards = () => {
               Turn your points into savings for <br /> this stay.
             </Text>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-2 gap-4 md:mt-8 mt-4 pb-4">
+            <div className="grid grid-cols-2 sm:grid-cols-2 xl:grid-cols-2 gap-4 md:mt-8 mt-4 pb-4">
               {discounts.map((discount, index) => (
                 <div key={index} className="bg-[#F9FAFB] p-4 rounded-xl flex flex-col items-center">
                   <div className="mb-3">
