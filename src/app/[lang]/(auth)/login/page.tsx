@@ -7,6 +7,7 @@ import CommonButton from '@/components/Button/Button'
 import Image from 'next/image'
 import Link from 'next/link'
 import { loginSchema } from '@/lib/validationSchemas'
+import { useRouter } from 'next/navigation'
 interface LoginFormInputs {
   phone: string
   password: string
@@ -15,6 +16,7 @@ interface LoginFormInputs {
 interface PhoneChangeEvent extends React.ChangeEvent<HTMLInputElement> {}
 
 const Login = () => {
+  const router = useRouter()
   const {
     handleSubmit,
     formState: { isValid, errors, isSubmitting },
@@ -31,7 +33,7 @@ const Login = () => {
 
   const onSubmit = async (data: LoginFormInputs): Promise<void> => {
     try {
-      console.log('Form submitted:', data)
+      router.push('/')
     } catch (error) {
       console.error('Login error:', error)
     }
@@ -52,7 +54,7 @@ const Login = () => {
 
   return (
     <>
-      <div className="max-w-[360px]  overflow-y-auto flex flex-col gap-[24px]">
+      <div className="max-w-[360px] overflow-y-auto flex flex-col gap-[24px]">
         <div className="flex justify-start">
           <Image src={'/images/Logo.svg'} alt="Logo" width={150} height={48} />
         </div>

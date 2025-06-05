@@ -33,7 +33,7 @@ const ChangePassword = () => {
         />
         <CommonButton
           children={'Create New Password'}
-          className="w-[360px] h-[48px] bg-[#29397E] text-white gap-2 pt-3 pr-5 pb-3 pl-5 rounded-lg"
+          className="w-full h-[48px] bg-[#29397E] text-white gap-2 pt-3 pr-5 pb-3 pl-5 rounded-lg"
           onClick={() => router.push('/verify-account/success?mode=reset-password')}
         />
       </div>
