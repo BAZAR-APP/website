@@ -23,9 +23,9 @@ const PropertyDetailsCard = ({
     <section className="py-6 xl:px-22 lg:px-18 md:px-14 px-10">
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-6">
         <div>
-          <h1 className="md:text-3xl sm:text-2xl text-xl font-bold text-gray-900 mb-2">{title}</h1>
+          <h1 className="lg:text-[39px] md:text-3xl sm:text-2xl text-xl font-semibold text-gray-900 mb-2">{title}</h1>
           <div className="flex items-center flex-wrap gap-4 text-sm text-gray-600">
-            <div className="flex items-center flex-wrap sm:gap-1 gap-2 text-gray-800">
+            <div className="flex items-center flex-wrap sm:gap-1 gap-2.5 text-gray-800">
               <span className="text-[#484A4C]">{rating}</span>
               <Image src={LikeStar} alt="Rating star" width={18} height={18} />
               <span className="text-[#9EA0A2]">&bull;</span>

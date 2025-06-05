@@ -1,9 +1,8 @@
 'use client'
 import React from 'react'
-import { DropdownMenu, Avatar, Text, Flex, Button } from '@radix-ui/themes'
+import { DropdownMenu, Avatar, Text, Flex } from '@radix-ui/themes'
 import { ChevronDown, LogOut } from 'lucide-react'
 import { getUserNameInitials } from '@/lib/constant'
-
 
 type UserProfileProps = {
   userName: string
@@ -11,16 +10,12 @@ type UserProfileProps = {
   onLogout: () => void
 }
 
-const UserProfile: React.FC<UserProfileProps> = ({
-  userName,
-  avatarSrc = '',
-  onLogout,
-}) => {
+const UserProfile: React.FC<UserProfileProps> = ({ userName, avatarSrc = '', onLogout }) => {
   return (
     <DropdownMenu.Root>
       <DropdownMenu.Trigger>
-        <Button variant="ghost" className="p-0">
-          <Flex align="center" gap="2" className="cursor-pointer">
+        <button className="p-0 focus-visible:outline-none focus:outline-none border-none">
+          <Flex align="center" gap="2" className="cursor-pointer border-none outline-none">
             <Avatar
               size="3"
               radius="full"
@@ -32,7 +27,7 @@ const UserProfile: React.FC<UserProfileProps> = ({
             </Text>
             <ChevronDown size={16} />
           </Flex>
-        </Button>
+        </button>
       </DropdownMenu.Trigger>
 
       <DropdownMenu.Content className="w-56 rounded-xl bg-[#F9FAFB] shadow-lg p-2" sideOffset={8}>

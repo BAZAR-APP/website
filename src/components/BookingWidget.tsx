@@ -66,7 +66,7 @@ const PricingRow = ({
     </div>
     <span className="text-sm leading-[17px] font-medium text-[#19191A] flex gap-2 items-center">
       {price} {currency}
-      <Radio name="example" value="1" defaultChecked={checked} />
+      <Radio name="example" value="1" defaultChecked={checked} className='!cursor-pointer' />
     </span>
   </div>
 )

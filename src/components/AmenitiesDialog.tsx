@@ -72,13 +72,13 @@ const AmenitiesDialog: React.FC<AmenitiesDialogProps> = ({ isOpen, setIsOpen }) 
       isOpen={isOpen}
       setIsOpen={setIsOpen}
       title="Amenities"
-      className="max-w-2xl max-h-[90vh] min-h-[90%] text-[#19191A]"
+      className="max-w-2xl lg:max-w-[67%] xl:max-w-[75%] max-h-[90vh] text-[#19191A]"
     >
       <div className="mb-4">
         <p className="text-[#484A4C]">Everything you need for a comfortable stay.</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3.5">
         {amenities.map((amenity, index) => (
           <div key={index} className="flex items-center gap-3 py-2">
             <amenity.icon className="w-5 h-5 flex-shrink-0" />

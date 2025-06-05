@@ -25,7 +25,7 @@ const PropertyDetails = ({
   return (
     <section className="border-b border-[#E5E7EB] pb-8">
       <div className="flex items-center flex-wrap pb-3 gap-3">
-        <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-[#19191A]">{title}</h1>
+        <h1 className="text-xl sm:text-2xl md:text-3xl font-semibold text-[#19191A]">{title}</h1>
         <div className="flex bg-[#E1F3FF] items-center justify-between gap-1 rounded py-1 px-1.5 max-w-[110px]">
           <Image src={Points} width={16} height={16} alt="Points Icon" />
           <span className="text-[#29397E] text-sm">{points} Points</span>

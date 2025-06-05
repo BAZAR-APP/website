@@ -25,23 +25,26 @@ const ModalDialog: React.FC<ModalDialogProps> = ({
         <Dialog.Content
           className={clsx(
             'fixed z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2',
-            'bg-white rounded-lg shadow-lg p-6 w-full max-w-[90%] md:max-w-md mx-auto md:my-0 my-3 max-h-[500px] overflow-y-auto',
+            'bg-white rounded-lg shadow-lg p-0 w-full max-w-[90%] md:max-w-md mx-auto md:my-0 my-3 max-h-[500px] overflow-y-auto',
             'hide-scrollbar',
             className,
           )}
         >
-          <div className="flex items-center justify-between mb-4 mt-1">
-            <Dialog.Title className="md:text-xl text-lg font-semibold">{title}</Dialog.Title>
-            <Dialog.Close asChild>
-              <button
-                aria-label="Close"
-                className="text-gray-500 hover:text-gray-700 transition-colors cursor-pointer"
-              >
-                <X className="w-5 h-5 text-[#9CA3AF]" />
-              </button>
-            </Dialog.Close>
+          <div className="sticky top-0 z-10 bg-white px-6 pt-4 pb-2">
+            <div className="flex items-center justify-between">
+              <Dialog.Title className="md:text-xl text-lg font-semibold">{title}</Dialog.Title>
+              <Dialog.Close asChild>
+                <button
+                  aria-label="Close"
+                  className="text-gray-500 hover:text-gray-700 transition-colors cursor-pointer"
+                >
+                  <X className="w-5 h-5 text-[#9CA3AF]" />
+                </button>
+              </Dialog.Close>
+            </div>
           </div>
-          <div>{children}</div>
+
+          <div className="px-6 pb-6 pt-2">{children}</div>
         </Dialog.Content>
       </Dialog.Portal>
     </Dialog.Root>

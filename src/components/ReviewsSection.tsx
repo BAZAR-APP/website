@@ -16,11 +16,11 @@ interface ReviewsSectionProps {
 const ReviewsSection = ({ rating, reviewCount }: ReviewsSectionProps) => {
   return (
     <section className="border-b border-t border-[#E5E7EB] pb-8 md:pt-8 pt-6 lg:mt-0 mt-10">
-      <div className="flex items-center gap-2 mb-6">
-        <span className="text-xl font-semibold">{rating}</span>
-        <Image src={LikeStar} width={20} height={20} alt="Like Star" />
-        <span className="text-xl font-semibold">·</span>
-        <span className="text-xl font-semibold">{reviewCount} reviews</span>
+      <div className="flex items-center gap-2 mb-6 sm:text-2xl text-xl">
+        <span className="font-semibold">{rating}</span>
+        <Image src={LikeStar} width={23} height={23} alt="Like Star" />
+        <span className="font-semibold">·</span>
+        <span className="font-semibold">{reviewCount} reviews</span>
       </div>
 
       <div className="flex flex-col gap-5">
@@ -50,8 +50,8 @@ const ReviewsSection = ({ rating, reviewCount }: ReviewsSectionProps) => {
                     <Image
                       key={`like-${i}`}
                       src={LikeStar}
-                      width={18}
-                      height={18}
+                      width={14}
+                      height={14}
                       alt="Like Star"
                     />
                   ))}
@@ -77,8 +77,8 @@ const ReviewsSection = ({ rating, reviewCount }: ReviewsSectionProps) => {
           </div>
         ))}
         <Link className="flex text-[14px] items-center gap-1" href="">
-          <span className="border-b-1 border-[#19191A]">Show more</span>{' '}
-          <ChevronRight className="w-3.5 h-3.5" strokeWidth={3} />
+          <span className="border-b-1 border-[#19191A] text-[#19191A] font-semibold">Show more</span>{' '}
+          <ChevronRight className="w-4 h-4" strokeWidth={3} />
         </Link>
         <Button
           intent="transperent"

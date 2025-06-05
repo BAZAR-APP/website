@@ -20,7 +20,7 @@ const AmenitiesList = ({ amenities }: AmenitiesListProps) => {
   return (
     <>
       <div className="text-[#19191A]">
-        <h2 className="text-xl font-semibold mb-6">Amenities</h2>
+        <h2 className="md:text-[25px] text-xl font-semibold mb-6">Amenities</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pb-6 font-medium">
           {amenities.map((amenity, index) => {
             const IconComponent = Icons[amenity.icon as keyof typeof Icons] as LucideIcon
