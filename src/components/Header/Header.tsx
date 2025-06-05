@@ -32,7 +32,7 @@ const Header: React.FC<HeaderProps> = ({
     'flex relative flex-col gap-16 justify-center items-center self-stretch lg:px-16 px-12 py-8 max-md:px-8 max-md:py-6 max-sm:px-5 max-sm:py-4'
 
   const baseInnerClasses =
-    'bg-[#F9FAFB] backdrop-blur-[12px] rounded-full flex-none order-0 self-stretch'
+    'bg-[#F9FAFB] backdrop-blur-[12px] shadow-sm rounded-full flex-none order-0 self-stretch'
 
   const maxWidthContainer = 'mx-auto px-8 max-md:px-4 max-sm:px-2'
 

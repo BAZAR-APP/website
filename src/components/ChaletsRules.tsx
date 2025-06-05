@@ -111,7 +111,7 @@ const ChaletRules: React.FC<Props> = ({ data = chaletRules as ChaletRulesData })
           {cancellationPolicy.description}
         </p>
 
-        <p className="text-sm bg-[#FCE7F3] text-[#EC4899] font-medium max-w-[267px] rounded-md px-1.5 py-1">
+        <p className="text-sm bg-[#FCE7F3] text-[#EC4899] font-medium max-w-[277px] rounded-md px-1.5 py-1">
           {cancellationPolicy.refundTimeEstimate}
         </p>
 
