@@ -50,6 +50,7 @@ const RedeemRewards = () => {
         isOpen={isOpen}
         setIsOpen={handleClose}
         title={step === 'select' ? 'Discounts You Can Redeem' : ''}
+        className={`${step === 'select' ? 'max-h-[90%] max-w-2xl' : ''}`}
       >
         {step === 'select' && (
           <>
@@ -57,11 +58,11 @@ const RedeemRewards = () => {
               Turn your points into savings for <br /> this stay.
             </Text>
 
-            <div className="grid grid-cols-2 gap-4 md:mt-8 mt-4 pb-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-2 gap-4 md:mt-8 mt-4 pb-4">
               {discounts.map((discount, index) => (
                 <div key={index} className="bg-[#F9FAFB] p-4 rounded-xl flex flex-col items-center">
                   <div className="mb-3">
-                    <Image src={discount.icon} alt={discount.label} width={160} height={160} className='w-[110px] h-[110px]' />
+                    <Image src={discount.icon} alt={discount.label} width={160} height={160} className='w-[122px] h-[122px]' />
                   </div>
                   <p className="self-start text-[20px] leading-6 text-[#19191A]">
                     {discount.label}

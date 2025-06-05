@@ -67,6 +67,7 @@ export const AddOns: React.FC = () => {
         <CategorySection
           key={title}
           title={title}
+          defaultOpen={title === 'Luxury'}
           items={items.map((item) => {
             const selected = selectedAddons.find((s) => s.label === item.label)
             return { ...item, quantity: selected?.quantity }

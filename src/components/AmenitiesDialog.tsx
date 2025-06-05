@@ -81,8 +81,8 @@ const AmenitiesDialog: React.FC<AmenitiesDialogProps> = ({ isOpen, setIsOpen }) 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3.5">
         {amenities.map((amenity, index) => (
           <div key={index} className="flex items-center gap-3 py-2">
-            <amenity.icon className="w-5 h-5 flex-shrink-0" />
-            <span className="text-sm">{amenity.label}</span>
+            <amenity.icon className="w-6 h-6 flex-shrink-0" />
+            <span className="lg:text-[16px] text-sm">{amenity.label}</span>
           </div>
         ))}
       </div>

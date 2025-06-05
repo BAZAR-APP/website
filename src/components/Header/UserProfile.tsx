@@ -15,17 +15,15 @@ const UserProfile: React.FC<UserProfileProps> = ({ userName, avatarSrc = '', onL
     <DropdownMenu.Root>
       <DropdownMenu.Trigger>
         <button className="p-0 focus-visible:outline-none focus:outline-none border-none">
-          <Flex align="center" gap="2" className="cursor-pointer border-none outline-none">
+          <Flex align="center" gap="2" className="cursor-pointer border-none outline-none font-medium">
             <Avatar
               size="3"
               radius="full"
               fallback={getUserNameInitials(userName)}
               src={avatarSrc}
             />
-            <Text weight="medium" size="2" color="gray">
-              {userName}
-            </Text>
-            <ChevronDown size={16} />
+            <h2 className="text-[16px] font-[500] text-[#19191A] leading-6">{userName}</h2>
+            <ChevronDown className='text-[#19191A]' size={20} />
           </Flex>
         </button>
       </DropdownMenu.Trigger>

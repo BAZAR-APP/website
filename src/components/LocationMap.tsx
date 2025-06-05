@@ -33,7 +33,7 @@ const HotelMap: React.FC<HotelMapProps> = ({ center, hotelInfo }) => {
 
   return (
     <>
-      <h2 className="sm:text-xl text-lg font-semibold mt-7 mb-5">Location</h2>
+      <h2 className="text-xl sm:text-[22px] md:text-[25px] font-semibold mt-7 mb-5">Location</h2>
       <p className="text-[#484A4C] text-[16px] leading-[19px] mb-4">
         Al Khiran, Ahmadi, Kuwait
       </p>

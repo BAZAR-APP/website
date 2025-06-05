@@ -23,19 +23,17 @@ const UserInfo: React.FC<UserInfoProps> = ({ onNext }) => {
   return (
     <>
       <div className="max-w-[1800px] mx-auto lg:px-24 md:px-18 px-10 py-9">
-        <h2 className="lg:text-[39px] md:text-2xl text-xl font-semibold text-[#19191A] mb-2">Your Details</h2>
+        <h2 className="lg:text-[39px] md:text-2xl text-xl font-semibold text-[#19191A] mb-2">
+          Your Details
+        </h2>
         <p className="text-[#484A4C] sm:text-lg text-sm mb-8">
           Please provide your name and contact info to complete the booking.
         </p>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
-          <div className="lg:col-span-2 md:grid-cols-1">
-            <ContactForm onSubmit={handleFormSubmit} />
-          </div>
+        <div className="flex justify-between flex-wrap md:gap-2 gap-10">
+          <ContactForm onSubmit={handleFormSubmit} />
 
-          <div className="lg:col-span-1 md:grid-cols-1 pb-7 md:px-3">
-            <div className="sticky top-8">
-              <BookingSummary couponCode/>
-            </div>
+          <div className="pb-7 md:px-3">
+            <BookingSummary couponCode />
           </div>
         </div>
         <div className=" border-t border-[#E5E7EB] pt-7">
@@ -49,7 +47,7 @@ const UserInfo: React.FC<UserInfoProps> = ({ onNext }) => {
           </Button>
         </div>
       </div>
-      <ModalDialog isOpen={isOpen} setIsOpen={toggle}>
+      <ModalDialog isOpen={isOpen} setIsOpen={toggle} className="lg:min-w-[524px] min-w-[auto]">
         <Image
           src={'/images/save-info.svg'}
           width={170}
@@ -57,7 +55,7 @@ const UserInfo: React.FC<UserInfoProps> = ({ onNext }) => {
           className="text-center mx-auto md:pb-4 pb-1"
           alt="Save icon"
         />
-        <h3 className="lg:text-[22px] sm:text-xl text-[16px] md:leading-8 leading-6 font-semibold text-center text-[#19191A]">
+        <h3 className="lg:text-[25px] text-xl text-[16px] lg:leading-9 leading-6 font-semibold text-center text-[#19191A]">
           Would you like to save these details for faster booking next time?
         </h3>
         <p className="md:text-xl text-[14px] leading-[24px] md:py-4 py-2 text-center text-[#484A4C]">

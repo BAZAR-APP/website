@@ -75,7 +75,7 @@ const CommonInput: React.FC<CommonInputProps> = ({
           onChange={onChange}
           placeholder={placeholder}
           readOnly={readonly}
-          className="w-full bg-transparent outline-none text-[#19191A] placeholder:text-gray-400 hover:outline-none hover:ring-0 focus:outline-none focus:ring-0"
+          className="w-full bg-transparent outline-none text-[#9EA0A2] placeholder:text-[#9EA0A2] hover:outline-none hover:ring-0 focus:outline-none focus:ring-0"
           maxLength={maxLength}
         />
       </div>
