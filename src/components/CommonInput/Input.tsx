@@ -9,24 +9,27 @@ type CommonInputProps = {
   value?: string
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
   type?:
-  | 'number'
-  | 'search'
-  | 'time'
-  | 'text'
-  | 'hidden'
-  | 'date'
-  | 'datetime-local'
-  | 'email'
-  | 'month'
-  | 'password'
-  | 'tel'
-  | 'url'
-  | 'week'
+    | 'number'
+    | 'search'
+    | 'time'
+    | 'text'
+    | 'hidden'
+    | 'date'
+    | 'datetime-local'
+    | 'email'
+    | 'month'
+    | 'password'
+    | 'tel'
+    | 'url'
+    | 'week'
   name?: string
   className?: string
   icon?: ReactNode
   prefix?: string
   readonly?: boolean
+  error?: boolean
+  errorMessage?: string
+  maxLength?: number
 }
 
 const CommonInput: React.FC<CommonInputProps> = ({
@@ -40,6 +43,9 @@ const CommonInput: React.FC<CommonInputProps> = ({
   icon,
   prefix,
   readonly = false,
+  error = false,
+  errorMessage = '',
+  maxLength,
 }) => {
   const inputId = name || `input-${label?.toLowerCase().replace(/\s+/g, '-')}`
 
@@ -60,9 +66,7 @@ const CommonInput: React.FC<CommonInputProps> = ({
             {prefix}
           </span>
         )}
-        {!icon && prefix && (
-          <span className="text-[#484A4C] text-sm font-medium">{prefix}</span>
-        )}
+        {!icon && prefix && <span className="text-[#484A4C] text-sm font-medium">{prefix}</span>}
         <input
           id={inputId}
           name={name}
@@ -72,8 +76,10 @@ const CommonInput: React.FC<CommonInputProps> = ({
           placeholder={placeholder}
           readOnly={readonly}
           className="w-full bg-transparent outline-none text-[#19191A] placeholder:text-gray-400 hover:outline-none hover:ring-0 focus:outline-none focus:ring-0"
+          maxLength={maxLength}
         />
       </div>
+      {error && errorMessage && <p className="text-red-500 text-sm">{errorMessage}</p>}
     </Flex>
   )
 }

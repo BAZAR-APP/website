@@ -1,13 +1,54 @@
 'use client'
-
 import React from 'react'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { CommonInput, CheckBox } from '@/components'
 import CommonButton from '@/components/Button/Button'
 import Image from 'next/image'
 import Link from 'next/link'
+import { loginSchema } from '@/lib/validationSchemas'
+interface LoginFormInputs {
+  phone: string
+  password: string
+  rememberMe?: boolean
+}
+interface PhoneChangeEvent extends React.ChangeEvent<HTMLInputElement> {}
 
 const Login = () => {
-  const handleChange = () => { }
+  const {
+    handleSubmit,
+    formState: { isValid, errors, isSubmitting },
+    setValue,
+    watch,
+  } = useForm({
+    resolver: zodResolver(loginSchema),
+    defaultValues: {
+      phone: '',
+      password: '',
+      rememberMe: false,
+    },
+  })
+
+  const onSubmit = async (data: LoginFormInputs): Promise<void> => {
+    try {
+      console.log('Form submitted:', data)
+    } catch (error) {
+      console.error('Login error:', error)
+    }
+  }
+
+  const handlePhoneChange = (e: PhoneChangeEvent): void => {
+    const value = e.target.value.replace(/\D/g, '').slice(0, 8)
+    setValue('phone', value, { shouldValidate: true })
+  }
+
+  const handlePasswordChange = (e: { target: { value: string } }) => {
+    setValue('password', e.target.value, { shouldValidate: true })
+  }
+
+  const handleRememberMeChange = (checked: boolean): void => {
+    setValue('rememberMe', checked)
+  }
 
   return (
     <div className="flex flex-col items-center justify-center h-[100%]">
@@ -24,38 +65,58 @@ const Login = () => {
           </p>
         </div>
 
-        <CommonInput
-          icon={<Image src={'/images/countryFlag.svg'} alt="Country Flag" width={16} height={16} />}
-          prefix="+965"
-          name="phone"
-          className={
-            '!bg-[#F9FAFB] !text-[#484A4C] !rounded-[8px] !border-none !h-[42px] text-sm sm:text-base'
-          }
-          type="number"
-          label="Phone"
-          onChange={handleChange}
-        />
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-[24px]">
+          <div>
+            <CommonInput
+              icon={
+                <Image src={'/images/countryFlag.svg'} alt="Country Flag" width={16} height={16} />
+              }
+              prefix="+965"
+              name="phone"
+              className={
+                '!bg-[#F9FAFB] !text-[#484A4C] !rounded-[8px] !border-none !h-[42px] text-sm sm:text-base'
+              }
+              type="text"
+              label="Phone"
+              value={watch('phone')}
+              onChange={handlePhoneChange}
+              maxLength={8}
+              error={!!errors?.phone}
+              errorMessage={errors?.phone?.message}
+            />
+          </div>
 
-        <CommonInput
-          name=""
-          placeholder=""
-          label="Password"
-          className={'bg-[#F9FAFB]'}
-          onChange={handleChange}
-          type='password'
-        />
+          <div>
+            <CommonInput
+              name="password"
+              label="Password"
+              className={'bg-[#F9FAFB]'}
+              value={watch('password')}
+              onChange={handlePasswordChange}
+              type="password"
+              error={!!errors?.password}
+              errorMessage={errors?.password?.message}
+            />
+          </div>
 
-        <div className="flex justify-between text-sm sm:text-base">
-          <CheckBox label={'Remember Me'} />
-          <Link href="/forget-password" className="text-[#29397E] font-bold underline">
-            Forget Password?
-          </Link>
-        </div>
+          <div className="flex justify-between text-sm sm:text-base">
+            <CheckBox
+              label={'Remember Me'}
+              checked={watch('rememberMe')}
+              onChange={handleRememberMeChange}
+            />
+            <Link href="/forget-password" className="text-[#29397E] font-bold underline">
+              Forget Password?
+            </Link>
+          </div>
 
-        <CommonButton
-          children={'Continue'}
-          className="w-full h-[48px] bg-[#29397E] text-white gap-2 pt-3 pr-5 pb-3 pl-5 rounded-lg text-base"
-        />
+          <CommonButton
+            type="submit"
+            disabled={isSubmitting || !isValid}
+            children={isSubmitting ? 'Signing In...' : 'Continue'}
+            className="w-full h-[48px] bg-[#29397E] text-white gap-2 pt-3 pr-5 pb-3 pl-5 rounded-lg text-base disabled:opacity-50"
+          />
+        </form>
 
         <div className="flex items-center my-6">
           <div className="flex-grow border-t border-[#DEDEDF]"></div>
