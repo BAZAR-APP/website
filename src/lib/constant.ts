@@ -239,7 +239,7 @@ export const reviews = [
 
 export const propertyData = {
   title: 'Luxury Lakeside Retreat',
-  location: 'Lake Tahoe, California',
+  location: 'Al Khiran',
   rating: 4.7,
   reviewCount: 200,
   price: 450,

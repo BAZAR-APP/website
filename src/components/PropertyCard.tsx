@@ -37,28 +37,38 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
   newPrice,
 }) => {
   return (
-    <div onClick={onClick} className="flex flex-col max-w-full p-3 gap-5 bg-[#F9FAFB] cursor-pointer rounded-[16px] mx-auto">
-      <div className="lg:w-[276px] w-full h-[184px]">
-        <Image src={imageUrl} alt={title} className="w-full h-full object-cover rounded-[12px]" width={100} height={100} />
+    <div
+      onClick={onClick}
+      className="flex flex-col w-full max-w-[350px] p-4 gap-4 bg-[#F9FAFB] cursor-pointer rounded-[16px] mx-auto"
+    >
+      <div className="w-full h-[184px]">
+        <Image
+          src={imageUrl}
+          alt={title}
+          className="w-full h-full object-cover rounded-[12px]"
+          width={400}
+          height={300}
+        />
       </div>
-      <div className="flex flex-col gap-4 w-full">
 
-        <div className="flex items-start justify-between w-full">
-          <h3 className="text-xl font-normal text-[#484A4C] leading-6">{title}</h3>
+      <div className="flex flex-col gap-4">
+        <div className="flex items-start justify-between">
+          <h3 className="sm:text-xl text-lg font-normal text-[#484A4C]">{title}</h3>
           <button aria-label="Add to favorites">
             <Heart className="w-5 h-5 text-[#29397E]" />
           </button>
         </div>
-        <div className="flex items-center text-sm text-[#8E8E93]">
-          <MapPin className="w-4 h-4 mr-1" />
-          {location}
-          {member &&
-            <div className="flex items-center text-sm text-gray-700">
+
+        <div className="flex flex-wrap items-center text-sm text-[#8E8E93] gap-x-2">
+          <MapPin className="w-4 h-4" />
+          <span>{location}</span>
+          {member && (
+            <div className="flex items-center text-sm text-gray-700 ml-auto">
               <span className="ml-1">{rating}</span>
               <Image src={Star} alt="Star" width={16} height={16} />
               <span className="text-gray-500 ml-1">({reviews} reviews)</span>
             </div>
-          }
+          )}
         </div>
 
         <div className="text-sm text-[#8E8E93] leading-5">
@@ -67,21 +77,21 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
           {amenities.join(' • ')}
         </div>
 
-        <div className="flex items-center justify-between w-full">
-          {!member &&
+        <div className="flex items-center justify-between">
+          {!member && (
             <div className="flex items-center text-sm text-gray-700">
               <Image src={Star} alt="Star" width={16} height={16} />
               <span className="ml-1">{rating}</span>
               <span className="text-gray-500 ml-1">({reviews} reviews)</span>
             </div>
-          }
+          )}
+
           <div className="flex items-center gap-2 font-medium text-[16px] leading-7 text-[#484A4C]">
             {newPrice ? (
               <>
-
                 <span>{newPrice} KD</span>
                 <span className="text-sm leading-4 font-normal text-[#484A4C]">/{priceUnit}</span>
-                <span className="text-[12px] font-overline leading-4 font-medium line-through text-[#484A4C]">
+                <span className="text-[12px] leading-4 font-medium line-through text-[#484A4C]">
                   {price} KD
                 </span>
               </>
