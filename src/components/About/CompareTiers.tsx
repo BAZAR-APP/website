@@ -1,9 +1,11 @@
 
 
+// In your CompareTiers component:
 const CompareTiers = () => {
     return (
         <div className="main-container flex w-full lg:w-[1011px] flex-col gap-[24px] items-end flex-nowrap relative mx-auto my-0">
-            <div className="flex flex-col items-start self-stretch shrink-0 flex-nowrap bg-[#fff] rounded-[12px] border-solid border border-[#f3f4f6] relative overflow-auto shadow-[0_1px_2px_0_rgba(16,24,40,0.05)] z-[3]">
+            {/* Remove overflow-auto from this div */}
+            <div className="flex flex-col items-start self-stretch shrink-0 flex-nowrap bg-[#fff] rounded-[12px] border-solid border border-[#f3f4f6] relative shadow-[0_1px_2px_0_rgba(16,24,40,0.05)] z-[3]">
                 <div className="flex items-start self-stretch shrink-0 flex-nowrap bg-[#fff] relative z-[4]">
                     <div className="flex w-[88px] flex-col items-start shrink-0 flex-nowrap relative z-[5]">
                         <div className="flex h-[62px] pt-[12px] pr-[24px] pb-[12px] pl-[24px] gap-[12px] items-center self-stretch shrink-0 flex-nowrap bg-[#f8f9fb] border-solid border-t border-t-[#eaecf0] relative z-[6]" />
@@ -39,7 +41,7 @@ const CompareTiers = () => {
                         </div>
                     </div>
                     <div className="flex flex-col items-start grow shrink-0 basis-0 flex-nowrap relative z-[25]">
-                        <div className="flex h-[62px] pt-[16px] pr-[24px] pb-[16px] pl-[24px] gap-[12px] items-center self-stretch shrink-0 flex-nowrap bg-[#f8f9fb] border-solid border-t border-t-[#eaecf0] relative z-[26]">
+                        <div className="flex h-[62px] pt-[16px] pr-[24px] pb-[16px] pl-[24px] gap-[12px] items-center self-stretch shrink-0 flex-nowrap bg-[#f8f9fb] relative z-[26]">
                             <div className="flex w-[56px] gap-[4px] items-center shrink-0 flex-nowrap relative z-[27]">
                                 <span className="h-[17px] shrink-0 basis-auto font-['Inter'] text-[14px] font-medium leading-[16.943px] text-[#484a4c] relative text-left whitespace-nowrap z-[28]">
                                     Benefits
@@ -251,4 +253,4 @@ const CompareTiers = () => {
     );
 }
 
-export default CompareTiers
+export default CompareTiers;

@@ -32,8 +32,8 @@ const BannerSection = () => {
           <div className="text-3xl md:text-4xl lg:text-5xl text-white font-[500] text-center max-w-[800px]">
             Where Will Your Next Adventure Take You?
           </div>
-          <SearchHeader />
         </div>
+        <SearchHeader />
       </div>
     </div>
   )

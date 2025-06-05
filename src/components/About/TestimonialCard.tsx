@@ -19,7 +19,7 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({
     className = ""
 }) => {
     return (
-        <article className={`content-start flex-wrap flex min-w-60 overflow-hidden w-[400px] bg-gray-50 p-6 rounded-[20px] max-md:px-5 ${className}`}>
+        <article className={`bg-gray-50 rounded-3xl p-6 w-full mx-auto`}>
             <div className="flex min-w-60 w-full justify-between flex-1 shrink basis-[0%]">
                 <div className="flex min-w-60 w-full flex-col items-stretch flex-1 shrink basis-[0%]">
                     <div className="flex w-full flex-col items-stretch mt-[15px]">

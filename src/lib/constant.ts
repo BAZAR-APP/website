@@ -9,7 +9,7 @@ export const navItems = [
   { label: 'Home', href: '/' },
   { label: 'Explore', href: '/explore/chalets' },
   // { label: 'My Bookings', href: '/' },
-  { label: 'Loyalty Points', href: '/' },
+  { label: 'Loyalty Points', href: '/loyalty-program' },
 ]
 
 export const fields = [
@@ -18,7 +18,7 @@ export const fields = [
   { label: 'Check out', placeholder: 'Add dates' },
   { label: 'Guests', placeholder: 'Add guests' },
 ]
-
+  
 export const locations = [
   'Al Khobar',
   'Brasiler',
@@ -207,9 +207,9 @@ export const getVisiblePages = (currentPage: number, totalPages: number): number
 }
 
 export const quickLinks = [
-  { label: 'Home', href: '#' },
+  { label: 'Home', href: '/' },
   { label: 'About Us', href: '/about' },
-  { label: 'Explore', href: '#' },
+  { label: 'Explore', href: '/explore/chalets' },
   { label: 'Terms & Conditions', href: '/terms-conditions/' },
   { label: 'Privacy Policy', href: '/privacy-policy/' },
 ]
