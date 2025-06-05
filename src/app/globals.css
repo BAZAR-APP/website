@@ -8,7 +8,8 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-inter); /* Changed from geist-sans to inter */
+  --font-sans: var(--font-inter);
+  /* Changed from geist-sans to inter */
   --font-mono: var(--font-geist-mono);
   --font-tenor-sans: 'Tenor Sans', sans-serif;
   --color-sidebar-ring: var(--sidebar-ring);
@@ -176,6 +177,7 @@ html body * {
 .radix-themes {
   font-family: var(--font-inter), 'Inter', system-ui, sans-serif !important;
 }
+
 .font-tenor {
   font-family: var(--font-tenor-sans), serif !important;
 }
@@ -185,7 +187,8 @@ html body * {
     .w-500px-1440 {
       width: 500px;
     }
-    .max-p{
+
+    .max-p {
       padding: 0 28px;
     }
   }

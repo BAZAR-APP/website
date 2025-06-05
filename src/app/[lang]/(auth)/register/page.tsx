@@ -26,10 +26,14 @@ const SignUp = () => {
           onChange={handleChange}
         />
         <CommonInput
-          name=""
-          placeholder=""
+          icon={<Image src={'/images/countryFlag.svg'} alt="Country Flag" width={16} height={16} />}
+          prefix="+965"
+          name="phone"
+          className={
+            '!bg-[#F9FAFB] !text-[#484A4C] !rounded-[8px] !border-none !h-[42px] text-sm sm:text-base'
+          }
+          type="number"
           label="Phone"
-          className={'bg-[#F9FAFB]'}
           onChange={handleChange}
         />
         <CommonInput

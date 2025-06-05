@@ -1,11 +1,11 @@
 'use client'
 import React, { useState } from 'react'
-import { ChevronDown } from 'lucide-react'
 import { Radio } from '@radix-ui/themes'
 import Image from 'next/image'
 import Deposit from '../../public/images/Deposit.svg'
 import Button from './Button/Button'
 import Link from 'next/link'
+import { useForm } from 'react-hook-form'
 
 interface PackageOption {
   id: string
@@ -95,6 +95,12 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
     },
   },
 }) => {
+  const { setValue, watch } = useForm()
+  const quantity = watch('guests') ?? 1
+  const handleQuantityChange = (newQuantity: number) => {
+    if (newQuantity < 1) return
+    setValue('guests', newQuantity)
+  }
   const [selectedPackage, setSelectedPackage] = useState(
     packageOptions[0]?.label || '100 KWD / night',
   )
@@ -119,7 +125,9 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
   return (
     <div className="bg-[#F9FAFB] rounded-2xl">
       <div className="sm:p-5 p-4 !pb-4">
-      <h3 className="font-bold xl:text-[20px] md:text-lg text-[16px] leading-[24px] text-[#19191A] pb-3">Choose Your Package</h3>
+        <h3 className="font-bold xl:text-[20px] md:text-lg text-[16px] leading-[24px] text-[#19191A] pb-3">
+          Choose Your Package
+        </h3>
         <h2 className="md:text-lg text-sm leading-6 font-normal text-[#19191A] flex items-center">
           {selectedPackage}
         </h2>
@@ -175,7 +183,41 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
               <span className="block text-[10px] font-semibold">GUESTS</span>
               <span className="block text-[13px] text-[#9EA0A2]">{guests} guests</span>
             </div>
-            <ChevronDown className="w-4 h-4 cursor-pointer text-gray-400" />
+            <div className="flex items-center gap-2 relative">
+              <button
+                onClick={() => handleQuantityChange(quantity - 1)}
+                className="flex cursor-pointer w-8 h-8 justify-center items-center relative p-[6.4px] rounded-[80px] border-[0.8px] border-solid border-[#E5E5EA]"
+                aria-label="Decrease quantity"
+                type="button"
+              >
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                  <path
+                    d="M14.7997 10H5.19971"
+                    stroke="#19191A"
+                    strokeWidth="1.6"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </button>
+              <span className="text-[#19191A] text-base font-medium leading-6">{quantity}</span>
+              <button
+                onClick={() => handleQuantityChange(quantity + 1)}
+                className="cursor-pointer flex w-8 h-8 justify-center items-center relative p-[6.4px] rounded-[80px] border-[0.8px] border-solid border-[#E5E5EA]"
+                aria-label="Increase quantity"
+                type="button"
+              >
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                  <path
+                    d="M10.0002 5.19995V9.99995M10.0002 9.99995V14.8M10.0002 9.99995H14.8002M10.0002 9.99995L5.2002 9.99995"
+                    stroke="#19191A"
+                    strokeWidth="1.6"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </button>
+            </div>
           </div>
         </div>
       </div>

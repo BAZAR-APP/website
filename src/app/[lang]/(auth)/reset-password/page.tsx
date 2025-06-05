@@ -5,11 +5,11 @@ import { useRouter } from 'next/navigation'
 
 const ChangePassword = () => {
   const router = useRouter()
-  const handleChange = () => {}
+  const handleChange = () => { }
 
   return (
     <div className="flex flex-col items-center justify-center h-[100%]">
-      <div className="max-w-[360px] flex flex-col gap-[24px] pt-[120px]">
+      <div className="max-w-[360px] h-[90vh] overflow-y-auto flex flex-col gap-[24px]">
         <img src={'/images/Logo.svg'} alt="" className="w-[150px] h-[48px]" />
         <div className="flex flex-col gap-[12px]">
           <h2 className="!text-primary font-semibold text-[39px]">Set A New Password</h2>
