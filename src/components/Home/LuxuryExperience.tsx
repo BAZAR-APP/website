@@ -60,31 +60,32 @@ const LuxuryExperience: React.FC<any> = () => {
                                     className="w-[275px] h-[232px] relative rounded-[20px] max-md:w-full max-md:h-[200px]"
                                 />
                                 <div className="flex w-[300px] flex-col items-start gap-[15px] relative max-md:w-full">
-                                    <div className="flex justify-between items-center self-stretch relative max-sm:flex-col max-sm:gap-3">
+                                    <div className="flex flex-wrap justify-between items-center self-stretch relative max-sm:gap-3">
                                         <img
                                             src="https://cdn.builder.io/api/v1/image/assets/TEMP/f9b48e4de65efdd91cbdf136ba8b9ade44b078fc?placeholderIfAbsent=true"
                                             alt="Luxury chalet interior"
-                                            className="w-[141px] h-[108px] relative rounded-[20px] max-md:w-[calc(50%_-_7.5px)] max-md:h-[100px] max-sm:w-full"
+                                            className="w-[141px] h-[108px] rounded-[20px] max-md:w-[calc(50%_-_7.5px)] max-md:h-[100px] max-sm:w-[calc(50%_-_7.5px)]"
                                         />
                                         <img
                                             src="https://cdn.builder.io/api/v1/image/assets/TEMP/8115a00e449569b51058a08d7a03dd0c0adae6f3?placeholderIfAbsent=true"
                                             alt="Sea view from chalet"
-                                            className="w-[141px] h-[108px] relative rounded-[20px] max-md:w-[calc(50%_-_7.5px)] max-md:h-[100px] max-sm:w-full"
+                                            className="w-[141px] h-[108px] rounded-[20px] max-md:w-[calc(50%_-_7.5px)] max-md:h-[100px] max-sm:w-[calc(50%_-_7.5px)]"
                                         />
                                     </div>
-                                    <div className="flex justify-between items-center self-stretch relative max-sm:flex-col max-sm:gap-3">
+                                    <div className="flex flex-wrap justify-between items-center self-stretch relative max-sm:gap-3">
                                         <img
                                             src="https://cdn.builder.io/api/v1/image/assets/TEMP/dc040d48794f3060a950d23798e6473c7763064a?placeholderIfAbsent=true"
                                             alt="Resort amenities"
-                                            className="w-[141px] h-[108px] relative rounded-[20px] max-md:w-[calc(50%_-_7.5px)] max-md:h-[100px] max-sm:w-full"
+                                            className="w-[141px] h-[108px] rounded-[20px] max-md:w-[calc(50%_-_7.5px)] max-md:h-[100px] max-sm:w-[calc(50%_-_7.5px)]"
                                         />
                                         <img
                                             src="https://cdn.builder.io/api/v1/image/assets/TEMP/d3667f8d47098a73c20c44f0e1c3a7e2deab34a1?placeholderIfAbsent=true"
                                             alt="Coastal landscape"
-                                            className="w-[141px] h-[108px] relative rounded-[20px] max-md:w-[calc(50%_-_7.5px)] max-md:h-[100px] max-sm:w-full"
+                                            className="w-[141px] h-[108px] rounded-[20px] max-md:w-[calc(50%_-_7.5px)] max-md:h-[100px] max-sm:w-[calc(50%_-_7.5px)]"
                                         />
                                     </div>
                                 </div>
+
                             </div>
                         </figure>
 

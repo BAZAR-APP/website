@@ -5,14 +5,15 @@ import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 
 const ForgetPassword = () => {
-  const handleChange = () => {}
+  const handleChange = () => { }
   const router = useRouter()
   return (
     <div className="flex flex-col items-center justify-start h-[100%]">
       <div className="max-w-[360px] flex flex-col gap-[24px] pt-[120px]">
         <Image src={'/images/Logo.svg'} alt="" width={150} height={48} />
         <div className="flex flex-col gap-[12px]">
-          <h2 className="!text-primary font-semibold text-[39px]">Forget Password</h2>
+          <h2 className="text-primary font-semibold text-[24px] sm:text-[32px] leading-tight">
+            Forget Password</h2>
           <p className="text-secondary font-400 text-[16px]">
             Enter your phone number to reset your password.
           </p>

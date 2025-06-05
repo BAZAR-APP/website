@@ -13,7 +13,7 @@ interface LoginFormInputs {
   password: string
   rememberMe?: boolean
 }
-interface PhoneChangeEvent extends React.ChangeEvent<HTMLInputElement> {}
+interface PhoneChangeEvent extends React.ChangeEvent<HTMLInputElement> { }
 
 const SignUp = () => {
   const router = useRouter()
@@ -55,7 +55,7 @@ const SignUp = () => {
           <Image src={'/images/Logo.svg'} alt="Logo" width={150} height={48} />
         </div>
         <div className="flex flex-col gap-3 text-left">
-          <h2 className="text-primary font-semibold text-[32px] sm:text-[39px] leading-tight">
+          <h2 className="text-primary font-semibold text-[24px] sm:text-[32px] leading-tight">
             Create an Account{' '}
           </h2>
           <p className="text-secondary font-semibold text-[14px] sm:text-[16px]">

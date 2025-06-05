@@ -5,7 +5,7 @@ import Image from 'next/image'
 const AuthLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="h-[100vh] flex flex-col md:flex-row p-4 relative">
-      <div className="absolute bottom-0 left-8 z-[10] text-text-disabled bg-white w-[70%] h-12 hidden md:block">
+      <div className="absolute bottom-0 left-8 z-[10] text-text-disabled bg-white w-[70%] h-8 hidden md:block">
         © 2025 Sea Villa. All rights reserved.
       </div>
       <div className="w-full h-full flex flex-col justify-center items-center md:w-1/2">

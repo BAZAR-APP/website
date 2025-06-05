@@ -6,7 +6,7 @@ const AboutBanner = () => {
             <div className="main-container w-full flex flex-col items-center bg-[#fdfdfe] relative overflow-hidden px-4 py-16 md:px-8 p-6 md:p-12 lg:p-16 md:py-[92px]">
                 <div className="flex flex-col gap-16 justify-center items-center w-full max-w-7xl">
                     <div className="flex flex-col lg:flex-row gap-8 lg:gap-16 w-full">
-                        {/* Image Section */}
+
                         <div className="w-full lg:w-[45%] flex justify-center">
                             <div
                                 className="w-full max-w-[515px] aspect-[515/348] bg-[rgba(255,239,239,0.2)] bg-cover bg-no-repeat bg-center rounded-[30px]"
@@ -17,7 +17,7 @@ const AboutBanner = () => {
                             />
                         </div>
 
-                        {/* Text Section */}
+
                         <div className="w-full lg:w-[55%] flex flex-col gap-8">
                             <div className="flex flex-col gap-6">
                                 <h1 className="text-[clamp(32px,7vw,92px)] font-bold leading-tight tracking-tight text-[#29397e]">

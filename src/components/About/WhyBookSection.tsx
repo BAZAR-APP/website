@@ -33,7 +33,7 @@ const WhyBookSection = () => {
     ];
 
     return (
-        <div className="main-container w-full flex flex-col items-start relative overflow-hidden mx-auto my-0"
+        <div className="w-full flex flex-col items-start relative overflow-hidden mx-auto my-0"
             style={{
                 background: "linear-gradient(rgba(41, 57, 126, 0.88), rgba(41, 57, 126, 0.88)), url('/images/AppSectionBackground.png')",
                 backgroundSize: "cover",
@@ -41,8 +41,8 @@ const WhyBookSection = () => {
             }}>
             <div className="max-w-screen-xl flex flex-col items-start gap-8 self-stretch relative w-full mx-auto my-0 px-5 py-[32px] md:py-[64px] max-md:max-w-[991px] max-md:px-4 max-sm:max-w-screen-sm">
                 <div className="flex flex-col gap-4">
-                    <h2 className="font-inter text-[32px] md:text-[39px] font-semibold text-white text-center md:text-left">Why book with us?</h2>
-                    <p className="w-full md:w-[506px] font-inter text-[16px] md:text-[20px] text-white text-center md:text-left">
+                    <h2 className="font-inter text-[32px] md:text-[39px] font-semibold text-white text-left">Why book with us?</h2>
+                    <p className="w-full md:w-[506px] font-inter text-[16px] md:text-[20px] text-white text-left">
                         Experience comfort, trust, and flexibility—every stay, every time.
                     </p>
                 </div>

@@ -28,8 +28,10 @@ export default async function Home({ params }: { params: Promise<{ lang: Locale 
       />
       <WhyBookSection />
       <DestinationSection />
-      <ChaletsCard title={'Most Booked'} />
-      <ChaletsCard title={'Close to the Beach'} />
+      <div className='flex flex-col gap-[100px]'>
+        <ChaletsCard title={'Most Booked'} />
+        <ChaletsCard title={'Close to the Beach'} />
+      </div>
       <RewardsSection />
       <ChatHero />
       <DownloadApp />

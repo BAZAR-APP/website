@@ -18,7 +18,7 @@ const Card: React.FC<CardProps> = ({
     className = '',
     position = 'relative',
     style = {},
-    width = 'md:w-[400px] w-[220px]',
+    width = 'md:w-[400px] w-[100%]',
     height = 'h-[261px]',
 }) => {
     const backgroundLayer = backgroundImage
@@ -48,30 +48,31 @@ const BazarImageCard: React.FC = () => {
         {
             id: 1,
             backgroundImage: '/images/bazarCard1.jpg',
-            rotate: '-rotate-[5.05deg]',
-            className: 'z-10 md:-right-15 sm:-right-10',
+            rotate: 'rotate-0 lg:-rotate-[5.05deg]', // no rotation on small, rotate on large
+            className: 'z-10 md:-right-15 sm:-right-10 w-[100%] md:w-atuo',
         },
         {
             id: 2,
             backgroundColor: '#1E2A78',
-            rotate: '-rotate-[16.84deg]',
-            className: 'sm:top-5 top-0',
+            rotate: 'rotate-0 lg:-rotate-[16.84deg]', // hidden on small screens
+            className: 'top-0 hidden lg:block',
         },
         {
             id: 3,
             backgroundImage: '/images/bazarCard3.jpg',
-            rotate: 'sm:rotate-[24.89deg] rotate-[15.89deg]',
-            className: 'sm:-left-7 -left-0 top-2.5',
+            rotate: 'rotate-0 lg:rotate-[24.89deg]', // hidden on small screens
+            className: 'top-2.5 hidden lg:block',
         },
     ];
 
     return (
-        <div className="flex flex-col sm:flex-row items-center justify-center pt-15 md:-ml-10 md:max-w-[95%] max-w-[100%]">
+        <div className="flex flex-col lg:flex-row items-center justify-center pt-15 md:-ml-10 max-w-full">
             {cards.map((item) => (
                 <Card key={item.id} {...item} />
             ))}
         </div>
     );
 };
+
 
 export default BazarImageCard;
