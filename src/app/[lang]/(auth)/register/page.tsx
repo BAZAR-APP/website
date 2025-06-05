@@ -6,11 +6,11 @@ import { useRouter } from 'next/navigation'
 
 const SignUp = () => {
   const router = useRouter()
-  const handleChange = () => { }
+  const handleChange = () => {}
 
   return (
-    <div className="flex flex-col items-center justify-center h-[100%]">
-      <div className="max-w-[360px] h-[90vh] overflow-y-auto flex flex-col gap-[24px]">
+    <>
+      <div className="max-w-[360px] overflow-y-auto flex flex-col gap-[24px]">
         <img src={'/images/Logo.svg'} alt="" className="w-[150px] h-[48px]" />
         <div className="flex flex-col gap-[12px]">
           <h2 className="!text-primary font-600 text-[39px]">Sign Up</h2>
@@ -79,7 +79,7 @@ const SignUp = () => {
           </a>
         </div>
       </div>
-    </div>
+    </>
   )
 }
 

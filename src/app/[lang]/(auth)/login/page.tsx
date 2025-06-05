@@ -51,8 +51,8 @@ const Login = () => {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center h-[100%]">
-      <div className="max-w-[360px] h-[90vh] overflow-y-auto flex flex-col gap-[24px]">
+    <>
+      <div className="max-w-[360px]  overflow-y-auto flex flex-col gap-[24px]">
         <div className="flex justify-start">
           <Image src={'/images/Logo.svg'} alt="Logo" width={150} height={48} />
         </div>
@@ -148,7 +148,7 @@ const Login = () => {
           </Link>
         </div>
       </div>
-    </div>
+    </>
   )
 }
 
