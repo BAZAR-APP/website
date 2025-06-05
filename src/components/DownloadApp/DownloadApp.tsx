@@ -37,9 +37,9 @@ const DownloadApp: React.FC = () => {
                         <Image
                             src="/images/GooglePlay.svg"
                             alt="Google Play"
-                            width={160}
-                            height={40}
-                            className="shirnk-0"
+                            width={168}
+                            height={56}
+                            className="h-14"
                         />
                     </div>
                 </div>

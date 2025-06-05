@@ -89,33 +89,37 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
           <div className="flex items-center font-medium text-[16px] leading-7 text-[#484A4C]">
             {newPrice ? (
               <>
-
-                <span className='md:text-[14px] text-[12px] font-bold text-primary'>{newPrice} KD</span>
-                <span className="md:text-[12px] text-[10px] leading-4 font-normal text-primary">/{priceUnit}</span>
+                <span className="md:text-[14px] text-[12px] font-bold text-primary">
+                  {newPrice} KD
+                </span>
+                <span className="md:text-[12px] text-[10px] leading-4 font-normal text-primary">
+                  /{priceUnit}
+                </span>
                 <span className="pl-2 md:text-[12px] text-[10px] font-overline leading-4 font-bold line-through text-primary">
                   {price} KD
                 </span>
               </>
             ) : (
               <>
-                <span className='sm:text-[18px] text-sm'>{price} KD</span>
-                <span className="text-sm leading-4 font-normal text-[#484A4C]">/{priceUnit}</span>
+                <span className="sm:text-[18px] text-sm">{price} KD</span>
+                <span className="text-sm leading-4 font-normal text-[#484A4C]">
+                  /{priceUnit}
+                </span>
               </>
             )}
           </div>
-
-          {member &&
-            <div className="flex w-[113px] py-[4px] px-[6px] gap-[4px] justify-center items-center bg-[#29397e] rounded-[6px] relative z-[29]">
-              <div className="w-[12px] h-[12px] bg-[url(https://codia-f2c.s3.us-west-1.amazonaws.com/image/2025-06-04/7tnhNOS6C5.png)] bg-cover bg-no-repeat relative z-30" />
-              <span className="text-[12px] font-normal text-[#fdfdfe] text-center whitespace-nowrap z-31">
-                Members Only
-              </span>
-            </div>
-
-          }
         </div>
+
+        {member && (
+          <div className="flex w-[113px] py-[4px] px-[6px] gap-[4px] justify-center items-center bg-[#29397e] rounded-[6px] relative z-[29]">
+            <div className="w-[12px] h-[12px] bg-[url(https://codia-f2c.s3.us-west-1.amazonaws.com/image/2025-06-04/7tnhNOS6C5.png)] bg-cover bg-no-repeat relative z-30" />
+            <span className="text-[12px] font-normal text-[#fdfdfe] text-center whitespace-nowrap z-31">
+              Members Only
+            </span>
+          </div>
+        )}
       </div>
-    </div >
+    </div>
   );
 };
 
