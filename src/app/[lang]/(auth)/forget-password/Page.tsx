@@ -12,7 +12,7 @@ const ForgetPassword = () => {
       <div className="max-w-[360px] flex flex-col gap-[24px] pt-[120px]">
         <Image src={'/images/Logo.svg'} alt="" width={150} height={48} />
         <div className="flex flex-col gap-[12px]">
-          <h2 className="text-primary font-semibold text-[24px] sm:text-[32px] leading-tight">
+          <h2 className="text-primary font-semibold text-[24px] max-[1440px]:text-[32px] min-[1441px]:text-[39px] leading-tight">
             Forget Password</h2>
           <p className="text-secondary font-400 text-[16px]">
             Enter your phone number to reset your password.

@@ -24,7 +24,7 @@ export default async function Home({ params }: { params: Promise<{ lang: Locale 
         ]}
         description={`where breathtaking views meet world-class hospitality. Whether you're seeking a relaxing retreat or an adventure by the sea, our chalets offer the perfect getaway.`}
         buttonText={'More About Us'}
-        buttonLink={''}
+        buttonLink={'/about'}
       />
       <WhyBookSection />
       <DestinationSection />
