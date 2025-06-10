@@ -18,6 +18,7 @@ export type PaymentFormData = {
 
 type PaymentFormProps = {
   onSubmit?: (data: PaymentFormData) => void
+  paymentDetail?: boolean
 }
 
 const paymentOptions = [
@@ -39,7 +40,7 @@ const paymentOptions = [
   },
 ] as const
 
-const PaymentForm: React.FC<PaymentFormProps> = ({ onSubmit }) => {
+const PaymentForm: React.FC<PaymentFormProps> = ({ onSubmit, paymentDetail = true }) => {
   const {
     register,
     handleSubmit,
@@ -60,41 +61,42 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ onSubmit }) => {
     <>
       <form onSubmit={handleSubmit(onFormSubmit)} className="lg:w-[480px] xl:w-[528px] w-full">
         <div className="space-y-8">
-          <div className="flex flex-col items-start p-4 gap-4 bg-[#FDFDFE] shadow-[0px_4px_16px_rgba(17,34,17,0.05)] rounded-[12px]">
-            <div className="space-y-4 w-full">
-              {paymentOptions.map((option) => (
-                <label
-                  key={option.value}
-                  className={clsx(
-                    'flex items-center justify-between p-4 gap-3 rounded-lg cursor-pointer transition-all',
-                    paymentOption === option.value ? 'bg-[#F3F4F6]' : 'bg-transparent',
-                  )}
-                >
-                  <div className="ml-2">
-                    <div className="font-medium text-[16px] leading-[150%] text-[#19191A] pb-2">
-                      {option.title}
+          {paymentDetail && (
+            <div className="flex flex-col items-start p-4 gap-4 bg-[#FDFDFE] shadow-[0px_4px_16px_rgba(17,34,17,0.05)] rounded-[12px]">
+              <div className="space-y-4 w-full">
+                {paymentOptions.map((option) => (
+                  <label
+                    key={option.value}
+                    className={clsx(
+                      'flex items-center justify-between p-4 gap-3 rounded-lg cursor-pointer transition-all',
+                      paymentOption === option.value ? 'bg-[#F3F4F6]' : 'bg-transparent',
+                    )}
+                  >
+                    <div className="ml-2">
+                      <div className="font-medium text-[16px] leading-[150%] text-[#19191A] pb-2">
+                        {option.title}
+                      </div>
+                      <div className="text-sm text-[#484A4C]">{option.description}</div>
                     </div>
-                    <div className="text-sm text-[#484A4C]">{option.description}</div>
-                  </div>
-                  <Radio
-                    name="paymentOption"
-                    value={option.value}
-                    className="!cursor-pointer"
-                    checked={paymentOption === option.value}
-                    onChange={() => setValue('paymentOption', option.value)}
-                  />
-                </label>
-              ))}
+                    <Radio
+                      name="paymentOption"
+                      value={option.value}
+                      className="!cursor-pointer"
+                      checked={paymentOption === option.value}
+                      onChange={() => setValue('paymentOption', option.value)}
+                    />
+                  </label>
+                ))}
 
-              <p className="text-sm text-[#29397E] flex items-center gap-1">
-                <span className="bg-[#29397E] rounded-full max-w-10">
-                  <Check className="text-white w-4 h-4 p-0.5" />
-                </span>
-                You can split your payment if your total is 400 KWD or higher.
-              </p>
+                <p className="text-sm text-[#29397E] flex items-center gap-1">
+                  <span className="bg-[#29397E] rounded-full max-w-10">
+                    <Check className="text-white w-4 h-4 p-0.5" />
+                  </span>
+                  You can split your payment if your total is 400 KWD or higher.
+                </p>
+              </div>
             </div>
-          </div>
-
+          )}
           <div className="bg-white p-6 rounded-xl shadow-[0px_4px_16px_rgba(17,34,17,0.05)]">
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700 mb-1">Card number</label>

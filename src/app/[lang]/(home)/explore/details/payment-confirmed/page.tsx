@@ -15,7 +15,9 @@ interface PaymentConfirmationData {
     period: string
   }
 }
-
+interface PaymentConfirmedProps {
+  bookingConfirmed?: boolean 
+}
 const mockData: PaymentConfirmationData = {
   imageUrl: 'https://picsum.photos/200/300',
   title: 'Luxury Lakeside Retreat',
@@ -54,7 +56,7 @@ const ActionLink = ({
   </Link>
 )
 
-const PaymentConfirmed = () => {
+const PaymentConfirmed = ({ bookingConfirmed = false }: PaymentConfirmedProps) => {
   const data = mockData
 
   const refundInfo = [
@@ -99,9 +101,15 @@ const PaymentConfirmed = () => {
         Payment Confirmed
       </h3>
       <p className="lg:text-[20px] md:text-[16px] text-sm md:leading-[28px] lg:leading-[34px] leading-5 py-1 text-[#484A4C] text-center">
-        Your booking is complete. Thank you for choosing us! <br />
-        You earned {data.points} points. Track and redeem them in your profile <br />
-        anytime!
+        {bookingConfirmed ? (
+          'Your booking is complete. Thank you for choosing us!'
+        ) : (
+          <>
+            Your booking is complete. Thank you for choosing us! <br />
+            You earned {data.points} points. Track and redeem them in your profile <br />
+            anytime!
+          </>
+        )}
       </p>
 
       <Image

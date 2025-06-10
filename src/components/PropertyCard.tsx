@@ -89,10 +89,10 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
 
         <div className="flex items-center justify-between">
           {!member && (
-            <div className="flex items-center text-sm text-gray-700">
+            <div className="flex items-center sm:flex-nowrap flex-wrap text-sm text-gray-700">
               <span className="mr-1">{rating}</span>
               <Image src={Star} alt="Star" width={16} height={16} />
-              <span className="text-gray-500 ml-1">({reviews} reviews)</span>
+              <span className="text-gray-500 sm:ml-1">({reviews} reviews)</span>
             </div>
           )}
 
