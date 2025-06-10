@@ -23,7 +23,8 @@ const VerifyAccount = () => {
         <Image src={'/images/Logo.svg'} alt="logo" width={150} height={48} />
 
         <div className="flex flex-col gap-[12px]">
-          <h2 className="!text-primary font-600 text-[39px]">
+          <h2 className="text-primary font-semibold text-[24px] sm:text-[32px] leading-tight">
+
             Verify Your
             <br /> Account
           </h2>

@@ -2,14 +2,14 @@ import { BazarImageCard } from "@/components";
 
 const LoyaltyBannerSection = () => {
     return (
-        <div className="flex flex-col items-center relative bg-color-tokens-background-background-primary">
+        <div className="flex flex-col items-center relative max-w-screen-xl bg-color-tokens-background-background-primary mx-auto">
             <div className="flex flex-col items-center justify-center gap-16 px-4 py-16 md:py-[92px] w-full">
-                <div className="flex flex-col w-full max-w-screen-xl items-start justify-center gap-10 px-4 md:px-0">
+                <div className="flex flex-col w-full max-w-screen-xl items-start justify-center gap-10">
                     <div className="flex flex-col items-start gap-8 w-full">
                         <div className="flex flex-col items-start gap-6 w-full">
                             <div className="flex flex-col items-start gap-4 w-full">
                                 <p className="mt-[-1px] font-bold text-primary leading-tight text-[#29397e] text-4xl sm:text-5xl md:text-[92px] tracking-tight">
-                                    <span className="block">
+                                    <span className="block text-primary-blue">
                                         About
                                     </span>
                                     <span className="block text-[#19191a]">

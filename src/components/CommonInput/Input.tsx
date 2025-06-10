@@ -9,19 +9,19 @@ type CommonInputProps = {
   value?: string
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
   type?:
-    | 'number'
-    | 'search'
-    | 'time'
-    | 'text'
-    | 'hidden'
-    | 'date'
-    | 'datetime-local'
-    | 'email'
-    | 'month'
-    | 'password'
-    | 'tel'
-    | 'url'
-    | 'week'
+  | 'number'
+  | 'search'
+  | 'time'
+  | 'text'
+  | 'hidden'
+  | 'date'
+  | 'datetime-local'
+  | 'email'
+  | 'month'
+  | 'password'
+  | 'tel'
+  | 'url'
+  | 'week'
   name?: string
   className?: string
   icon?: ReactNode
@@ -61,12 +61,12 @@ const CommonInput: React.FC<CommonInputProps> = ({
       >
         {icon && !prefix && <span className="text-gray-500">{icon}</span>}
         {icon && prefix && (
-          <span className="flex items-center gap-1 text-[#484A4C] text-sm font-medium">
+          <span className="flex items-center gap-1 text-[#484A4C] text-sm font-medium pr-2">
             {icon}
             {prefix}
           </span>
         )}
-        {!icon && prefix && <span className="text-[#484A4C] text-sm font-medium">{prefix}</span>}
+        {!icon && prefix && <span className="text-[#484A4C] text-sm font-medium pr-2">{prefix}</span>}
         <input
           id={inputId}
           name={name}
@@ -75,8 +75,9 @@ const CommonInput: React.FC<CommonInputProps> = ({
           onChange={onChange}
           placeholder={placeholder}
           readOnly={readonly}
-          className="w-full bg-transparent outline-none text-[#9EA0A2] placeholder:text-[#9EA0A2] hover:outline-none hover:ring-0 focus:outline-none focus:ring-0"
+          className="w-full bg-transparent outline-none text-sm text-[#484A4C] font-medium placeholder:text-gray-400 hover:outline-none hover:ring-0 focus:outline-none focus:ring-0"
           maxLength={maxLength}
+          autoComplete="off"
         />
       </div>
       {error && errorMessage && <p className="text-red-500 text-sm">{errorMessage}</p>}

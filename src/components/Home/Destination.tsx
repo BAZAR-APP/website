@@ -62,13 +62,13 @@ const DestinationSection: React.FC = () => {
                 rel="stylesheet"
             />
             <section
-                className="flex w-full flex-col items-center gap-24 box-border bg-white px-20 py-24 max-md:gap-16 max-md:px-10 max-md:py-16 max-sm:gap-12 max-sm:px-5 max-sm:py-12"
+                className="flex flex-col items-center gap-24 box-border bg-white py-24 max-md:gap-16 max-md:py-16 max-sm:gap-12 max-sm:py-12"
                 aria-labelledby="destinations-heading"
             >
-                <div className="flex flex-col items-start gap-12 w-full max-w-screen-xl">
+                <div className="flex flex-col items-start gap-12 px-4 md:px-5 max-w-screen-xl">
                     <h1
                         id="destinations-heading"
-                        className="w-full text-black text-[39px] font-bold max-md:text-[32px] max-sm:text-[28px]"
+                        className="w-full text-black text-[32px] md:text-[39px] font-semibold"
                     >
                         Discover Your Next Destination
                     </h1>

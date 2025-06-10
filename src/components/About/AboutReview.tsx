@@ -4,7 +4,7 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 import { Autoplay, Navigation, Pagination } from 'swiper/modules'
 import type { Swiper as SwiperType } from 'swiper'
 import { TestimonialCard } from '@/components'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { ArrowLeft, ArrowLeftIcon, ArrowRight, ArrowRightIcon } from 'lucide-react'
 
 import 'swiper/css'
 import 'swiper/css/navigation'
@@ -89,17 +89,17 @@ const TestimonialsSection: React.FC = () => {
             <div className="flex items-center gap-4">
               <button
                 onClick={handlePrevious}
-                className="aspect-[1] w-6 h-6 flex items-center justify-center hover:bg-gray-100 rounded transition-colors"
+                className="aspect-[1] w-6 h-6 flex items-center justify-center !cursor-pointer rounded transition-colors"
                 aria-label="Previous testimonials"
               >
-                <ChevronLeft size={24} className="text-gray-600" />
+                <ArrowLeftIcon size={30} className="text-primary-blue !cursor-pointer" />
               </button>
               <button
                 onClick={handleNext}
-                className="aspect-[1] w-6 h-6 flex items-center justify-center hover:bg-gray-100 rounded transition-colors"
+                className="aspect-[1] w-6 h-6 flex items-center justify-center !cursor-pointer rounded transition-colors"
                 aria-label="Next testimonials"
               >
-                <ChevronRight size={24} className="text-gray-600" />
+                <ArrowRightIcon size={30} className="text-primary-blue !cursor-pointer" />
               </button>
             </div>
           </header>

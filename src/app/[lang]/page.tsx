@@ -24,12 +24,14 @@ export default async function Home({ params }: { params: Promise<{ lang: Locale 
         ]}
         description={`where breathtaking views meet world-class hospitality. Whether you're seeking a relaxing retreat or an adventure by the sea, our chalets offer the perfect getaway.`}
         buttonText={'More About Us'}
-        buttonLink={''}
+        buttonLink={'/about'}
       />
       <WhyBookSection />
       <DestinationSection />
-      <ChaletsCard title={'Most Booked'} />
-      <ChaletsCard title={'Close to the Beach'} />
+      <div className='flex flex-col gap-[100px]'>
+        <ChaletsCard title={'Most Booked'} />
+        <ChaletsCard title={'Close to the Beach'} />
+      </div>
       <RewardsSection />
       <ChatHero />
       <DownloadApp />

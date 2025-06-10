@@ -15,10 +15,10 @@ const AccountVerificationSuccess = () => {
           <div className="flex flex-col gap-[12px]">
             <img src={'/images/Verified.svg'} alt="" className="w-[120px] h-[120px]" />
 
-            <h2 className="!text-primary font-semibold text-[39px]">
+            <h2 className="text-primary font-semibold text-[24px] max-[1440px]:text-[32px] min-[1441px]:text-[39px] leading-tight">
               {mode === 'reset-password' && 'Password'} Verified Successfully
             </h2>
-            <p className="!text-secondary font-600 text-[16px]">
+            <p className="!text-secondary font-400 text-[16px]">
               {mode === 'reset-password'
                 ? 'Your new password is set. You can now log in to your account.'
                 : 'Your phone number has been verified. You’re all set to continue!'}

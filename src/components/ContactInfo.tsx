@@ -27,16 +27,16 @@ export const ContactInfo: React.FC<ContactInfoProps> = ({ className = '' }) => {
       </div>
 
       <address className="flex items-start gap-2 text-sm font-medium text-indigo-900 not-italic">
-        <MapPin className="w-6 h-6 mt-0.5 shrink-0" />
+        <MapPin className="w-[24px] w-[24px] mt-0.5 shrink-0" />
         <p>Kuwait, Souq Al-Manakh, Ground Floor, Office No. 318.</p>
       </address>
 
-      <div className="flex sm:flex-col flex-row gap-3">
-        <Link href="#" aria-label="Download from App Store">
-          <Image src={Appstore} alt="App Store badge" />
+      <div className="flex flex-col gap-2">
+        <Link href="#" aria-label="Download from App Store" className='max-h-[35]'>
+          <Image src={Appstore} alt="App Store badge" width={108} height={35} />
         </Link>
-        <Link href="#" aria-label="Download from Google Play">
-          <Image src={GooglePlay} alt="Google Play badge" />
+        <Link href="#" aria-label="Download from Google Play" className='max-h-[35]'>
+          <Image src={GooglePlay} alt="Google Play badge" width={108} height={35} />
         </Link>
       </div>
     </section>

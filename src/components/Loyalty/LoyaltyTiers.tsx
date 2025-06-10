@@ -9,7 +9,7 @@ export const LoyaltyTiers: React.FC = () => {
 
   return (
     <>
-      <div className="flex flex-col w-full items-center gap-16 px-4 sm:px-8 md:px-20 py-16 sm:py-24 bg-white">
+      <div className="flex flex-col w-full items-center gap-16 px-4 md:px-16 py-16 sm:py-24 bg-white">
         <div className="flex flex-col items-start gap-8 w-full max-w-screen-xl">
           <div className="flex flex-col md:flex-row justify-between w-full gap-4 md:gap-0">
             <div className="flex flex-col gap-2 sm:gap-4 max-w-full md:max-w-lg">
@@ -38,7 +38,7 @@ export const LoyaltyTiers: React.FC = () => {
         title={'Compare Between Tiers'}
         isOpen={isOpen}
         setIsOpen={toggle}
-        className="!max-w-[1050px] !w-full max-h-[calc(100vh-80px)] overflow-y-auto mx-4  lg:max-h-none lg:overflow-y-visible"
+        className="!max-w-[1050px] w-full max-h-[calc(100vh-80px)] overflow-y-auto m-4 py-2 lg:max-h-none lg:overflow-y-visible"
       >
         <CompareTiers />
       </ModalDialog>

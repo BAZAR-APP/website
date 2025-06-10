@@ -187,35 +187,52 @@ html body * {
     .w-500px-1440 {
       width: 450px;
     }
+
     .xxl-gap {
       gap: 45px !important;
     }
+
     .xxl-p {
       padding: 0px 64px;
     }
-    .xxl-w{
+
+    .xxl-w {
       width: 30%;
     }
+
     .max-p {
       padding: 0 28px;
     }
   }
 }
-.max-w-xxl{
+
+.max-w-xxl {
   max-width: 1900px;
 }
-.rt-BaseCheckboxRoot:where(.rt-variant-surface):where(
-    [data-state='checked'],
-    [data-state='indeterminate']
-  ):before {
+
+.rt-BaseCheckboxRoot:where(.rt-variant-surface):where([data-state='checked'],
+  [data-state='indeterminate']):before {
   background-color: var(--primary-blue) !important;
 }
+
 .rt-BaseRadioRoot:where(.rt-variant-surface):where(:checked, [data-state='checked']):before {
   background-color: var(--primary-blue) !important;
 }
+
 .rt-BaseButton.rt-variant-ghost:hover,
 .rt-BaseButton.rt-variant-ghost:focus {
   background-color: transparent !important;
   border: none !important;
   outline: none !important;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+
+input[type=number] {
+  -moz-appearance: textfield;
 }

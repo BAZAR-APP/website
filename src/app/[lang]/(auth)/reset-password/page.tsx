@@ -12,7 +12,8 @@ const ChangePassword = () => {
       <div className="max-w-[360px] h-[90vh] overflow-y-auto flex flex-col gap-[24px]">
         <img src={'/images/Logo.svg'} alt="" className="w-[150px] h-[48px]" />
         <div className="flex flex-col gap-[12px]">
-          <h2 className="!text-primary font-semibold text-[39px]">Set A New Password</h2>
+          <h2 className="text-primary font-semibold text-[24px] max-[1440px]:text-[32px] min-[1441px]:text-[39px] leading-tight">
+            Set A New Password</h2>
           <p className="text-secondary font-400 text-[16px]">
             Create a strong password to secure your account.
           </p>

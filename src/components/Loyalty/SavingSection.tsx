@@ -1,9 +1,9 @@
 const SavingSection = () => {
     return (
-        <div className="main-container flex flex-col items-center gap-24 px-5 py-24 mx-auto max-w-[1200px] bg-white">
-            <div className="flex flex-col md:flex-row gap-12 items-center w-full">
+        <div className="main-container flex flex-col items-center gap-24 py-16 md:py-24 mt-10 md:mt-16 mx-4 md:mx-auto max-w-screen-xl bg-white">
+            <div className="flex flex-col md:flex-row gap-12 items-start w-full">
                 {/* Image container */}
-                <div className="flex justify-center items-center shrink-0 bg-[#f3f4f6] rounded-[137px] p-8 md:p-9 w-[220px] h-[220px] md:w-[274px] md:h-[274px]">
+                <div className="flex justify-center md:items-center shrink-0 bg-[#f3f4f6] rounded-[137px] p-8 md:p-9 w-[220px] h-[220px] md:w-[274px] md:h-[274px]">
                     <div
                         className="w-[140px] h-[140px] md:w-[171px] md:h-[171px] bg-[url(https://codia-f2c.s3.us-west-1.amazonaws.com/image/2025-06-03/ce2kJLDrws.png)] bg-cover bg-no-repeat"
                         role="img"

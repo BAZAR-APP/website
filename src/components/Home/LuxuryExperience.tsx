@@ -12,7 +12,7 @@ const LuxuryExperience: React.FC<any> = () => {
     return (
         <section className="flex flex-col items-center gap-16 self-stretch relative bg-[#FDFDFE] px-0 py-24 max-md:px-0 max-md:py-16 max-sm:px-0 max-sm:py-12">
             <div className="max-w-screen-xl flex flex-col items-start gap-8 self-stretch relative w-full mx-auto my-0 px-5 py-0 max-md:max-w-[991px] max-md:px-4 max-md:py-0 max-sm:max-w-screen-sm">
-                <div className="flex items-start gap-8 self-stretch relative max-md:flex-col max-md:gap-6">
+                <div className="flex items-start gap-8 self-stretch relative max-lg:flex-col max-md:gap-6">
                     <header className="flex max-w-[1440px] flex-col items-start gap-5 flex-[1_0_0] relative">
                         <h1 className="self-stretch text-[#101828] text-5xl font-bold relative gap-[-54px] max-md:text-4xl max-sm:text-[28px]">
                             Escape to luxury and comfort at Bazar
@@ -52,7 +52,7 @@ const LuxuryExperience: React.FC<any> = () => {
                     </header>
 
                     <div className="flex w-[611px] flex-col items-start gap-[61px] relative max-md:w-full">
-                        <figure className="flex w-[611px] flex-col items-start gap-[61px] relative max-md:w-full">
+                        <figure className="flex w-[611px] flex-col items-start gap-[61px] relative max-lg:w-full">
                             <div className="flex h-[232px] justify-between items-start self-stretch relative max-md:flex-col max-md:h-auto max-md:gap-4">
                                 <img
                                     src="https://cdn.builder.io/api/v1/image/assets/TEMP/713e4af6672d6f5c8e66dfde7936a2dd6eb29123?placeholderIfAbsent=true"
@@ -60,31 +60,32 @@ const LuxuryExperience: React.FC<any> = () => {
                                     className="w-[275px] h-[232px] relative rounded-[20px] max-md:w-full max-md:h-[200px]"
                                 />
                                 <div className="flex w-[300px] flex-col items-start gap-[15px] relative max-md:w-full">
-                                    <div className="flex justify-between items-center self-stretch relative max-sm:flex-col max-sm:gap-3">
+                                    <div className="flex flex-wrap justify-between items-center self-stretch relative max-sm:gap-3">
                                         <img
                                             src="https://cdn.builder.io/api/v1/image/assets/TEMP/f9b48e4de65efdd91cbdf136ba8b9ade44b078fc?placeholderIfAbsent=true"
                                             alt="Luxury chalet interior"
-                                            className="w-[141px] h-[108px] relative rounded-[20px] max-md:w-[calc(50%_-_7.5px)] max-md:h-[100px] max-sm:w-full"
+                                            className="w-[141px] h-[108px] rounded-[20px] max-md:w-[calc(50%_-_7.5px)] max-md:h-[100px] max-sm:w-[calc(50%_-_7.5px)]"
                                         />
                                         <img
                                             src="https://cdn.builder.io/api/v1/image/assets/TEMP/8115a00e449569b51058a08d7a03dd0c0adae6f3?placeholderIfAbsent=true"
                                             alt="Sea view from chalet"
-                                            className="w-[141px] h-[108px] relative rounded-[20px] max-md:w-[calc(50%_-_7.5px)] max-md:h-[100px] max-sm:w-full"
+                                            className="w-[141px] h-[108px] rounded-[20px] max-md:w-[calc(50%_-_7.5px)] max-md:h-[100px] max-sm:w-[calc(50%_-_7.5px)]"
                                         />
                                     </div>
-                                    <div className="flex justify-between items-center self-stretch relative max-sm:flex-col max-sm:gap-3">
+                                    <div className="flex flex-wrap justify-between items-center self-stretch relative max-sm:gap-3">
                                         <img
                                             src="https://cdn.builder.io/api/v1/image/assets/TEMP/dc040d48794f3060a950d23798e6473c7763064a?placeholderIfAbsent=true"
                                             alt="Resort amenities"
-                                            className="w-[141px] h-[108px] relative rounded-[20px] max-md:w-[calc(50%_-_7.5px)] max-md:h-[100px] max-sm:w-full"
+                                            className="w-[141px] h-[108px] rounded-[20px] max-md:w-[calc(50%_-_7.5px)] max-md:h-[100px] max-sm:w-[calc(50%_-_7.5px)]"
                                         />
                                         <img
                                             src="https://cdn.builder.io/api/v1/image/assets/TEMP/d3667f8d47098a73c20c44f0e1c3a7e2deab34a1?placeholderIfAbsent=true"
                                             alt="Coastal landscape"
-                                            className="w-[141px] h-[108px] relative rounded-[20px] max-md:w-[calc(50%_-_7.5px)] max-md:h-[100px] max-sm:w-full"
+                                            className="w-[141px] h-[108px] rounded-[20px] max-md:w-[calc(50%_-_7.5px)] max-md:h-[100px] max-sm:w-[calc(50%_-_7.5px)]"
                                         />
                                     </div>
                                 </div>
+
                             </div>
                         </figure>
 
@@ -112,8 +113,8 @@ const LuxuryExperience: React.FC<any> = () => {
 
                 <section className="flex flex-col items-start gap-8 self-stretch relative">
                     <div className="flex max-w-[1440px] flex-col items-start gap-5 self-stretch relative">
-                        <div className="flex w-[976px] flex-col items-start gap-[-54px] relative max-md:w-full">
-                            <blockquote className="self-stretch text-[#101828] font-normal  text-4xl leading-[55px] tracking-[-0.72px] px-[11px] py-0 max-md:text-[28px] max-md:leading-10 max-sm:text-2xl max-sm:leading-8">
+                        <div className="flex max-w-[976px] flex-col items-start gap-[-54px] relative max-md:w-full">
+                            <blockquote className="self-stretch text-[#101828] font-normal  text-4xl leading-[55px] tracking-[-0.72px] px-[11px] py-0 max-md:text-[28px] mt-4 md:mt-8 max-md:leading-10 max-sm:text-2xl max-sm:leading-8">
                                 Bazar offers a luxurious escape with stunning sea views and premium amenities. Our chalets provide the perfect
                             </blockquote>
                             <div className="flex flex-col items-center gap-2 relative pl-0 pr-2 py-2 max-sm:items-start">
