@@ -9,22 +9,37 @@ import SideNav from '../SideNav'
 import Link from 'next/link'
 import Button from '../Button/Button'
 import { useRouter } from 'next/navigation'
+import { LanguageSwitcher } from './LanguageSwitcher'
+import { i18n, Locale } from '../../../i18n.config'
 
 interface HeaderProps {
   className?: string
   isAuthHeader?: boolean
   isLoggedIn?: boolean
+  dictionary?: {
+    navigation: {
+      home: string
+      about: string
+      contact: string
+    }
+    footer: {
+      language: string
+    }
+  }
+  lang?: Locale
 }
 
 const Header: React.FC<HeaderProps> = ({
   className = '',
   isAuthHeader = false,
   isLoggedIn = true,
+  dictionary,
+  lang,
 }) => {
   console.log(isLoggedIn)
 
   const [isSideNavOpen, setIsSideNavOpen] = useState(false)
-    const router = useRouter()
+  const router = useRouter()
 
   const toggleSideNav = () => setIsSideNavOpen((open) => !open)
   const closeSideNav = () => setIsSideNavOpen(false)
@@ -56,6 +71,11 @@ const Header: React.FC<HeaderProps> = ({
           </svg>
         </button>
       </div>
+      <LanguageSwitcher
+        lang={lang ?? "en"}
+        label={dictionary?.footer.language || ''}
+        availableLocales={[...i18n.locales]}
+      />
       <div className="hidden lg:flex items-center justify-between w-full">
         <Logo />
         <Navigation />
