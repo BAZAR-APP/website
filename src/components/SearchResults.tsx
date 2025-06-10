@@ -25,7 +25,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({
       </h2>
 
       <Select.Root value={sortBy} onValueChange={onSortChange}>
-        <Select.Trigger className="sm:w-48 w-full inline-flex items-center justify-between bg-[#F9FAFB] cursor-pointer rounded-lg px-4 py-4 text-sm font-medium text-gray-700 focus:outline-none focus:border-none">
+        <Select.Trigger className="sm:w-[200px] w-full inline-flex items-center justify-between bg-[#F9FAFB] cursor-pointer rounded-lg px-3 py-2 text-sm font-medium text-gray-700 focus:outline-none focus:border-none">
           <div className="flex flex-col items-start gap-1">
             <span className="text-[12px] leading-3 font-normal text-[#9EA0A2] flex-none">
               Sort by

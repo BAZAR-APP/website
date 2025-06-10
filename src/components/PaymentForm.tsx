@@ -6,6 +6,7 @@ import { Check, CheckCircle, Plus } from 'lucide-react'
 import clsx from 'clsx'
 import { useFormContext } from 'react-hook-form'
 import Button from './Button/Button'
+import { Radio } from '@radix-ui/themes'
 
 export type PaymentFormData = {
   paymentOption: 'full' | 'split'
@@ -57,7 +58,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ onSubmit }) => {
 
   return (
     <>
-      <form onSubmit={handleSubmit(onFormSubmit)} className="md:w-[328px] lg:w-[528px] w-full">
+      <form onSubmit={handleSubmit(onFormSubmit)} className="lg:w-[480px] xl:w-[528px] w-full">
         <div className="space-y-8">
           <div className="flex flex-col items-start p-4 gap-4 bg-[#FDFDFE] shadow-[0px_4px_16px_rgba(17,34,17,0.05)] rounded-[12px]">
             <div className="space-y-4 w-full">
@@ -75,14 +76,16 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ onSubmit }) => {
                     </div>
                     <div className="text-sm text-[#484A4C]">{option.description}</div>
                   </div>
-                  <input
-                    type="radio"
+                  <Radio
+                    name="paymentOption"
                     value={option.value}
-                    {...register('paymentOption')}
-                    className="mt-1 h-4 w-4 text-blue-600"
+                    className="!cursor-pointer"
+                    checked={paymentOption === option.value}
+                    onChange={() => setValue('paymentOption', option.value)}
                   />
                 </label>
               ))}
+
               <p className="text-sm text-[#29397E] flex items-center gap-1">
                 <span className="bg-[#29397E] rounded-full max-w-10">
                   <Check className="text-white w-4 h-4 p-0.5" />
@@ -111,7 +114,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ onSubmit }) => {
                   type="text"
                   {...register('cardNumber')}
                   placeholder="1234 1234 1234 1234"
-                  className="w-full px-4 py-2 border rounded-md border-gray-300 focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 border rounded-md border-gray-300"
                 />
 
                 <div className="absolute right-3 top-2 hidden lg:flex space-x-2">
@@ -134,7 +137,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ onSubmit }) => {
                   type="text"
                   {...register('expiry')}
                   placeholder="MM / YY"
-                  className="w-full px-4 py-2 border rounded-md border-gray-300 focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 border rounded-md border-gray-300"
                 />
               </div>
               <div>
@@ -143,17 +146,18 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ onSubmit }) => {
                   type="text"
                   {...register('cvv')}
                   placeholder="CVV"
-                  className="w-full px-4 py-2 border rounded-md border-gray-300 focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 border rounded-md border-gray-300"
                 />
               </div>
             </div>
           </div>
 
-          <p className="text-sm text-gray-500 mt-4 flex items-center">
+          <p className="text-sm text-[#000000] mt-4 flex items-center">
             <span className="mr-2">
               <Image src={'/images/protection.svg'} alt="Secure" width={24} height={24} />
             </span>
-            All payments processed securely via KNET 💳.
+            All payments processed securely via KNET
+            <Image src={'/images/Knet.svg'} alt="Secure" className="ml-1" width={24} height={24} />.
           </p>
         </div>
       </form>
@@ -165,10 +169,10 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ onSubmit }) => {
           backgroundColor: 'rgba(0, 0, 0, 0.5)',
         }}
       >
-        <h2 className="text-white md:text-xl sm:text-lg text-[16px] font-semibold">
+        <h2 className="text-[#FDFDFE] md:text-xl sm:text-lg text-[16px] font-bold">
           Make your weekend unforgettable Just 25 KWD
         </h2>
-        <p className="text-white text-sm md:mt-4 mt-2">
+        <p className="text-[#FDFDFE] text-sm md:mt-4 mt-2">
           Add the Romantic Weekend upgrade for only 25 KWD and enjoy late check-out, welcome gift,
           and a private Romantic Setup.
         </p>
@@ -176,7 +180,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ onSubmit }) => {
           intent="transperent"
           size={romanticWeekend ? 'sm' : 'md'}
           className={clsx(
-            'flex sm:gap-3 gap-1 md:text-[16px] text-sm cursor-pointer border md:mt-5 mt-3 text-white border-white',
+            'flex sm:gap-3 gap-1 md:text-[16px] text-sm cursor-pointer border md:mt-5 mt-3 text-[#FDFDFE] border-[#FDFDFE] sm:max-w-[270px] max-w-[auto]',
           )}
           onClick={() => setValue('romanticWeekend', !romanticWeekend)}
           type="button"

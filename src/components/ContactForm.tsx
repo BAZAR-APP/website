@@ -42,7 +42,7 @@ const ContactForm: React.FC<ContactFormProps> = ({ onSubmit }) => {
           className={'!bg-[#F9FAFB] !text-[#484A4C] !rounded-[8px] !border-none !h-[42px]'}
         />
         <CommonInput
-          icon={<img src={'/images/countryFlag.svg'} alt="" className="w-[16px] h-[16px]" />}
+          icon={<img src={'/images/countryFlag.svg'} alt="" className="w-[24px] h-[22px]" />}
           prefix="+965"
           name="phone"
           placeholder=""

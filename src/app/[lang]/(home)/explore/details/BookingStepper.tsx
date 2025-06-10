@@ -28,7 +28,7 @@ export default function BookingStepper({ currentStep }: BookingStepperProps) {
               {!isLast && (
                 <div
                   className={`absolute top-2.5 left-full h-[3px] w-full -translate-x-1/2 ${
-                    isCompleted || isActive ? 'bg-[#1C2E70]' : 'bg-[#EAECF0]'
+                    isCompleted ? 'bg-[#1C2E70]' : 'bg-[#EAECF0]'
                   }`}
                 />
               )}
@@ -61,8 +61,8 @@ export default function BookingStepper({ currentStep }: BookingStepperProps) {
               </div>
 
               <div className="mt-2 sm:text-sm text-[12px]">
-                <h3 className="sm:font-semibold font-medium text-[#29397E]">{step.title}</h3>
-                <p className="text-xs text-[#29397E]">{step.subtitle}</p>
+                <h3 className="sm:font-bold font-semibold text-[#29397E]">{step.title}</h3>
+                <p className="text-xs sm:block hidden text-[#29397E]">{step.subtitle}</p>
               </div>
             </li>
           )

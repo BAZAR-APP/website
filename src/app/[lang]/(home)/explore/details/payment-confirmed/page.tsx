@@ -93,14 +93,15 @@ const PaymentConfirmed = () => {
   ]
 
   return (
-    <div className="flex justify-center flex-col items-center md:w-[473px] w-full mx-auto md:px-0 px-6">
+    <div className="flex justify-center flex-col items-center md:w-[603px] w-full mx-auto md:px-0 px-6 my-7">
       <Image src="/images/PayConfirm.svg" width={117} height={117} alt="Icon" />
-      <h3 className="md:text-3xl sm:text-2xl text-xl font-semibold py-1 leading-[47px] text-[#19191A] text-center md:pt-6 pt-3 w-full">
+      <h3 className="lg:text-[39px] md:text-3xl sm:text-2xl text-xl font-semibold py-1 leading-[47px] text-[#19191A] text-center md:pt-6 pt-3 w-full">
         Payment Confirmed
       </h3>
-      <p className="md:text-[16px] text-sm md:leading-[28px] leading-5 py-1 text-[#484A4C] text-center">
-        Your booking is complete. Thank you for choosing us! <br /> You earned {data.points} points. Track
-        and redeem them in your profile <br /> anytime!
+      <p className="lg:text-[20px] md:text-[16px] text-sm md:leading-[28px] lg:leading-[34px] leading-5 py-1 text-[#484A4C] text-center">
+        Your booking is complete. Thank you for choosing us! <br />
+        You earned {data.points} points. Track and redeem them in your profile <br />
+        anytime!
       </p>
 
       <Image
@@ -108,10 +109,10 @@ const PaymentConfirmed = () => {
         alt={data.title}
         width={200}
         height={200}
-        className="w-full mt-5 object-cover rounded-lg h-[276px]"
+        className="w-full mt-5 object-cover rounded-[24px] h-[326px]"
       />
 
-      <div className="self-start pt-3">
+      <div className="self-start pt-4">
         <div className="flex items-center flex-wrap gap-3 mb-3">
           <h3 className="text-[16px] leading-[24px] font-medium text-[#19191A] font-inter">
             {data.title}
@@ -125,12 +126,12 @@ const PaymentConfirmed = () => {
 
       <p className="text-sm leading-4 font-normal text-[#8E8E93] self-start">{data.details}</p>
 
-      <div className="text-sm flex gap-2 self-start my-4 leading-4 text-[#8E8E93]">
+      <div className="text-sm flex gap-2 self-start my-4.5 leading-4 text-[#8E8E93]">
         <MapPin className="w-4 h-4 text-[#8E8E93]" />
         <span className="pr-2">{data.location}</span>
       </div>
 
-      <h4 className="self-start pb-2 text-[12px] leading-4 font-semibold text-[#121722]">
+      <h4 className="self-start text-[12px] leading-4 font-semibold text-[#121722]">
         Refund Instructions
       </h4>
 

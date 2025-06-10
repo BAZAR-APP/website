@@ -88,6 +88,7 @@ export default async function ChaletDetailsPage({ params }: { params: Promise<{ 
                 maxGuests={data.maxGuests}
                 packageOptions={data.packageOptions}
                 bookingConfig={data.bookingConfig}
+                guests={2}
               />
             </div>
           </div>

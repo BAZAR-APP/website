@@ -16,8 +16,8 @@ interface ReviewsSectionProps {
 const ReviewsSection = ({ rating, reviewCount }: ReviewsSectionProps) => {
   return (
     <section className="border-b border-t border-[#E5E7EB] pb-8 md:pt-8 pt-6 lg:mt-0 mt-10">
-      <div className="flex items-center gap-2 mb-6 sm:text-2xl text-xl">
-        <span className="font-semibold">{rating}</span>
+      <div className="flex items-center gap-2 mb-6 text-xl sm:text-[22px] md:text-[25px]">
+        <span className="font-semibold text-[#19191A]">{rating}</span>
         <Image src={LikeStar} width={23} height={23} alt="Like Star" />
         <span className="font-semibold">·</span>
         <span className="font-semibold">{reviewCount} reviews</span>
@@ -37,7 +37,7 @@ const ReviewsSection = ({ rating, reviewCount }: ReviewsSectionProps) => {
 
               <div>
                 <div className="mb-1">
-                  <Text as="p" size="3" weight="medium">
+                  <Text as="p" size="3" className='text-[#19191A]' weight="medium">
                     {review.name}
                   </Text>
                   <Text as="p" size="2" className='text-[#9EA0A2] text-sm'>
@@ -70,7 +70,7 @@ const ReviewsSection = ({ rating, reviewCount }: ReviewsSectionProps) => {
             <Text
               as="p"
               size="2"
-              className="leading-relaxed text-[#19191A] pt-4 md:max-w-[70%] w-[100%]"
+              className="lg:!text-[16px] text-sm leading-relaxed text-[#19191A] pt-4 md:max-w-[70%] w-[100%]"
             >
               {review.comment}
             </Text>
@@ -82,7 +82,8 @@ const ReviewsSection = ({ rating, reviewCount }: ReviewsSectionProps) => {
         </Link>
         <Button
           intent="transperent"
-          className="cursor-pointer border border-[#19191A] text-sm font-medium sm:w-[200px] w-full "
+          size='sm'
+          className="cursor-pointer border border-[#19191A] text-sm font-medium sm:max-w-[170px] w-full "
         >
           Show all 200 reviews
         </Button>

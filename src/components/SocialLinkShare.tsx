@@ -73,7 +73,7 @@ const SocialLinkShare: React.FC<ShareModalProps> = ({ onClose, open }) => {
 
   return (
     <ModalDialog isOpen={open} setIsOpen={onClose} title="Share With...">
-      <div className="grid grid-cols-3 md:grid-cols-5 gap-4">
+      <div className="grid grid-cols-3 md:grid-cols-5 gap-5">
         {shareOptions.map((option) => (
           <div
             key={option.name}
@@ -87,7 +87,7 @@ const SocialLinkShare: React.FC<ShareModalProps> = ({ onClose, open }) => {
                 <option.icon className="text-[#29397E]" />
               )}
             </div>
-            <span className="text-xs text-[#29397E]">{option.name}</span>
+            <span className="text-[10px] text-[#29397E]">{option.name}</span>
           </div>
         ))}
       </div>
@@ -97,12 +97,12 @@ const SocialLinkShare: React.FC<ShareModalProps> = ({ onClose, open }) => {
           value={shareUrl}
           readonly
           placeholder="Loading URL..."
-          className="w-full relative !px-4 !pr-10 bg-gray-50 border border-gray-200 !rounded-md !text-sm !border-none !h-[42px]"
+          className="w-full relative !px-4 !pr-10 bg-gray-50 border border-[#D0D5DD] !rounded-md !text-sm !h-[42px]"
         />
         <span className="absolute top-0 right-3 flex">
           <Separator.Root
             orientation="vertical"
-            className="h-10.5 w-[1.5px] bg-gray-300 inline-block mx-2"
+            className="h-10.5 w-[1.5px] bg-gray-300 inline-block mx-3"
           />
           <Copy
             className="w-4 h-4 mt-3 text-[#29397E] cursor-pointer hover:text-blue-600 transition-colors"
@@ -110,7 +110,7 @@ const SocialLinkShare: React.FC<ShareModalProps> = ({ onClose, open }) => {
           />
         </span>
       </div>
-      <Button size="responsive" intent="ghost" onClick={onClose} className="mt-4 w-full">
+      <Button size="responsive" intent="ghost" onClick={onClose} className="mt-4 w-full text-[#1F2A37]">
         Cancel
       </Button>
     </ModalDialog>
