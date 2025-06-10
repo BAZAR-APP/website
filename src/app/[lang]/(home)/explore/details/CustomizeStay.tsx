@@ -88,7 +88,7 @@ export default function CustomizeStay({ onNext }: CustomizeStayProps) {
           <AddOns />
 
           <textarea
-            className="md:w-[370px] w-full h-52 p-3 bg-[#F9FAFB] rounded resize-none text-sm"
+            className="md:w-[370px] w-full h-52 p-3 bg-[#F9FAFB] focus:border-none focus:outline-none rounded resize-none text-sm"
             placeholder="Let us know if you need anything specific..."
           />
         </div>
@@ -111,7 +111,7 @@ export default function CustomizeStay({ onNext }: CustomizeStayProps) {
               </li>
             ))}
           </ul>
-          <div className="border-t w-full pt-4 mt-2 flex justify-between font-semibold text-sm">
+          <div className="border-t w-full pt-4 mt-2 flex justify-between font-medium text-sm sm:text-[16px]">
             <span>Total</span>
             <span>{total} KWD</span>
           </div>

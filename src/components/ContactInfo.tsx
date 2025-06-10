@@ -15,7 +15,7 @@ export const ContactInfo: React.FC<ContactInfoProps> = ({ className = '' }) => {
   return (
     <section className={`flex flex-col gap-6 w-[207px] ${className}`}>
       <div className="flex flex-col gap-2">
-        <h3 className="text-base font-medium text-neutral-600">Contact Us</h3>
+        <h3 className="text-base font-medium text-neutral-600 mb-1">Contact Us</h3>
         <div className="flex gap-4">
           <Link href="#" aria-label="Instagram">
             <Image src={Instagram} alt="Instagram icon" />

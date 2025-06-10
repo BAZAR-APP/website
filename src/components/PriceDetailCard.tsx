@@ -24,7 +24,7 @@ const PriceDetailCard: React.FC<PriceDetailCardProps> = ({
 }) => {
   const containerClasses = `
   relative cursor-pointer transition-all duration-200 
-  md:w-[220px] w-full md:h-[155px] h-[170px] rounded-[30px] xxl-w
+  md:w-[225px] w-full md:h-[155px] h-[170px] rounded-[30px] xxl-w
   flex flex-col items-center justify-center border border-[#E5E7EB]
   ${isSelected ? 'bg-white shadow-lg' : 'bg-white hover:border-gray-300 hover:shadow-md'}
 `
@@ -47,7 +47,7 @@ const PriceDetailCard: React.FC<PriceDetailCardProps> = ({
         <div className="md:text-[20px] text-lg leading-[24px] font-bold text-[#19191A] text-center">
           {price}
         </div>
-        <div className="flex items-center justify-center gap-1 pt-1.5">
+        <div className="flex items-center justify-center 2xl:gap-3 gap-1 pt-1.5">
           <p className="text-[12px] leading-[15px] font-normal text-[#484A4C]">{description}</p>
           {badge && (
             <div className="flex justify-center">

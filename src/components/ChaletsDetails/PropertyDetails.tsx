@@ -25,14 +25,14 @@ const PropertyDetails = ({
   return (
     <section className="border-b border-[#E5E7EB] pb-8">
       <div className="flex items-center flex-wrap pb-3 gap-3">
-        <h1 className="text-xl sm:text-2xl md:text-3xl font-semibold text-[#19191A]">{title}</h1>
+        <h1 className="text-xl sm:text-[22px] md:text-[25px] font-semibold text-[#19191A]">{title}</h1>
         <div className="flex bg-[#E1F3FF] items-center justify-between gap-1 rounded py-1 px-1.5 max-w-[110px]">
           <Image src={Points} width={16} height={16} alt="Points Icon" />
           <span className="text-[#29397E] text-sm">{points} Points</span>
         </div>
       </div>
 
-      <div className="flex justify-between md:flex-row flex-col md:gap-0 gap-2 border-b border-[#E5E7EB] pb-5">
+      <div className="flex justify-between md:flex-row flex-col md:gap-0 gap-2 border-b border-[#E5E7EB] pb-6 pt-1">
         <p className="flex items-center gap-1.5">
           <Image src="/images/Trust.svg" width={24} height={24} alt="Trust icon" />
           <span className="sm:text-[16px] text-sm sm:leading-5 leading-3.5 text-[#19191A]">
@@ -56,7 +56,7 @@ const PropertyDetails = ({
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-6 mt-6 text-[#19191A] text-[15px] leading-[20px] pt-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-6 mt-6 text-[#19191A] md:text-[16px] text-sm leading-[20px] pt-3">
         <DetailItem icon="/images/cityicon.svg" text="City View" />
         <DetailItem icon="/images/Icon.svg" text={`${beds} Beds Max`} />
         <DetailItem icon="/images/squreicon.svg" text="500 sqm²" />
@@ -66,7 +66,7 @@ const PropertyDetails = ({
         <DetailItem icon="/images/family.svg" text="Family Friendly only (No Men Groups)" />
       </div>
 
-      <p className="mt-6 text-[#484A4C] text-[15px] leading-[22px] xl:max-w-full max-w-full md:max-w-[630px]">{description}</p>
+      <p className="mt-6 text-[#484A4C] md:text-[16px] text-sm leading-[22px] xl:max-w-full max-w-full md:max-w-[630px]">{description}</p>
     </section>
   )
 }

@@ -66,7 +66,7 @@ const PricingRow = ({
     </div>
     <span className="text-sm leading-[17px] font-medium text-[#19191A] flex gap-2 items-center">
       {price} {currency}
-      <Radio name="example" value="1" defaultChecked={checked} className='!cursor-pointer' />
+      <Radio name="example" value="1" defaultChecked={checked} className="!cursor-pointer" />
     </span>
   </div>
 )
@@ -128,8 +128,9 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
         <h3 className="font-bold xl:text-[20px] md:text-lg text-[16px] leading-[24px] text-[#19191A] pb-3">
           Choose Your Package
         </h3>
-        <h2 className="md:text-lg text-sm leading-6 font-normal text-[#19191A] flex items-center">
-          {selectedPackage}
+        <h2 className="lg:text-[20px] md:text-[16px] text-sm leading-6 font-normal text-[#19191A] flex items-center">
+          {selectedPackage.split('/')[0]}
+          <span className="text-[16px]">/ {selectedPackage.split('/')[1]}</span>
         </h2>
       </div>
       <div className="px-6 space-y-3">
@@ -171,17 +172,17 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
           <div className="grid grid-cols-2 divide-x divide-[#D1D5DB]">
             <div className="p-3">
               <span className="block text-[10px] font-semibold">CHECK-IN</span>
-              <span className="block text-[13px] text-[#9EA0A2]">{formatDate(checkIn)}</span>
+              <span className="block text-[14px] text-[#9EA0A2]">{formatDate(checkIn)}</span>
             </div>
             <div className="p-3">
               <span className="block text-[10px] font-semibold">CHECKOUT</span>
-              <span className="block text-[13px] text-[#9EA0A2]">{formatDate(checkOut)}</span>
+              <span className="block text-[14px] text-[#9EA0A2]">{formatDate(checkOut)}</span>
             </div>
           </div>
           <div className="border-t border-[#D1D5DB] px-3 py-2 flex items-center justify-between cursor-pointer">
             <div>
               <span className="block text-[10px] font-semibold">GUESTS</span>
-              <span className="block text-[13px] text-[#9EA0A2]">{guests} guests</span>
+              <span className="block text-[14px] text-[#9EA0A2]">{guests} guests</span>
             </div>
             <div className="flex items-center gap-2 relative">
               <button

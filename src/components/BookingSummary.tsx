@@ -68,8 +68,8 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
   const isSplitPayment = getValues()?.paymentOption === 'split'
 
   return (
-    <div className="w-full md:max-w-sm rounded-lg bg-[#F9FAFB] p-6">
-      <h3 className="text-lg font-semibold text-gray-900 mb-3">Booking Summary</h3>
+    <div className="w-full md:max-w-sm rounded-lg bg-[#F9FAFB] sm:p-6 p-3">
+      <h3 className="xl:text-[25px] text-lg font-semibold text-gray-900 mb-3">Booking Summary</h3>
       <div className="p-0">
         <div className="relative">
           <Image

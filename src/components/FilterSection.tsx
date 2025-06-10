@@ -14,7 +14,7 @@ const FilterSection: React.FC<FilterSectionProps> = ({ title, defaultOpen = true
     <div className="mb-6">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center justify-between w-full text-left font-medium text-[#19191A] mb-3 cursor-pointer"
+        className="flex items-center justify-between text-[18px] w-full text-left font-semibold text-[#19191A] mb-3 cursor-pointer"
       >
         {title}
         {isOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}

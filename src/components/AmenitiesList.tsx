@@ -21,7 +21,7 @@ const AmenitiesList = ({ amenities }: AmenitiesListProps) => {
     <>
       <div className="text-[#19191A]">
         <h2 className="md:text-[25px] text-xl font-semibold mb-6">Amenities</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pb-6 font-medium">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pb-6">
           {amenities.map((amenity, index) => {
             const IconComponent = Icons[amenity.icon as keyof typeof Icons] as LucideIcon
 
@@ -33,7 +33,12 @@ const AmenitiesList = ({ amenities }: AmenitiesListProps) => {
             )
           })}
         </div>
-        <Button onClick={toggle} intent="transperent" className="border border-[#19191A] sm:w-[200px] w-full">
+        <Button
+          onClick={toggle}
+          intent="transperent"
+          size="sm"
+          className="cursor-pointer border border-[#19191A] text-sm font-medium sm:max-w-[170px] w-full "
+        >
           Show all Amenities
         </Button>
       </div>

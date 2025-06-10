@@ -17,7 +17,7 @@ const Calender = () => {
 
   return (
     <div className="py-2">
-      <h3 className="font-semibold text-xl leading-8 text-[#19191A] flex items-center">
+      <h3 className="font-semibold text-xl sm:text-[22px] md:text-[25px] leading-8 text-[#19191A] flex items-center">
         Check Availability
       </h3>
       <DateRangePicker
