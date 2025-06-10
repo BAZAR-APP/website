@@ -13,7 +13,7 @@ const BannerSection = () => {
         paddingBottom: '32px',
       }}
     >
-      <Header isLoggedIn={false} />
+      <Header isLoggedIn={false} className='bg-transparent' />
       <div
         style={{
           backgroundImage: "url('/images/ImageBannerCard.svg')",
