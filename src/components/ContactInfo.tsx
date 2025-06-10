@@ -15,7 +15,7 @@ export const ContactInfo: React.FC<ContactInfoProps> = ({ className = '' }) => {
   return (
     <section className={`flex flex-col gap-6 w-[207px] ${className}`}>
       <div className="flex flex-col gap-2">
-        <h3 className="text-base font-medium text-neutral-600">Contact Us</h3>
+        <h3 className="text-base font-medium text-neutral-600 mb-1">Contact Us</h3>
         <div className="flex gap-4">
           <Link href="#" aria-label="Instagram">
             <Image src={Instagram} alt="Instagram icon" />
@@ -27,11 +27,11 @@ export const ContactInfo: React.FC<ContactInfoProps> = ({ className = '' }) => {
       </div>
 
       <address className="flex items-start gap-2 text-sm font-medium text-indigo-900 not-italic">
-        <MapPin className="w-4 h-4 mt-0.5 shrink-0" />
+        <MapPin className="w-6 h-6 mt-0.5 shrink-0" />
         <p>Kuwait, Souq Al-Manakh, Ground Floor, Office No. 318.</p>
       </address>
 
-      <div className="flex flex-col gap-3">
+      <div className="flex sm:flex-col flex-row gap-3">
         <Link href="#" aria-label="Download from App Store">
           <Image src={Appstore} alt="App Store badge" />
         </Link>

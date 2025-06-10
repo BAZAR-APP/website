@@ -5,7 +5,7 @@ import { fields } from '@/lib/constant'
 
 const SearchHeader = () => {
   return (
-    <div className="flex flex-wrap items-center py-4 gap-7 bg-[#F9FAFB] md:rounded-full rounded-xl px-3 w-full mx-2">
+    <div className="flex flex-wrap items-center py-2 gap-7 bg-[#F9FAFB] md:rounded-full rounded-xl px-3 w-full">
       <div className="flex md:flex-row flex-col flex-1 items-center justify-between md:divide-x md:gap-0 gap-3 divide-[#E5E7EB]">
         {fields.map((field, index) => (
           <div key={index} className="flex flex-col px-4 w-full">
