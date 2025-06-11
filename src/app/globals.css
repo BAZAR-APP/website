@@ -213,6 +213,7 @@ html body * {
 .rt-BaseCheckboxRoot:where(.rt-variant-surface):where([data-state='checked'],
   [data-state='indeterminate']):before {
   background-color: var(--primary-blue) !important;
+  cursor: pointer !important;
 }
 
 .rt-BaseRadioRoot:where(.rt-variant-surface):where(:checked, [data-state='checked']):before {
@@ -231,7 +232,11 @@ input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
-
+.rt-BaseCheckboxRoot.rt-variant-surface[data-state='unchecked']:before {
+  background-color: #F9FAFB !important;
+  border-color: #D1D5DB !important;
+  cursor: pointer !important;
+}
 
 input[type=number] {
   -moz-appearance: textfield;

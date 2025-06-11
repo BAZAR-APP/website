@@ -73,7 +73,7 @@ const ChaletRules: React.FC<Props> = ({ data = chaletRules as ChaletRulesData })
   const { title, checkInOut, healthStandards, chaletStandards, cancellationPolicy } = data
 
   return (
-    <div className="py-8 mt-9 border-t border-[#E5E7EB]">
+    <div className="py-8 mt-3">
       <h2 className="text-xl sm:text-[22px] md:text-[25px] md:leading-8 leading-6 font-semibold text-[#19191A] mb-4">{title}</h2>
 
       <section className="mb-6">

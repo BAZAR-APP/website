@@ -30,7 +30,7 @@ const ModalDialog: React.FC<ModalDialogProps> = ({
             className,
           )}
         >
-          <div className="sticky top-0 z-10 bg-white px-6 pt-6 pb-2 h-16">
+          <div className="sticky top-[0.3px] z-10 bg-white px-6 pt-6 pb-2 h-16">
             <div className="flex items-center justify-between">
               <Dialog.Title className="lg:text-[25px] sm:text-lg text-[16px] text-[#19191A] font-semibold">{title}</Dialog.Title>
               <Dialog.Close asChild>

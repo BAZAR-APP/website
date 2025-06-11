@@ -8,6 +8,7 @@ export const buttonStyles = cva(
         primary: 'text-primary-foreground bg-primary-blue hover:bg-primary-blue hover:opacity-90',
         secondary: 'bg-[#F3F4F6] text-[#29397E] hover:bg-[#e4e5e7]',
         ghost: ' text-gray bg-gray-100 hover:bg-gray-100',
+        danger: 'bg-[#FEF3F3] text-[#E41212] hover:bg-[#e4e5e7]',
         transperent: ' text-[#19191A] bg-transperent',
       },
       size: {
