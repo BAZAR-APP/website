@@ -5,7 +5,7 @@ import { PropertyCard } from '@/components'
 import SearchHeader from '@/components/SearchHeader'
 import SearchResults from '@/components/SearchResults'
 import { mockProperties } from '@/lib/constant'
-import { Grid, Heading } from '@radix-ui/themes'
+import { Grid } from '@radix-ui/themes'
 import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 

@@ -109,7 +109,7 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
             {earnPoints && (
               <>
                 <div className="text-sm text-[#9EA0A2] mb-3">
-                  You'll earn 200 points with this booking!
+                  You&apos;ll earn 200 points with this booking!
                 </div>
 
                 <div className="flex bg-[#E1F3FF] items-center justify-between gap-1 rounded py-1 px-1.5 max-w-[111px]">

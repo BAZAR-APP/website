@@ -6,6 +6,8 @@ import Button from '../Button/Button'
 import StarRating from '../About/StarRating'
 import useToggle from '@/lib/hooks/useToggle'
 import SubmitReviewDialog from './SubmitReviewDailog'
+import ThanksReviewDialog from './ThanksReviewDialog' // Make sure this is the correct path
+import { submitReview } from '@/lib/constant'
 
 interface BookingCardProps {
   id: string
@@ -49,7 +51,9 @@ const BookingCard: React.FC<BookingCardProps> = ({
   onViewInvoice,
   showRating,
 }) => {
-  const { isOpen, toggle } = useToggle(false)
+  const { isOpen: isReviewOpen, open: openReview, close: closeReview } = useToggle(false)
+  const { isOpen: isThanksOpen, open: openThanks, close: closeThanks } = useToggle(false)
+
   return (
     <>
       <div
@@ -57,10 +61,12 @@ const BookingCard: React.FC<BookingCardProps> = ({
         className="flex md:flex-row flex-col w-full max-w-[700px] xl:max-w-[800px] p-4 mt-12 gap-5 bg-[#F9FAFB] cursor-pointer rounded-[16px] hover:shadow-sm transition-shadow duration-300"
       >
         <div className="w-full md:max-w-[311px] max-w-full h-[216px] flex-shrink-0">
-          <img
+          <Image
             src={imageUrl}
             alt={imageAlt}
             className="w-full h-full object-cover rounded-[12px]"
+            width={400}
+            height={400}
           />
         </div>
 
@@ -103,29 +109,29 @@ const BookingCard: React.FC<BookingCardProps> = ({
               From {dateRange.from} To {dateRange.to}
             </p>
           </div>
-          <button
-            onClick={(e) => {
-              e.stopPropagation()
-              toggle()
-            }}
-            className="cursor-pointer"
-          >
-            {showRating && <StarRating className="!mb-0" rating={5} />}
-          </button>
+
+          {showRating && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation()
+                openReview()
+              }}
+              className="cursor-pointer"
+            >
+              <StarRating className="!mb-0" rating={5} />
+            </button>
+          )}
+
           <div className="flex items-center gap-2 justify-between flex-wrap">
             <Button
-              onClick={() => {
-                onSeeDetails?.(id)
-              }}
+              onClick={() => onSeeDetails?.(id)}
               intent="transperent"
               className="text-sm font-medium !px-0 !py-0 text-[#29397E] underline flex items-center"
             >
               See Details <ChevronRight className="w-4 h-4" strokeWidth={3} />
             </Button>
             <Button
-              onClick={() => {
-                onViewInvoice?.(id)
-              }}
+              onClick={() => onViewInvoice?.(id)}
               intent="transperent"
               className="text-sm font-medium !px-0 !py-0 text-[#29397E] underline flex items-center"
             >
@@ -134,7 +140,18 @@ const BookingCard: React.FC<BookingCardProps> = ({
           </div>
         </div>
       </div>
-      <SubmitReviewDialog isOpen={isOpen} setIsOpen={toggle} onSubmit={() => {}} />
+
+      <SubmitReviewDialog
+        isOpen={isReviewOpen}
+        setIsOpen={closeReview}
+        onSubmit={() => {
+          closeReview()
+          openThanks()
+        }}
+        data={submitReview}
+      />
+
+      <ThanksReviewDialog isOpen={isThanksOpen} setIsOpen={closeThanks} />
     </>
   )
 }

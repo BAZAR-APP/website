@@ -37,6 +37,7 @@ const Header: React.FC<HeaderProps> = ({
   lang,
 }) => {
   console.log(isLoggedIn)
+  const isArabic = lang !== 'en'
 
   const [isSideNavOpen, setIsSideNavOpen] = useState(false)
   const router = useRouter()
@@ -53,8 +54,18 @@ const Header: React.FC<HeaderProps> = ({
 
   const AuthenticatedHeader = () => (
     <>
-      <div className="flex items-center justify-between w-full lg:hidden">
-        <Logo />
+      <div
+        className={`flex items-center justify-between w-full lg:hidden ${isArabic ? 'ltr' : 'ltr'}`}
+        style={{ direction: 'ltr' }}
+      >
+        <div className="flex items-center gap-2">
+          <LanguageSwitcher
+            lang={lang ?? 'en'}
+            label={dictionary?.footer.language || ''}
+            availableLocales={[...i18n.locales]}
+          />
+          <Logo />
+        </div>
         <button
           type="button"
           onClick={toggleSideNav}
@@ -71,13 +82,18 @@ const Header: React.FC<HeaderProps> = ({
           </svg>
         </button>
       </div>
-      <LanguageSwitcher
-        lang={lang ?? "en"}
-        label={dictionary?.footer.language || ''}
-        availableLocales={[...i18n.locales]}
-      />
-      <div className="hidden lg:flex items-center justify-between w-full">
-        <Logo />
+      <div
+        className={`hidden lg:flex items-center justify-between w-full ${isArabic ? 'ltr' : 'ltr'}`}
+        style={{ direction: 'ltr' }}
+      >
+        <div className="flex items-center gap-2">
+          <LanguageSwitcher
+            lang={lang ?? 'en'}
+            label={dictionary?.footer.language || ''}
+            availableLocales={[...i18n.locales]}
+          />
+          <Logo />
+        </div>
         <Navigation />
         {isLoggedIn ? (
           <div className="flex items-center space-x-4 gap-5">

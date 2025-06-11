@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import CommonInput from './CommonInput/Input'
+import Image from 'next/image'
 
 interface ContactFormData {
   fullName: string
@@ -42,7 +43,7 @@ const ContactForm: React.FC<ContactFormProps> = ({ onSubmit }) => {
           className={'!bg-[#F9FAFB] !text-[#484A4C] !rounded-[8px] !border-none !h-[42px]'}
         />
         <CommonInput
-          icon={<img src={'/images/countryFlag.svg'} alt="" className="w-[24px] h-[22px]" />}
+          icon={<Image src={'/images/countryFlag.svg'} alt="" className="w-[24px] h-[22px]" width={30} height={30} />}
           prefix="+965"
           name="phone"
           placeholder=""

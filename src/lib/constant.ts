@@ -1,3 +1,5 @@
+import { SubmitReviewData } from "@/components/Booking/SubmitReviewDailog"
+
 export const getUserNameInitials = (name: string) =>
   name
     .split(' ')
@@ -8,7 +10,7 @@ export const getUserNameInitials = (name: string) =>
 export const navItems = [
   { label: 'Home', href: '/' },
   { label: 'Explore', href: '/explore/chalets' },
-  // { label: 'My Bookings', href: '/' },
+  { label: 'My Bookings', href: '/explore/booking/' },
   { label: 'Loyalty Points', href: '/loyalty-program' },
 ]
 
@@ -566,3 +568,14 @@ export const bookingCardsData = [
     member: true,
   },
 ]
+export const submitReview: SubmitReviewData = {
+  title: 'Luxury Lakeside Retreat',
+  points: 200,
+  guests: '5–7 guests',
+  propertyType: 'Entire Home',
+  beds: 5,
+  baths: 4,
+  amenities: ['Wifi', 'Free Parking', 'Kitchen', 'Pool'],
+  imageUrl: 'https://picsum.photos/seed/lakeside/311/190',
+  imageAlt: 'Luxury Lakeside Property Interior',
+}
