@@ -4,6 +4,7 @@ import '@radix-ui/themes/styles.css'
 import { Theme } from '@radix-ui/themes'
 import './globals.css'
 import { GoogleOAuthProvider } from '@react-oauth/google'
+import AuthSessionProvider from '@/components/SessionProvider'
 
 // Font configurations
 const inter = Inter({
@@ -40,9 +41,9 @@ export default function RootLayout({
         cz-shortcut-listen="true"
         style={{ fontFamily: 'var(--font-inter), system-ui, sans-serif' }}
       >
-        <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!} >
-          <Theme>{children}</Theme>
-        </GoogleOAuthProvider>
+        <Theme>
+          <AuthSessionProvider>{children}</AuthSessionProvider>
+        </Theme>
       </body>
     </html>
   )

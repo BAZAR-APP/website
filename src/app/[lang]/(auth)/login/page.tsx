@@ -8,8 +8,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { loginSchema } from '@/lib/validationSchemas'
 import { useRouter } from 'next/navigation'
-import { useGoogleLogin } from '@react-oauth/google'
-import { signIn, useSession } from 'next-auth/react'
+import { getSession, signIn, useSession } from 'next-auth/react'
 
 import axios from 'axios'
 interface LoginFormInputs {
@@ -21,6 +20,9 @@ interface PhoneChangeEvent extends React.ChangeEvent<HTMLInputElement> {}
 
 const Login = () => {
   const router = useRouter()
+  const { status, data: session } = useSession();
+console.log(session,status);
+
   const {
     handleSubmit,
     formState: { isValid, errors, isSubmitting },
@@ -47,8 +49,8 @@ const Login = () => {
         authProvider: 'phone',
         // callbackUrl : lang !== 'fr' ? `${getEnv('NEXT_PUBLIC_URL')}/${lang}/login` : `${getEnv('NEXT_PUBLIC_URL')}/login`
       })
-      console.log(result);
-      
+      console.log(result)
+
       // router.push('/')
     } catch (error) {
       console.log('Login error:', error)
@@ -67,39 +69,6 @@ const Login = () => {
   const handleRememberMeChange = (checked: boolean): void => {
     setValue('rememberMe', checked)
   }
-  const googleLogin = useGoogleLogin({
-    onSuccess: async (tokenResponse: any) => {
-      console.log(tokenResponse)
-
-      try {
-        const userInfoResponse = await axios.get('https://www.googleapis.com/oauth2/v3/userinfo', {
-          headers: { Authorization: `Bearer ${tokenResponse.access_token}` },
-        })
-
-        const decoded = userInfoResponse.data // The user info is directly in the response data
-        console.log(decoded)
-
-        const payload = {
-          // @ts-ignore
-          email: decoded.email,
-          fullName: decoded.name,
-          // picture: decoded.picture,
-          // @ts-ignore
-          authProvider: 'google',
-          googleId: decoded.sub,
-        }
-
-        const res = await axios.post(`http://localhost:4000/auth/signUp`, payload)
-        localStorage.setItem('token', res.data.token)
-        router.push('/')
-      } catch (err) {
-        console.error('Google login failed:', err)
-      }
-    },
-    onError: () => {
-      console.error('Login Failed')
-    },
-  })
 
   return (
     <>
@@ -176,7 +145,7 @@ const Login = () => {
         </div>
 
         <div className="flex justify-center items-center gap-6 w-full">
-          <button onClick={() => googleLogin()} className="shrink-0">
+          <button onClick={() => signIn('google')} className="shrink-0">
             <Image src="/images/googleRounded.svg" alt="Login with Google" width={35} height={35} />
           </button>
 
