@@ -5,6 +5,7 @@ import { Theme } from '@radix-ui/themes'
 import './globals.css'
 import AuthSessionProvider from '@/components/Providers/SessionProvider'
 import { ToastProvider } from '@/components/Providers/ToastProvider'
+import { QueryProvider } from '@/components/Providers/QueryProvider'
 
 // Font configurations
 const inter = Inter({
@@ -43,7 +44,9 @@ export default function RootLayout({
       >
         <ToastProvider />
         <Theme>
-          <AuthSessionProvider>{children}</AuthSessionProvider>
+          <AuthSessionProvider>
+            <QueryProvider>{children}</QueryProvider>
+          </AuthSessionProvider>
         </Theme>
       </body>
     </html>

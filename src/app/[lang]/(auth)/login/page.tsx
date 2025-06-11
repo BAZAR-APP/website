@@ -8,10 +8,9 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { loginSchema } from '@/lib/validationSchemas'
 import { useRouter } from 'next/navigation'
-import { getSession, signIn, useSession } from 'next-auth/react'
-
-import axios from 'axios'
+import { signIn, useSession } from 'next-auth/react'
 import { toast } from '@/lib/toast'
+import { extractErrorMessage } from '@/lib/utils'
 interface LoginFormInputs {
   phone: string
   password: string
@@ -21,7 +20,6 @@ interface PhoneChangeEvent extends React.ChangeEvent<HTMLInputElement> {}
 
 const Login = () => {
   const router = useRouter()
-  const { status, data: session } = useSession()
 
   const {
     handleSubmit,
@@ -46,16 +44,15 @@ const Login = () => {
         countryCode: 'KW',
         password: data?.password,
         authProvider: 'phone',
-        // callbackUrl : lang !== 'fr' ? `${getEnv('NEXT_PUBLIC_URL')}/${lang}/login` : `${getEnv('NEXT_PUBLIC_URL')}/login`
       })
+
       if (result?.ok) {
+        router.replace(`/explore/chalets`)
       } else {
         toast.error(result?.error ?? '')
       }
-
-      // router.push('/')
     } catch (error) {
-      console.log('Login error:', error)
+      extractErrorMessage(error)
     }
   }
 

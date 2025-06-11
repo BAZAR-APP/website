@@ -6,14 +6,15 @@ import { CommonInput, CheckBox } from '@/components'
 import CommonButton from '@/components/Button/Button'
 import Image from 'next/image'
 import Link from 'next/link'
-import { loginSchema } from '@/lib/validationSchemas'
-import { useRouter } from 'next/navigation'
+import { loginSchema, registerSchema } from '@/lib/validationSchemas'
 import api from '@/lib/axios'
+import { toast } from '@/lib/toast'
+import { extractErrorMessage } from '@/lib/utils'
+import { useRouter } from 'next/navigation'
 interface LoginFormInputs {
   phone: string
   password: string
-  rememberMe?: boolean
-  fullName?:string
+  fullName: string
 }
 interface PhoneChangeEvent extends React.ChangeEvent<HTMLInputElement> {}
 
@@ -25,28 +26,29 @@ const SignUp = () => {
     setValue,
     watch,
   } = useForm({
-    resolver: zodResolver(loginSchema),
+    resolver: zodResolver(registerSchema),
     defaultValues: {
       phone: '',
       password: '',
-      rememberMe: false,
+      fullName: '',
     },
   })
 
   const onSubmit = async (data: LoginFormInputs): Promise<void> => {
     try {
       const body = {
-        fullName: 'Test phone',
-        phoneNumber: '3127786000',
-        callingCode: '+92',
-        countryCode: 'PK',
-        password: 'Qwerty@123',
+        fullName: data?.fullName,
+        phoneNumber: data?.phone,
+        callingCode: '+965',
+        countryCode: 'KW',
+        password: data?.password,
         authProvider: 'phone',
       }
-      await api.post('/auth/signUp')
-      // router.push('/verify-account')
+      const res = await api.post('/auth/signUp', body)
+
+      router.push(`/verify-account?userId=${encodeURIComponent(res?.data?.userId)}&phone=${data?.phone}`)
     } catch (error) {
-      console.error('Login error:', error)
+      toast.error(extractErrorMessage(error))
     }
   }
 
@@ -76,11 +78,16 @@ const SignUp = () => {
 
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-[8px]">
           <CommonInput
-            name=""
+            name="fullName"
             placeholder=""
+            value={watch('fullName')}
+            onChange={(e) => setValue('fullName', e.target.value, { shouldValidate: true })}
             label="Full Name"
             className={'bg-[#F9FAFB] text-[#484A4C] rounded-[8px]'}
+            error={!!errors?.fullName}
+            errorMessage={errors?.fullName?.message}
           />
+
           <div>
             <CommonInput
               icon={

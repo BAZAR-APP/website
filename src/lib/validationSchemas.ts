@@ -13,10 +13,10 @@ export const passwordSchema = z
   .min(6, 'Password must be at least 6 characters')
   .regex(
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
-    'Password must contain at least one uppercase letter, one lowercase letter, and one number'
+    'Password must contain at least one uppercase letter, one lowercase letter, and one number',
   )
 
-export const confirmPasswordSchema = (passwordField = 'password') => 
+export const confirmPasswordSchema = (passwordField = 'password') =>
   z.string().min(1, 'Please confirm your password')
 
 // Email schema for additional auth forms
@@ -42,54 +42,50 @@ export const lastNameSchema = z
 export const loginSchema = z.object({
   phone: phoneSchema,
   password: passwordSchema,
-  rememberMe: z.boolean().optional()
+  rememberMe: z.boolean().optional(),
 })
 
 export const registerSchema = z.object({
-  firstName: firstNameSchema,
-  lastName: lastNameSchema,
+  fullName: z.string().min(2, 'Full name is required'),
   phone: phoneSchema,
-  email: emailSchema.optional(), // Make optional if not required
   password: passwordSchema,
-  confirmPassword: confirmPasswordSchema(),
-  agreeToTerms: z.boolean().refine(val => val === true, {
-    message: 'You must agree to the terms and conditions'
-  })
-}).refine((data) => data.password === data.confirmPassword, {
-  message: "Passwords don't match",
-  path: ["confirmPassword"]
 })
 
 export const forgotPasswordSchema = z.object({
-  phone: phoneSchema
+  phone: phoneSchema,
 })
 
-export const resetPasswordSchema = z.object({
-  password: passwordSchema,
-  confirmPassword: confirmPasswordSchema()
-}).refine((data) => data.password === data.confirmPassword, {
-  message: "Passwords don't match",
-  path: ["confirmPassword"]
-})
+export const resetPasswordSchema = z
+  .object({
+    password: passwordSchema,
+    confirmPassword: confirmPasswordSchema(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ['confirmPassword'],
+  })
 
-export const changePasswordSchema = z.object({
-  currentPassword: z.string().min(1, 'Current password is required'),
-  newPassword: passwordSchema,
-  confirmNewPassword: confirmPasswordSchema()
-}).refine((data) => data.newPassword === data.confirmNewPassword, {
-  message: "New passwords don't match",
-  path: ["confirmNewPassword"]
-}).refine((data) => data.currentPassword !== data.newPassword, {
-  message: "New password must be different from current password",
-  path: ["newPassword"]
-})
+export const changePasswordSchema = z
+  .object({
+    currentPassword: z.string().min(1, 'Current password is required'),
+    newPassword: passwordSchema,
+    confirmNewPassword: confirmPasswordSchema(),
+  })
+  .refine((data) => data.newPassword === data.confirmNewPassword, {
+    message: "New passwords don't match",
+    path: ['confirmNewPassword'],
+  })
+  .refine((data) => data.currentPassword !== data.newPassword, {
+    message: 'New password must be different from current password',
+    path: ['newPassword'],
+  })
 
 // OTP verification schema
 export const otpSchema = z.object({
   otp: z
     .string()
     .min(1, 'OTP is required')
-    .regex(/^\d{4,6}$/, 'OTP must be 4-6 digits')
+    .regex(/^\d{4,6}$/, 'OTP must be 4-6 digits'),
 })
 
 // Profile update schema
@@ -97,5 +93,5 @@ export const profileUpdateSchema = z.object({
   firstName: firstNameSchema,
   lastName: lastNameSchema,
   phone: phoneSchema,
-  email: emailSchema.optional()
+  email: emailSchema.optional(),
 })

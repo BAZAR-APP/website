@@ -15,7 +15,7 @@ const handler = NextAuth({
       },
       async authorize(credentials) {
         try {
-          const response = await fetch(`${process.env.NESTJS_API_URL}/auth/signIn`, {
+          const response = await fetch(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/auth/signIn`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -35,9 +35,9 @@ const handler = NextAuth({
 
           const user = responseBody.user || responseBody
 
-          if (user?.id) {
+          if (user?.userId) {
             return {
-              id: user.id.toString(),
+              id: user.userId.toString(),
               name: user.fullName,
               email: user.email || null,
               phoneNumber: user.phoneNumber,
@@ -47,7 +47,6 @@ const handler = NextAuth({
 
           return null
         } catch (err: any) {
-          console.error('Authorize error:', err.message)
           throw new Error(err.message)
         }
       },
@@ -64,7 +63,7 @@ const handler = NextAuth({
       if (account?.provider === 'google') {
         try {
           // For Google login, authenticate and get access token
-          const res = await fetch(`${process.env.NESTJS_API_URL}/auth/signUp`, {
+          const res = await fetch(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/auth/signUp`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -78,7 +77,6 @@ const handler = NextAuth({
           })
 
           if (!res.ok) {
-            console.error('Failed to authenticate Google user:', await res.text())
             return false
           }
 
@@ -92,7 +90,6 @@ const handler = NextAuth({
 
           return true
         } catch (err) {
-          console.error('Google sign-in error:', err)
           return false
         }
       }
@@ -101,8 +98,6 @@ const handler = NextAuth({
     },
 
     async jwt({ token, user, account }) {
-      console.log('JWT Callback:', { token, user, account })
-
       if (user) {
         token.id = user.id
         token.accessToken = user.accessToken
@@ -115,18 +110,19 @@ const handler = NextAuth({
     },
 
     async session({ session, token }) {
-      console.log('Session Callback:', { session, token })
-
       try {
         // Make API call to get current user details for both providers
         if (token.accessToken) {
-          const response = await fetch(`${process.env.NESTJS_API_URL}/users/currentUser`, {
-            method: 'GET',
-            headers: {
-              Authorization: `Bearer ${token.accessToken}`,
-              'Content-Type': 'application/json',
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_NESTJS_API_URL}/users/currentUser`,
+            {
+              method: 'GET',
+              headers: {
+                Authorization: `Bearer ${token.accessToken}`,
+                'Content-Type': 'application/json',
+              },
             },
-          })
+          )
 
           if (response.ok) {
             const userData = await response.json()
@@ -145,8 +141,6 @@ const handler = NextAuth({
           throw new Error('No access token available')
         }
       } catch (error) {
-        console.error('Session callback error:', error)
-
         // Fallback to token data if API call fails
         session.user = {
           id: token.id,
