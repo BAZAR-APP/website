@@ -2,16 +2,8 @@ import BookingSummary from '@/components/BookingSummary'
 import PaymentForm from '@/components/PaymentForm'
 import React from 'react'
 
-type UserInfoProps = {
-  onNext: () => void
-}
-interface ContactFormData {
-  fullName: string
-  phone: string
-  email: string
-  address: string
-}
-const UserInfo: React.FC<UserInfoProps> = ({ onNext }) => {
+
+const UserInfo: React.FC = () => {
   return (
     <div className="max-w-[1800px] mx-auto lg:px-20 md:px-14 sm:px-10 px-8 py-9">
       <h2 className="xl:text-[39px] md:text-2xl text-xl font-semibold text-[#19191A] mb-2">Secure Your Booking</h2>

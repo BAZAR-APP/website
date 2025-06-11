@@ -61,11 +61,13 @@ const PropertyDetailsCard = ({
         {[images.slice(1, 3), images.slice(3, 5)].map((group, groupIndex) => (
           <div key={groupIndex} className="grid grid-cols-2 lg:grid-cols-1 gap-2">
             {group.map((img, i) => (
-              <img
+              <Image
                 key={i}
                 src={img}
                 alt={`${title} view ${groupIndex * 2 + i + 2}`}
                 className="w-full h-28 sm:h-36 xl:h-[220px] object-cover"
+                width={650}
+                height={400}
               />
             ))}
           </div>

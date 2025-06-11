@@ -31,7 +31,7 @@ interface BookingDetailsProps {
   id: string
   title?: string
   location?: string
-  price?: string
+  // price?: string // Removed unused variable
   points?: number
   guests?: string
   propertyType?: string
@@ -58,7 +58,7 @@ interface BookingDetailsProps {
 const DEFAULT_VALUES = {
   title: 'Luxury Lakeside Retreat',
   location: 'Al Khiran',
-  price: '0',
+  // price: '0', // Removed unused variable
   points: 200,
   guests: '5-7 guests',
   propertyType: 'Entire Home',
@@ -82,7 +82,7 @@ const DEFAULT_VALUES = {
   ],
 } as const
 
-const PaymentStatusBadge: React.FC<{ status: PaymentStatus }> = React.memo(({ status }) => {
+const PaymentStatusBadge: React.FC<{ status: PaymentStatus }> = React.memo(function PaymentStatusBadge({ status }) {
   const statusConfig = {
     fully_paid: {
       bgColor: 'bg-[#D1FAE5]',
@@ -116,7 +116,7 @@ const PropertyInfo: React.FC<{
   beds: number
   baths: number
   amenities: string[]
-}> = React.memo(({ guests, propertyType, beds, baths, amenities }) => {
+}> = React.memo(function PropertyInfo({ guests, propertyType, beds, baths, amenities }) {
   const infoItems = useMemo(
     () => [guests, propertyType, `${beds} beds`, `${baths} baths`, ...amenities],
     [guests, propertyType, beds, baths, amenities],
@@ -136,25 +136,27 @@ const PropertyInfo: React.FC<{
   )
 })
 
-const DateSection: React.FC<{ dateRange: DateRange }> = React.memo(({ dateRange }) => (
-  <div className="border-b border-[#D1D5DB] max-w-[359px]">
-    <h2 className="font-semibold text-[25px] leading-[32px] text-[#19191A] mb-4">Dates</h2>
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <div className="sm:border-r border-[#D1D5DB] px-0.5">
-        <label className="font-semibold text-[10px] leading-[16px] text-[#19191A]">CHECK-IN</label>
-        <div className="text-[14px] leading-[17px] text-[#9EA0A2]">
-          {dateRange.from || 'Not set'}
+const DateSection: React.FC<{ dateRange: DateRange }> = React.memo(function DateSection({ dateRange }) {
+  return (
+    <div className="border-b border-[#D1D5DB] max-w-[359px]">
+      <h2 className="font-semibold text-[25px] leading-[32px] text-[#19191A] mb-4">Dates</h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="sm:border-r border-[#D1D5DB] px-0.5">
+          <label className="font-semibold text-[10px] leading-[16px] text-[#19191A]">CHECK-IN</label>
+          <div className="text-[14px] leading-[17px] text-[#9EA0A2]">
+            {dateRange.from || 'Not set'}
+          </div>
+        </div>
+        <div className="px-0.5">
+          <label className="font-semibold text-[10px] leading-[16px] text-[#19191A]">CHECKOUT</label>
+          <div className="text-[14px] leading-[17px] text-[#9EA0A2]">{dateRange.to || 'Not set'}</div>
         </div>
       </div>
-      <div className="px-0.5">
-        <label className="font-semibold text-[10px] leading-[16px] text-[#19191A]">CHECKOUT</label>
-        <div className="text-[14px] leading-[17px] text-[#9EA0A2]">{dateRange.to || 'Not set'}</div>
-      </div>
     </div>
-  </div>
-))
+  )
+})
 
-const AddOnsSection: React.FC<{ addOns: AddOn[] }> = React.memo(({ addOns }) => {
+const AddOnsSection: React.FC<{ addOns: AddOn[] }> = React.memo(function AddOnsSection({ addOns }) {
   if (!addOns?.length) return null
 
   return (
@@ -181,18 +183,18 @@ const PaymentSection: React.FC<{
   priceBreakdown: PriceBreakdownItem[]
   onPayRemaining?: () => void
   onCancelBooking?: () => void
-}> = React.memo(
-  ({
-    paymentStatus,
-    totalAmount,
-    paidAmount,
-    remainingAmount,
-    securityDeposit,
-    paymentDueDate,
-    priceBreakdown,
-    onPayRemaining,
-    onCancelBooking,
-  }) => (
+}> = React.memo(function PaymentSection({
+  paymentStatus,
+  totalAmount,
+  paidAmount,
+  remainingAmount,
+  securityDeposit,
+  paymentDueDate,
+  priceBreakdown,
+  onPayRemaining,
+  onCancelBooking,
+}) {
+  return (
     <div className="w-full lg:max-w-[430px] max-w-full">
       <div className="md:px-6 px-1">
         <div className="flex items-center justify-between mb-4">
@@ -204,7 +206,7 @@ const PaymentSection: React.FC<{
 
         {paymentStatus === 'partially_paid' && (
           <p className="text-sm leading-[17px] text-[#9EA0A2]">
-            You've paid 50% of the total amount ({paidAmount} KWD). The remaining {remainingAmount}{' '}
+            You&apos;ve paid 50% of the total amount ({paidAmount} KWD). The remaining {remainingAmount}{' '}
             KWD is due at least 72 hours before check-in by [{paymentDueDate}].
           </p>
         )}
@@ -250,8 +252,8 @@ const PaymentSection: React.FC<{
         </Button>
       </div>
     </div>
-  ),
-)
+  )
+})
 
 const BookingDetails: React.FC<BookingDetailsProps> = (props) => {
   const router = useRouter()
@@ -260,7 +262,7 @@ const BookingDetails: React.FC<BookingDetailsProps> = (props) => {
   const {
     title = DEFAULT_VALUES.title,
     location = DEFAULT_VALUES.location,
-    price = DEFAULT_VALUES.price,
+    // price = DEFAULT_VALUES.price, // Removed unused variable
     points = DEFAULT_VALUES.points,
     guests = DEFAULT_VALUES.guests,
     propertyType = DEFAULT_VALUES.propertyType,

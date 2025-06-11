@@ -73,12 +73,8 @@ const PricingRow = ({
 
 const BookingWidget: React.FC<BookingWidgetProps> = ({
   checkIn,
-  setCheckIn,
   checkOut,
-  setCheckOut,
   guests,
-  setGuests,
-  maxGuests,
   packageOptions = [],
   bookingConfig = {
     refundableDeposit: 200,
@@ -101,9 +97,8 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
     if (newQuantity < 1) return
     setValue('guests', newQuantity)
   }
-  const [selectedPackage, setSelectedPackage] = useState(
-    packageOptions[0]?.label || '100 KWD / night',
-  )
+
+  const selectedPackage = packageOptions[0]?.label || '100 KWD / night'
 
   const currentPackage =
     packageOptions.find((pkg) => pkg.label === selectedPackage) || packageOptions[0]

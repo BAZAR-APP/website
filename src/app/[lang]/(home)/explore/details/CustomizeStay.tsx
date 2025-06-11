@@ -56,12 +56,8 @@ type CustomizeStayProps = {
   onNext: () => void
 }
 export default function CustomizeStay({ onNext }: CustomizeStayProps) {
-  const [selected, setSelected] = useState<string[]>([])
-  const { getValues, setValue, watch } = useFormContext()
+  const { watch } = useFormContext()
   const selectedAddons: AddOnItem[] = watch('addons') || []
-  const handleToggle = (item: string) => {
-    setSelected((prev) => (prev.includes(item) ? prev.filter((i) => i !== item) : [...prev, item]))
-  }
   const itemIconMap: Record<string, React.ReactNode> = {}
   services.forEach((section) => {
     section.items.forEach((item) => {

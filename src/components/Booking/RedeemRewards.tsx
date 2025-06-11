@@ -6,7 +6,6 @@ import useToggle from '@/lib/hooks/useToggle'
 import { copyToClipboard } from '@/lib/utils'
 import { Text } from '@radix-ui/themes'
 import Image from 'next/image'
-import Link from 'next/link'
 import React, { useState } from 'react'
 
 const discounts = [

@@ -61,10 +61,12 @@ const BookingCard: React.FC<BookingCardProps> = ({
         className="flex md:flex-row flex-col w-full max-w-[700px] xl:max-w-[800px] p-4 mt-12 gap-5 bg-[#F9FAFB] cursor-pointer rounded-[16px] hover:shadow-sm transition-shadow duration-300"
       >
         <div className="w-full md:max-w-[311px] max-w-full h-[216px] flex-shrink-0">
-          <img
+          <Image
             src={imageUrl}
             alt={imageAlt}
             className="w-full h-full object-cover rounded-[12px]"
+            width={400}
+            height={400}
           />
         </div>
 
