@@ -8,6 +8,7 @@ import CleanIcon from '../../public/images/cleanless.svg'
 import CautionIcon from '../../public/images/caution.svg'
 import PoolIcon from '../../public/images/swimming-pool.svg'
 import { chaletRules } from '@/lib/constant'
+import { StaticImageData } from 'next/image'
 
 interface CheckInOut {
   checkIn: string
@@ -40,7 +41,7 @@ interface Props {
 }
 
 const getIcon = (id: string) => {
-  const icons: Record<string, any> = {
+  const icons: Record<string, StaticImageData> = {
     'smoke-alarm': AlarmIcon,
     'security-deposit': SecuitryIcon,
     cleanliness: CleanIcon,
@@ -74,7 +75,9 @@ const ChaletRules: React.FC<Props> = ({ data = chaletRules as ChaletRulesData })
 
   return (
     <div className="py-8 mt-3">
-      <h2 className="text-xl sm:text-[22px] md:text-[25px] md:leading-8 leading-6 font-semibold text-[#19191A] mb-4">{title}</h2>
+      <h2 className="text-xl sm:text-[22px] md:text-[25px] md:leading-8 leading-6 font-semibold text-[#19191A] mb-4">
+        {title}
+      </h2>
 
       <section className="mb-6">
         <h3 className="text-base font-medium leading-6 text-[#19191A] mb-3">

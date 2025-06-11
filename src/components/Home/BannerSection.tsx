@@ -27,7 +27,7 @@ const BannerSection = () => {
         className="flex flex-col justify-center items-center rounded-[20px] md:rounded-[60px] h-auto min-[768px]:h-[440px] min-[1440px]:h-[640px]"
       >
         <div className="max-w-[80%] flex flex-col gap-[80px]">
-          <div className="text-2xl min-[1279px]:text-[48px] text-white font-[500] text-center pt-4 md: pt-0 max-w-[800px]">
+          <div className="text-2xl min-[1279px]:text-[48px] text-white font-[500] text-center pt-4 md:pt-0 max-w-[800px]">
             Where Will Your Next Adventure Take You?
           </div>
         </div>

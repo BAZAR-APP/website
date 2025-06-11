@@ -46,11 +46,9 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ onSubmit, paymentDetail = tru
     handleSubmit,
     watch,
     setValue,
-    formState: { errors },
   } = useFormContext<PaymentFormData>()
 
   const romanticWeekend = watch('romanticWeekend')
-
   const paymentOption = watch('paymentOption')
 
   const onFormSubmit = (data: PaymentFormData) => {
@@ -103,10 +101,12 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ onSubmit, paymentDetail = tru
               <div className="relative">
                 <div className="flex justify-start space-x-2 mb-2 lg:hidden">
                   {['VISA', 'Mastercard', 'ApplePay', 'Gpay'].map((brand) => (
-                    <img
+                    <Image
                       key={brand}
                       src={`/images/${brand}.svg`}
                       alt={brand}
+                      width={32}
+                      height={20}
                       className="h-5 w-auto"
                     />
                   ))}
@@ -121,10 +121,12 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ onSubmit, paymentDetail = tru
 
                 <div className="absolute right-3 top-2 hidden lg:flex space-x-2">
                   {['VISA', 'Mastercard', 'ApplePay', 'Gpay'].map((brand) => (
-                    <img
+                    <Image
                       key={brand}
                       src={`/images/${brand}.svg`}
                       alt={brand}
+                      width={32}
+                      height={20}
                       className="h-5 w-auto"
                     />
                   ))}
