@@ -11,6 +11,7 @@ import api from '@/lib/axios'
 import { toast } from '@/lib/toast'
 import { extractErrorMessage } from '@/lib/utils'
 import { useRouter } from 'next/navigation'
+import { signIn } from 'next-auth/react'
 interface LoginFormInputs {
   phone: string
   password: string
@@ -46,7 +47,9 @@ const SignUp = () => {
       }
       const res = await api.post('/auth/signUp', body)
 
-      router.push(`/verify-account?userId=${encodeURIComponent(res?.data?.userId)}&phone=${data?.phone}`)
+      router.push(
+        `/verify-account?userId=${encodeURIComponent(res?.data?.userId)}&phone=${data?.phone}`,
+      )
     } catch (error) {
       toast.error(extractErrorMessage(error))
     }
@@ -136,13 +139,14 @@ const SignUp = () => {
         </div>
 
         <div className="flex justify-center items-center gap-6 w-full">
-          <Image
-            src="/images/googleRounded.svg"
-            alt="Google"
-            width={35}
-            height={35}
+          <button
+            onClick={() =>
+              signIn('google', { callbackUrl: `${process.env.NEXT_PUBLIC_URL}/explore/chalets` })
+            }
             className="shrink-0"
-          />
+          >
+            <Image src="/images/googleRounded.svg" alt="Login with Google" width={35} height={35} />
+          </button>
           <Image
             src="/images/appleRounded.svg"
             alt="Apple"
