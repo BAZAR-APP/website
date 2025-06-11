@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import React from 'react'
 import { Radio } from '@radix-ui/themes'
 import Image from 'next/image'
 import Deposit from '../../public/images/Deposit.svg'

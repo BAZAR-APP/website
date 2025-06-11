@@ -3,7 +3,7 @@ import { Button } from '@/components'
 import { NotificationTab, NotificationTabs } from '@/components/Notification/NotificationTabs'
 import { NotificationItem, NotificationData } from '@/components/Notification/NotificationItem'
 import Image from 'next/image'
-import { ChevronDown, ChevronRight } from 'lucide-react'
+import { ChevronRight } from 'lucide-react'
 import React, { useState, useMemo } from 'react'
 import { dumyNotifications } from '@/lib/constant'
 import useToggle from '@/lib/hooks/useToggle'
@@ -12,11 +12,11 @@ import NotificationSettingsDialog from '@/components/Notification/NotificationSe
 const Notifications = () => {
   const [activeTab, setActiveTab] = useState<NotificationTab>('all')
   const [visibleCount, setVisibleCount] = useState(10)
-  const [selectedNotification, setSelectedNotification] = useState<NotificationData | null>(null)
+  const [, setSelectedNotification] = useState<NotificationData | null>(null)
 
   const handleTabChange = (tab: NotificationTab) => {
     setActiveTab(tab)
-    setVisibleCount(10) // reset visible count when switching tabs
+    setVisibleCount(10) 
   }
 
   const filteredNotifications = useMemo(() => {
