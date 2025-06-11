@@ -8,15 +8,19 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { loginSchema } from '@/lib/validationSchemas'
 import { useRouter } from 'next/navigation'
+import { signIn, useSession } from 'next-auth/react'
+import { toast } from '@/lib/toast'
+import { extractErrorMessage } from '@/lib/utils'
 interface LoginFormInputs {
   phone: string
   password: string
   rememberMe?: boolean
 }
-interface PhoneChangeEvent extends React.ChangeEvent<HTMLInputElement> { }
+interface PhoneChangeEvent extends React.ChangeEvent<HTMLInputElement> {}
 
 const Login = () => {
   const router = useRouter()
+
   const {
     handleSubmit,
     formState: { isValid, errors, isSubmitting },
@@ -33,9 +37,22 @@ const Login = () => {
 
   const onSubmit = async (data: LoginFormInputs): Promise<void> => {
     try {
-      router.push('/')
+      const result = await signIn('credentials', {
+        redirect: false,
+        phoneNumber: data?.phone,
+        callingCode: '+965',
+        countryCode: 'KW',
+        password: data?.password,
+        authProvider: 'phone',
+      })
+
+      if (result?.ok) {
+        router.replace(`/explore/chalets`)
+      } else {
+        toast.error(result?.error ?? '')
+      }
     } catch (error) {
-      console.error('Login error:', error)
+      extractErrorMessage(error)
     }
   }
 
@@ -127,13 +144,15 @@ const Login = () => {
         </div>
 
         <div className="flex justify-center items-center gap-6 w-full">
-          <Image
-            src="/images/googleRounded.svg"
-            alt="Google"
-            width={35}
-            height={35}
+          <button
+            onClick={() =>
+              signIn('google', { callbackUrl: `${process.env.NEXT_PUBLIC_URL}/explore/chalets` })
+            }
             className="shrink-0"
-          />
+          >
+            <Image src="/images/googleRounded.svg" alt="Login with Google" width={35} height={35} />
+          </button>
+
           <Image
             src="/images/appleRounded.svg"
             alt="Apple"

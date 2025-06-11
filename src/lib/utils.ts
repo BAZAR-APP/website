@@ -4,7 +4,7 @@ import { twMerge } from 'tailwind-merge'
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
-export const copyToClipboard = async (content:any) => {
+export const copyToClipboard = async (content: any) => {
   try {
     await navigator.clipboard.writeText(content)
     alert('Link copied to clipboard!')
@@ -18,4 +18,27 @@ export const copyToClipboard = async (content:any) => {
     document.body.removeChild(textArea)
     alert('Link copied to clipboard!')
   }
+}
+export function extractErrorMessage(error: any): string {
+  if (!error) return 'Unknown error occurred'
+
+  if (error.response && error.response.data) {
+    const data = error.response.data
+
+    if (typeof data === 'string') return data
+
+    if (typeof data.message === 'string') return data.message
+
+    if (Array.isArray(data.message)) return data.message.join(', ')
+
+    if (typeof data.message === 'string') return data.message
+
+    return JSON.stringify(data)
+  }
+
+  if (error.message) return error.message
+
+  if (typeof error === 'string') return error
+
+  return 'Something went wrong'
 }
