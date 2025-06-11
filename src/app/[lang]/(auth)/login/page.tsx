@@ -11,6 +11,7 @@ import { useRouter } from 'next/navigation'
 import { getSession, signIn, useSession } from 'next-auth/react'
 
 import axios from 'axios'
+import { toast } from '@/lib/toast'
 interface LoginFormInputs {
   phone: string
   password: string
@@ -20,8 +21,7 @@ interface PhoneChangeEvent extends React.ChangeEvent<HTMLInputElement> {}
 
 const Login = () => {
   const router = useRouter()
-  const { status, data: session } = useSession();
-console.log(session,status);
+  const { status, data: session } = useSession()
 
   const {
     handleSubmit,
@@ -41,15 +41,17 @@ console.log(session,status);
     try {
       const result = await signIn('credentials', {
         redirect: false,
-        fullName: 'Test phone',
-        phoneNumber: '3127786000',
-        callingCode: '+92',
-        countryCode: 'PK',
-        password: 'Qwerty@123',
+        phoneNumber: data?.phone,
+        callingCode: '+965',
+        countryCode: 'KW',
+        password: data?.password,
         authProvider: 'phone',
         // callbackUrl : lang !== 'fr' ? `${getEnv('NEXT_PUBLIC_URL')}/${lang}/login` : `${getEnv('NEXT_PUBLIC_URL')}/login`
       })
-      console.log(result)
+      if (result?.ok) {
+      } else {
+        toast.error(result?.error ?? '')
+      }
 
       // router.push('/')
     } catch (error) {
@@ -145,7 +147,12 @@ console.log(session,status);
         </div>
 
         <div className="flex justify-center items-center gap-6 w-full">
-          <button onClick={() => signIn('google')} className="shrink-0">
+          <button
+            onClick={() =>
+              signIn('google', { callbackUrl: `${process.env.NEXT_PUBLIC_URL}/explore/chalets` })
+            }
+            className="shrink-0"
+          >
             <Image src="/images/googleRounded.svg" alt="Login with Google" width={35} height={35} />
           </button>
 

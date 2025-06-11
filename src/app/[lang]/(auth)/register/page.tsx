@@ -8,12 +8,14 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { loginSchema } from '@/lib/validationSchemas'
 import { useRouter } from 'next/navigation'
+import api from '@/lib/axios'
 interface LoginFormInputs {
   phone: string
   password: string
   rememberMe?: boolean
+  fullName?:string
 }
-interface PhoneChangeEvent extends React.ChangeEvent<HTMLInputElement> { }
+interface PhoneChangeEvent extends React.ChangeEvent<HTMLInputElement> {}
 
 const SignUp = () => {
   const router = useRouter()
@@ -33,7 +35,16 @@ const SignUp = () => {
 
   const onSubmit = async (data: LoginFormInputs): Promise<void> => {
     try {
-      router.push('/verify-account')
+      const body = {
+        fullName: 'Test phone',
+        phoneNumber: '3127786000',
+        callingCode: '+92',
+        countryCode: 'PK',
+        password: 'Qwerty@123',
+        authProvider: 'phone',
+      }
+      await api.post('/auth/signUp')
+      // router.push('/verify-account')
     } catch (error) {
       console.error('Login error:', error)
     }

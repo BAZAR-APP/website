@@ -3,8 +3,8 @@ import { Inter, Geist_Mono, Tenor_Sans } from 'next/font/google'
 import '@radix-ui/themes/styles.css'
 import { Theme } from '@radix-ui/themes'
 import './globals.css'
-import { GoogleOAuthProvider } from '@react-oauth/google'
-import AuthSessionProvider from '@/components/SessionProvider'
+import AuthSessionProvider from '@/components/Providers/SessionProvider'
+import { ToastProvider } from '@/components/Providers/ToastProvider'
 
 // Font configurations
 const inter = Inter({
@@ -41,6 +41,7 @@ export default function RootLayout({
         cz-shortcut-listen="true"
         style={{ fontFamily: 'var(--font-inter), system-ui, sans-serif' }}
       >
+        <ToastProvider />
         <Theme>
           <AuthSessionProvider>{children}</AuthSessionProvider>
         </Theme>
