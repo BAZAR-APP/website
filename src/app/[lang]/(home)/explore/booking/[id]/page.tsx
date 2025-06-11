@@ -31,7 +31,6 @@ interface BookingDetailsProps {
   id: string
   title?: string
   location?: string
-  // price?: string // Removed unused variable
   points?: number
   guests?: string
   propertyType?: string
@@ -58,7 +57,6 @@ interface BookingDetailsProps {
 const DEFAULT_VALUES = {
   title: 'Luxury Lakeside Retreat',
   location: 'Al Khiran',
-  // price: '0', // Removed unused variable
   points: 200,
   guests: '5-7 guests',
   propertyType: 'Entire Home',
@@ -262,7 +260,6 @@ const BookingDetails: React.FC<BookingDetailsProps> = (props) => {
   const {
     title = DEFAULT_VALUES.title,
     location = DEFAULT_VALUES.location,
-    // price = DEFAULT_VALUES.price, // Removed unused variable
     points = DEFAULT_VALUES.points,
     guests = DEFAULT_VALUES.guests,
     propertyType = DEFAULT_VALUES.propertyType,
