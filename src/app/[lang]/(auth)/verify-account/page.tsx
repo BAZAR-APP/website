@@ -45,8 +45,12 @@ const VerifyAccount = () => {
         userId,
         otpCode: +otp,
       }),
-    onSuccess: () => {
-      router.replace(mode === 'reset-password' ? '/reset-password' : '/verify-account/success')
+    onSuccess: (res) => {
+      router.replace(
+        mode === 'reset-password'
+          ? `/reset-password?token=${res?.data?.accessToken}`
+          : '/verify-account/success',
+      )
     },
     onError: (error) => {
       toast.error(extractErrorMessage(error))
