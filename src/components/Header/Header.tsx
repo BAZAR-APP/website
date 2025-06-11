@@ -28,11 +28,7 @@ interface HeaderProps {
   lang?: Locale
 }
 
-const Header: React.FC<HeaderProps> = ({
-  className = '',
-  isLoggedIn = true,
-  dictionary,
-}) => {
+const Header: React.FC<HeaderProps> = ({ className = '', isLoggedIn = true, dictionary }) => {
   const params = useParams() as { lang?: Locale } | null
   const lang = params?.lang ?? 'en'
 
@@ -69,11 +65,7 @@ const Header: React.FC<HeaderProps> = ({
           </svg>
         </button>
       </div>
-      <LanguageSwitcher
-        lang={lang ?? 'en'}
-        label={dictionary?.footer.language || ''}
-        availableLocales={[...i18n.locales]}
-      />
+
       <div className="hidden lg:flex items-center justify-between w-full">
         <Logo />
         <Navigation />
@@ -102,6 +94,13 @@ const Header: React.FC<HeaderProps> = ({
           </div>
         )}
       </div>
+      <div className="hidden lg:block">
+        <LanguageSwitcher
+          lang={lang ?? 'en'}
+          label={dictionary?.footer.language || ''}
+          availableLocales={[...i18n.locales]}
+        />
+      </div>
     </>
   )
 
@@ -126,6 +125,13 @@ const Header: React.FC<HeaderProps> = ({
         avatarSrc=""
         onLogout={() => console.log('User logged out')}
         isLoggedIn={isLoggedIn}
+        LanguageSwitcher={
+          <LanguageSwitcher
+            lang={lang ?? 'en'}
+            label={dictionary?.footer.language || ''}
+            availableLocales={[...i18n.locales]}
+          />
+        }
       />
     </>
   )

@@ -14,6 +14,7 @@ interface SideNavProps {
   avatarSrc?: string
   onLogout?: () => void
   isLoggedIn?: boolean
+  LanguageSwitcher?: React.ReactNode
 }
 
 const SideNav: React.FC<SideNavProps> = ({
@@ -23,6 +24,7 @@ const SideNav: React.FC<SideNavProps> = ({
   avatarSrc = '',
   onLogout = () => console.log('User logged out'),
   isLoggedIn,
+  LanguageSwitcher,
 }) => {
   const router = useRouter()
   const { lang } = useParams() as { lang: Locale }
@@ -48,6 +50,7 @@ const SideNav: React.FC<SideNavProps> = ({
         >
           <div className="flex items-center justify-between p-6 border-b border-gray-200">
             <Logo />
+
             <button
               onClick={onClose}
               className="p-2 rounded-md hover:bg-gray-100 transition-colors cursor-pointer"
@@ -68,8 +71,10 @@ const SideNav: React.FC<SideNavProps> = ({
             <div className="flex flex-col space-y-6">
               <Navigation />
             </div>
+            <div className='px-4 py-2'>{LanguageSwitcher}</div>
+
             {isLoggedIn ? (
-              <div className="flex gap-3 py-3 mt-3 px-3">
+              <div className="flex gap-3 py-3 px-3">
                 <UserProfile userName={userName} avatarSrc={avatarSrc} onLogout={onLogout} />
                 <NotificationIcon />
               </div>
