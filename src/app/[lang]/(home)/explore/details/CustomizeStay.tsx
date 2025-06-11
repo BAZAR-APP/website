@@ -17,7 +17,6 @@ import {
   Clapperboard,
   SwordIcon,
 } from 'lucide-react'
-import React, { useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 
 const services = [
