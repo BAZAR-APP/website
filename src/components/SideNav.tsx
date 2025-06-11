@@ -4,7 +4,8 @@ import Navigation from './Navigation'
 import NotificationIcon from './NotificationIcon'
 import UserProfile from './Header/UserProfile'
 import Button from './Button/Button'
-import { useRouter } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
+import { Locale } from '../../i18n.config'
 
 interface SideNavProps {
   isOpen: boolean
@@ -24,7 +25,8 @@ const SideNav: React.FC<SideNavProps> = ({
   isLoggedIn,
 }) => {
   const router = useRouter()
-
+  const { lang } = useParams() as { lang: Locale }
+  const isArabic = lang !== 'en'
   return (
     <>
       {isOpen && (
@@ -40,7 +42,10 @@ const SideNav: React.FC<SideNavProps> = ({
         ${isOpen ? 'translate-x-0' : '-translate-x-full'}
       `}
       >
-        <div className="flex flex-col h-full">
+        <div
+          className={`flex flex-col ${isArabic ? 'ltr' : 'ltr'} h-full`}
+          style={{ direction: 'ltr' }}
+        >
           <div className="flex items-center justify-between p-6 border-b border-gray-200">
             <Logo />
             <button

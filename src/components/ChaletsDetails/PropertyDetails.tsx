@@ -16,7 +16,6 @@ interface PropertyDetailsProps {
 const PropertyDetails = ({
   title,
   description,
-  maxGuests,
   bedrooms,
   beds,
   bathrooms,

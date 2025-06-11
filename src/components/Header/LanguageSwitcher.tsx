@@ -20,7 +20,7 @@ export function LanguageSwitcher({ lang, label, availableLocales }: LanguageSwit
   const pathname = usePathname();
 
   const onSelectLanguage = (locale: Locale) => {
-    const pathSegments = pathname.split('/');
+    const pathSegments = (pathname ?? '').split('/');
     pathSegments[1] = locale;
 
     document.cookie = `NEXT_LOCALE=${locale}; path=/; max-age=${60 * 60 * 24 * 365}`;

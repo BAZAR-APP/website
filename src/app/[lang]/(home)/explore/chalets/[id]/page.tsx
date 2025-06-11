@@ -10,7 +10,7 @@ import SelectablePlans from '@/components/SelectablePlans'
 import BedroomCard from '@/components/BedroomCard'
 import HotelMap from '@/components/LocationMap'
 
-export async function generateMetadata({ params }: { params: { slug: string } }) {
+export async function generateMetadata() {
   const data = propertyData
 
   return {
@@ -36,8 +36,7 @@ const hotel = {
   lat: 24.7136,
   lng: 46.6753,
 }
-export default async function ChaletDetailsPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params
+export default async function ChaletDetailsPage() {
   const data = propertyData
   return (
     <div className="min-h-screen bg-white">

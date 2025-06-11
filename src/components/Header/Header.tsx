@@ -7,7 +7,7 @@ import Logo from '../Logo'
 import NotificationIcon from '../NotificationIcon'
 import SideNav from '../SideNav'
 import Button from '../Button/Button'
-import { useRouter } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import { LanguageSwitcher } from './LanguageSwitcher'
 import { i18n, Locale } from '../../../i18n.config'
 
@@ -30,12 +30,11 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({
   className = '',
-  isAuthHeader = false,
   isLoggedIn = true,
   dictionary,
-  lang,
 }) => {
-  console.log(isLoggedIn)
+  const params = useParams() as { lang?: Locale } | null
+  const lang = params?.lang ?? 'en'
 
   const [isSideNavOpen, setIsSideNavOpen] = useState(false)
   const router = useRouter()
@@ -71,7 +70,7 @@ const Header: React.FC<HeaderProps> = ({
         </button>
       </div>
       <LanguageSwitcher
-        lang={lang ?? "en"}
+        lang={lang ?? 'en'}
         label={dictionary?.footer.language || ''}
         availableLocales={[...i18n.locales]}
       />
