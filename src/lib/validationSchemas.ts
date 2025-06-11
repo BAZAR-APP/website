@@ -10,10 +10,10 @@ export const phoneSchema = z
 export const passwordSchema = z
   .string()
   .min(1, 'Password is required')
-  .min(6, 'Password must be at least 6 characters')
+  .min(8, 'Password must be at least 8 characters')
   .regex(
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
-    'Password must contain at least one uppercase letter, one lowercase letter, and one number',
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_\-+={[}\]|\\:;"'<>,.?/~`])/,
+    'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character',
   )
 
 export const confirmPasswordSchema = (passwordField = 'password') =>
@@ -58,13 +58,12 @@ export const forgotPasswordSchema = z.object({
 export const resetPasswordSchema = z
   .object({
     password: passwordSchema,
-    confirmPassword: confirmPasswordSchema(),
+    confirmPassword: z.string().min(1, 'Please confirm your password'),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords don't match",
-    path: ['confirmPassword'],
+    path: ['confirmPassword'], // This ensures the error appears under confirmPassword field
   })
-
 export const changePasswordSchema = z
   .object({
     currentPassword: z.string().min(1, 'Current password is required'),
