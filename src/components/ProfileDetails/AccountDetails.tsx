@@ -4,8 +4,11 @@ import CommonInput from "../CommonInput/Input"
 import ModalDialog from "../ModalDialog/Dialog"
 import ReferModal from "./ReferModal"
 import useToggle from "@/lib/hooks/useToggle"
-import { useState } from "react"
+
 import Button from "../Button/Button"
+import ProfileOTPModal from "./ProfileOTPModal"
+// import ProfileSuccessModal from "./ProfileSuccessModal"
+// import ProfileOTPModal from "./ProfileOTPModal"
 
 const AccountDetails = () => {
     const { isOpen, toggle } = useToggle(false)
@@ -90,6 +93,33 @@ const AccountDetails = () => {
                     Save Changes
                 </Button>
             </ModalDialog>
+            {/* <ModalDialog
+                title={''}
+                isOpen={isOpen}
+                setIsOpen={toggle}
+                className="!max-w-[486px] w-full max-h-[calc(100vh-80px)] overflow-y-auto m-4 py-2 lg:max-h-none lg:overflow-y-visible"
+            >
+                <>
+                    <ProfileOTPModal />
+                    <Button className="h-[48px] w-[100%] !bg-[#29397E] text-[16px] font-medium leading-[24px] !text-[#FDFDFE] mt-[32px]" onClick={toggle}>
+                        Verify
+                    </Button>
+                </>
+            </ModalDialog> */}
+
+            {/* <ModalDialog
+                title={''}
+                isOpen={isOpen}
+                setIsOpen={toggle}
+                className="!max-w-[486px] w-full max-h-[calc(100vh-80px)] overflow-y-auto m-4 py-2 lg:max-h-none lg:overflow-y-visible"
+            >
+                <>
+                    <ProfileSuccessModal />
+                    <Button className="h-[48px] w-[100%] !bg-[#29397E] text-[16px] font-medium leading-[24px] !text-[#FDFDFE] mt-[32px]" onClick={toggle}>
+                        Verify
+                    </Button>
+                </>
+            </ModalDialog> */}
 
         </>
     )

@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import React from 'react';
 
 interface ProfileBillingCardProps {
@@ -62,10 +63,12 @@ export const ProfileBillingCard: React.FC<ProfileBillingCardProps> = ({
                             {title}
                         </h3>
                         <div className="flex items-center gap-1 text-sm text-[#8e8e93] mt-2">
-                            <img
+                            <Image
                                 src={locationIconUrl}
                                 alt="Location icon"
                                 className="aspect-[1] object-contain w-4 self-stretch shrink-0 my-auto"
+                                width={12}
+                                height={12}
                             />
                             <span className="self-stretch my-auto">
                                 {location}
@@ -75,10 +78,12 @@ export const ProfileBillingCard: React.FC<ProfileBillingCardProps> = ({
                 </header>
 
                 <div className="flex w-full items-center gap-[5px] text-sm text-[#9EA0A2] font-normal mt-4">
-                    <img
+                    <Image
                         src={dateIconUrl}
                         alt="Date icon"
                         className="aspect-[1] object-contain w-5 self-stretch shrink-0 my-auto"
+                        width={20}
+                        height={20}
                     />
                     <span className="text-[#9EA0A2] self-stretch flex-1 shrink basis-[0%] my-auto">
                         {dateRange}
@@ -86,10 +91,12 @@ export const ProfileBillingCard: React.FC<ProfileBillingCardProps> = ({
                 </div>
 
                 <div className="flex w-full items-center gap-[5px] text-sm text-[#9EA0A2] font-normal mt-4">
-                    <img
+                    <Image
                         src={paymentIconUrl}
                         alt="Payment icon"
                         className="aspect-[1] object-contain w-5 self-stretch shrink-0 my-auto"
+                        width={20}
+                        height={20}
                     />
                     <span className="text-[#9EA0A2] self-stretch flex-1 shrink basis-[0%] my-auto">
                         {paymentDate}
@@ -103,10 +110,12 @@ export const ProfileBillingCard: React.FC<ProfileBillingCardProps> = ({
                         </span>
                     </div>
                     <div className={`justify-center items-center self-stretch flex gap-0.5 text-sm font-normal text-center my-auto px-1.5 py-1 rounded-md ${statusStyle.text} ${statusStyle.bg}`}>
-                        <img
+                        <Image
                             src={paymentStatus.iconUrl}
                             alt="Status icon"
                             className="aspect-[1] object-contain w-4 self-stretch shrink-0 my-auto"
+                            width={20}
+                            height={20}
                         />
                         <span className={`self-stretch my-auto ${statusStyle.text}`}>
                             {paymentStatus.text}
@@ -121,10 +130,12 @@ export const ProfileBillingCard: React.FC<ProfileBillingCardProps> = ({
                     <span className="text-[#29397E] self-stretch my-auto underline">
                         View Billing Details Page
                     </span>
-                    <img
+                    <Image
                         src={detailsLinkIconUrl}
                         alt="Arrow icon"
                         className="aspect-[1] object-contain w-4 self-stretch shrink-0 my-auto"
+                        width={20}
+                        height={20}
                     />
                 </button>
             </div>

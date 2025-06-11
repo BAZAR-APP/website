@@ -1,5 +1,6 @@
 "use client"
 import { AccountDetails, PropertyCard } from "@/components"
+import BillingDetail from "@/components/ProfileDetails/BillingDetail";
 import PasswordDetail from "@/components/ProfileDetails/PasswordDetail";
 import ProfileBilling from "@/components/ProfileDetails/ProfileBilling";
 import ProfileChaletListing from "@/components/ProfileDetails/ProfileChaletListing";
@@ -20,7 +21,7 @@ const Profile = () => {
 
     return (
         <>
-            <div className="main-container flex  pt-[24px] pr-[160px] pb-[64px] pl-[160px] flex-col gap-[40px] items-start flex-nowrap bg-[#fdfdfe] relative mx-auto my-0">
+            {/* <div className="main-container flex  pt-[24px] pr-[160px] pb-[64px] pl-[160px] flex-col gap-[40px] items-start flex-nowrap bg-[#fdfdfe] relative mx-auto my-0">
                 <ProfileHeader />
                 <ProfileTabs
                     tabs={tabData}
@@ -34,7 +35,8 @@ const Profile = () => {
                     {activeTab === "password" && <div><PasswordDetail /> </div>}
                     {activeTab === "billing" && <div><ProfileBilling /></div>}
                 </div>
-            </div >
+            </div > */}
+            <BillingDetail />
         </>
     )
 }
