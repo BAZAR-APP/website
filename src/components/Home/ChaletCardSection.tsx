@@ -1,7 +1,6 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { Grid } from '@radix-ui/themes';
 import { HomeChaltesData } from '@/lib/constant';
 import { PropertyCard } from '@/components';
 

@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 const EarningPoints = () => {
     return (
         <div className="main-container flex flex-col items-center w-full max-w-screen-xl pt-16 md:pt-24 mt-10 md:mt-16 px-4 md:px-5 bg-white relative mx-auto">
@@ -15,12 +17,13 @@ const EarningPoints = () => {
                     </button>
                 </div>
 
-                {/* Image Section (replaced previous complex divs with image) */}
                 <div className="flex justify-center items-center flex-1 max-w-full">
-                    <img
+                    <Image
                         src="/images/bazarGroup.svg"
                         alt="Earning points illustration"
                         className="w-full h-auto object-contain"
+                        height={100}
+                        width={100}
                     />
                 </div>
             </div>

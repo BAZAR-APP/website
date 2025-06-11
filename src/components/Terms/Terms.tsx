@@ -1,6 +1,6 @@
 import { termsData } from '@/lib/constant';
 import React from 'react';
-import { DownloadApp } from "@/components";
+
 
 const Terms: React.FC = () => {
     return (

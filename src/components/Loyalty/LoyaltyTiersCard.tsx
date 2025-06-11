@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import React from 'react';
 
 interface TierData {
@@ -60,10 +61,12 @@ const LoyaltyTiersCardSection: React.FC = () => {
 
     const TierIcon = ({ src, alt }: { src: string; alt: string }) => (
         <div className="justify-center items-center self-stretch flex min-h-16 gap-2 w-16 h-16 bg-gray-100 my-auto px-2 rounded-[32px]">
-            <img
+            <Image
                 src={src}
                 alt={alt}
                 className="aspect-[1] object-contain w-10 self-stretch my-auto"
+                width={64}
+                height={64}
             />
         </div>
     );

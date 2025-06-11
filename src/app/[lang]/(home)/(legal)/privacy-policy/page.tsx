@@ -1,7 +1,6 @@
 
 "use client"
 import { DownloadApp, Privacy } from '@/components';
-import { Download } from 'lucide-react';
 
 
 

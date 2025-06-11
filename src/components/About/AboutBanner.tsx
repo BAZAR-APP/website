@@ -28,10 +28,10 @@ const AboutBanner = () => {
                                 </h1>
                             </div>
                             <p className="text-base md:text-lg text-[#484a4c] leading-relaxed max-w-2xl">
-                                Bazar offers a luxurious yet peaceful stay with breathtaking views of the sea,
+                                {`Bazar offers a luxurious yet peaceful stay with breathtaking views of the sea,
                                 private outdoor spaces, and elegant interiors. Whether you're looking for a
                                 romantic retreat, a family getaway, or a relaxing weekend with friends, our
-                                spaces are crafted to create unforgettable moments by the water.
+                                spaces are crafted to create unforgettable moments by the water.`}
                             </p>
                         </div>
                     </div>
