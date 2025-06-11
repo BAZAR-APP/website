@@ -3,6 +3,7 @@ import ModalDialog from '../ModalDialog/Dialog'
 import Image from 'next/image'
 import Button from '../Button/Button'
 import { ChevronRight } from 'lucide-react'
+import { useParams, useRouter } from 'next/navigation'
 
 interface CancelBookingProps {
   isOpen: boolean
@@ -11,6 +12,8 @@ interface CancelBookingProps {
   onGoBack?: () => void
 }
 const CancelBooking: React.FC<CancelBookingProps> = ({ isOpen, setIsOpen, onCancel, onGoBack }) => {
+  const router = useRouter()
+  const params = useParams()
   return (
     <ModalDialog isOpen={isOpen} setIsOpen={setIsOpen} className="lg:min-w-[524px] min-w-[auto]">
       <Image
@@ -27,12 +30,13 @@ const CancelBooking: React.FC<CancelBookingProps> = ({ isOpen, setIsOpen, onCanc
         This action cannot be undone. Please review your cancellation policy before proceeding.
       </p>
       <div className="text-center w-full mx-auto my-2">
-        <button
-          className="cursor-pointer w-full flex items-center justify-center self-start text-sm text-[#29397E] font-medium underline"
-          onClick={() => {}}
+        <Button
+          intent="transperent"
+          className="cursor-pointer !py-0 !px-0 w-full flex items-center justify-center self-start text-sm text-[#29397E] font-medium underline"
+          onClick={() => router.push(`/explore/booking/${params.id}/cancellation-policy`)}
         >
           Cancellation Policy <ChevronRight className="w-4 h-4" />
-        </button>
+        </Button>
       </div>
       <div className="flex md:flex-row flex-col justify-between gap-4 py-3">
         <Button
