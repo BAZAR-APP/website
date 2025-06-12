@@ -68,7 +68,6 @@ const ChangePassword = () => {
   const onSubmit = (data: PasswordFormData) => {
     mutation.mutate(data)
   }
-  console.log(errors)
 
   return (
     <div className="flex flex-col items-center justify-center h-full">

@@ -97,7 +97,7 @@ const handler = NextAuth({
       return true
     },
 
-    async jwt({ token, user, account }) {
+    async jwt({ token, user, account, trigger }) {
       if (user) {
         token.id = user.id
         token.accessToken = user.accessToken
@@ -106,13 +106,9 @@ const handler = NextAuth({
         token.provider = account?.provider || ''
       }
 
-      return token
-    },
-
-    async session({ session, token }) {
-      try {
-        // Make API call to get current user details for both providers
-        if (token.accessToken) {
+      // Check token validity on each request
+      if (token.accessToken && trigger !== 'signIn') {
+        try {
           const response = await fetch(
             `${process.env.NEXT_PUBLIC_NESTJS_API_URL}/users/currentUser`,
             {
@@ -124,31 +120,72 @@ const handler = NextAuth({
             },
           )
 
-          if (response.ok) {
-            const userData = await response.json()
+          // If token is invalid/expired, clear the token
+          if (!response.ok) {
+            return {
+              id: '',
+              accessToken: undefined,
+              phoneNumber: undefined,
+              provider: undefined,
+              email: undefined,
+            } // Return empty JWT to force sign out
+          }
+        } catch (error) {
+          return {
+            id: '',
+            accessToken: undefined,
+            phoneNumber: undefined,
+            provider: undefined,
+            email: undefined,
+          } // Return empty JWT to force sign out
+        }
+      }
 
-            // Use the API response data
-            session.user = {
-              id: token.id,
-              accessToken: token.accessToken,
-              provider: token.provider,
-              ...userData, // Spread all user data from API
-            }
-          } else {
-            throw new Error('Failed to fetch user data')
+      return token
+    },
+
+    async session({ session, token }) {
+      // If token is empty (expired/invalid), return null session
+      if (!token.id || !token.accessToken) {
+        return {
+          ...session,
+          user: undefined,
+        }
+      }
+
+      try {
+        // Make API call to get current user details
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_NESTJS_API_URL}/users/currentUser`,
+          {
+            method: 'GET',
+            headers: {
+              Authorization: `Bearer ${token.accessToken}`,
+              'Content-Type': 'application/json',
+            },
+          },
+        )
+
+        if (response.ok) {
+          const userData = await response.json()
+
+          // Use the API response data
+          session.user = {
+            id: token.id,
+            accessToken: token.accessToken,
+            provider: token.provider,
+            ...userData, // Spread all user data from API
           }
         } else {
-          throw new Error('No access token available')
+          return {
+            ...session,
+            user: undefined,
+          }
         }
       } catch (error) {
-        // Fallback to token data if API call fails
-        session.user = {
-          id: token.id,
-          name: session.user?.name,
-          email: token.email || session.user?.email,
-          phoneNumber: token.phoneNumber,
-          provider: token.provider,
-          accessToken: token.accessToken,
+        return {
+          ...session,
+          user: undefined,
         }
       }
 

@@ -4,6 +4,7 @@ import { DropdownMenu, Avatar, Text, Flex } from '@radix-ui/themes'
 import { ChevronDown, LogOut } from 'lucide-react'
 import { getUserNameInitials } from '@/lib/constant'
 import { signOut, useSession } from 'next-auth/react'
+import Link from 'next/link'
 
 type UserProfileProps = {
   userName: string
@@ -38,10 +39,13 @@ const UserProfile: React.FC<UserProfileProps> = ({ userName, avatarSrc = '' }) =
       </DropdownMenu.Trigger>
 
       <DropdownMenu.Content className="w-56 rounded-xl bg-[#F9FAFB] shadow-lg p-2" sideOffset={8}>
-        <div className="px-3 py-1 cursor-pointer text-[#484A4C]">
-          <Text size="2" weight="medium" color="gray">
+        <div className=" flex flex-col">
+          <Link className="px-3 py-1 cursor-pointer text-[#484A4C]" href={'/profile'}>
+            Profile
+          </Link>
+          <Link className="px-3 py-1 cursor-pointer text-[#484A4C]" href={'/notifications'}>
             Notifications
-          </Text>
+          </Link>
         </div>
         <div
           className="flex items-center gap-2 text-[#E41212] hover:bg-transparent cursor-pointer px-3 py-2 text-sm font-medium"

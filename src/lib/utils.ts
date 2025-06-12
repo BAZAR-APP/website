@@ -1,5 +1,6 @@
 import { clsx, type ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
+import { toast } from './toast'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -7,7 +8,7 @@ export function cn(...inputs: ClassValue[]) {
 export const copyToClipboard = async (content: any) => {
   try {
     await navigator.clipboard.writeText(content)
-    alert('Link copied to clipboard!')
+    toast.success('Link copied to clipboard!')
   } catch (err) {
     // Fallback for older browsers
     const textArea = document.createElement('textarea')
@@ -16,7 +17,7 @@ export const copyToClipboard = async (content: any) => {
     textArea.select()
     document.execCommand('copy')
     document.body.removeChild(textArea)
-    alert('Link copied to clipboard!')
+    toast.success('Link copied to clipboard!')
   }
 }
 export function extractErrorMessage(error: any): string {

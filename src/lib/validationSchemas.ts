@@ -89,8 +89,7 @@ export const otpSchema = z.object({
 
 // Profile update schema
 export const profileUpdateSchema = z.object({
-  firstName: firstNameSchema,
-  lastName: lastNameSchema,
+  fullName: z.string().min(2, 'Full name is required'),
   phone: phoneSchema,
-  email: emailSchema.optional(),
+  email: emailSchema,
 })

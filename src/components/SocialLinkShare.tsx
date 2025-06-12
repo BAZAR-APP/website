@@ -8,13 +8,24 @@ import ModalDialog from '@/components/ModalDialog/Dialog'
 import { Button, CommonInput } from '@/components'
 import { Separator } from 'radix-ui'
 import { copyToClipboard } from '@/lib/utils'
+import clsx from 'clsx'
+import { toast } from '@/lib/toast'
 
 interface ShareModalProps {
   onClose: () => void
   open: boolean
+  title?: string
+  children?: React.ReactNode
+  colRevers?: boolean
 }
 
-const SocialLinkShare: React.FC<ShareModalProps> = ({ onClose, open }) => {
+const SocialLinkShare: React.FC<ShareModalProps> = ({
+  onClose,
+  open,
+  title = 'Share With...',
+  children,
+  colRevers = false,
+}) => {
   const [shareUrl, setShareUrl] = useState('')
 
   // Set the URL only after component mounts (client-side)
@@ -67,50 +78,62 @@ const SocialLinkShare: React.FC<ShareModalProps> = ({ onClose, open }) => {
       // Instagram doesn't support direct URL sharing, so copy to clipboard
       copyToClipboard(shareUrl)
 
-      alert('Link copied! You can paste it in Instagram.')
+      toast.success('Link copied! You can paste it in Instagram.')
     }
   }
 
   return (
-    <ModalDialog isOpen={open} setIsOpen={onClose} title="Share With...">
-      <div className="grid grid-cols-3 md:grid-cols-5 gap-5">
-        {shareOptions.map((option) => (
-          <div
-            key={option.name}
-            className="flex flex-col items-center space-y-4"
-            onClick={() => handleShareClick(option)}
-          >
-            <div className="w-[72px] h-[72px] my-3 cursor-pointer rounded-[37.33px] bg-[#F9FAFB] flex items-center justify-center p-6 hover:bg-gray-100 transition-colors">
-              {option.isImage ? (
-                <Image src={option.icon} alt={option.name} width={24} height={24} />
-              ) : (
-                <option.icon className="text-[#29397E]" />
-              )}
+    <ModalDialog isOpen={open} setIsOpen={onClose} title={title}>
+      {children && children}
+      <div
+        className={clsx('flex flex-col', {
+          'flex-col-reverse': colRevers,
+        })}
+      >
+        <div className="grid grid-cols-3 md:grid-cols-5 gap-5">
+          {shareOptions.map((option) => (
+            <div
+              key={option.name}
+              className="flex flex-col items-center space-y-4"
+              onClick={() => handleShareClick(option)}
+            >
+              <div className="w-[72px] h-[72px] my-3 cursor-pointer rounded-[37.33px] bg-[#F9FAFB] flex items-center justify-center p-6 hover:bg-gray-100 transition-colors">
+                {option.isImage ? (
+                  <Image src={option.icon} alt={option.name} width={24} height={24} />
+                ) : (
+                  <option.icon className="text-[#29397E]" />
+                )}
+              </div>
+              <span className="text-[10px] text-[#29397E]">{option.name}</span>
             </div>
-            <span className="text-[10px] text-[#29397E]">{option.name}</span>
-          </div>
-        ))}
-      </div>
-      <div className="relative my-5">
-        <CommonInput
-          type="text"
-          value={shareUrl}
-          readonly
-          placeholder="Loading URL..."
-          className="w-full relative !px-4 !pr-10 bg-gray-50 border border-[#D0D5DD] !rounded-md !text-sm !h-[42px]"
-        />
-        <span className="absolute top-0 right-3 flex">
-          <Separator.Root
-            orientation="vertical"
-            className="h-10.5 w-[1.5px] bg-gray-300 inline-block mx-3"
+          ))}
+        </div>
+        <div className="relative my-5">
+          <CommonInput
+            type="text"
+            value={shareUrl}
+            readonly
+            placeholder="Loading URL..."
+            className="w-full relative !px-4 !pr-10 bg-gray-50 border border-[#D0D5DD] !rounded-md !text-sm !h-[42px]"
           />
-          <Copy
-            className="w-4 h-4 mt-3 text-[#29397E] cursor-pointer hover:text-blue-600 transition-colors"
-            onClick={handleCopy}
-          />
-        </span>
+          <span className="absolute top-0 right-3 flex">
+            <Separator.Root
+              orientation="vertical"
+              className="h-10.5 w-[1.5px] bg-gray-300 inline-block mx-3"
+            />
+            <Copy
+              className="w-4 h-4 mt-3 text-[#29397E] cursor-pointer hover:text-blue-600 transition-colors"
+              onClick={handleCopy}
+            />
+          </span>
+        </div>
       </div>
-      <Button size="responsive" intent="ghost" onClick={onClose} className="mt-4 w-full text-[#1F2A37]">
+      <Button
+        size="responsive"
+        intent="ghost"
+        onClick={onClose}
+        className="mt-4 w-full text-[#1F2A37]"
+      >
         Cancel
       </Button>
     </ModalDialog>
