@@ -97,7 +97,7 @@ const Header: React.FC<HeaderProps> = ({ className = '', isLoggedIn = true, dict
       <div className="hidden lg:block">
         <LanguageSwitcher
           lang={lang ?? 'en'}
-          label={dictionary?.footer.language || ''}
+          label={dictionary?.footer?.language || ''}
           availableLocales={[...i18n.locales]}
         />
       </div>
@@ -128,7 +128,7 @@ const Header: React.FC<HeaderProps> = ({ className = '', isLoggedIn = true, dict
         LanguageSwitcher={
           <LanguageSwitcher
             lang={lang ?? 'en'}
-            label={dictionary?.footer.language || ''}
+            label={dictionary?.footer?.language || ''}
             availableLocales={[...i18n.locales]}
           />
         }

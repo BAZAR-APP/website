@@ -14,7 +14,7 @@ export const navItems = [
   { label: 'Home', href: '/' },
   { label: 'Explore', href: '/explore/chalets' },
   { label: 'My Bookings', href: '/explore/booking/' },
-  { label: 'Loyalty Points', href: '/loyalty-program' },
+  { label: 'Loyalty Points', href: '/loyalty-points' },
 ]
 
 export const fields = [

@@ -1,45 +1,15 @@
 import 'server-only';
+import { builtDictionaries, Dictionary } from './dictionary-builder';
 import { Locale } from '../../i18n.config';
 
-// Define the structure of the dictionary
-interface Dictionary {
-  navigation: {
-    home: string;
-    about: string;
-    contact: string;
-  };
-  page: {
-    home: {
-      title: string;
-      description: string;
-      cta: string;
-    };
-    about: {
-      title: string;
-      description: string;
-    };
-    contact: {
-      title: string;
-      description: string;
-      form: {
-        name: string;
-        email: string;
-        message: string;
-        submit: string;
-      };
-    };
-  };
-  footer: {
-    rights: string;
-    language: string;
-  };
-}
-
 const dictionaries: Record<Locale, () => Promise<Dictionary>> = {
-  en: () => import('./dictionaries/en.json').then(module => module.default),
-  ar: () => import('./dictionaries/ar.json').then(module => module.default),
+  en: async () => builtDictionaries.en as unknown as Dictionary,
+  ar: async () => builtDictionaries.ar as unknown as Dictionary,
 };
 
 export const getDictionary = async (locale: Locale): Promise<Dictionary> => {
   return dictionaries[locale]();
 };
+
+// Re-export the Dictionary type for use in components
+export type { Dictionary };
