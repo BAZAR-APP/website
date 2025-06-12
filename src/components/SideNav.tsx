@@ -1,7 +1,7 @@
 import React from 'react'
 import Logo from './Logo'
 import Navigation from './Navigation'
-import NotificationIcon from './NotificationIcon'
+import NotificationIcon from './Notification/NotificationIcon'
 import UserProfile from './Header/UserProfile'
 import Button from './Button/Button'
 import { useParams, useRouter } from 'next/navigation'

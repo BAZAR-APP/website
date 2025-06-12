@@ -14,7 +14,6 @@ const RewardsSection: React.FC<RewardsSectionProps> = ({
     title = "Earn & Redeem Rewards",
     description = "Join our loyalty program, earn points on every booking, and redeem them for exclusive discounts!",
     buttonText = "Learn More",
-    imageUrl = "https://cdn.builder.io/api/v1/image/assets/1b3d434ba2184846a69efe8753eda104/9b3cf1b0d5de8b6159f2435165d5be9d9e71c766?placeholderIfAbsent=true",
     onButtonClick
 }) => {
     const handleLearnMore = () => {

@@ -1,4 +1,7 @@
+import { NotificationData } from '@/components/Notification/NotificationItem'
+
 import { SubmitReviewData } from "@/components/Booking/SubmitReviewDailog"
+import { NotificationItem } from '@/components/Notification/NotificationSettingsDialog'
 
 export const getUserNameInitials = (name: string) =>
   name
@@ -20,7 +23,7 @@ export const fields = [
   { label: 'Check out', placeholder: 'Add dates' },
   { label: 'Guests', placeholder: 'Add guests' },
 ]
-  
+
 export const locations = [
   'Al Khobar',
   'Brasiler',
@@ -417,9 +420,7 @@ export const HomeChaltesData = [
     imageUrl:
       'https://cdn.builder.io/api/v1/image/assets/TEMP/9df58597e3e3f82cf04ba41b5826302522a3872d?placeholderIfAbsent=true',
   },
-];
-
-
+]
 
 // Terms and Conditions
 
@@ -568,6 +569,99 @@ export const bookingCardsData = [
     member: true,
   },
 ]
+export const dumyNotifications: NotificationData[] = [
+  {
+    id: '1',
+    message: 'Your booking is confirmed!',
+    timestamp: '1h ago',
+    iconUrl: '/images/Notification.svg',
+    category: 'booking',
+  },
+  {
+    id: '2',
+    message: 'Payment of $120 was successful.',
+    timestamp: '2h ago',
+    iconUrl: '/images/Notification.svg',
+    category: 'payment',
+  },
+  {
+    id: '3',
+    message: 'Your profile was updated.',
+    timestamp: '3h ago',
+    iconUrl: '/images/Notification.svg',
+    category: 'profile',
+  },
+  {
+    id: '4',
+    message: 'You have a new booking request.',
+    timestamp: '4h ago',
+    iconUrl: '/images/Notification.svg',
+    category: 'booking',
+  },
+  {
+    id: '5',
+    message: 'Refund of $50 has been processed.',
+    timestamp: '6h ago',
+    iconUrl: '/images/Notification.svg',
+    category: 'payment',
+  },
+  {
+    id: '6',
+    message: 'You changed your password.',
+    timestamp: '8h ago',
+    iconUrl: '/images/Notification.svg',
+    category: 'profile',
+  },
+  {
+    id: '7',
+    message: 'Booking #1234 has been canceled.',
+    timestamp: '10h ago',
+    iconUrl: '/images/Notification.svg',
+    category: 'booking',
+  },
+  {
+    id: '8',
+    message: 'Payment method updated.',
+    timestamp: '12h ago',
+    iconUrl: '/images/Notification.svg',
+    category: 'payment',
+  },
+  {
+    id: '9',
+    message: 'Your profile photo has been changed.',
+    timestamp: 'Yesterday',
+    iconUrl: '/images/Notification.svg',
+    category: 'profile',
+  },
+  {
+    id: '10',
+    message: 'New discount available for your next booking!',
+    timestamp: '2 days ago',
+    iconUrl: '/images/Notification.svg',
+    category: 'booking',
+  },
+  {
+    id: '11',
+    message: 'Payment failed for booking #5678.',
+    timestamp: '3 days ago',
+    iconUrl: '/images/Notification.svg',
+    category: 'payment',
+  },
+  {
+    id: '12',
+    message: 'You received a review on your profile.',
+    timestamp: '4 days ago',
+    iconUrl: '/images/Notification.svg',
+    category: 'profile',
+  },
+  {
+    id: '13',
+    message: 'Chalet check-in reminder for tomorrow.',
+    timestamp: '6 days ago',
+    iconUrl: '/images/Notification.svg',
+    category: 'booking',
+  },
+]
 export const submitReview: SubmitReviewData = {
   title: 'Luxury Lakeside Retreat',
   points: 200,
@@ -579,3 +673,82 @@ export const submitReview: SubmitReviewData = {
   imageUrl: 'https://picsum.photos/seed/lakeside/311/190',
   imageAlt: 'Luxury Lakeside Property Interior',
 }
+export const initialNotificationItems: NotificationItem[] = [
+  {
+    title: 'Booking Confirmations',
+    options: [
+      { label: 'In-App', checked: true, switchId: 'booking-confirmations-inapp' },
+      { label: 'Email', checked: false, switchId: 'booking-confirmations-email' },
+    ],
+  },
+  {
+    title: 'Payment Reminders',
+    options: [
+      { label: 'In-App', checked: true, switchId: 'payment-reminders-inapp' },
+      { label: 'Email', checked: false, switchId: 'payment-reminders-email' },
+    ],
+  },
+  {
+    title: 'Check-in Reminders',
+    options: [
+      { label: 'In-App', checked: true, switchId: 'check-in-reminders-inapp' },
+      { label: 'Email', checked: false, switchId: 'check-in-reminders-email' },
+    ],
+  },
+  {
+    title: 'Loyalty Rewards (Points Earned)',
+    options: [
+      { label: 'In-App', checked: true, switchId: 'loyalty-rewards-inapp' },
+      { label: 'Email', checked: false, switchId: 'loyalty-rewards-email' },
+    ],
+  },
+  {
+    title: 'Reviews and Feedback Acknowledgements',
+    options: [
+      { label: 'In-App', checked: true, switchId: 'reviews-feedback-acknowledgements-inapp' },
+      { label: 'Email', checked: false, switchId: 'reviews-feedback-acknowledgements-email' },
+    ],
+  },
+  {
+    title: 'Deposit Refund Status',
+    options: [
+      { label: 'In-App', checked: true, switchId: 'deposit-refund-status-inapp' },
+      { label: 'Email', checked: false, switchId: 'deposit-refund-status-email' },
+    ],
+  },
+  {
+    title: 'Booking Changes or Updates',
+    options: [
+      { label: 'In-App', checked: true, switchId: 'booking-changes-updates-inapp' },
+      { label: 'Email', checked: false, switchId: 'booking-changes-updates-email' },
+    ],
+  },
+  {
+    title: 'Refund Approvals or Declines',
+    options: [
+      { label: 'In-App', checked: true, switchId: 'refund-approvals-declines-inapp' },
+      { label: 'Email', checked: false, switchId: 'refund-approvals-declines-email' },
+    ],
+  },
+  {
+    title: 'Profile and Contact Info Updates',
+    options: [
+      { label: 'In-App', checked: true, switchId: 'profile-contact-info-updates-inapp' },
+      { label: 'Email', checked: false, switchId: 'profile-contact-info-updates-email' },
+    ],
+  },
+  {
+    title: 'Cancellation Policy Changes',
+    options: [
+      { label: 'In-App', checked: true, switchId: 'cancellation-policy-changes-inapp' },
+      { label: 'Email', checked: false, switchId: 'cancellation-policy-changes-email' },
+    ],
+  },
+  {
+    title: 'Promotions and Exclusive Discounts',
+    options: [
+      { label: 'In-App', checked: true, switchId: 'promotions-exclusive-discounts-inapp' },
+      { label: 'Email', checked: false, switchId: 'promotions-exclusive-discounts-email' },
+    ],
+  },
+]

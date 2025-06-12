@@ -32,3 +32,4 @@ export { default as TestimonialsSection } from './About/AboutReview'
 export { default as Privacy } from './Terms/Privacy'
 export { default as CompareTiers } from './About/CompareTiers'
 export { default as StarRating } from "./About/StarRating"
+export { default as AccountDetails } from "./ProfileDetails/AccountDetails"

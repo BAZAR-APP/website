@@ -1,5 +1,4 @@
 import { Button } from "@/components";
-import { Section } from "lucide-react";
 
 const ChatHero: React.FC = () => {
 

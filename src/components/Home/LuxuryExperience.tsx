@@ -2,7 +2,21 @@
 import Image from 'next/image';
 import { useState } from 'react';
 
-const LuxuryExperience: React.FC<any> = () => {
+interface LuxuryExperienceProps {
+    title: string;
+    description: string;
+    thumbnails: string[];
+    buttonText: string;
+    buttonLink: string;
+}
+
+const LuxuryExperience: React.FC<LuxuryExperienceProps> = ({
+    title,
+    description,
+    thumbnails,
+    buttonText,
+    buttonLink,
+}) => {
     const [isHovered, setIsHovered] = useState(false);
 
     const handleLearnMore = () => {
@@ -15,7 +29,7 @@ const LuxuryExperience: React.FC<any> = () => {
                 <div className="flex items-start gap-8 self-stretch relative max-lg:flex-col max-md:gap-6">
                     <header className="flex max-w-[1440px] flex-col items-start gap-5 flex-[1_0_0] relative">
                         <h1 className="self-stretch text-[#101828] text-5xl font-bold relative gap-[-54px] max-md:text-4xl max-sm:text-[28px]">
-                            Escape to luxury and comfort at Bazar
+                            {title}
                         </h1>
                         <div className="flex items-start gap-[24px]">
                             <div className="flex items-center gap-2 relative p-0 rounded-[80.439px] bg-[#29397E] max-md:justify-center max-md:flex-wrap max-md:gap-4 max-sm:gap-3">
@@ -54,34 +68,44 @@ const LuxuryExperience: React.FC<any> = () => {
                     <div className="flex w-[611px] flex-col items-start gap-[61px] relative max-md:w-full">
                         <figure className="flex w-[611px] flex-col items-start gap-[61px] relative max-lg:w-full">
                             <div className="flex h-[232px] justify-between items-start self-stretch relative max-md:flex-col max-md:h-auto max-md:gap-4">
-                                <img
-                                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/713e4af6672d6f5c8e66dfde7936a2dd6eb29123?placeholderIfAbsent=true"
+                                <Image
+                                    src={thumbnails[0]}
                                     alt="Main resort view showcasing luxury chalets"
                                     className="w-[275px] h-[232px] relative rounded-[20px] max-md:w-full max-md:h-[200px]"
+                                    width={275}
+                                    height={275}
                                 />
                                 <div className="flex w-[300px] flex-col items-start gap-[15px] relative max-md:w-full">
                                     <div className="flex flex-wrap justify-between items-center self-stretch relative max-sm:gap-3">
-                                        <img
-                                            src="https://cdn.builder.io/api/v1/image/assets/TEMP/f9b48e4de65efdd91cbdf136ba8b9ade44b078fc?placeholderIfAbsent=true"
+                                        <Image
+                                            src={thumbnails[1]}
                                             alt="Luxury chalet interior"
                                             className="w-[141px] h-[108px] rounded-[20px] max-md:w-[calc(50%_-_7.5px)] max-md:h-[100px] max-sm:w-[calc(50%_-_7.5px)]"
+                                            width={141}
+                                            height={108}
                                         />
-                                        <img
-                                            src="https://cdn.builder.io/api/v1/image/assets/TEMP/8115a00e449569b51058a08d7a03dd0c0adae6f3?placeholderIfAbsent=true"
+                                        <Image
+                                            src={thumbnails[2]}
                                             alt="Sea view from chalet"
                                             className="w-[141px] h-[108px] rounded-[20px] max-md:w-[calc(50%_-_7.5px)] max-md:h-[100px] max-sm:w-[calc(50%_-_7.5px)]"
+                                            width={141}
+                                            height={108}
                                         />
                                     </div>
                                     <div className="flex flex-wrap justify-between items-center self-stretch relative max-sm:gap-3">
-                                        <img
-                                            src="https://cdn.builder.io/api/v1/image/assets/TEMP/dc040d48794f3060a950d23798e6473c7763064a?placeholderIfAbsent=true"
+                                        <Image
+                                            src={thumbnails[3]}
                                             alt="Resort amenities"
                                             className="w-[141px] h-[108px] rounded-[20px] max-md:w-[calc(50%_-_7.5px)] max-md:h-[100px] max-sm:w-[calc(50%_-_7.5px)]"
+                                            width={141}
+                                            height={108}
                                         />
-                                        <img
-                                            src="https://cdn.builder.io/api/v1/image/assets/TEMP/d3667f8d47098a73c20c44f0e1c3a7e2deab34a1?placeholderIfAbsent=true"
+                                        <Image
+                                            src={thumbnails[4]}
                                             alt="Coastal landscape"
                                             className="w-[141px] h-[108px] rounded-[20px] max-md:w-[calc(50%_-_7.5px)] max-md:h-[100px] max-sm:w-[calc(50%_-_7.5px)]"
+                                            width={141}
+                                            height={108}
                                         />
                                     </div>
                                 </div>
@@ -91,9 +115,7 @@ const LuxuryExperience: React.FC<any> = () => {
 
                         <article className="flex items-start gap-[94px] relative bottom-[content] max-md:flex-col max-md:gap-6">
                             <p className="w-[311px] h-[87px] text-gray-700 text-base italic font-normal relative max-md:w-full max-md:h-auto">
-                                where breathtaking views meet world-class hospitality. Whether
-                                you're seeking a relaxing retreat or an adventure by the sea,
-                                our chalets offer the perfect getaway.
+                                {description}
                             </p>
                             <div className="flex items-start relative">
                                 <button
@@ -104,7 +126,7 @@ const LuxuryExperience: React.FC<any> = () => {
                                         }`}
                                     aria-label="Learn more about Bazar resort amenities and services"
                                 >
-                                    More About Us
+                                    {buttonText}
                                 </button>
                             </div>
                         </article>
