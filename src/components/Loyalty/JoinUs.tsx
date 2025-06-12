@@ -1,13 +1,16 @@
+import Image from "next/image";
 import * as React from "react";
 
 const JoinUs = () => {
     return (
         <main className="flex flex-col relative min-h-screen text-white">
-            <img
+            <Image
                 src="https://cdn.builder.io/api/v1/image/assets/1b3d434ba2184846a69efe8753eda104/bfb14513705ade3e6e2faeee9bd0eb6ce182ac16?placeholderIfAbsent=true"
                 alt=""
                 className="absolute h-full w-full object-cover inset-0"
                 role="presentation"
+                height={100}
+                width={100}
             />
 
             <section className="relative w-full px-4 md:px-16">

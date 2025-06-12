@@ -48,19 +48,19 @@ const BazarImageCard: React.FC = () => {
         {
             id: 1,
             backgroundImage: '/images/bazarCard1.jpg',
-            rotate: 'rotate-0 lg:-rotate-[5.05deg]', // no rotation on small, rotate on large
+            rotate: 'rotate-0 lg:-rotate-[5.05deg]',
             className: 'z-10 md:-right-15 sm:-right-10 w-[100%] md:w-atuo',
         },
         {
             id: 2,
             backgroundColor: '#1E2A78',
-            rotate: 'rotate-0 lg:-rotate-[16.84deg]', // hidden on small screens
+            rotate: 'rotate-0 lg:-rotate-[16.84deg]',
             className: 'top-0 hidden lg:block',
         },
         {
             id: 3,
             backgroundImage: '/images/bazarCard3.jpg',
-            rotate: 'rotate-0 lg:rotate-[24.89deg]', // hidden on small screens
+            rotate: 'rotate-0 lg:rotate-[24.89deg]',
             className: 'top-2.5 hidden lg:block',
         },
     ];
