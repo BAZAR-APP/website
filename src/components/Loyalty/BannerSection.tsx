@@ -8,7 +8,7 @@ const LoyaltyBannerSection = () => {
                     <div className="flex flex-col items-start gap-8 w-full">
                         <div className="flex flex-col items-start gap-6 w-full">
                             <div className="flex flex-col items-start gap-4 w-full">
-                                <p className="mt-[-1px] font-bold text-primary leading-tight text-[#29397e] text-4xl sm:text-5xl md:text-[92px] tracking-tight">
+                                <p className="mt-[-1px] font-bold leading-tight text-[#29397e] text-4xl sm:text-5xl md:text-[92px] tracking-tight">
                                     <span className="block text-primary-blue">
                                         About
                                     </span>

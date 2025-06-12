@@ -11,7 +11,7 @@ type CardProps = {
     height?: string;
 };
 
-const Card: React.FC<CardProps> = ({
+export const Card: React.FC<CardProps> = ({
     backgroundImage,
     backgroundColor = '#FFFFFF',
     rotate = 'rotate-0',

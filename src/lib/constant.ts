@@ -1,6 +1,6 @@
 import { NotificationData } from '@/components/Notification/NotificationItem'
 
-import { SubmitReviewData } from "@/components/Booking/SubmitReviewDailog"
+import { SubmitReviewData } from '@/components/Booking/SubmitReviewDailog'
 import { NotificationItem } from '@/components/Notification/NotificationSettingsDialog'
 
 export const getUserNameInitials = (name: string) =>

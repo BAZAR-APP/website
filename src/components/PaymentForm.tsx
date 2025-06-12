@@ -19,6 +19,7 @@ export type PaymentFormData = {
 type PaymentFormProps = {
   onSubmit?: (data: PaymentFormData) => void
   paymentDetail?: boolean
+  addNowBooking?: boolean
 }
 
 const paymentOptions = [
@@ -40,13 +41,12 @@ const paymentOptions = [
   },
 ] as const
 
-const PaymentForm: React.FC<PaymentFormProps> = ({ onSubmit, paymentDetail = true }) => {
-  const {
-    register,
-    handleSubmit,
-    watch,
-    setValue,
-  } = useFormContext<PaymentFormData>()
+const PaymentForm: React.FC<PaymentFormProps> = ({
+  onSubmit,
+  paymentDetail = true,
+  addNowBooking = true,
+}) => {
+  const { register, handleSubmit, watch, setValue } = useFormContext<PaymentFormData>()
 
   const romanticWeekend = watch('romanticWeekend')
   const paymentOption = watch('paymentOption')
@@ -155,51 +155,60 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ onSubmit, paymentDetail = tru
               </div>
             </div>
           </div>
-
-          <p className="text-sm text-[#000000] mt-4 flex items-center">
-            <span className="mr-2">
-              <Image src={'/images/protection.svg'} alt="Secure" width={24} height={24} />
-            </span>
-            All payments processed securely via KNET
-            <Image src={'/images/Knet.svg'} alt="Secure" className="ml-1" width={24} height={24} />.
-          </p>
+          {addNowBooking && (
+            <p className="text-sm text-[#000000] mt-4 flex items-center">
+              <span className="mr-2">
+                <Image src={'/images/protection.svg'} alt="Secure" width={24} height={24} />
+              </span>
+              All payments processed securely via KNET
+              <Image
+                src={'/images/Knet.svg'}
+                alt="Secure"
+                className="ml-1"
+                width={24}
+                height={24}
+              />
+              .
+            </p>
+          )}
         </div>
       </form>
-
-      <div
-        className="flex flex-col my-5 py-6 items-start md:px-6 px-4 w-full lg:w-[528px] lg:h-[194px] h-auto isolate rounded-xl bg-[url('/images/FlowerImg.jpg')] bg-cover bg-center"
-        style={{
-          backgroundBlendMode: 'overlay',
-          backgroundColor: 'rgba(0, 0, 0, 0.5)',
-        }}
-      >
-        <h2 className="text-[#FDFDFE] md:text-xl sm:text-lg text-[16px] font-bold">
-          Make your weekend unforgettable Just 25 KWD
-        </h2>
-        <p className="text-[#FDFDFE] text-sm md:mt-4 mt-2">
-          Add the Romantic Weekend upgrade for only 25 KWD and enjoy late check-out, welcome gift,
-          and a private Romantic Setup.
-        </p>
-        <Button
-          intent="transperent"
-          size={romanticWeekend ? 'sm' : 'md'}
-          className={clsx(
-            'flex sm:gap-3 gap-1 md:text-[16px] text-sm cursor-pointer border md:mt-5 mt-3 text-[#FDFDFE] border-[#FDFDFE] sm:max-w-[270px] max-w-[auto]',
-          )}
-          onClick={() => setValue('romanticWeekend', !romanticWeekend)}
-          type="button"
+      {addNowBooking && (
+        <div
+          className="flex flex-col my-5 py-6 items-start md:px-6 px-4 w-full lg:w-[528px] lg:h-[194px] h-auto isolate rounded-xl bg-[url('/images/FlowerImg.jpg')] bg-cover bg-center"
+          style={{
+            backgroundBlendMode: 'overlay',
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+          }}
         >
-          {romanticWeekend ? (
-            <>
-              Added <CheckCircle className="w-4 h-4" />
-            </>
-          ) : (
-            <>
-              Add Now To Your Booking <Plus className="w-4 h-4" />
-            </>
-          )}
-        </Button>
-      </div>
+          <h2 className="text-[#FDFDFE] md:text-xl sm:text-lg text-[16px] font-bold">
+            Make your weekend unforgettable Just 25 KWD
+          </h2>
+          <p className="text-[#FDFDFE] text-sm md:mt-4 mt-2">
+            Add the Romantic Weekend upgrade for only 25 KWD and enjoy late check-out, welcome gift,
+            and a private Romantic Setup.
+          </p>
+          <Button
+            intent="transperent"
+            size={romanticWeekend ? 'sm' : 'md'}
+            className={clsx(
+              'flex sm:gap-3 gap-1 md:text-[16px] text-sm cursor-pointer border md:mt-5 mt-3 text-[#FDFDFE] border-[#FDFDFE] sm:max-w-[270px] max-w-[auto]',
+            )}
+            onClick={() => setValue('romanticWeekend', !romanticWeekend)}
+            type="button"
+          >
+            {romanticWeekend ? (
+              <>
+                Added <CheckCircle className="w-4 h-4" />
+              </>
+            ) : (
+              <>
+                Add Now To Your Booking <Plus className="w-4 h-4" />
+              </>
+            )}
+          </Button>
+        </div>
+      )}
     </>
   )
 }
