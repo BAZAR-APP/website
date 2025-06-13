@@ -17,12 +17,16 @@
 // import arAuth from './dictionaries/ar/auth.json';
 import arloyaltyPoints from './dictionaries/ar/loyalty-points.json'
 import enloyaltyPoints from './dictionaries/en/loyalty-points.json'
-
+import arcommon from './dictionaries/ar/common.json'
+import encommon from './dictionaries/en/common.json'
+import { string } from 'zod'
 // Build complete dictionaries from individual page files
 const buildEnglishDictionary = () => ({
   //   navigation: enNavigation,
   page: {
     loyaltyPoints: enloyaltyPoints,
+    common: encommon,
+
     // home: enHome,
     // about: enAbout,
     // contact: enContact,
@@ -35,6 +39,7 @@ const buildArabicDictionary = () => ({
   //   navigation: arNavigation,
   page: {
     loyaltyPoints: arloyaltyPoints,
+    common: arcommon,
 
     // home: arHome,
     // about: arAbout,
@@ -87,6 +92,9 @@ export interface Dictionary {
         icon: string
         cta: string
       }[]
+    }
+    common:{
+      redeem_now:string
     }
     about: {
       title: string

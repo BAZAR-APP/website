@@ -34,7 +34,6 @@ const RedeemRewards = () => {
     setStep('select')
     setSelectedDiscount(null)
     toggle()
-    copyToClipboard('etxt')
   }
 
   return (

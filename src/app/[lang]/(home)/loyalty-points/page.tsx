@@ -10,6 +10,7 @@ import useToggle from '@/lib/hooks/useToggle'
 import { useParams } from 'next/navigation'
 import RedeemDiscountDailog from '@/components/RedeemDiscountDailog'
 import BuyPointsDialog from '@/components/BuyPointsDailog'
+import DiscountCard from '@/components/user/Dicounts/Card'
 
 const LoyaltyPoints = () => {
   const { isOpen, toggle } = useToggle(false)
@@ -94,29 +95,23 @@ const LoyaltyPoints = () => {
             <h3 className="font-semibold text-[25px] leading-[32px] text-[#19191A] py-3">
               {page.loyaltyPoints.discountsTitle}
             </h3>
+
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 2xl:grid-cols-7 gap-4 md:mt-8 mt-4 pb-4">
-              {page.loyaltyPoints.redeemableDiscounts.map((discount: any, index: number) => (
-                <div
-                  key={index}
-                  className="bg-[#F9FAFB] p-4 rounded-xl flex flex-col items-center lg:w-[200px]"
-                >
-                  <div className="mb-3">
-                    <Image
-                      src={discount.icon}
-                      alt={discount.title}
-                      width={160}
-                      height={160}
-                      className="w-[122px] h-[122px]"
-                    />
-                  </div>
-                  <p className="self-start text-[20px] leading-6 text-[#19191A]">
-                    {discount.title}
-                  </p>
-                  <p className="self-start text-sm leading-[17px] text-[#29397E] opacity-70 mt-2">
-                    {discount.pointsRequired} points
-                  </p>
-                  <Button
-                    onClick={() => {
+              {page.loyaltyPoints.redeemableDiscounts.map(
+                (
+                  discount: {
+                    title: string
+                    pointsRequired: number
+                    icon: string
+                    cta: string
+                  },
+                  index: number,
+                ) => (
+                  <DiscountCard
+                    key={discount?.title + index}
+                    title={discount?.title}
+                    points={discount?.pointsRequired}
+                    onRedeemClick={() => {
                       setSelectedDiscount({
                         label: discount.title,
                         points: discount.pointsRequired,
@@ -125,13 +120,10 @@ const LoyaltyPoints = () => {
                       setRedeemStep('confirm')
                       setIsRedeemOpen(true)
                     }}
-                    intent="transperent"
-                    className="mt-2 cursor-pointer self-start text-sm !px-0 !py-0 text-[#29397E] font-medium underline"
-                  >
-                    {discount.cta} &rsaquo;
-                  </Button>
-                </div>
-              ))}
+                    value={discount?.title?.includes('Discount') ? 'discount' : 'free'}
+                  />
+                ),
+              )}
             </div>
           </div>
         </div>
