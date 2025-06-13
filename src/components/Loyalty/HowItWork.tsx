@@ -45,8 +45,8 @@ const StepCard: React.FC<{ title: string; description: string; img: string }> = 
 const HowItWork: React.FC = () => {
     return (
         <div className="flex flex-col items-center px-4 sm:px-16 py-12 sm:py-24 relative bg-primary-blue mt-16">
-            <div className="flex flex-col items-center justify-center gap-12 sm:gap-16 w-full max-w-screen-xl">
-                <div className="flex flex-col md:flex-row items-start gap-6 md:gap-16 w-full">
+            <div className="flex flex-col items-center justify-center gap-8 sm:gap-12 w-full">
+                <div className="flex flex-col md:flex-row items-start gap-6 md:gap-12 w-full">
                     <div className="flex flex-col items-start gap-3 md:gap-8 flex-1">
                         <h2 className="font-semibold text-white text-2xl sm:text-3xl md:text-[39px] leading-tight">
                             How It Works

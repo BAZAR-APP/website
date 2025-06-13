@@ -31,7 +31,7 @@ export const ContactInfo: React.FC<ContactInfoProps> = ({ className = '' }) => {
         <p>Kuwait, Souq Al-Manakh, Ground Floor, Office No. 318.</p>
       </address>
 
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2 mt-[-16px] md:mt-[-32px]">
         <Link href="#" aria-label="Download from App Store" className='max-h-[35]'>
           <Image src={Appstore} alt="App Store badge" width={108} height={35} />
         </Link>

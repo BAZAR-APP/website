@@ -2,7 +2,7 @@ import Image from "next/image";
 
 const EarningPoints = () => {
     return (
-        <div className="main-container flex flex-col items-center w-full max-w-screen-xl pt-16 md:pt-24 mt-10 md:mt-16 px-4 md:px-5 bg-white relative mx-auto">
+        <div className="main-container flex flex-col items-center w-full pt-16 md:pt-24 mt-10 md:mt-16 md:px-16 max-md:px-5 bg-white relative mx-auto">
             <div className="flex flex-col md:flex-row gap-12 md:gap-12 items-start w-full">
 
                 <div className="flex flex-col gap-6 items-start flex-1">

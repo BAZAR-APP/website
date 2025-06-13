@@ -80,14 +80,14 @@ const Header: React.FC<HeaderProps> = ({ className = '', isLoggedIn = true, dict
           </div>
         ) : (
           <div className="flex items-center space-x-4">
-            <Button onClick={() => router.push('/en/login')} type="button" size="md" intent="ghost">
+            <Button onClick={() => router.push('/en/login')} type="button" size="md" intent="ghost" className='!text-[#484A4C]'>
               Sign In
             </Button>
             <Button
               onClick={() => router.push('/en/register')}
               type="button"
               size="md"
-              className="text-nowrap"
+              className="text-nowrap "
             >
               Sign Up
             </Button>
@@ -106,7 +106,7 @@ const Header: React.FC<HeaderProps> = ({ className = '', isLoggedIn = true, dict
 
   return (
     <>
-      <header className={`flex relative flex-col items-center self-stretch ${className}`}>
+      <header className={`flex relative flex-col items-center w-full self-stretch ${className}`}>
         <div className={baseContainerClasses}>
           <div className={baseInnerClasses}>
             <div className={maxWidthContainer}>

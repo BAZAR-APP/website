@@ -29,8 +29,8 @@ const RewardsSection: React.FC<RewardsSectionProps> = ({
             className="flex flex-col justify-center bg-white md:px-16 md:py-24 max-md:px-5  mx-auto"
             aria-labelledby="rewards-title"
         >
-            <div className="min-h-[794px] overflow-hidden bg-gray-50 p-20 rounded-[40px] max-md:px-5  mx-auto max-w-screen-xl">
-                <article className="min-h-[191px] max-w-[1280px]">
+            <div className="min-h-[794px] overflow-hidden bg-gray-50 p-20 rounded-[40px] max-md:px-5 w-full  mx-auto ">
+                <article className="min-h-[191px] ">
                     <header>
                         <h1 className="text-[#19191A] text-[32px] md:text-[39px] font-semibold leading-tight max-md:max-w-full">
                             {title}

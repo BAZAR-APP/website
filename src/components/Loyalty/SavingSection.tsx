@@ -1,6 +1,6 @@
 const SavingSection = () => {
     return (
-        <div className="main-container flex flex-col items-center gap-24 py-16 md:py-24 mt-10 md:mt-16 mx-4 md:mx-auto max-w-screen-xl bg-white">
+        <div className="main-container flex flex-col items-center gap-24 py-16 md:py-24 mt-10 md:mt-16 mx-4 md:mx-auto  md:px-16 max-md:px-5 bg-white">
             <div className="flex flex-col md:flex-row gap-12 items-start w-full">
                 {/* Image container */}
                 <div className="flex justify-center md:items-center shrink-0 bg-[#f3f4f6] rounded-[137px] p-8 md:p-9 w-[220px] h-[220px] md:w-[274px] md:h-[274px]">

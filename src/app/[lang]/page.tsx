@@ -15,7 +15,7 @@ export default async function Home({ params }: { params: Promise<{ lang: Locale 
   const { lang } = await params
 
   return (
-    <>
+    <div className='max-w-xxl mx-auto'>
       <BannerSection />
       <LuxuryExperience
         title="Escape to luxury and comfort at Bazar"
@@ -32,7 +32,7 @@ export default async function Home({ params }: { params: Promise<{ lang: Locale 
       />
       <WhyBookSection />
       <DestinationSection />
-      <div className="flex flex-col gap-[100px]">
+      <div className="flex flex-col gap-[100px] md:px-16 max-md:px-5">
         <ChaletsCard title={'Most Booked'} />
         <ChaletsCard title={'Close to the Beach'} />
       </div>
@@ -40,6 +40,6 @@ export default async function Home({ params }: { params: Promise<{ lang: Locale 
       <ChatHero />
       <DownloadApp />
       <Footer />
-    </>
+    </div>
   )
 }

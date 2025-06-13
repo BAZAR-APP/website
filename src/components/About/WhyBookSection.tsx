@@ -39,7 +39,7 @@ const WhyBookSection = () => {
                 backgroundSize: "cover",
                 height: "auto",
             }}>
-            <div className="max-w-screen-xl flex flex-col items-start gap-8 self-stretch relative w-full mx-auto my-0 px-5 py-[32px] md:py-[64px] max-md:max-w-[991px] max-md:px-4 max-sm:max-w-screen-sm">
+            <div className="flex flex-col items-start gap-8 self-stretch relative w-full mx-auto my-0 py-[32px] md:py-[64px] max-md:max-w-[991px] md:px-16 max-md:px-5">
                 <div className="flex flex-col gap-4">
                     <h2 className="font-inter text-[32px] md:text-[39px] font-semibold text-white text-left">Why book with us?</h2>
                     <p className="w-full md:w-[506px] font-inter text-[16px] md:text-[20px] text-white text-left">

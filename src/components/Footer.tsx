@@ -25,7 +25,7 @@ export const Footer: React.FC = () => {
       </footer>
       <div className="w-full text-center py-9">
         <Text className="text-[14px] leading-4 font-normal text-[#9EA0A2]">
-          © 2025 Sea Villa Chalet. All rights reserved.
+          © 2025 Sea Villa Chalet . All rights reserved.
         </Text>
       </div>
     </div>
