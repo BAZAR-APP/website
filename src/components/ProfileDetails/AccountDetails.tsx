@@ -6,10 +6,11 @@ import useToggle from '@/lib/hooks/useToggle'
 import Button from '../Button/Button'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { profileUpdateSchema } from '@/lib/validationSchemas'
 import { useSession } from 'next-auth/react'
 import { useEffect } from 'react'
 import api from '@/lib/axios'
+import { z } from 'zod'
+
 import { toast } from '@/lib/toast'
 import { extractErrorMessage } from '@/lib/utils'
 import ProfileOTPModal from './ProfileOTPModal'
@@ -19,10 +20,39 @@ import PhoneOtpVerification from '../PhoneOtpVerification'
 interface PhoneChangeEvent extends React.ChangeEvent<HTMLInputElement> {}
 
 interface userFormData {
-  phone: string
-  email: string
+  phone?: string
+  email?: string
   fullName: string
 }
+
+export const profileUpdateSchema = z
+  .object({
+    fullName: z.string().min(1, { message: 'Full name is required' }),
+    phone: z.string().max(8, { message: 'Phone must be 8 digits' }).optional().or(z.literal('')),
+    email: z
+      .string()
+      .trim()
+      .optional()
+      .or(z.literal(''))
+      .refine((val) => (val ?? '') === '' || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val ?? ''), {
+        message: 'Invalid email',
+      }),
+  })
+  .superRefine((data, ctx) => {
+    if (!data.phone && !data.email) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Either phone or email is required',
+        path: ['phone'],
+      })
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Either phone or email is required',
+        path: ['email'],
+      })
+    }
+  })
+
 const AccountDetails = () => {
   const verifyPhoneModel = useToggle(false)
   const { data: user, update } = useSession()
@@ -129,7 +159,7 @@ const AccountDetails = () => {
             <div className="flex pt-[8px] pr-0 pb-[8px] pl-0 gap-[12px] items-center self-stretch shrink-0 flex-nowrap relative z-[57]">
               <div className="flex w-[190px] pt-[12px] pr-[20px] pb-[12px] pl-[20px] gap-[8px] justify-center items-center shrink-0 flex-nowrap bg-[#29397e] rounded-[8px] relative overflow-hidden z-[58]">
                 <Button
-                  disabled={isSubmitting || !isValid}
+                  disabled={isSubmitting}
                   className="h-[24px]  text-[16px] font-medium  text-[#fff] "
                   type="submit"
                 >

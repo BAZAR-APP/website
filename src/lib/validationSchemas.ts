@@ -46,7 +46,13 @@ export const loginSchema = z.object({
 })
 
 export const registerSchema = z.object({
-  fullName: z.string().min(2, 'Full name is required'),
+  fullName: z
+    .string()
+    .trim()
+    .min(2, 'Full name must be at least 2 characters long')
+    .refine((val) => val.trim().length >= 2, {
+      message: 'Full name is required and must be at least 2 characters',
+    }),
   phone: phoneSchema,
   password: passwordSchema,
 })
@@ -89,7 +95,13 @@ export const otpSchema = z.object({
 
 // Profile update schema
 export const profileUpdateSchema = z.object({
-  fullName: z.string().min(2, 'Full name is required'),
+  fullName: z
+    .string()
+    .trim()
+    .min(2, 'Full name must be at least 2 characters long')
+    .refine((val) => val.trim().length >= 2, {
+      message: 'Full name is required and must be at least 2 characters',
+    }),
   phone: phoneSchema,
   email: emailSchema,
 })

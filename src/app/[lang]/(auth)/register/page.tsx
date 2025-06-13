@@ -38,7 +38,7 @@ const SignUp = () => {
   const onSubmit = async (data: LoginFormInputs): Promise<void> => {
     try {
       const body = {
-        fullName: data?.fullName,
+        fullName: data?.fullName.trim(),
         phoneNumber: data?.phone,
         callingCode: '+965',
         countryCode: 'KW',
