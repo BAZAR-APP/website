@@ -61,14 +61,14 @@ const ForgetPassword = () => {
   }
 
   return (
-    <div className="flex flex-col items-center justify-start h-[100%]">
-      <div className="max-w-[360px] flex flex-col gap-[24px] pt-[120px]">
+    <div className="flex flex-col items-center justify-center h-[100%]">
+      <div className="max-w-[360px] flex flex-col justify-center gap-[24px]">
         <Image src={'/images/Logo.svg'} alt="Logo" width={150} height={48} />
         <div className="flex flex-col gap-[12px]">
           <h2 className="text-primary font-semibold text-[24px] max-[1440px]:text-[32px] min-[1441px]:text-[39px] leading-tight">
             Forget Password
           </h2>
-          <p className="text-secondary font-400 text-[16px]">
+          <p className="text-secondary font-400 text-[16px] min-[1440px]:pt-3">
             Enter your phone number to reset your password.
           </p>
         </div>
@@ -89,7 +89,7 @@ const ForgetPassword = () => {
 
           <CommonButton
             type="submit"
-            className="w-full h-[48px] bg-[#29397E] text-white gap-2 pt-3 pr-5 pb-3 pl-5 rounded-lg"
+            className="w-full h-[48px] bg-[#29397E] min-[1440px]:my-3 text-white gap-2 pt-3 pr-5 pb-3 pl-5 rounded-lg"
             disabled={!isValid || resendMutation?.isPending}
           >
             {resendMutation.isPending ? 'Sending...' : 'Send OTP'}

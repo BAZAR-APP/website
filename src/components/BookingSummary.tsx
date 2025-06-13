@@ -41,16 +41,21 @@ const PaymentSplitSection: React.FC = () => (
 
 // Extracted coupon section component
 const CouponSection: React.FC = () => (
-  <>
+  <div className="relative">
     <CommonInput
       name="redeemCode"
       type="text"
       onChange={() => {}}
       placeholder="Apply redeemed code here"
-      className={'!bg-[#F9FAFB] !text-[#484A4C] my-1 !rounded-[8px] !border-none !h-[42px]'}
+      className={
+        '!bg-[#F3F4F6] !text-[#484A4C] mt-1 relative !rounded-[8px] !border-none !h-[42px] placeholder:text-[#9EA0A2]'
+      }
     />
+    <span className="font-medium text-[14px] leading-[17px] absolute top-3.5 right-4 cursor-pointer text-[#29397E]">
+      Apply
+    </span>
     <RedeemRewards />
-  </>
+  </div>
 )
 
 type BookingSummaryProps = {
@@ -77,8 +82,10 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
 
   return (
     <>
-      <div className="w-full md:max-w-sm rounded-lg bg-[#F9FAFB] sm:p-6 p-3">
-        <h3 className="xl:text-[25px] text-lg font-semibold text-gray-900 mb-3">Booking Summary</h3>
+      <div className="w-full md:max-w-sm rounded-lg bg-[#F9FAFB] sm:px-6 sm:py-5 p-3">
+        <h3 className="xl:text-[25px] text-lg font-semibold text-[#19191A] mb-3">
+          Booking Summary
+        </h3>
         <div className="p-0">
           <div className="relative">
             <Image
@@ -86,11 +93,11 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
               alt="Luxury Lakeside Retreat"
               width={200}
               height={200}
-              className="w-full h-46 object-cover rounded-lg"
+              className="w-full h-46 object-cover rounded-[24px]"
             />
           </div>
 
-          <div className="py-3">
+          <div className="py-3.5">
             <div className="flex items-start flex-wrap justify-between mb-3">
               <h3 className="text-[16px] leading-[24px] font-medium text-[#19191A] font-inter">
                 Luxury Lakeside Retreat
@@ -101,7 +108,7 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
               </div>
             </div>
 
-            <div className={`flex items-center mb-3 ${textStyles.body}`}>
+            <div className={`flex items-center mb-3.5 ${textStyles.body}`}>
               <Calendar size={16} className="mr-2" />
               From 20 March 2025 to 24 March 2025
             </div>
@@ -126,7 +133,7 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
               </p>
             </div>
 
-            <div className="space-y-3 text-sm pt-2">
+            <div className="space-y-3 text-sm pt-2 !text-[#19191A]">
               {priceDetails.map(({ label, amount }) => (
                 <PriceRowUI key={label} label={label} amount={amount} />
               ))}
@@ -136,7 +143,9 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
               <PriceRowUI label={'Total'} amount={'420 KWD'} labelFont="medium" />
             </div>
 
-            <p className={`flex items-center mb-2 mt-4 ${textStyles.body} self-stretch`}>
+            <p
+              className={`flex items-center mb-2 mt-4 !text-[#9EA0A2] ${textStyles.body} self-stretch`}
+            >
               Deposit will be returned after your stay, subject to property condition.
             </p>
             {paidAmount && (
@@ -156,7 +165,7 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
 
             {showBookButton && (
               <Link href="/explore/details/payment-confirmed/">
-                <Button className="w-[100%] mb-5 text-white my-3.5s !px-0 rounded-lg font-medium cursor-pointer">
+                <Button className="w-[100%] text-white mt-3.5 !px-0 rounded-lg font-medium cursor-pointer">
                   {isSplitPayment ? 'Book Now with 50% Payment' : 'Book Now'}
                 </Button>
               </Link>

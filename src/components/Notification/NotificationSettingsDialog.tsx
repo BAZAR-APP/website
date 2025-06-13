@@ -28,16 +28,19 @@ const NotificationOption: React.FC<NotificationOptionProps> = ({
 }) => {
   return (
     <div className="flex items-center justify-between gap-2">
-      <label htmlFor={switchId} className="text-[#484A4C] text-base font-normal leading-[19px]">
+      <label htmlFor={switchId} className="text-[#484A4C] sm:text-base text-[15px] font-normal leading-[19px]">
         {label}
       </label>
       <Switch.Root
         id={switchId}
-        className="w-[42.5px] h-6 bg-[#F3F4F6] rounded-full cursor-pointer relative data-[state=checked]:bg-[#29397E] transition-colors flex-shrink-0"
+        className="w-[42.5px] h-6 bg-[#F3F4F6] flex items-center rounded-full cursor-pointer relative data-[state=checked]:bg-[#29397E] transition-colors flex-shrink-0"
         checked={checked}
         onCheckedChange={onToggle}
       >
-        <Switch.Thumb className="block w-[20.8px] h-[20.8px]  bg-[#FDFDFE] border border-[#FDFDFE] shadow-md rounded-full transition-transform translate-x-0.5 data-[state=checked]:translate-x-5 flex-shrink-0" />
+        <Switch.Thumb
+          className="block w-[20.8px] h-[20.8px] mt-[0.8px] bg-[#FDFDFE] border border-[#FDFDFE] rounded-full transition-transform translate-x-0.5 data-[state=checked]:translate-x-5 flex-shrink-0"
+          style={{ boxShadow: '-0.16px 2.24px 2.88px rgba(0, 0, 0, 0.35)' }}
+        />
       </Switch.Root>
     </div>
   )
@@ -78,7 +81,7 @@ const NotificationSettingsDialog: React.FC<NotificationSettingsDialogProps> = ({
       <div className="space-y-6 overflow-y-auto">
         {notifications.map((item, itemIndex) => (
           <div key={item.title}>
-            <p className="text-[#19191A] text-base font-medium leading-[150%] mb-5">{item.title}</p>
+            <p className="text-[#19191A] sm:text-base text-[15px] font-medium leading-[150%] mb-5">{item.title}</p>
             <div className="flex flex-col gap-4">
               {item.options.map((option, optionIndex) => {
                 const switchId = `${itemIndex}-${optionIndex}`

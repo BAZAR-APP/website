@@ -80,33 +80,35 @@ const DEFAULT_VALUES = {
   ],
 } as const
 
-const PaymentStatusBadge: React.FC<{ status: PaymentStatus }> = React.memo(function PaymentStatusBadge({ status }) {
-  const statusConfig = {
-    fully_paid: {
-      bgColor: 'bg-[#D1FAE5]',
-      textColor: 'text-[#10B981]',
-      icon: '/images/paid.svg',
-      text: 'Fully Paid',
-    },
-    partially_paid: {
-      bgColor: 'bg-[#FCE7F3]',
-      textColor: 'text-[#EC4899]',
-      icon: '/images/discount.svg',
-      text: '50% Paid',
-    },
-  }
+const PaymentStatusBadge: React.FC<{ status: PaymentStatus }> = React.memo(
+  function PaymentStatusBadge({ status }) {
+    const statusConfig = {
+      fully_paid: {
+        bgColor: 'bg-[#D1FAE5]',
+        textColor: 'text-[#10B981]',
+        icon: '/images/paid.svg',
+        text: 'Fully Paid',
+      },
+      partially_paid: {
+        bgColor: 'bg-[#FCE7F3]',
+        textColor: 'text-[#EC4899]',
+        icon: '/images/discount.svg',
+        text: '50% Paid',
+      },
+    }
 
-  const config = statusConfig[status] || statusConfig.fully_paid
+    const config = statusConfig[status] || statusConfig.fully_paid
 
-  return (
-    <div
-      className={`flex ${config.bgColor} ${config.textColor} rounded-md px-1.5 py-1 text-sm gap-0.5`}
-    >
-      <Image src={config.icon} width={20} height={20} alt="Payment status icon" />
-      {config.text}
-    </div>
-  )
-})
+    return (
+      <div
+        className={`flex ${config.bgColor} ${config.textColor} rounded-md px-1.5 py-1 text-sm gap-0.5`}
+      >
+        <Image src={config.icon} width={20} height={20} alt="Payment status icon" />
+        {config.text}
+      </div>
+    )
+  },
+)
 
 const PropertyInfo: React.FC<{
   guests: string
@@ -134,20 +136,28 @@ const PropertyInfo: React.FC<{
   )
 })
 
-const DateSection: React.FC<{ dateRange: DateRange }> = React.memo(function DateSection({ dateRange }) {
+const DateSection: React.FC<{ dateRange: DateRange }> = React.memo(function DateSection({
+  dateRange,
+}) {
   return (
     <div className="border-b border-[#D1D5DB] max-w-[359px]">
       <h2 className="font-semibold text-[25px] leading-[32px] text-[#19191A] mb-4">Dates</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="sm:border-r border-[#D1D5DB] px-0.5">
-          <label className="font-semibold text-[10px] leading-[16px] text-[#19191A]">CHECK-IN</label>
+          <label className="font-semibold text-[10px] leading-[16px] text-[#19191A]">
+            CHECK-IN
+          </label>
           <div className="text-[14px] leading-[17px] text-[#9EA0A2]">
             {dateRange.from || 'Not set'}
           </div>
         </div>
         <div className="px-0.5">
-          <label className="font-semibold text-[10px] leading-[16px] text-[#19191A]">CHECKOUT</label>
-          <div className="text-[14px] leading-[17px] text-[#9EA0A2]">{dateRange.to || 'Not set'}</div>
+          <label className="font-semibold text-[10px] leading-[16px] text-[#19191A]">
+            CHECKOUT
+          </label>
+          <div className="text-[14px] leading-[17px] text-[#9EA0A2]">
+            {dateRange.to || 'Not set'}
+          </div>
         </div>
       </div>
     </div>
@@ -158,16 +168,16 @@ const AddOnsSection: React.FC<{ addOns: AddOn[] }> = React.memo(function AddOnsS
   if (!addOns?.length) return null
 
   return (
-    <>
-      <h2 className="font-semibold text-[25px] leading-8 text-[#19191A]">Add-ons</h2>
+    <div>
+      <h2 className="font-semibold text-[25px] leading-8 text-[#19191A] mb-4">Add-ons</h2>
       {addOns.map((addOn, index) => (
         <div key={`${addOn.name}-${index}`} className="flex items-center flex-wrap gap-2">
-          <Image src={'/images/Addon.svg'} width={24} height={24} alt='Add icon' />
+          <Image src={'/images/Addon.svg'} width={24} height={24} alt="Add icon" />
           <span className="text-base leading-[19px] text-[#19191A]">{addOn.name}</span>
           <span className="text-base leading-[19px] text-[#19191A]">{addOn.price} KWD</span>
         </div>
       ))}
-    </>
+    </div>
   )
 })
 
@@ -194,7 +204,7 @@ const PaymentSection: React.FC<{
 }) {
   return (
     <div className="w-full lg:max-w-[430px] max-w-full">
-      <div className="md:px-6 px-1">
+      <div className="sm:px-6 px-3 bg-[#F9FAFB] rounded-[16px] py-6">
         <div className="flex items-center justify-between mb-4">
           <h2 className="font-semibold md:text-[25px] text-lg md:leading-8 leading-6 text-[#19191A]">
             Total Payments
@@ -204,8 +214,8 @@ const PaymentSection: React.FC<{
 
         {paymentStatus === 'partially_paid' && (
           <p className="text-sm leading-[17px] text-[#9EA0A2]">
-            You&apos;ve paid 50% of the total amount ({paidAmount} KWD). The remaining {remainingAmount}{' '}
-            KWD is due at least 72 hours before check-in by [{paymentDueDate}].
+            You&apos;ve paid 50% of the total amount ({paidAmount} KWD). The remaining{' '}
+            {remainingAmount} KWD is due at least 72 hours before check-in by [{paymentDueDate}].
           </p>
         )}
 
@@ -241,11 +251,11 @@ const PaymentSection: React.FC<{
 
       <div className="flex flex-col gap-4 min-h-[200px] pt-10">
         {paymentStatus !== 'fully_paid' && (
-          <Button intent="primary" className="w-full !px-0" onClick={onPayRemaining}>
+          <Button intent="primary" className="w-full !px-0 !text-sm !text-[#FFFFFF]" onClick={onPayRemaining}>
             Pay Remaining Amount {remainingAmount} KD Now
           </Button>
         )}
-        <Button intent="danger" className="w-full" onClick={onCancelBooking}>
+        <Button intent="danger" className="w-full !text-sm" onClick={onCancelBooking}>
           Cancel Booking
         </Button>
       </div>
@@ -298,19 +308,19 @@ const BookingDetails: React.FC<BookingDetailsProps> = (props) => {
   }
 
   return (
-    <>
+    <div className='2xl:px-22 xl:px-15 md:px-10 sm:px-7 px-3'>
       <div className="lg:px-20 md:px-14 sm:px-10 px-8 mx-auto py-9">
-        <h1 className="md:text-[39px] text-xl leading-[47px] font-semibold text-[#19191A] sm:mb-2">
+        <h1 className="md:text-[39px] text-[24px] md:leading-[47px] leading-8 font-semibold text-[#19191A] sm:mb-2">
           {title}
         </h1>
-        <p className="mb-6 md:text-[20px] text-sm md:leading-[24px] leading-4 text-[#484A4C]">
+        <p className="mb-6 md:text-[20px] text-sm md:leading-[24px] leading-4 text-[#484A4C] sm:pt-0 pt-1">
           Track your stays, check-in details, and booking status here.
         </p>
 
         <div className="flex items-start justify-between lg:flex-nowrap flex-wrap gap-8">
           <div className="space-y-8">
             <div className="bg-white rounded-lg">
-              <div className="lg:w-[470px] w-full">
+              <div className="lg:w-[470px] w-full pt-3">
                 <Image
                   src={imageUrl}
                   alt={imageAlt}
@@ -323,7 +333,7 @@ const BookingDetails: React.FC<BookingDetailsProps> = (props) => {
 
               <div className="space-y-4">
                 <div className="flex items-center flex-wrap gap-2 pt-3">
-                  <h3 className="text-xl font-semibold text-foreground">{title}</h3>
+                  <h3 className="text-[16px] font-medium text-[#19191A]">{title}</h3>
                   {points > 0 && (
                     <div className="flex bg-[#E1F3FF] items-center gap-1 rounded py-1 px-1.5 max-w-[110px]">
                       <Image src="/images/Points.svg" width={16} height={16} alt="Points Icon" />
@@ -333,9 +343,9 @@ const BookingDetails: React.FC<BookingDetailsProps> = (props) => {
                 </div>
 
                 <Location
-                  icon={<MapPin className="w-4 h-4 text-[#9EA0A2]" />}
+                  icon={<MapPin className="w-4 h-4 text-[#8E8E93]" />}
                   text={location}
-                  className="text-[#9EA0A2]"
+                  className="text-[#8E8E93] text-sm"
                 />
 
                 <PropertyInfo
@@ -350,16 +360,16 @@ const BookingDetails: React.FC<BookingDetailsProps> = (props) => {
                   <Button
                     onClick={handleViewDetails}
                     intent="transperent"
-                    className="text-sm font-medium !px-0 !py-0 text-[#29397E] underline flex items-center"
+                    className="text-sm font-medium !px-0 !py-0 text-[#29397E] underline underline-offset-2 flex gap-1 items-center"
                   >
-                    View Chalet Details Page <ChevronRight className="w-4 h-4" strokeWidth={3} />
+                    View Chalet Details Page <ChevronRight className="w-3 h-3" strokeWidth={3} />
                   </Button>
                   <Button
                     onClick={handleViewLocation}
                     intent="transperent"
-                    className="text-sm font-medium !px-0 !py-0 text-[#29397E] underline flex items-center"
+                    className="text-sm font-medium !px-0 !py-0 text-[#29397E] underline underline-offset-2 flex  gap-1 items-center"
                   >
-                    View Exact Location <ChevronRight className="w-4 h-4" strokeWidth={3} />
+                    View Exact Location <ChevronRight className="w-3 h-3" strokeWidth={3} />
                   </Button>
                 </div>
               </div>
@@ -390,7 +400,7 @@ const BookingDetails: React.FC<BookingDetailsProps> = (props) => {
           confirmCancelToggle()
         }}
       />
-      <ModalDialog isOpen={isConfirmCancel} setIsOpen={confirmCancelToggle}>
+      <ModalDialog isOpen={isConfirmCancel} setIsOpen={confirmCancelToggle} className="lg:min-w-[524px] min-w-[auto]">
         <div className="text-center">
           <Image
             src="/images/PayConfirm.svg"
@@ -399,8 +409,8 @@ const BookingDetails: React.FC<BookingDetailsProps> = (props) => {
             alt="Success"
             className="mx-auto"
           />
-          <h3 className="text-xl font-semibold mt-4 text-[#19191A] pt-3">Booking Cancelled</h3>
-          <p className="text-sm text-[#484A4C] mt-2">
+          <h3 className="md:text-[25px] text-xl font-semibold mt-4 text-[#19191A] pt-3">Booking Cancelled</h3>
+          <p className=" md:text-xl text-[16px] text-[#484A4C] mt-2">
             Your booking has been successfully cancelled. If applicable, your refund will be
             processed according to the cancellation policy.
           </p>
@@ -408,20 +418,20 @@ const BookingDetails: React.FC<BookingDetailsProps> = (props) => {
             <Button
               onClick={() => router.push('/explore/booking/')}
               intent="ghost"
-              className="cursor-pointer bg-[#F3F4F6] text-[#19191A] py-2 rounded-lg text-sm font-medium w-full"
+              className="cursor-pointer bg-[#F3F4F6] text-[#19191A] rounded-lg text-[16px] font-medium w-full"
             >
               Back to My Bookings
             </Button>
             <Button
-               onClick={() => router.push('/explore/chalets/')}
-              className="cursor-pointer bg-[#29397E] text-white py-2 rounded-lg text-sm font-medium !w-full"
+              onClick={() => router.push('/explore/chalets/')}
+              className="cursor-pointer bg-[#29397E] text-[#FDFDFE] rounded-lg text-[16px] font-medium !w-full"
             >
               Browse Chalets
             </Button>
           </div>
         </div>
       </ModalDialog>
-    </>
+    </div>
   )
 }
 

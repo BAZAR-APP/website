@@ -16,7 +16,7 @@ interface PaymentConfirmationData {
   }
 }
 interface PaymentConfirmedProps {
-  bookingConfirmed?: boolean 
+  bookingConfirmed?: boolean
 }
 const mockData: PaymentConfirmationData = {
   imageUrl: 'https://picsum.photos/200/300',
@@ -51,7 +51,7 @@ const ActionLink = ({
 }) => (
   <Link href={href} className="flex gap-1 items-center">
     {icon}
-    <span className="text-sm text-[#29397E] underline">{label}</span>
+    <span className="text-sm text-[#29397E] font-medium underline underline-offset-2">{label}</span>
     {trailingIcon}
   </Link>
 )
@@ -79,7 +79,7 @@ const PaymentConfirmed = ({ bookingConfirmed = false }: PaymentConfirmedProps) =
       icon: <MapPin className="w-4 h-4 text-[#29397E]" />,
       label: 'View Exact Location',
       href: '',
-      trailingIcon: <ChevronRight className="w-4 h-4 text-[#29397E]" strokeWidth={3} />,
+      trailingIcon: <ChevronRight className="w-3 h-3 text-[#29397E]" strokeWidth={3} />,
     },
     {
       icon: <Image src="/images/ReferIcon.svg" width={16} height={16} alt="Refer" />,
@@ -96,7 +96,7 @@ const PaymentConfirmed = ({ bookingConfirmed = false }: PaymentConfirmedProps) =
 
   return (
     <div className="flex justify-center flex-col items-center md:w-[603px] w-full mx-auto md:px-0 px-6 my-7">
-      <Image src="/images/PayConfirm.svg" width={117} height={117} alt="Icon" />
+      <Image src="/images/PayConfirm.svg" width={117} height={117} alt="Icon" className='pb-5 pt-8' />
       <h3 className="lg:text-[39px] md:text-3xl sm:text-2xl text-xl font-semibold py-1 leading-[47px] text-[#19191A] text-center md:pt-6 pt-3 w-full">
         Payment Confirmed
       </h3>
@@ -105,58 +105,58 @@ const PaymentConfirmed = ({ bookingConfirmed = false }: PaymentConfirmedProps) =
           'Your booking is complete. Thank you for choosing us!'
         ) : (
           <>
-            Your booking is complete. Thank you for choosing us! <br />
-            You earned {data.points} points. Track and redeem them in your profile <br />
-            anytime!
+            <p> Your booking is complete. Thank you for choosing us!</p>
+            You earned {data.points} points. Track and redeem them in your profile anytime!
           </>
         )}
       </p>
+      <div className="w-full max-w-[540px]">
+        <Image
+          src={data.imageUrl}
+          alt={data.title}
+          width={200}
+          height={200}
+          className="w-full mt-5 object-cover rounded-[24px] sm:h-[326px] h-[270px]"
+        />
 
-      <Image
-        src={data.imageUrl}
-        alt={data.title}
-        width={200}
-        height={200}
-        className="w-full mt-5 object-cover rounded-[24px] h-[326px]"
-      />
-
-      <div className="self-start pt-4">
-        <div className="flex items-center flex-wrap gap-3 mb-3">
-          <h3 className="text-[16px] leading-[24px] font-medium text-[#19191A] font-inter">
-            {data.title}
-          </h3>
-          <div className="flex bg-[#E1F3FF] items-center gap-1 rounded py-1 px-1.5 max-w-[108px]">
-            <Image src="/images/Points.svg" width={16} height={16} alt="Points-Icon" />
-            <span className="text-[#29397E] text-sm">{data.points} Points</span>
+        <div className="self-start pt-4">
+          <div className="flex items-center flex-wrap gap-3 mb-3">
+            <h3 className="text-[16px] leading-[24px] font-medium text-[#19191A] font-inter">
+              {data.title}
+            </h3>
+            <div className="flex bg-[#E1F3FF] items-center gap-1 rounded py-1 px-1.5 max-w-[108px]">
+              <Image src="/images/Points.svg" width={16} height={16} alt="Points-Icon" />
+              <span className="text-[#29397E] text-sm">{data.points} Points</span>
+            </div>
           </div>
         </div>
-      </div>
 
-      <p className="text-sm leading-4 font-normal text-[#8E8E93] self-start">{data.details}</p>
+        <p className="text-sm leading-4 font-normal text-[#8E8E93] self-start">{data.details}</p>
 
-      <div className="text-sm flex gap-2 self-start my-4.5 leading-4 text-[#8E8E93]">
-        <MapPin className="w-4 h-4 text-[#8E8E93]" />
-        <span className="pr-2">{data.location}</span>
-      </div>
+        <div className="text-sm flex gap-2 self-start my-4.5 leading-4 text-[#8E8E93]">
+          <MapPin className="w-4 h-4 text-[#8E8E93]" />
+          <span className="pr-2">{data.location}</span>
+        </div>
 
-      <h4 className="self-start text-[12px] leading-4 font-semibold text-[#121722]">
-        Refund Instructions
-      </h4>
+        <h4 className="self-start text-[12px] leading-4 font-semibold text-[#121722]">
+          Refund Instructions
+        </h4>
 
-      {refundInfo.map((item, i) => (
-        <InfoItem key={i} icon={item.icon} text={item.text} />
-      ))}
-
-      <div className="self-start py-3 flex gap-2 flex-wrap">
-        {actionLinks.map((link, i) => (
-          <ActionLink
-            key={i}
-            icon={link.icon}
-            label={link.label}
-            href={link.href}
-            trailingIcon={link.trailingIcon}
-          />
+        {refundInfo.map((item, i) => (
+          <InfoItem key={i} icon={item.icon} text={item.text} />
         ))}
+
+        <div className="self-start py-3 flex gap-2 flex-wrap">
+          {actionLinks.map((link, i) => (
+            <ActionLink
+              key={i}
+              icon={link.icon}
+              label={link.label}
+              href={link.href}
+              trailingIcon={link.trailingIcon}
+            />
+          ))}
+        </div>
       </div>
     </div>
   )

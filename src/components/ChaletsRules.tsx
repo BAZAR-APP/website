@@ -55,7 +55,7 @@ const getIcon = (id: string) => {
 }
 
 const StandardItem: React.FC<{ item: Standard }> = ({ item }) => (
-  <div className="flex items-start gap-3">
+  <div className="flex items-center gap-3">
     {getIcon(item.id)}
     <span className="text-base font-normal leading-[19px] text-[#19191A]">{item.title}</span>
   </div>
@@ -74,7 +74,7 @@ const ChaletRules: React.FC<Props> = ({ data = chaletRules as ChaletRulesData })
   const { title, checkInOut, healthStandards, chaletStandards, cancellationPolicy } = data
 
   return (
-    <div className="py-8 mt-3">
+    <div>
       <h2 className="text-xl sm:text-[22px] md:text-[25px] md:leading-8 leading-6 font-semibold text-[#19191A] mb-4">
         {title}
       </h2>
@@ -114,15 +114,15 @@ const ChaletRules: React.FC<Props> = ({ data = chaletRules as ChaletRulesData })
           {cancellationPolicy.description}
         </p>
 
-        <p className="text-sm bg-[#FCE7F3] text-[#EC4899] font-medium max-w-[277px] rounded-md px-1.5 py-1">
+        <p className="text-sm bg-[#FCE7F3] text-[#EC4899] font-normal max-w-[277px] rounded-md px-1.5 py-1">
           {cancellationPolicy.refundTimeEstimate}
         </p>
 
         <div className="pt-3.5 flex gap-2 items-center">
-          <button className="text-base font-medium leading-6 text-[#19191A] underline cursor-pointer">
+          <button className="text-base font-medium leading-6 text-[#19191A] underline underline-offset-2 cursor-pointer">
             Show more
           </button>
-          <ChevronRight className="w-3.5 h-3.5" strokeWidth={3} />
+          <ChevronRight className="w-3 h-3" strokeWidth={3} />
         </div>
       </section>
     </div>

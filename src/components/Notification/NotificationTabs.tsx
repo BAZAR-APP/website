@@ -31,11 +31,11 @@ export const NotificationTabs: React.FC<NotificationTabsProps> = ({ activeTab, o
             onClick={() => onTabChange(tab.id)}
             className={`justify-center cursor-pointer items-center flex min-h-[38px] gap-1.5 overflow-hidden px-[18px] py-[11px] rounded-xl transition-colors ${
               activeTab === tab.id
-                ? 'text-white bg-[#29397E]'
+                ? 'text-white bg-[#29397E] border border-[#29397E]'
                 : 'text-[#344054] border border-[#D0D5DD] bg-white hover:bg-gray-50'
             }`}
           >
-            <span className="px-0.5">{tab.label}</span>
+            {tab.label}
           </button>
         ))}
       </div>

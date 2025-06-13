@@ -8,11 +8,11 @@ const CompletePayment: React.FC = () => {
   const methods = useForm()
   return (
     <FormProvider {...methods}>
-      <div className="max-w-[1800px] mx-auto lg:px-20 md:px-14 sm:px-10 px-8 py-9">
+      <div className="max-w-[1800px] mx-auto lg:px-21 md:px-13 sm:px-10 px-8 py-9">
         <h2 className="xl:text-[39px] md:text-2xl text-xl font-semibold text-[#19191A] mb-2">
           Complete Your Payment
         </h2>
-        <p className="text-[#484A4C] md:text-lg text-sm mb-8">
+        <p className="text-[#484A4C] md:text-[20px] text-sm mb-8">
           Pay the remaining amount to fully confirm your chalet booking.{' '}
         </p>
         <div className="flex flex-col lg:flex-row gap-4 border-b border-[#E5E7EB] pb-3">
