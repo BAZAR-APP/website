@@ -2,6 +2,7 @@ import Footer from '@/components/Footer'
 import Header from '@/components/Header/Header'
 import { Locale } from '../../../../i18n.config'
 import { getDictionary } from '@/lib/dictionary'
+import { StickyChatBot } from '@/components/ChatBot/StickyChatBot'
 
 const NotificationLayout = async ({
   children,
@@ -18,6 +19,7 @@ const NotificationLayout = async ({
       <Header dictionary={dictionary} className="bg-[#FDFDFE]" />
       {children}
       <Footer />
+      <StickyChatBot />
     </div>
   )
 }
