@@ -14,7 +14,7 @@ const NotificationLayout = async ({
   const dictionary = await getDictionary(lang)
   
   return (
-    <div className="max-w-xxl mx-">
+    <div className="max-w-xxl mx-auto">
       <Header dictionary={dictionary} className="bg-[#FDFDFE]" />
       {children}
       <Footer />

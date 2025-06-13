@@ -1,4 +1,4 @@
-import 'server-only'
+// import 'server-only'
 // import { Locale } from '@/i18n.config';
 
 // // Import individual page dictionaries
@@ -65,8 +65,28 @@ export interface Dictionary {
     }
     loyaltyPoints: {
       title: string
+      name: string
+      welcomeMessage: string
       description: string
-      cta: string
+      tier: {
+        name: string
+        range: string
+        earnedPoints: number
+        nextTierMessage: string
+        goldReward: string
+      }
+      actions: {
+        title: string
+        description: string
+        cta: string
+      }[]
+      discountsTitle: string
+      redeemableDiscounts: {
+        title: string
+        pointsRequired: number
+        icon: string
+        cta: string
+      }[]
     }
     about: {
       title: string

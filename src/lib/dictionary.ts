@@ -1,4 +1,4 @@
-import 'server-only';
+// import 'server-only';
 import { builtDictionaries, Dictionary } from './dictionary-builder';
 import { Locale } from '../../i18n.config';
 
