@@ -20,9 +20,7 @@ const LuxuryExperience: React.FC<LuxuryExperienceProps> = ({
     const [isHovered, setIsHovered] = useState(false);
     const router = useRouter();
 
-    const handleLearnMore = () => {
-        router.push('/about');
-    };
+
 
     return (
         <section className="flex flex-col items-center gap-16 self-stretch relative bg-[#FDFDFE] px-0 py-24 max-md:px-0 max-md:py-16 max-sm:px-0 max-sm:py-12 md:px-16 max-md:px-5">
@@ -120,7 +118,7 @@ const LuxuryExperience: React.FC<LuxuryExperienceProps> = ({
                             </p>
                             <div className="flex items-start relative">
                                 <button
-                                    onClick={handleLearnMore}
+                                    onClick={() => router.push('/about')}
                                     onMouseEnter={() => setIsHovered(true)}
                                     onMouseLeave={() => setIsHovered(false)}
                                     className={`!text-[#19191A] !bg-[#FDFDFE] text-sm font-normal leading-5 relative gap-2 border shadow-[0px_1px_2px_0px_rgba(31,41,55,0.08)] bg-[#FDFDFE] px-4 py-2 rounded-lg border-solid border-[#19191A] transition-all duration-200 focus:outline-none ${isHovered ? 'transform scale-105' : ''

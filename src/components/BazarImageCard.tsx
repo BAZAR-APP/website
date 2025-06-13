@@ -37,7 +37,7 @@ export const Card: React.FC<CardProps> = ({
             }}
         >
             <div className="w-full h-full flex items-center justify-center">
-                <Image src={"/images/Logo-white.svg"} alt="logo" width={148} height={74} />
+                <Image src={"/images/Logo-white.svg"} alt="logo" width={148} height={74} className="w-full sm:w-auto" />
             </div>
         </div>
     );

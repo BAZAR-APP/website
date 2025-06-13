@@ -10,10 +10,8 @@ const SearchHeader = () => {
         {fields.map((field, index) => (
           <div
             key={index}
-            className={`flex flex-col px-0 md:px-4 w-full md:w-auto 
-        ${index === 0 ? 'lg:w-[30%]' : 'lg:w-[20%]'} 
-        ${index % 2 === 0 ? 'text-left' : 'text-right'} 
-        md:text-left`}
+            className={`flex flex-col px-0 md:px-4 w-full md:w-auto ${index === 0 ? 'lg:w-[30%]' : 'lg:w-[20%]'
+              }`}
           >
             <span className="text-[12px] font-bold text-primary">{field.label}</span>
             <span className="text-sm text-secondary">{field.placeholder}</span>

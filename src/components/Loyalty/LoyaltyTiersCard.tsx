@@ -22,8 +22,6 @@ const LoyaltyTiersCardSection: React.FC = () => {
             benefits: [
                 'Earn 8 points per 1 KWD',
                 'Priority support',
-                '',
-                ''
             ],
             className: 'min-h-[214px] w-full  '
         },
@@ -72,18 +70,18 @@ const LoyaltyTiersCardSection: React.FC = () => {
     );
 
     const TierBenefits = ({ benefits }: { benefits: string[] }) => (
-        <div className="text-[#FDFDFE] text-sm font-normal mt-4">
+        <ul className="text-[#FDFDFE] list-disc pl-5 text-sm font-normal mt-4">
             {benefits.map((benefit, index) => (
-                <React.Fragment key={index}>
+                <li key={index}>
                     {benefit}
                     {index < benefits.length - 1 && <br />}
-                </React.Fragment>
+                </li>
             ))}
-        </div>
+        </ul>
     );
 
     const TierCard = ({ tier }: { tier: TierData }) => (
-        <article className={`flex-1 ${tier.className}`}>
+        <article className={`flex-1 flex-wrap ${tier.className}`}>
             <div
                 className="flex w-full flex-col p-4 rounded-2xl h-full"
                 style={{ backgroundColor: tier.backgroundColor }}

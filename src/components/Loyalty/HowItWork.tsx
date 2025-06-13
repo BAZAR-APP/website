@@ -25,7 +25,7 @@ const steps = [
 ];
 
 const StepCard: React.FC<{ title: string; description: string; img: string }> = ({ title, description, img }) => (
-    <div className="flex flex-col w-full max-w-xs sm:max-w-[268px] items-start bg-[#F9FAFB33] rounded-2xl p-4 gap-3 sm:gap-4">
+    <div className="flex flex-col w-full sm:max-w-[268px] items-start bg-[#F9FAFB33] rounded-2xl p-4 gap-3 sm:gap-4">
         <div className="flex flex-col items-start gap-3 sm:gap-4">
             <div className="flex w-14 h-14 sm:w-16 sm:h-16 items-center justify-center bg-gray-100 rounded-[32px]">
                 <Image alt={title} src={img} width={40} height={40} className="w-10 h-10 sm:w-10 sm:h-10" />
@@ -48,7 +48,7 @@ const HowItWork: React.FC = () => {
             <div className="flex flex-col items-center justify-center gap-8 sm:gap-12 w-full">
                 <div className="flex flex-col md:flex-row items-start gap-6 md:gap-12 w-full">
                     <div className="flex flex-col items-start gap-3 md:gap-8 flex-1">
-                        <h2 className="font-semibold text-white text-2xl sm:text-3xl md:text-[39px] leading-tight">
+                        <h2 className="font-semibold text-white text-[32px] sm:text-3xl md:text-[39px] leading-tight">
                             How It Works
                         </h2>
                         <p className="text-base sm:text-lg md:text-[20px] text-cream-white w-full md:max-w-[700px] text-left">

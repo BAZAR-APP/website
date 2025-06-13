@@ -20,7 +20,7 @@ const LoyaltyBannerSection = () => {
                         </div>
 
                         <div className="flex flex-col items-start gap-6 w-full">
-                            <p className="mt-[-1px] text-base sm:text-lg md:text-[20px] max-w-full md:max-w-[700px] text-[#484A4C] text-justify font-normal leading-relaxed">
+                            <p className="mt-[-1px] text-base sm:text-lg md:text-[20px] max-w-full md:max-w-[700px] text-[#484A4C] font-normal leading-relaxed">
                                 Join our loyalty program and make every booking more rewarding!
                                 Earn points every time you book a chalet or purchase add-ons.
                                 The more you book, the more points you collect, unlocking bigger
