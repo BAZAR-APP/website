@@ -78,7 +78,7 @@ const TestimonialsSection: React.FC = () => {
         <div className="w-full max-w-screen-xl px-16 max-md:max-w-full max-md:px-5">
           <header className="flex w-full gap-[40px_100px] justify-between flex-wrap max-md:max-w-full">
             <div className="min-w-60 flex-1 shrink basis-[0%] max-w-screen-md max-md:max-w-full">
-              <h2 className="text-[#19191A] w-full text-[39px] font-semibold max-md:max-w-full">
+              <h2 className="text-[#19191A] w-full text-[39px] font-semibold max-md:text-[32px]">
                 What Our Guests Say
               </h2>
               <p className="text-[#484A4C] text-xl font-normal leading-7 mt-5 max-md:max-w-full">
@@ -134,7 +134,7 @@ const TestimonialsSection: React.FC = () => {
           }}
         >
           {[...testimonials, ...testimonials].map((testimonial) => (
-            <SwiperSlide key={testimonial.id + Math.random()} className="mb-16 mt-10">
+            <SwiperSlide key={testimonial.id + Math.random()} className="mb-16 mt-10 px-4 md:px-0">
               <TestimonialCard
                 name={testimonial.name}
                 rating={testimonial.rating}
