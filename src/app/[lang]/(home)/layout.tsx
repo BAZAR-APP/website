@@ -11,8 +11,8 @@ const NotificationLayout = async ({
   params: Promise<{ lang: Locale }>
 }) => {
   const { lang } = await params
-  const dictionary = await getDictionary(lang)
-  
+  const dictionary = getDictionary(lang)
+
   return (
     <div className="max-w-xxl mx-auto">
       <Header dictionary={dictionary} className="bg-[#FDFDFE]" />

@@ -1,13 +1,15 @@
-// import 'server-only';
+// Remove 'server-only' import as it's causing render delays
 import { builtDictionaries, Dictionary } from './dictionary-builder';
 import { Locale } from '../../i18n.config';
 
-const dictionaries: Record<Locale, () => Promise<Dictionary>> = {
-  en: async () => builtDictionaries.en as unknown as Dictionary,
-  ar: async () => builtDictionaries.ar as unknown as Dictionary,
+// Make dictionaries synchronous since builtDictionaries is already available
+const dictionaries: Record<Locale, () => Dictionary> = {
+  en: () => builtDictionaries.en as unknown as Dictionary,
+  ar: () => builtDictionaries.ar as unknown as Dictionary,
 };
 
-export const getDictionary = async (locale: Locale): Promise<Dictionary> => {
+// Make getDictionary synchronous
+export const getDictionary = (locale: Locale): Dictionary => {
   return dictionaries[locale]();
 };
 

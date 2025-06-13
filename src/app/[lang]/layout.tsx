@@ -1,6 +1,5 @@
 import { IBM_Plex_Sans, IBM_Plex_Sans_Arabic } from 'next/font/google'
 import '@/app/globals.css'
-import { getDictionary } from '@/lib/dictionary'
 import { i18n, Locale } from '../../../i18n.config'
 
 // Font for English
@@ -31,7 +30,6 @@ export default async function RootLayout({
   params: Promise<{ lang: Locale }>
 }) {
   const { lang } = await params
-  const dictionary = await getDictionary(lang)
   const isRtl = lang === 'ar'
 
   return (

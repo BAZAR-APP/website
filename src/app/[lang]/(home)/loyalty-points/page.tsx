@@ -15,17 +15,12 @@ const LoyaltyPoints = () => {
   const { isOpen, toggle } = useToggle(false)
   const params = useParams() as { lang: Locale }
   const { lang } = params
-  const [page, setPage] = React.useState<any>(null)
   const [isRedeemOpen, setIsRedeemOpen] = React.useState(false)
   const [selectedDiscount, setSelectedDiscount] = React.useState<any>(null)
   const [redeemStep, setRedeemStep] = React.useState<'select' | 'confirm' | 'copy'>('select')
   const [isDialogOpen, setDialogOpen] = React.useState(false)
 
-  React.useEffect(() => {
-    getDictionary(lang).then((dict) => setPage(dict.page))
-  }, [lang])
-
-  if (!page) return null
+  const { page } = getDictionary(lang)
 
   return (
     <>

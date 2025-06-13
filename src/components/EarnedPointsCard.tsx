@@ -1,5 +1,6 @@
 import React from 'react'
 import Image from 'next/image'
+import { AnimatedPointsProgress } from './AnimatedPointsProgress '
 
 interface EarnedPointsCardProps {
   currentPoints: number
@@ -29,31 +30,7 @@ export const EarnedPointsCard: React.FC<EarnedPointsCardProps> = ({
       </div>
 
       <div className="flex flex-col items-center gap-[16px]">
-        <div className="relative w-[160px] h-[160px]">
-          <svg className="w-[160px] h-[160px] transform -rotate-90" viewBox="0 0 160 160">
-            <circle cx="80" cy="80" r="72" stroke="#EAECF0" strokeWidth="16" fill="none" />
-            <circle
-              cx="80"
-              cy="80"
-              r="72"
-              stroke="#29397E"
-              strokeWidth="16"
-              fill="none"
-              strokeDasharray="452.389"
-              strokeDashoffset={strokeDashoffset}
-              strokeLinecap="round"
-            />
-          </svg>
-
-          <div className="absolute inset-0 flex flex-col items-center justify-center">
-            <span className="text-[#475467] text-[12px] font-[400]">
-              {page.loyaltyPoints.tier.earnedPoints}
-            </span>
-            <span className="text-[#101828] sm:text-[24px] text-[16px] font-[700]">
-              {currentPoints}
-            </span>
-          </div>
-        </div>
+        <AnimatedPointsProgress />
 
         <div className="text-center">
           <div className="flex items-center gap-[4px] mb-[8px]">

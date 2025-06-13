@@ -1,14 +1,18 @@
-import { getDictionary } from '@/lib/dictionary'
 import { Locale } from '../../../i18n.config'
-import { BannerSection, ChaletsCard, ChatHero, DestinationSection, DownloadApp, Footer, LuxuryExperience, RewardsSection, WhyBookSection } from '@/components'
-
-
+import {
+  BannerSection,
+  ChaletsCard,
+  ChatHero,
+  DestinationSection,
+  DownloadApp,
+  Footer,
+  LuxuryExperience,
+  RewardsSection,
+  WhyBookSection,
+} from '@/components'
 
 export default async function Home({ params }: { params: Promise<{ lang: Locale }> }) {
   const { lang } = await params
-  const { page } = await getDictionary(lang)
-
-
 
   return (
     <>
@@ -28,7 +32,7 @@ export default async function Home({ params }: { params: Promise<{ lang: Locale 
       />
       <WhyBookSection />
       <DestinationSection />
-      <div className='flex flex-col gap-[100px]'>
+      <div className="flex flex-col gap-[100px]">
         <ChaletsCard title={'Most Booked'} />
         <ChaletsCard title={'Close to the Beach'} />
       </div>
