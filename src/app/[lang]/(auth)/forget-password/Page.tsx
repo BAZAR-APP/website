@@ -15,7 +15,7 @@ import { z } from 'zod'
 type FormValues = {
   phone: string
 }
-interface PhoneChangeEvent extends React.ChangeEvent<HTMLInputElement> {}
+interface PhoneChangeEvent extends React.ChangeEvent<HTMLInputElement> { }
 
 const ForgetPassword = () => {
   const router = useRouter()
@@ -73,7 +73,7 @@ const ForgetPassword = () => {
           </p>
         </div>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-[24px]">
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-[24px] w-full">
           <CommonInput
             icon={<img src="/images/countryFlag.svg" alt="" className="w-[16px] h-[16px]" />}
             prefix="+965"

@@ -8,15 +8,16 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { profileUpdateSchema } from '@/lib/validationSchemas'
 import { useSession } from 'next-auth/react'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import api from '@/lib/axios'
 import { toast } from '@/lib/toast'
 import { extractErrorMessage } from '@/lib/utils'
 import ProfileOTPModal from './ProfileOTPModal'
 import PhoneOtpVerification from '../PhoneOtpVerification'
+import ReusableTextArea from '../CommonTextArea/TextArea'
 // import ProfileSuccessModal from "./ProfileSuccessModal"
 // import ProfileOTPModal from "./ProfileOTPModal"
-interface PhoneChangeEvent extends React.ChangeEvent<HTMLInputElement> {}
+interface PhoneChangeEvent extends React.ChangeEvent<HTMLInputElement> { }
 
 interface userFormData {
   phone: string
@@ -26,6 +27,9 @@ interface userFormData {
 const AccountDetails = () => {
   const verifyPhoneModel = useToggle(false)
   const { data: user, update } = useSession()
+  const [address, setAddress] = useState(
+    'Sea Villa Retreat, Block 5, Street 12, Villa 27, Al Khiran, Ahmadi, Kuwait 64021'
+  );
 
   const {
     handleSubmit,
@@ -53,6 +57,11 @@ const AccountDetails = () => {
     setValue('phone', value, { shouldValidate: true })
   }
 
+  const handleTextAreaChange = (e: React.ChangeEvent<HTMLTextAreaElement>): void => {
+    console.log(e.target.value)
+    setAddress(e.target.value || '');
+  }
+
   const onSubmit = async (data: userFormData) => {
     try {
       const body = {
@@ -75,55 +84,58 @@ const AccountDetails = () => {
 
   return (
     <>
-      <div className="flex w-[710px] flex-col gap-[40px] items-start shrink-0 flex-nowrap relative z-[38]">
+      <div className="flex w-full max-w-[710px] flex-col gap-6 sm:gap-10 items-start shrink-0 flex-nowrap relative z-[38] px-4 sm:px-0">
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-[32px]">
-          <CommonInput
-            name="fullName"
-            placeholder=""
-            value={watch('fullName')}
-            onChange={(e) => setValue('fullName', e.target.value, { shouldValidate: true })}
-            label="Full Name"
-            className={'bg-[#F9FAFB] text-[#484A4C] rounded-[8px]'}
-            error={!!errors?.fullName}
-            errorMessage={errors?.fullName?.message}
-          />
-          <CommonInput
-            icon={
-              <Image src={'/images/countryFlag.svg'} alt="Country Flag" width={16} height={16} />
-            }
-            prefix="+965"
-            name="phone"
-            className={
-              '!bg-[#F9FAFB] !text-[#484A4C] !rounded-[8px] !border-none !h-[42px] text-sm sm:text-base'
-            }
-            type="text"
-            label="Phone"
-            value={watch('phone')}
-            onChange={handlePhoneChange}
-            maxLength={8}
-            error={!!errors?.phone}
-            errorMessage={errors?.phone?.message}
-          />
-          <CommonInput
-            name="email"
-            placeholder=""
-            value={watch('email')}
-            onChange={(e) => setValue('email', e.target.value, { shouldValidate: true })}
-            label="Email"
-            className={'bg-[#F9FAFB] text-[#484A4C] rounded-[8px]'}
-            error={!!errors?.email}
-            errorMessage={errors?.email?.message}
-            readonly
-          />
-          <div className="flex w-[330px] h-[117px] flex-col gap-[8px] items-start shrink-0 flex-nowrap relative z-[52]">
-            <span className="h-[17px] self-stretch shrink-0 basis-auto font-['Inter'] text-[14px] font-normal leading-[16.943px] text-[#19191a] relative text-left overflow-hidden whitespace-nowrap z-[53]">
-              Home or ID Address
-            </span>
-            <div className="flex w-[330px] pt-[12px] pr-[16px] pb-[12px] pl-[16px] gap-[8px] items-start shrink-0 flex-nowrap bg-[#f9fafb] rounded-[8px] relative overflow-hidden z-[54]">
-              <span className="flex w-[298px] justify-start items-start self-stretch grow shrink-0 basis-0 font-['Inter'] text-[14px] font-normal leading-[16.943px] text-[#484a4c] relative text-left overflow-hidden z-[55]">
-                Sea Villa Retreat, Block 5, Street 12, Villa 27, Al Khiran, Ahmadi, Kuwait 64021
-              </span>
-            </div>
+          <div className="w-full">
+            <CommonInput
+              name="fullName"
+              placeholder=""
+              value={watch('fullName')}
+              onChange={(e) => setValue('fullName', e.target.value, { shouldValidate: true })}
+              label="Full Name"
+              className={'bg-[#F9FAFB] text-[#484A4C] rounded-[8px]'}
+              error={!!errors?.fullName}
+              errorMessage={errors?.fullName?.message}
+            />
+          </div>
+          <div className="w-full">
+            <CommonInput
+              icon={
+                <Image src={'/images/countryFlag.svg'} alt="Country Flag" width={16} height={16} />
+              }
+              prefix="+965"
+              name="phone"
+              className={
+                '!bg-[#F9FAFB] !text-[#484A4C] !rounded-[8px] !border-none !h-[42px] text-sm sm:text-base'
+              }
+              type="text"
+              label="Phone"
+              value={watch('phone')}
+              onChange={handlePhoneChange}
+              maxLength={8}
+              error={!!errors?.phone}
+              errorMessage={errors?.phone?.message}
+            />
+          </div>
+          <div className="w-full">
+            <CommonInput
+              name="email"
+              placeholder=""
+              value={watch('email')}
+              onChange={(e) => setValue('email', e.target.value, { shouldValidate: true })}
+              label="Email"
+              className={'bg-[#F9FAFB] text-[#484A4C] rounded-[8px]'}
+              error={!!errors?.email}
+              errorMessage={errors?.email?.message}
+              readonly
+            />
+          </div>
+          <div className="w-full">
+            <ReusableTextArea
+              label={'Home or ID Address'}
+              value={address}
+              onChange={(e) => { handleTextAreaChange(e) }}
+              row={2} />
           </div>
           <div className="flex flex-col items-start self-stretch shrink-0 flex-nowrap relative z-[56]">
             <div className="flex pt-[8px] pr-0 pb-[8px] pl-0 gap-[12px] items-center self-stretch shrink-0 flex-nowrap relative z-[57]">

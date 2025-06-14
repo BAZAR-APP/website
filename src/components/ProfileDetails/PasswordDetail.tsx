@@ -58,7 +58,7 @@ const PasswordDetail = () => {
 
   return (
     <>
-      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-[32px]">
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-[32px] max-w-[450px] w-full">
         <div>
           <CommonInput
             name="currentPassword"

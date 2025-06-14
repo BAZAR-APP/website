@@ -20,7 +20,8 @@ const Profile = () => {
 
     return (
         <>
-            <div className="main-container flex  pt-[24px] pr-[160px] pb-[64px] pl-[160px] flex-col gap-[40px] items-start flex-nowrap bg-[#fdfdfe] relative mx-auto my-0">
+            <div className="flex flex-col items-start flex-nowrap bg-[#fdfdfe] relative mx-auto my-0 pt-6 pb-16 px-4 sm:px-10 lg:px-[160px] gap-6 sm:gap-[40px]">
+
                 <ProfileHeader />
                 <ProfileTabs
                     tabs={tabData}
