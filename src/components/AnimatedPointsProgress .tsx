@@ -52,8 +52,8 @@ export const AnimatedPointsProgress = ({
   const strokeDashoffset = circumference - (animatedProgress / 100) * circumference
 
   return (
-    <div className="flex items-center justify-center  bg-gray-50 p-8">
-      <div className="relative w-64 h-64 flex items-center justify-center">
+    <div className="flex items-center justify-center">
+      <div className="relative w-[160px] h-[160px] flex items-center justify-center">
         {/* Background Circle */}
         <svg className="absolute inset-0 w-full h-full transform -rotate-90" viewBox="0 0 200 200">
           <circle
@@ -61,7 +61,7 @@ export const AnimatedPointsProgress = ({
             cy="100"
             r={radius}
             stroke="rgb(229, 231, 235)"
-            strokeWidth="12"
+            strokeWidth="15"
             fill="transparent"
             className="opacity-30"
           />
@@ -74,7 +74,7 @@ export const AnimatedPointsProgress = ({
             cy="100"
             r={radius}
             stroke="#29397e"
-            strokeWidth="12"
+            strokeWidth="15"
             fill="transparent"
             strokeDasharray={circumference}
             strokeDashoffset={strokeDashoffset}
@@ -85,14 +85,14 @@ export const AnimatedPointsProgress = ({
 
         {/* Center Content */}
         <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-          <p className="text-gray-600 text-sm font-medium mb-2">Earned Points</p>
-          <p className="text-4xl font-bold text-gray-900">{Math.round(animatedPoints)}</p>
+          <p className="text-[#475467] text-[12px] font-medium mb-1.5">Earned Points</p>
+          <p className="text-2xl font-semibold !text-[#101828]">{Math.round(animatedPoints)}</p>
         </div>
       </div>
 
       {/* Radix UI Themes Progress Bar Alternative (Hidden by default) */}
       <div className="hidden">
-        <Progress value={animatedProgress} className="w-64" />
+        <Progress value={animatedProgress} className='w-[160px]' />
       </div>
     </div>
   )

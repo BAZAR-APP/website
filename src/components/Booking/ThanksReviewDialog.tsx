@@ -33,13 +33,13 @@ const ThanksReviewDialog: React.FC<ThanksReviewDialogProps> = ({ isOpen, setIsOp
           <Button
             onClick={() => router.push('/explore/booking/')}
             intent="ghost"
-            className="cursor-pointer bg-[#F3F4F6] text-[#19191A] py-2 rounded-lg text-sm font-medium w-full"
+            className="cursor-pointer bg-[#F3F4F6] text-[#19191A] py-2 rounded-lg text-[16px] font-medium w-full"
           >
             Back to My Bookings
           </Button>
           <Button
             onClick={() => router.push('/explore/chalets/')}
-            className="cursor-pointer bg-[#29397E] text-white py-2 rounded-lg text-sm font-medium !w-full"
+            className="cursor-pointer bg-[#29397E] text-[#FDFDFE] py-2 rounded-lg text-[16px] font-medium !w-full"
           >
             Browse Chalets
           </Button>

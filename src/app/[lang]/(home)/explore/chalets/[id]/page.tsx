@@ -62,8 +62,8 @@ export default async function ChaletDetailsPage() {
                 points={data.points}
               />
               <SelectablePlans />
-              <div className='border-b border-[#E5E7EB]'>
-              <AmenitiesList amenities={data.amenities} />
+              <div className="border-b border-[#E5E7EB]">
+                <AmenitiesList amenities={data.amenities} />
                 <h2 className="md:text-[25px] text-xl font-semibold leading-[32px] text-[#19191A] mt-7">
                   Where you’ll sleep
                 </h2>
@@ -102,7 +102,9 @@ export default async function ChaletDetailsPage() {
                 reviews: hotel.reviews,
               }}
             />
-            <ChaletsRules />
+            <div className="py-8 mt-3">
+              <ChaletsRules />
+            </div>
           </>
         </div>
       </div>

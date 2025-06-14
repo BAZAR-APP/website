@@ -11,6 +11,7 @@ import { CommonInput } from '@/components'
 import { resetPasswordSchema } from '@/lib/validationSchemas'
 import { toast } from '@/lib/toast'
 import { extractErrorMessage } from '@/lib/utils'
+import Image from 'next/image'
 
 interface PasswordFormData {
   password: string
@@ -47,7 +48,10 @@ const ChangePassword = () => {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ newPassword: data.password, confirmPassword: data?.confirmPassword }),
+        body: JSON.stringify({
+          newPassword: data.password,
+          confirmPassword: data?.confirmPassword,
+        }),
       })
 
       if (!res.ok) {
@@ -73,12 +77,18 @@ const ChangePassword = () => {
     <div className="flex flex-col items-center justify-center h-full">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="max-w-[360px] h-[90vh] overflow-y-auto flex flex-col gap-[24px]"
+        className="max-w-[360px] h-[90vh] overflow-y-auto flex flex-col justify-center gap-[24px]"
       >
-        <img src="/images/Logo.svg" alt="" className="w-[150px] h-[48px]" />
+        <Image
+          src={'/images/Logo.svg'}
+          alt="Logo"
+          width={150}
+          height={48}
+          className="min-[1440px]:py-3"
+        />
 
         <div className="flex flex-col gap-[12px]">
-          <h2 className="text-primary font-semibold text-[24px] max-[1440px]:text-[32px] min-[1441px]:text-[39px] leading-tight">
+          <h2 className="text-primary font-semibold text-[24px] min-[1440px]:py-3 max-[1440px]:text-[32px] min-[1441px]:text-[39px] leading-tight">
             Set A New Password
           </h2>
           <p className="text-secondary font-400 text-[16px]">
@@ -90,7 +100,7 @@ const ChangePassword = () => {
           name="password"
           type="password"
           label="New Password"
-          className="!bg-[#F9FAFB] !text-[#484A4C] !rounded-[8px] !border-none !h-[42px]"
+          className="!bg-[#F9FAFB] !text-[#484A4C] !rounded-[8px] !border-none min-[1440px]:my-1 !h-[42px]"
           value={watch('password')}
           onChange={handlePasswordChange}
           error={!!errors?.password}
@@ -101,7 +111,7 @@ const ChangePassword = () => {
           name="confirmPassword"
           type="password"
           label="Confirm New Password"
-          className="!bg-[#F9FAFB] !text-[#484A4C] !rounded-[8px] !border-none !h-[42px]"
+          className="!bg-[#F9FAFB] !text-[#484A4C] !rounded-[8px] min-[1440px]:my-1 !border-none !h-[42px]"
           value={watch('confirmPassword')}
           onChange={handlePasswordChange}
           error={!!errors?.confirmPassword}
@@ -110,7 +120,7 @@ const ChangePassword = () => {
 
         <CommonButton
           type="submit"
-          className="w-full h-[48px] bg-[#29397E] text-white gap-2 pt-3 pr-5 pb-3 pl-5 rounded-lg"
+          className="w-full h-[48px] bg-[#29397E] text-white min-[1440px]:my-3 gap-2 pt-3 pr-5 pb-3 pl-5 rounded-lg"
           disabled={!isValid || mutation?.isPending}
         >
           {mutation.isPending ? 'Submitting...' : 'Create New Password'}

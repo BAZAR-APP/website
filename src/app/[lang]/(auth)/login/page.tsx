@@ -71,20 +71,29 @@ const Login = () => {
 
   return (
     <>
-      <div className="max-w-[360px] overflow-y-auto flex flex-col gap-[4px]">
+      <div className="max-w-[360px] overflow-y-auto flex flex-col justify-center gap-[4px]">
         <div className="flex justify-start">
-          <Image src={'/images/Logo.svg'} alt="Logo" width={150} height={48} />
+          <Image
+            src={'/images/Logo.svg'}
+            alt="Logo"
+            width={150}
+            height={48}
+            className="min-[1440px]:py-3"
+          />
         </div>
         <div className="flex flex-col gap-3 text-left">
-          <h2 className="text-primary font-semibold text-[24px] max-[1440px]:text-[32px] min-[1441px]:text-[39px] leading-tight">
+          <h2 className="text-primary font-semibold min-[1440px]:pt-3 text-[24px] max-[1440px]:text-[32px] min-[1441px]:text-[39px] leading-tight">
             Sign In
           </h2>
-          <p className="text-secondary font-normal text-[14px] sm:text-[16px]">
+          <p className="text-secondary font-normal text-[14px] min-[1440px]:pb-4 min-[1440px]:pt-1.5 sm:text-[16px]">
             Welcome back! Log in to manage your bookings and profile.
           </p>
         </div>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-[16px]">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="flex flex-col min-[1440px]:gap-6 gap-[16px]"
+        >
           <div>
             <CommonInput
               icon={
@@ -118,13 +127,17 @@ const Login = () => {
             />
           </div>
 
-          <div className="flex justify-between text-sm sm:text-base">
+          <div className="flex justify-between min-[1440px]:mt-1 text-sm">
             <CheckBox
               label={'Remember Me'}
               checked={watch('rememberMe')}
               onChange={handleRememberMeChange}
+              className="text-[#484A4C] font-normal"
             />
-            <Link href="/forget-password" className="text-[#29397E] font-bold underline">
+            <Link
+              href="/forget-password"
+              className="text-[#29397E] font-medium text-sm underline underline-offset-2"
+            >
               Forget Password?
             </Link>
           </div>
@@ -133,36 +146,35 @@ const Login = () => {
             type="submit"
             disabled={isSubmitting || !isValid}
             children={isSubmitting ? 'Signing In...' : 'Sign In'}
-            className="w-full h-[48px] bg-[#29397E] text-white gap-2 pt-3 pr-5 pb-3 pl-5 rounded-lg text-base disabled:opacity-50"
+            className="w-full h-[48px] bg-[#29397E] !text-[#FDFDFE] min-[1440px]:my-3 gap-2 pt-3 pr-5 pb-3 pl-5 rounded-lg text-base disabled:opacity-50"
           />
         </form>
 
-        <div className="flex items-center">
+        <div className="flex items-center min-[1440px]:mt-1">
           <div className="flex-grow border-t border-[#DEDEDF]"></div>
-          <span className="mx-2 text-[#DEDEDF] text-sm">OR</span>
+          <span className="mx-2 text-[#DEDEDF] text-[16px]">OR</span>
           <div className="flex-grow border-t border-[#DEDEDF]"></div>
         </div>
 
-        <div className="flex justify-center items-center gap-6 w-full">
+        <div className="flex justify-center items-center gap-6 w-full min-[1440px]:my-3">
           <button
             onClick={() =>
               signIn('google', { callbackUrl: `${process.env.NEXT_PUBLIC_URL}/explore/chalets` })
             }
             className="shrink-0"
           >
-            <Image src="/images/googleRounded.svg" alt="Login with Google" width={35} height={35} />
+            <Image src="/images/googleRounded.svg" alt="Login with Google" width={40} height={40} />
           </button>
-
           <Image
             src="/images/appleRounded.svg"
             alt="Apple"
-            width={35}
-            height={35}
+            width={40}
+            height={40}
             className="shrink-0"
           />
         </div>
 
-        <div className="flex items-center justify-center space-x-1 text-[14px]">
+        <div className="flex items-center justify-start space-x-1 min-[1440px]:mt-4 text-[14px]">
           <span className="text-[#484A4C]">Don't have an account?</span>
           <Link href="/register" className="text-[#29397E] font-bold">
             Sign Up

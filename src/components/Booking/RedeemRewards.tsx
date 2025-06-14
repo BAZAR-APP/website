@@ -3,8 +3,8 @@
 import { Button, CommonInput } from '@/components'
 import ModalDialog from '@/components/ModalDialog/Dialog'
 import useToggle from '@/lib/hooks/useToggle'
-import { copyToClipboard } from '@/lib/utils'
 import { Text } from '@radix-ui/themes'
+import { ChevronRight } from 'lucide-react'
 import Image from 'next/image'
 import React, { useState } from 'react'
 
@@ -39,8 +39,8 @@ const RedeemRewards = () => {
   return (
     <div>
       <Button asChild onClick={toggle} intent="transperent" className="!px-0">
-        <span className="text-sm text-[#29397E] font-medium cursor-pointer underline">
-          Redeem Gifts & Discounts ›
+        <span className="text-sm !text-[#29397E] font-medium cursor-pointer flex items-center gap-2 underline underline-offset-2">
+          Redeem Gifts & Discounts <ChevronRight className="w-3 h-3" strokeWidth={3} />
         </span>
       </Button>
 

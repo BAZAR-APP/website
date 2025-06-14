@@ -51,7 +51,7 @@ const LoyaltyPoints = () => {
           </p>
           <div className="flex items-center justify-start flex-wrap my-8 gap-5">
             <EarnedPointsCard currentPoints={300} maxPoints={500} page={page} />
-            <Image src={'/images/bazar-card.png'} width={630} height={250} alt="Bazar Img" />
+            <Image src={'/images/bazar-card.png'} width={630} height={250} className='2xl:w-[850px] xl:w-[630px] w-full' alt="Bazar Img" />
           </div>
           <div className="flex items-center gap-10 flex-wrap py-4">
             {page.loyaltyPoints.actions.map((action: any, idx: number) => (

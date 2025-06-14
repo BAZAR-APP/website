@@ -80,7 +80,7 @@ const CommonInput: React.FC<CommonInputProps> = ({
           autoComplete="off"
         />
       </div>
-      {error && errorMessage && <p className="text-red-500 text-sm">{errorMessage}</p>}
+      {error && errorMessage && <p className="text-red-500 text-[12px] transition-all">{errorMessage}</p>}
     </Flex>
   )
 }

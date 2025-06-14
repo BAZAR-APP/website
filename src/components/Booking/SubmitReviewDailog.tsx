@@ -41,7 +41,7 @@ const SubmitReviewDialog: React.FC<SubmitReviewDialogProps> = ({
       className="lg:min-w-[524px] min-w-auto h-[95%] min-[1440px]:h-[98%]"
       title="Share Your Experience"
     >
-      <p className="sm:text-xl text-sm sm:leading-6 leading-4 text-gray-600 py-2">
+      <p className="sm:text-xl text-sm sm:leading-6 leading-4 text-[#484A4C] py-2">
         Tell us what you loved (or what we can do better). Your feedback helps us improve!
       </p>
 
@@ -94,15 +94,15 @@ const SubmitReviewDialog: React.FC<SubmitReviewDialogProps> = ({
         <Button
           onClick={() => {}}
           intent="transperent"
-          className="text-sm font-medium !px-0 !py-0 text-[#29397E] underline flex gap-1 items-center"
+          className="text-sm font-medium !px-0 !py-0 text-[#29397E] underline underline-offset-2 flex gap-1 items-center"
         >
           <MapPin className="w-3.5 h-3.5 text-[#29397E]" />
-          <span> View Exact Location</span> <ChevronRight className="w-4 h-4 mt-0.5" />
+          <span> View Exact Location</span> <ChevronRight className="w-3 h-3 mt-0.5" strokeWidth={3} />
         </Button>
         <Button
           onClick={() => {}}
           intent="transperent"
-          className="text-sm font-medium !px-0 !py-0 text-[#29397E] underline flex gap-1 items-center"
+          className="text-sm font-medium !px-0 !py-0 text-[#29397E] underline underline-offset-2 flex gap-1 items-center"
         >
           <Image src="/images/ReferIcon.svg" width={16} height={16} alt="Refer" />{' '}
           <span>Refer A Friend</span>
@@ -117,20 +117,20 @@ const SubmitReviewDialog: React.FC<SubmitReviewDialogProps> = ({
         </Button>
       </div>
       <textarea
-        className="w-full h-52 mt-6 p-3 bg-[#F9FAFB] focus:border-none focus:outline-none rounded resize-none text-sm"
+        className="w-full h-52 mt-6 p-3 bg-[#F9FAFB] text-[#9EA0A2] focus:border-none focus:outline-none rounded resize-none text-[16px]"
         placeholder="Write about your stay—what you liked, how the chalet was, or anything you'd like future guests to know..."
       />
       <div className="flex flex-col md:flex-row justify-between gap-4 pt-4">
         <Button
           onClick={onCancel}
           intent="ghost"
-          className="w-full py-2 text-sm font-medium rounded-lg cursor-pointer bg-gray-50 text-gray-900"
+          className="w-full py-2 text-[16px] font-medium rounded-lg cursor-pointer text-[#19191A] bg-[#F3F4F6]"
         >
           Cancel
         </Button>
         <Button
           onClick={onSubmit}
-          className="w-full py-2 text-sm font-medium text-white bg-indigo-800 rounded-lg cursor-pointer"
+          className="w-full py-2 text-[16px] font-medium text-[#FDFDFE] bg-indigo-800 rounded-lg cursor-pointer"
         >
           Submit Review
         </Button>

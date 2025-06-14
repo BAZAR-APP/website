@@ -16,7 +16,7 @@ const Notifications = () => {
 
   const handleTabChange = (tab: NotificationTab) => {
     setActiveTab(tab)
-    setVisibleCount(10) 
+    setVisibleCount(10)
   }
 
   const filteredNotifications = useMemo(() => {
@@ -93,13 +93,11 @@ const Notifications = () => {
               <Button
                 intent="transperent"
                 onClick={handleLoadMore}
-                className="flex items-center justify-start !px-0 gap-1 text-base text-[#19191A] font-medium underline mt-2 hover:no-underline transition-all focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded"
+                className="flex items-center justify-start !px-0 !py-1.5 gap-1 text-base text-[#19191A] font-medium underline underline-offset-2 mt-2"
                 aria-label={`Load more notifications. Currently showing ${visibleCount} of ${filteredNotifications.length}`}
               >
-                <span className="text-[#19191A] underline decoration-solid decoration-auto underline-offset-auto">
-                  Show more Notifications
-                </span>
-                <ChevronRight className="w-4 h-4" />
+                <span className="text-[#19191A]">Show more Notifications</span>
+                <ChevronRight className="w-3 h-3" strokeWidth={3} />
               </Button>
             )}
 

@@ -19,8 +19,8 @@ const Booking = () => {
   }
 
   return (
-    <div className="lg:px-20 md:px-14 sm:px-10 px-8 mx-auto min-h-screen">
-      <h2 className="md:text-[39px] text-[22px] md:leading-[47px] leading-8 font-semibold text-[#19191A]">
+    <div className="xl:px-39 lg:px-20 md:px-14 sm:px-10 px-8 mx-auto min-h-screen py-3">
+      <h2 className="md:text-[39px] text-[24px] md:leading-[47px] leading-8 font-semibold text-[#19191A]">
         My Bookings
       </h2>
       <p className="md:text-[20px] text-sm leading-[24px] text-[#484A4C] py-4">
@@ -30,11 +30,9 @@ const Booking = () => {
       <div className="flex gap-4 flex-wrap my-5">
         <Button
           onClick={() => setActiveTab('current')}
-          intent="ghost"
-          className={`!rounded-[12px] transition-colors ${
-            activeTab === 'current' 
-              ? '!bg-[#29397E] text-white' 
-              : 'hover:bg-[#29397E]'
+          intent="transperent"
+          className={`!rounded-[12px] border border-[#D0D5DD] text-sm transition-colors text-[#344054] ${
+            activeTab === 'current' ? '!bg-[#29397E] text-white' : ''
           }`}
         >
           Current
@@ -42,11 +40,9 @@ const Booking = () => {
 
         <Button
           onClick={() => setActiveTab('completed')}
-          intent="ghost"
-          className={`!rounded-[12px] transition-colors ${
-            activeTab === 'completed' 
-              ? '!bg-[#29397E] text-white' 
-              : 'hover:bg-[#29397E]'
+          intent="transperent"
+          className={`!rounded-[12px] border border-[#D0D5DD] text-sm transition-colors text-[#344054] ${
+            activeTab === 'completed' ? '!bg-[#29397E] text-white' : ''
           }`}
         >
           Completed

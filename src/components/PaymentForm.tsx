@@ -58,7 +58,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
   return (
     <>
       <form onSubmit={handleSubmit(onFormSubmit)} className="lg:w-[480px] xl:w-[528px] w-full">
-        <div className="space-y-8">
+        <div className="space-y-7">
           {paymentDetail && (
             <div className="flex flex-col items-start p-4 gap-4 bg-[#FDFDFE] shadow-[0px_4px_16px_rgba(17,34,17,0.05)] rounded-[12px]">
               <div className="space-y-4 w-full">
@@ -97,9 +97,9 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
           )}
           <div className="bg-white p-6 rounded-xl shadow-[0px_4px_16px_rgba(17,34,17,0.05)]">
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-1">Card number</label>
+              <label className="block text-sm font-medium text-[#19191A] mb-1">Card number</label>
               <div className="relative">
-                <div className="flex justify-start space-x-2 mb-2 lg:hidden">
+                <div className="flex items-center justify-start space-x-2 mb-2 lg:hidden">
                   {['VISA', 'Mastercard', 'ApplePay', 'Gpay'].map((brand) => (
                     <Image
                       key={brand}
@@ -116,10 +116,10 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
                   type="text"
                   {...register('cardNumber')}
                   placeholder="1234 1234 1234 1234"
-                  className="w-full px-4 py-2 border rounded-md border-gray-300"
+                  className="w-full px-4 py-2 bg-[#F9FAFB] border rounded-md border-[#D1D5DB] placeholder:text-[#6B7280]"
                 />
 
-                <div className="absolute right-3 top-2 hidden lg:flex space-x-2">
+                <div className="absolute right-3 top-3 hidden lg:flex space-x-2">
                   {['VISA', 'Mastercard', 'ApplePay', 'Gpay'].map((brand) => (
                     <Image
                       key={brand}
@@ -136,27 +136,27 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Expiry</label>
+                <label className="block text-sm font-medium text-[#19191A] mb-1">Expiry</label>
                 <input
                   type="text"
                   {...register('expiry')}
                   placeholder="MM / YY"
-                  className="w-full px-4 py-2 border rounded-md border-gray-300"
+                  className="w-full px-4 py-2 bg-[#F9FAFB] border rounded-md border-[#D1D5DB] placeholder:text-[#6B7280]"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">CVV</label>
+                <label className="block text-sm font-medium text-[#19191A] mb-1">CVV</label>
                 <input
                   type="text"
                   {...register('cvv')}
                   placeholder="CVV"
-                  className="w-full px-4 py-2 border rounded-md border-gray-300"
+                  className="w-full px-4 py-2 bg-[#F9FAFB] border rounded-md border-[#D1D5DB] placeholder:text-[#6B7280]"
                 />
               </div>
             </div>
           </div>
           {addNowBooking && (
-            <p className="text-sm text-[#000000] mt-4 flex items-center">
+            <p className="text-sm text-[#000000] !pb-3.5 flex items-center">
               <span className="mr-2">
                 <Image src={'/images/protection.svg'} alt="Secure" width={24} height={24} />
               </span>
@@ -164,7 +164,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
               <Image
                 src={'/images/Knet.svg'}
                 alt="Secure"
-                className="ml-1"
+                className="mx-1"
                 width={24}
                 height={24}
               />

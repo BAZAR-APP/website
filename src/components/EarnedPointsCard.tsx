@@ -9,18 +9,13 @@ interface EarnedPointsCardProps {
 }
 
 export const EarnedPointsCard: React.FC<EarnedPointsCardProps> = ({
-  currentPoints,
-  maxPoints,
   page,
 }) => {
-  const radius = 72
-  const circumference = 2 * Math.PI * radius
-  const progress = Math.min(currentPoints / maxPoints, 1)
-  const strokeDashoffset = circumference * (1 - progress)
+
 
   return (
-    <section className="flex flex-col items-start p-4 gap-4 w-full lg:max-w-[351px] max-w-full bg-[#F9FAFB] rounded-[16px]">
-      <div className="flex items-center gap-[16px] mb-[16px]">
+    <section className="flex flex-col items-start p-4 gap-2 w-full lg:max-w-[351px] max-w-full bg-[#F9FAFB] rounded-[16px]">
+      <div className="flex items-center gap-[16px]">
         <Image src={'/images/platinumTier.svg'} width={64} height={64} alt="Tier img" />
 
         <h3 className="font-semibold sm:text-[20px] text-[16px] sm:leading-[32px] leading-5 flex flex-wrap gap-1.5 items-center text-[#19191A]">
