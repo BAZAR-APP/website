@@ -3,7 +3,7 @@ import * as React from "react";
 
 const JoinUs = () => {
     return (
-        <main className="flex flex-col relative min-h-screen text-white">
+        <main className="flex flex-col relative text-white">
             <Image
                 src="https://cdn.builder.io/api/v1/image/assets/1b3d434ba2184846a69efe8753eda104/bfb14513705ade3e6e2faeee9bd0eb6ce182ac16?placeholderIfAbsent=true"
                 alt=""
@@ -15,11 +15,11 @@ const JoinUs = () => {
 
             <section className="relative w-full px-4 md:px-16">
                 <div className="flex flex-col items-center justify-center py-16 md:py-24">
-                    <div className="w-full max-w-screen-xl">
+                    <div className="w-full">
                         <div className="flex flex-col md:flex-row gap-10 md:gap-[64px]">
                             <div className="w-full">
                                 <header className="text-center md:text-left">
-                                    <h1 className="text-3xl md:text-5xl font-semibold">
+                                    <h1 className="text-[32px] md:text-5xl font-semibold">
                                         Why Join?
                                     </h1>
                                     <p className="text-base md:text-xl font-normal mt-6 text-justify md:text-left">
@@ -53,11 +53,11 @@ const JoinUs = () => {
 
             <section className="relative w-full px-4 md:px-16">
                 <div className="flex flex-col items-center justify-center py-20">
-                    <div className="w-full max-w-screen-xl">
+                    <div className="w-full">
                         <div className="flex flex-col md:flex-row gap-10 md:gap-[64px]">
                             <div className="w-full">
                                 <header className="text-center md:text-left">
-                                    <h2 className="text-3xl md:text-5xl font-semibold">
+                                    <h2 className="text-[32px] md:text-5xl font-semibold">
                                         Earn Points Easily!
                                     </h2>
                                     <p className="text-base md:text-xl font-normal mt-6 text-justify md:text-left">

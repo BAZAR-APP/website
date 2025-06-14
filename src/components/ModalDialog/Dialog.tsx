@@ -9,6 +9,7 @@ type ModalDialogProps = {
   title?: string
   children?: React.ReactNode
   className?: string
+  titleClassName?: string
 }
 
 const ModalDialog: React.FC<ModalDialogProps> = ({
@@ -17,11 +18,13 @@ const ModalDialog: React.FC<ModalDialogProps> = ({
   title,
   children,
   className,
+  titleClassName
+
 }) => {
   return (
     <Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 bg-[#000000B2] backdrop-blur-[4px] z-40" />
+        <Dialog.Overlay className="fixed inset-0 bg-[#000000B2] backdrop-blur-[2px] z-40" />
         <Dialog.Content
           className={clsx(
             'fixed z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2',

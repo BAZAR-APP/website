@@ -4,10 +4,10 @@ import AnimatedCounter from '../AnimatedCounter'
 const OurStatistics = () => {
   return (
     <div className="w-full bg-[#29397e] px-4 md:px-16 py-16">
-      <div className="max-w-7xl mx-auto flex flex-col gap-16 items-center">
+      <div className="mx-auto flex flex-col gap-16 items-center">
         <div className="flex flex-col gap-8 text-white w-full">
           <div className="flex flex-col gap-6">
-            <h2 className="font-['Inter'] font-semibold text-[clamp(28px,6vw,39px)] leading-tight">
+            <h2 className="font-semibold text-[clamp(32px,6vw,39px)] leading-tight">
               Our Impact in Numbers
             </h2>
             <p className="font-['Inter'] text-[clamp(16px,4vw,20px)] leading-[1.5] max-w-3xl">

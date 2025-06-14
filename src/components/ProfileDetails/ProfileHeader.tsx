@@ -5,7 +5,7 @@ import useToggle from '@/lib/hooks/useToggle'
 
 const ProfileHeader = () => {
   const { isOpen, toggle } = useToggle()
-  const { data: user,status } = useSession()
+  const { data: user, status } = useSession()
 
   return (
     <>
@@ -49,7 +49,7 @@ const ProfileHeader = () => {
           </div>
         </div>
       </div>
-      <SocialLinkShare open={isOpen} onClose={toggle} title="Refere A Friend" colRevers={true}>
+      <SocialLinkShare open={isOpen} onClose={toggle} title="Refers A Friend" colRevers={true}>
         <div className="bg-[#F9FAFB] w-[161px] h-[161px] mx-auto rounded-[20px] flex justify-center items-center">
           <Image src={'/images/gift.svg'} alt="gift" width={119} height={119} />
         </div>

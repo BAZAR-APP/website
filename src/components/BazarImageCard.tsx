@@ -37,7 +37,7 @@ export const Card: React.FC<CardProps> = ({
             }}
         >
             <div className="w-full h-full flex items-center justify-center">
-                <Image src={"/images/Logo-white.svg"} alt="logo" width={148} height={74} />
+                <Image src={"/images/Logo-white.svg"} alt="logo" width={148} height={74} className="w-full sm:w-auto" />
             </div>
         </div>
     );
@@ -49,24 +49,24 @@ const BazarImageCard: React.FC = () => {
             id: 1,
             backgroundImage: '/images/bazarCard1.jpg',
             rotate: 'rotate-0 lg:-rotate-[5.05deg]',
-            className: 'z-10 md:-right-15 sm:-right-10 w-[100%] md:w-atuo',
+            className: 'z-10 md:-right-15 sm:-right-10 w-[100%] md:w-atuo shadow-[0px_4.98px_4.98px_0px_#00000033]',
         },
         {
             id: 2,
             backgroundColor: '#1E2A78',
             rotate: 'rotate-0 lg:-rotate-[16.84deg]',
-            className: 'top-0 hidden lg:block',
+            className: 'top-0 hidden lg:block shadow-[0px_4.98px_4.98px_0px_#00000033]',
         },
         {
             id: 3,
             backgroundImage: '/images/bazarCard3.jpg',
             rotate: 'rotate-0 lg:rotate-[24.89deg]',
-            className: 'top-2.5 hidden lg:block',
+            className: 'top-2.5 hidden lg:block shadow-[0px_4.98px_4.98px_0px_#00000033]',
         },
     ];
 
     return (
-        <div className="flex flex-col lg:flex-row items-center justify-center pt-15 md:-ml-10 max-w-full">
+        <div className="flex flex-col lg:flex-row xl:items-start item-center justify-start pt-15 md:-ml-10 max-w-full">
             {cards.map((item) => (
                 <Card key={item.id} {...item} />
             ))}

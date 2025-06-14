@@ -66,7 +66,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
             <div className="flex gap-1 items-center text-sm text-gray-700 ml-auto">
               <span className="ml-2">{rating}</span>
               <Image src={Star} alt="Star" width={16} height={16} />
-              <span className="text-gray-500 ml-1">({reviews} reviews)</span>
+              <span className="text-[#484A4C] ml-1">({reviews} reviews)</span>
             </div>
           )}
         </div>
@@ -86,48 +86,49 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
             </span>
           ))}
         </div>
+        <div className='flex items-center justify-between flex-nowrap'>
+          <div className="flex items-center justify-between ">
+            {!member && (
+              <div className="flex items-center sm:flex-nowrap flex-wrap text-sm text-gray-700">
+                <span className="mr-1">{rating}</span>
+                <Image src={Star} alt="Star" width={16} height={16} />
+                <span className="text-gray-500 sm:ml-1">({reviews} reviews)</span>
+              </div>
+            )}
 
-        <div className="flex items-center justify-between">
-          {!member && (
-            <div className="flex items-center sm:flex-nowrap flex-wrap text-sm text-gray-700">
-              <span className="mr-1">{rating}</span>
-              <Image src={Star} alt="Star" width={16} height={16} />
-              <span className="text-gray-500 sm:ml-1">({reviews} reviews)</span>
+            <div className="flex items-center font-medium text-[16px] leading-7 text-[#484A4C]">
+              {newPrice ? (
+                <>
+                  <span className="md:text-[14px] text-[12px] font-bold text-primary">
+                    {newPrice} KD
+                  </span>
+                  <span className="md:text-[12px] text-[10px] leading-4 font-normal text-primary">
+                    /{priceUnit}
+                  </span>
+                  <span className="pl-2 md:text-[12px] text-[10px] font-overline leading-4 font-bold line-through text-primary">
+                    {price} KD
+                  </span>
+                </>
+              ) : (
+                <>
+                  <span className="sm:text-[18px] text-sm">{price} KD</span>
+                  <span className="text-sm leading-4 font-normal text-[#484A4C]">
+                    /{priceUnit}
+                  </span>
+                </>
+              )}
+            </div>
+          </div>
+
+          {member && (
+            <div className="flex w-[113px] py-[4px] px-[6px] gap-[4px] justify-center items-center bg-[#29397e] rounded-[6px] relative z-[29]">
+              <div className="w-[12px] h-[12px] bg-[url(https://codia-f2c.s3.us-west-1.amazonaws.com/image/2025-06-04/7tnhNOS6C5.png)] bg-cover bg-no-repeat relative z-30" />
+              <span className="text-[12px] font-normal text-[#fdfdfe] text-center whitespace-nowrap z-31">
+                Members Only
+              </span>
             </div>
           )}
-
-          <div className="flex items-center font-medium text-[16px] leading-7 text-[#484A4C]">
-            {newPrice ? (
-              <>
-                <span className="md:text-[14px] text-[12px] font-bold text-primary">
-                  {newPrice} KD
-                </span>
-                <span className="md:text-[12px] text-[10px] leading-4 font-normal text-primary">
-                  /{priceUnit}
-                </span>
-                <span className="pl-2 md:text-[12px] text-[10px] font-overline leading-4 font-bold line-through text-primary">
-                  {price} KD
-                </span>
-              </>
-            ) : (
-              <>
-                <span className="sm:text-[18px] text-sm">{price} KD</span>
-                <span className="text-sm leading-4 font-normal text-[#484A4C]">
-                  /{priceUnit}
-                </span>
-              </>
-            )}
-          </div>
         </div>
-
-        {member && (
-          <div className="flex w-[113px] py-[4px] px-[6px] gap-[4px] justify-center items-center bg-[#29397e] rounded-[6px] relative z-[29]">
-            <div className="w-[12px] h-[12px] bg-[url(https://codia-f2c.s3.us-west-1.amazonaws.com/image/2025-06-04/7tnhNOS6C5.png)] bg-cover bg-no-repeat relative z-30" />
-            <span className="text-[12px] font-normal text-[#fdfdfe] text-center whitespace-nowrap z-31">
-              Members Only
-            </span>
-          </div>
-        )}
       </div>
     </div>
   );

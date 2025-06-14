@@ -83,7 +83,7 @@ const SocialLinkShare: React.FC<ShareModalProps> = ({
   }
 
   return (
-    <ModalDialog isOpen={open} setIsOpen={onClose} title={title}>
+    <ModalDialog isOpen={open} setIsOpen={onClose} title={title} titleClassName='!text-[16px] !font-[700]'>
       {children && children}
       <div
         className={clsx('flex flex-col', {
@@ -114,15 +114,15 @@ const SocialLinkShare: React.FC<ShareModalProps> = ({
             value={shareUrl}
             readonly
             placeholder="Loading URL..."
-            className="w-full relative !px-4 !pr-10 bg-gray-50 border border-[#D0D5DD] !rounded-md !text-sm !h-[42px]"
+            className="w-full relative !px-4 !pr-10 bg-gray-50 border !border-[#D0D5DD] !rounded-md !text-[#9EA0A2] !text-sm !h-[42px]"
           />
-          <span className="absolute top-0 right-3 flex">
+          <span className="absolute top-0 right-4 flex">
             <Separator.Root
               orientation="vertical"
               className="h-10.5 w-[1.5px] bg-gray-300 inline-block mx-3"
             />
             <Copy
-              className="w-4 h-4 mt-3 text-[#29397E] cursor-pointer hover:text-blue-600 transition-colors"
+              className="w-5 h-5 mt-3 text-[#29397E] cursor-pointer hover:text-blue-600 transition-colors"
               onClick={handleCopy}
             />
           </span>

@@ -1,6 +1,8 @@
 
+"use client"
 import * as React from "react";
 import { BazarImageCard, Button } from "@/components";
+import { useRouter } from 'next/navigation'
 
 interface RewardsSectionProps {
     title?: string;
@@ -14,23 +16,17 @@ const RewardsSection: React.FC<RewardsSectionProps> = ({
     title = "Earn & Redeem Rewards",
     description = "Join our loyalty program, earn points on every booking, and redeem them for exclusive discounts!",
     buttonText = "Learn More",
-    onButtonClick
 }) => {
-    const handleLearnMore = () => {
-        if (onButtonClick) {
-            onButtonClick();
-        } else {
-            console.log("Learn more about rewards program");
-        }
-    };
+
+    const router = useRouter()
 
     return (
         <section
             className="flex flex-col justify-center bg-white md:px-16 md:py-24 max-md:px-5  mx-auto"
             aria-labelledby="rewards-title"
         >
-            <div className="min-h-[794px] overflow-hidden bg-gray-50 p-20 rounded-[40px] max-md:px-5  mx-auto max-w-screen-xl">
-                <article className="min-h-[191px] max-w-[1280px]">
+            <div className="min-h-[794px] overflow-hidden bg-gray-50 p-20 rounded-[40px] max-md:px-5 w-full  mx-auto ">
+                <article className="min-h-[191px] ">
                     <header>
                         <h1 className="text-[#19191A] text-[32px] md:text-[39px] font-semibold leading-tight max-md:max-w-full">
                             {title}
@@ -44,6 +40,7 @@ const RewardsSection: React.FC<RewardsSectionProps> = ({
                     <div className="mt-6">
                         <Button
                             className="w-[190px] h-auto bg-[#29397E] text-white hover:bg-[#1f2a5f] rounded-lg font-medium"
+                            onClick={() => router.push('/loyalty-program')}
                         >
                             {buttonText}
                         </Button>
@@ -53,8 +50,8 @@ const RewardsSection: React.FC<RewardsSectionProps> = ({
                 <div className="mt-10">
                     <BazarImageCard />
                 </div>
-            </div>
-        </section>
+            </div >
+        </section >
     );
 };
 

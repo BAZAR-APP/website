@@ -132,7 +132,7 @@ const LoyaltyPoints = () => {
         title={'About Tiers'}
         isOpen={isOpen}
         setIsOpen={toggle}
-        className="xl:!max-w-[1050px] w-full max-h-[calc(100vh-100px)] overflow-y-auto m-4"
+        className="xl:!max-w-[1050px] w-full max-h-[calc(100vh-101px)] overflow-y-auto m-4"
       >
         <CompareTiers />
       </ModalDialog>

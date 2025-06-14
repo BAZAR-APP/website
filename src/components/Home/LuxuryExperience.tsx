@@ -1,7 +1,7 @@
 "use client"
 import Image from 'next/image';
 import { useState } from 'react';
-
+import { useRouter } from 'next/navigation';
 interface LuxuryExperienceProps {
     title: string;
     description: string;
@@ -18,14 +18,13 @@ const LuxuryExperience: React.FC<LuxuryExperienceProps> = ({
     buttonLink,
 }) => {
     const [isHovered, setIsHovered] = useState(false);
+    const router = useRouter();
 
-    const handleLearnMore = () => {
-        console.log('Learn more about Bazar resort');
-    };
+
 
     return (
-        <section className="flex flex-col items-center gap-16 self-stretch relative bg-[#FDFDFE] px-0 py-24 max-md:px-0 max-md:py-16 max-sm:px-0 max-sm:py-12">
-            <div className="max-w-screen-xl flex flex-col items-start gap-8 self-stretch relative w-full mx-auto my-0 px-5 py-0 max-md:max-w-[991px] max-md:px-4 max-md:py-0 max-sm:max-w-screen-sm">
+        <section className="flex flex-col items-center gap-16 self-stretch relative bg-[#FDFDFE] px-0 py-24 max-md:px-0 max-md:py-16 max-sm:px-0 max-sm:py-12 md:px-16 max-md:px-5">
+            <div className="flex flex-col items-start gap-8 self-stretch relative w-full mx-auto my-0 px-5 py-0 max-md:max-w-[991px] max-md:px-4 max-md:py-0 max-sm:max-w-screen-sm">
                 <div className="flex items-start gap-8 self-stretch relative max-lg:flex-col max-md:gap-6">
                     <header className="flex max-w-[1440px] flex-col items-start gap-5 flex-[1_0_0] relative">
                         <h1 className="self-stretch text-[#101828] text-5xl font-bold relative gap-[-54px] max-md:text-4xl max-sm:text-[28px]">
@@ -119,10 +118,10 @@ const LuxuryExperience: React.FC<LuxuryExperienceProps> = ({
                             </p>
                             <div className="flex items-start relative">
                                 <button
-                                    onClick={handleLearnMore}
+                                    onClick={() => router.push('/about')}
                                     onMouseEnter={() => setIsHovered(true)}
                                     onMouseLeave={() => setIsHovered(false)}
-                                    className={`text-[#19191A] text-sm font-normal leading-5 relative gap-2 border shadow-[0px_1px_2px_0px_rgba(31,41,55,0.08)] bg-[#FDFDFE] px-4 py-2 rounded-lg border-solid border-[#19191A] transition-all duration-200 hover:bg-[#19191A] hover:text-[#FDFDFE] focus:outline-none focus:ring-2 focus:ring-[#19191A] focus:ring-offset-2 ${isHovered ? 'transform scale-105' : ''
+                                    className={`!text-[#19191A] !bg-[#FDFDFE] text-sm font-normal leading-5 relative gap-2 border shadow-[0px_1px_2px_0px_rgba(31,41,55,0.08)] bg-[#FDFDFE] px-4 py-2 rounded-lg border-solid border-[#19191A] transition-all duration-200 focus:outline-none ${isHovered ? 'transform scale-105' : ''
                                         }`}
                                     aria-label="Learn more about Bazar resort amenities and services"
                                 >
