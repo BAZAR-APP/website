@@ -135,7 +135,7 @@ const Login = () => {
               className="text-[#484A4C] font-normal"
             />
             <Link
-              href="/forget-password"
+              href="/forgot-password"
               className="text-[#29397E] font-medium text-sm underline underline-offset-2"
             >
               Forget Password?
