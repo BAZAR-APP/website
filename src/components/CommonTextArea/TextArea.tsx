@@ -1,4 +1,3 @@
-import { Row } from '@radix-ui/themes/components/table';
 import React from 'react';
 
 type ReusableTextAreaProps = {
