@@ -18,17 +18,17 @@ const ProfileHeader = () => {
         </span>
       </div>
 
-      <div className="flex flex-col md:flex-row items-center gap-6 mt-6">
+      <div className="flex flex-col md:flex-row items-center gap-8 mt-6">
         {/* Profile Image */}
         <div className="flex items-center justify-center w-[96px] h-[104px]">
           <div className="relative w-[96px] h-[96px]">
             <div className="rounded-full w-full h-full bg-[url('https://codia-f2c.s3.us-west-1.amazonaws.com/image/2025-06-11/i3wsd1dC5N.png')] bg-cover bg-center" />
-            <div className="absolute w-[40%] h-[37%] bg-[url('https://codia-f2c.s3.us-west-1.amazonaws.com/image/2025-06-11/RNdLFTnBUc.png')] bg-cover bg-center rounded-full right-0 bottom-0" />
+            <div className="absolute w-[40%] h-[37%] bg-[url('/images/camera.svg')] bg-cover bg-center rounded-full right-[-10px] bottom-0" />
           </div>
         </div>
 
         {/* User Info */}
-        <div className="flex flex-col gap-2 w-full md:w-auto items-start">
+        <div className="flex flex-col gap-0 w-full md:w-auto items-start">
           <span className="text-[20px] md:text-[25px] font-semibold text-[#19191a]">
             {user?.user?.fullName}
           </span>
@@ -40,7 +40,7 @@ const ProfileHeader = () => {
 
           {/* Refer a Friend Button */}
           <div
-            className="flex items-center gap-2 mt-2 rounded-full px-4 py-2 border border-[#29397e1a] cursor-pointer"
+            className="flex items-center gap-2 mt-2 rounded-full py-2 cursor-pointer"
             onClick={toggle}
           >
             <div className="w-4 h-4 bg-[url('https://codia-f2c.s3.us-west-1.amazonaws.com/image/2025-06-11/jPFatpV24M.png')] bg-cover bg-no-repeat" />

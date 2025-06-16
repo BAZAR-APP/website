@@ -75,7 +75,7 @@ const ForgetPassword = () => {
 
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-[24px] w-full">
           <CommonInput
-            icon={<img src="/images/countryFlag.svg" alt="" className="w-[16px] h-[16px]" />}
+            icon={<Image src="/images/countryFlag.svg" alt="countryFlag" className="w-[16px] h-[16px]" height={16} width={16} />}
             prefix="+965"
             type="number"
             label="Phone"

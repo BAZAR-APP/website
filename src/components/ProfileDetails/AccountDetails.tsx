@@ -116,19 +116,19 @@ const AccountDetails = () => {
     <>
       <div className="flex w-full max-w-[710px] flex-col gap-6 sm:gap-10 items-start shrink-0 flex-nowrap relative z-[38] px-4 sm:px-0">
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-[32px]">
-          <div className="w-full">
+          <div className="w-full box-border">
             <CommonInput
               name="fullName"
               placeholder=""
               value={watch('fullName')}
               onChange={(e) => setValue('fullName', e.target.value, { shouldValidate: true })}
               label="Full Name"
-              className={'bg-[#F9FAFB] text-[#484A4C] rounded-[8px]'}
+              className={'bg-[#F9FAFB] text-[#484A4C] rounded-[8px] !max-w-[417px] !w-full '}
               error={!!errors?.fullName}
               errorMessage={errors?.fullName?.message}
             />
           </div>
-          <div className="w-full">
+          <div className="w-full box-border">
             <CommonInput
               icon={
                 <Image src={'/images/countryFlag.svg'} alt="Country Flag" width={16} height={16} />
@@ -136,7 +136,7 @@ const AccountDetails = () => {
               prefix="+965"
               name="phone"
               className={
-                '!bg-[#F9FAFB] !text-[#484A4C] !rounded-[8px] !border-none !h-[42px] text-sm sm:text-base'
+                '!bg-[#F9FAFB] !text-[#484A4C] !rounded-[8px] !border-none !h-[42px] text-sm sm:text-base !max-w-[417px] !w-full'
               }
               type="text"
               label="Phone"
@@ -147,20 +147,20 @@ const AccountDetails = () => {
               errorMessage={errors?.phone?.message}
             />
           </div>
-          <div className="w-full">
+          <div className="w-full box-border">
             <CommonInput
               name="email"
               placeholder=""
               value={watch('email')}
               onChange={(e) => setValue('email', e.target.value, { shouldValidate: true })}
               label="Email"
-              className={'bg-[#F9FAFB] text-[#484A4C] rounded-[8px]'}
+              className={'bg-[#F9FAFB] text-[#484A4C] rounded-[8px] !max-w-[417px] !w-full'}
               error={!!errors?.email}
               errorMessage={errors?.email?.message}
               readonly
             />
           </div>
-          <div className="w-full">
+          <div className="w-full box-border">
             <ReusableTextArea
               label={'Home or ID Address'}
               value={address}
@@ -172,7 +172,7 @@ const AccountDetails = () => {
               <div className="flex w-[190px] pt-[12px] pr-[20px] pb-[12px] pl-[20px] gap-[8px] justify-center items-center shrink-0 flex-nowrap bg-[#29397e] rounded-[8px] relative overflow-hidden z-[58]">
                 <Button
                   disabled={isSubmitting}
-                  className="h-[24px]  text-[16px] font-medium  text-[#fff] "
+                  className="h-[24px] text-[16px] font-medium  !text-[#fff] hover:!text-[#fff]"
                   type="submit"
                 >
                   {isSubmitting ? 'Saving...' : 'Save Changes'}

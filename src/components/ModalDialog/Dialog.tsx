@@ -35,7 +35,9 @@ const ModalDialog: React.FC<ModalDialogProps> = ({
         >
           <div className="sticky top-[0.3px] z-10 bg-white px-6 pt-6 pb-2">
             <div className="flex items-center justify-between">
-              <Dialog.Title className="lg:text-[25px] sm:text-xl text-[18px] text-[#19191A] font-semibold">{title}</Dialog.Title>
+              <Dialog.Title className={clsx("lg:text-[25px] sm:text-xl text-[18px] text-[#19191A] font-semibold",
+                titleClassName
+              )}>{title}</Dialog.Title>
               <Dialog.Close asChild>
                 <button
                   aria-label="Close"
