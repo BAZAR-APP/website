@@ -1,0 +1,11 @@
+.rt-BaseButton:where(.rt-variant-ghost):where(:hover, :focus) {
+  background-color: transparent;
+  border: none;
+  outline: none;
+}
+.rt-BaseButton.rt-variant-ghost:hover,
+.rt-BaseButton.rt-variant-ghost:focus {
+  background-color: transparent !important;
+  border: none !important;
+  outline: none !important;
+}

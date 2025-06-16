@@ -1,0 +1,58 @@
+{
+  "title": "Loyalty Points",
+  "welcomeMessage": "Welcome Back to your loyalty points ,",
+  "description": "Earn points every time you book or review — redeem them for exclusive rewards, discounts, and more.",
+  "name": "Mr.Fahd",
+  "tier": {
+    "name": "Platinum",
+    "range": "0 – 499 points",
+    "earnedPoints": "Earned Points",
+    "goldReward": "Gold Tier: Unlock More Rewards!",
+    "nextTierMessage": "Earn 200 more points to unlock a free booking and enjoy exclusive discounts on your next stay."
+  },
+  "actions": [
+    {
+      "title": "Learn More About Tiers",
+      "description": "Discover how each tier unlocks greater rewards, benefits, and exclusive chalet experiences.",
+      "cta": "Learn More"
+    },
+    {
+      "title": "Boost Your Points",
+      "description": "Top up your loyalty points instantly and use them for discounts, perks, and upgrades on your next booking.",
+      "cta": "Buy Points"
+    }
+  ],
+  "discountsTitle": "Discounts You Can Redeem",
+  "redeemableDiscounts": [
+    {
+      "title": "10% Discount",
+      "pointsRequired": 600,
+      "cta": "Redeem Now",
+      "icon": "/images/discount-shape.svg"
+    },
+    {
+      "title": "20% Discount",
+      "pointsRequired": 800,
+      "cta": "Redeem Now",
+      "icon": "/images/discount-shape.svg"
+    },
+    {
+      "title": "30% Discount",
+      "pointsRequired": 1000,
+      "cta": "Redeem Now",
+      "icon": "/images/discount-shape.svg"
+    },
+    {
+      "title": "50% Discount",
+      "pointsRequired": 1500,
+      "cta": "Redeem Now",
+      "icon": "/images/discount-shape.svg"
+    },
+    {
+      "title": "Free Night",
+      "pointsRequired": 1000,
+      "cta": "Redeem Now",
+      "icon": "/images/free-icon.svg"
+    }
+  ]
+}

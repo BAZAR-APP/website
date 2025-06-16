@@ -1,0 +1,29 @@
+.rdrDefinedRangesWrapper,
+.rdrDateDisplayWrapper {
+  display: none;
+}
+.rdrNextPrevButton,
+.rdrNextPrevButton {
+  background: transparent;
+}
+
+@media (max-width: 768px) {
+  .rdrMonths {
+    margin: 0 auto;
+    flex-direction: column !important;
+  }
+}
+@media (max-width: 376px) {
+  .rdrMonthsHorizontal,.rdrMonth {
+    margin: 0 auto;
+    width: 240px !important;
+    float: left !important;
+  }
+}
+@media (max-width: 321px) {
+  .rdrMonthsHorizontal,.rdrMonth {
+    margin: 0 auto;
+    width: 200px !important;
+    float: left !important;
+  }
+}

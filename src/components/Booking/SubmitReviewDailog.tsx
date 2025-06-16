@@ -1,0 +1,142 @@
+import React from 'react'
+import ModalDialog from '../ModalDialog/Dialog'
+import Button from '../Button/Button'
+import Image from 'next/image'
+import { ChevronRight, Download, MapPin } from 'lucide-react'
+import Location from '../Location'
+
+export interface SubmitReviewData {
+  title: string
+  points: number
+  guests: string
+  propertyType: string
+  beds: number
+  baths: number
+  amenities: string[]
+  imageUrl: string
+  imageAlt: string
+}
+
+interface SubmitReviewDialogProps {
+  isOpen: boolean
+  setIsOpen: (isOpen: boolean) => void
+  onSubmit: () => void
+  onCancel?: () => void
+  data: SubmitReviewData
+}
+
+const SubmitReviewDialog: React.FC<SubmitReviewDialogProps> = ({
+  isOpen,
+  setIsOpen,
+  onSubmit,
+  onCancel = () => setIsOpen(false),
+  data,
+}) => {
+  const { title, points, guests, propertyType, beds, baths, amenities, imageUrl, imageAlt } = data
+
+  return (
+    <ModalDialog
+      isOpen={isOpen}
+      setIsOpen={setIsOpen}
+      className="lg:min-w-[524px] min-w-auto h-[95%] min-[1440px]:h-[98%]"
+      title="Share Your Experience"
+    >
+      <p className="sm:text-xl text-sm sm:leading-6 leading-4 text-[#484A4C] py-2">
+        Tell us what you loved (or what we can do better). Your feedback helps us improve!
+      </p>
+
+      <div className="flex gap-1 pb-5 pt-2">
+        {[...Array(5)].map((_, i) => (
+          <Image key={i} src="/images/Unfilld.svg" width={40} height={40} alt="Star icon" />
+        ))}
+      </div>
+
+      <div className="w-full h-[216px] flex-shrink-0">
+        <Image
+          src={imageUrl}
+          alt={imageAlt}
+          className="w-full h-full object-cover rounded-[12px]"
+          width={400}
+          height={400}
+        />
+      </div>
+
+      <div className="flex items-center flex-wrap gap-3 pt-3">
+        <h3 className="text-[16px] font-medium text-[#19191A]">{title}</h3>
+        <div className="flex bg-[#E1F3FF] items-center gap-1 rounded py-1 px-1.5 max-w-[110px]">
+          <Image src="/images/Points.svg" width={16} height={16} alt="Points Icon" />
+          <span className="text-[#29397E] text-sm">{points} Points</span>
+        </div>
+      </div>
+
+      <div className="text-sm text-[#8E8E93] leading-5 pt-2">
+        {guests} <span className="text-[#9EA0A2] text-[9px] pr-1">&bull;</span>
+        {propertyType} <span className="text-[#9EA0A2] text-[9px] pr-1">&bull;</span>
+        {beds} beds <span className="text-[#9EA0A2] text-[9px] pr-1">&bull;</span>
+        {baths} baths
+        {amenities.map((amenity, index) => (
+          <span key={index} className="text-[#8E8E93] text-sm font-normal">
+            {amenity}
+            {index < amenities.length - 1 && (
+              <span className="mx-1 text-[#9EA0A2] text-[9px]">&bull;</span>
+            )}
+          </span>
+        ))}
+        <br />
+        <Location
+          className="flex items-start py-1.5"
+          icon={<MapPin className="w-3.5 h-3.5 text-[#8E8E93] mt-1" />}
+          text="Sea Villa Retreat, Block 5, Street 12, Villa 27, Al Khiran, Ahmadi, Kuwait"
+        />
+      </div>
+
+      <div className="flex items-center gap-2 justify-between flex-wrap pt-4">
+        <Button
+          onClick={() => {}}
+          intent="transperent"
+          className="text-sm font-medium !px-0 !py-0 text-[#29397E] underline underline-offset-2 flex gap-1 items-center"
+        >
+          <MapPin className="w-3.5 h-3.5 text-[#29397E]" />
+          <span> View Exact Location</span> <ChevronRight className="w-3 h-3 mt-0.5" strokeWidth={3} />
+        </Button>
+        <Button
+          onClick={() => {}}
+          intent="transperent"
+          className="text-sm font-medium !px-0 !py-0 text-[#29397E] underline underline-offset-2 flex gap-1 items-center"
+        >
+          <Image src="/images/ReferIcon.svg" width={16} height={16} alt="Refer" />{' '}
+          <span>Refer A Friend</span>
+          <Image src="/images/Arrow.svg" width={14} height={14} alt="arrow" />
+        </Button>
+        <Button
+          onClick={() => {}}
+          intent="transperent"
+          className="text-sm font-medium !px-0 !py-0 text-[#29397E] underline flex gap-1 items-center"
+        >
+          Download Invoice <Download className="w-4 h-4 text-[#29397E]" />
+        </Button>
+      </div>
+      <textarea
+        className="w-full h-52 mt-6 p-3 bg-[#F9FAFB] text-[#9EA0A2] focus:border-none focus:outline-none rounded resize-none text-[16px]"
+        placeholder="Write about your stay—what you liked, how the chalet was, or anything you'd like future guests to know..."
+      />
+      <div className="flex flex-col md:flex-row justify-between gap-4 pt-4">
+        <Button
+          onClick={onCancel}
+          intent="ghost"
+          className="w-full py-2 text-[16px] font-medium rounded-lg cursor-pointer text-[#19191A] bg-[#F3F4F6]"
+        >
+          Cancel
+        </Button>
+        <Button
+          onClick={onSubmit}
+          className="w-full py-2 text-[16px] font-medium text-[#FDFDFE] bg-indigo-800 rounded-lg cursor-pointer"
+        >
+          Submit Review
+        </Button>
+      </div>
+    </ModalDialog>
+  )
+}
+
+export default SubmitReviewDialog

@@ -1,13 +1,17 @@
+/* Remove the Google Fonts import since we're using Next.js font optimization */
 @import 'tailwindcss';
 @import 'tw-animate-css';
+@import '@radix-ui/themes/styles.css';
 
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-inter);
+  /* Changed from geist-sans to inter */
   --font-mono: var(--font-geist-mono);
+  --font-tenor-sans: 'Tenor Sans', sans-serif;
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -41,6 +45,22 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+  --color-primary-custom: var(--primary);
+  --color-secondary-custom: var(--secondary);
+  --color-primary-blue: var(--primary-blue);
+  --color-white: var(--white);
+  --color-cream-white: var(--cream-white);
+  --color-green: var(--green);
+  --color-yellow-light: var(--yellow-light);
+  --color-yellow-dark: var(--yellow-dark);
+  --color-light-gray: var(--light-gray);
+  --color-gray-normal: var(--gray);
+  --color-gray-100: var(--gray-100);
+  --color-gray-900: var(--gray-900);
+  --color-light-grey: var(--light-grey);
+  --color-text-disabled: var(--text-disabled);
+  --color-black: var(--black);
+  --color-primary-foreground-custom: var(--primary-foreground);
 }
 
 :root {
@@ -51,9 +71,22 @@
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
-  --primary: #29397e;
-  --primary-foreground: #FDFDFE;
-  --secondary: oklch(0.97 0 0);
+  --primary: #19191a;
+  --secondary: #484a4c;
+  --primary-blue: #29397e;
+  --white: #ffffff;
+  --cream-white: #fdfdfe;
+  --green: #059669;
+  --yellow-light: #fbbf24;
+  --yellow-dark: #ffcc00;
+  --light-gray: #fffbeb00;
+  --gray: #8e8e93;
+  --gray-100: #f3f4f6;
+  --gray-900: #101828;
+  --light-grey: #f9fafb;
+  --text-disabled: #9ea0a2;
+  --black: #000000;
+  --primary-foreground: #fdfdfe;
   --secondary-foreground: oklch(0.205 0 0);
   --muted: oklch(0.97 0 0);
   --muted-foreground: oklch(0.556 0 0);
@@ -75,7 +108,7 @@
   --sidebar-accent: oklch(0.97 0 0);
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --sidebar-ring: var(--sidebar-ring);
 }
 
 .dark {
@@ -115,8 +148,96 @@
 @layer base {
   * {
     @apply border-border outline-ring/50;
+    scrollbar-width: none;
   }
+
+  *::-webkit-scrollbar {
+    display: none;
+  }
+
   body {
     @apply bg-background text-foreground;
+    /* Use the CSS variable instead of hard-coded font family */
+    font-family: var(--font-inter), system-ui, sans-serif !important;
   }
+}
+
+/* Additional specificity to override any other font declarations */
+html body,
+html body * {
+  font-family:
+    var(--font-inter),
+    'Inter',
+    system-ui,
+    -apple-system,
+    sans-serif !important;
+}
+
+/* Ensure Radix UI components use Inter */
+.radix-themes {
+  font-family: var(--font-inter), 'Inter', system-ui, sans-serif !important;
+}
+
+.font-tenor {
+  font-family: var(--font-tenor-sans), serif !important;
+}
+
+@layer utilities {
+  @media (min-width: 1640px) {
+    .w-500px-1440 {
+      width: 450px;
+    }
+
+    .xxl-gap {
+      gap: 45px !important;
+    }
+
+    .xxl-p {
+      padding: 0px 64px;
+    }
+
+    .xxl-w {
+      width: 30%;
+    }
+
+    .max-p {
+      padding: 0 28px;
+    }
+  }
+}
+
+.max-w-xxl {
+  max-width: 1900px;
+}
+
+.rt-BaseCheckboxRoot:where(.rt-variant-surface):where([data-state='checked'],
+  [data-state='indeterminate']):before {
+  background-color: var(--primary-blue) !important;
+  cursor: pointer !important;
+}
+
+.rt-BaseRadioRoot:where(.rt-variant-surface):where(:checked, [data-state='checked']):before {
+  background-color: var(--primary-blue) !important;
+}
+
+.rt-BaseButton.rt-variant-ghost:hover,
+.rt-BaseButton.rt-variant-ghost:focus {
+  background-color: transparent !important;
+  border: none !important;
+  outline: none !important;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.rt-BaseCheckboxRoot.rt-variant-surface[data-state='unchecked']:before {
+  background-color: #F9FAFB !important;
+  border-color: #D1D5DB !important;
+  cursor: pointer !important;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
 }
