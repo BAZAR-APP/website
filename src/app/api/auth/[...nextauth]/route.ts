@@ -1,7 +1,17 @@
 // app/api/auth/[...nextauth]/route.ts
+import axios from 'axios'
 import NextAuth from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import GoogleProvider from 'next-auth/providers/google'
+
+// Create axios instance for API calls
+const apiClient = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_NESTJS_API_URL,
+  timeout: 30000,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+})
 
 const handler = NextAuth({
   providers: [
@@ -15,25 +25,16 @@ const handler = NextAuth({
       },
       async authorize(credentials) {
         try {
-          const response = await fetch(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/auth/signIn`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              phoneNumber: credentials?.phoneNumber,
-              callingCode: credentials?.callingCode,
-              countryCode: credentials?.countryCode,
-              password: credentials?.password,
-              authProvider: 'phone',
-            }),
+          const response = await apiClient.post('/auth/signIn', {
+            phoneNumber: credentials?.phoneNumber,
+            callingCode: credentials?.callingCode,
+            countryCode: credentials?.countryCode,
+            password: credentials?.password,
+            authProvider: 'phone',
           })
 
-          const responseBody = await response.json()
-
-          if (!response.ok) throw new Error(responseBody.message || 'Login failed')
-
-          const user = responseBody.user || responseBody
+          const responseData = response.data
+          const user = responseData.user || responseData
 
           if (user?.userId) {
             return {
@@ -46,8 +47,9 @@ const handler = NextAuth({
           }
 
           return null
-        } catch (err: any) {
-          throw new Error(err.message)
+        } catch (error: any) {
+          console.error('Phone auth error:', error.response?.data || error.message)
+          throw new Error(error.response?.data?.message || 'Login failed')
         }
       },
     }),
@@ -62,34 +64,28 @@ const handler = NextAuth({
     async signIn({ user, account, profile }) {
       if (account?.provider === 'google') {
         try {
-          // For Google login, authenticate and get access token
-          const res = await fetch(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/auth/signUp`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              googleId: profile?.sub,
-              fullName: profile?.name,
-              email: profile?.email,
-              authProvider: 'google',
-            }),
+          const response = await apiClient.post('/auth/signUp', {
+            googleId: profile?.sub,
+            fullName: profile?.name,
+            email: profile?.email,
+            authProvider: 'google',
           })
 
-          if (!res.ok) {
-            return false
+          if (response.status === 200 || response.status === 201) {
+            const userData = response.data
+
+            // Store user data in the user object for JWT callback
+            user.id =
+              userData.user?.userId?.toString() || userData.userId?.toString() || profile?.sub
+            user.accessToken = userData.accessToken || userData.user?.accessToken
+            user.email = profile?.email
+            user.name = profile?.name
+
+            return true
           }
 
-          const userData = await res.json()
-
-          // Store user data and access token for JWT callback
-          user.id = userData.user?.id?.toString() || userData.id?.toString() || profile?.sub
-          user.accessToken = userData.accessToken || userData.user?.accessToken
-          user.email = profile?.email
-          user.name = profile?.name
-
-          return true
-        } catch (err) {
+          return false
+        } catch (error: any) {
           return false
         }
       }
@@ -98,6 +94,7 @@ const handler = NextAuth({
     },
 
     async jwt({ token, user, account, trigger }) {
+      // Initial sign in - store user data in token
       if (user) {
         token.id = user.id
         token.accessToken = user.accessToken
@@ -106,38 +103,28 @@ const handler = NextAuth({
         token.provider = account?.provider || ''
       }
 
-      // Check token validity on each request
+      // Validate token on subsequent requests (but not on initial sign in)
       if (token.accessToken && trigger !== 'signIn') {
         try {
-          const response = await fetch(
-            `${process.env.NEXT_PUBLIC_NESTJS_API_URL}/users/currentUser`,
-            {
-              method: 'GET',
-              headers: {
-                Authorization: `Bearer ${token.accessToken}`,
-                'Content-Type': 'application/json',
-              },
+          await apiClient.get('/users/currentUser', {
+            headers: {
+              Authorization: `Bearer ${token.accessToken}`,
             },
-          )
+          })
 
-          // If token is invalid/expired, clear the token
-          if (!response.ok) {
-            return {
-              id: '',
-              accessToken: undefined,
-              phoneNumber: undefined,
-              provider: undefined,
-              email: undefined,
-            } // Return empty JWT to force sign out
-          }
-        } catch (error) {
+          // Token is valid, continue with current token
+          return token
+        } catch (error: any) {
+
+          // Token is invalid/expired, clear the token
           return {
+            ...token,
             id: '',
             accessToken: undefined,
             phoneNumber: undefined,
             provider: undefined,
             email: undefined,
-          } // Return empty JWT to force sign out
+          }
         }
       }
 
@@ -154,47 +141,38 @@ const handler = NextAuth({
       }
 
       try {
-        // Make API call to get current user details
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_NESTJS_API_URL}/users/currentUser`,
-          {
-            method: 'GET',
-            headers: {
-              Authorization: `Bearer ${token.accessToken}`,
-              'Content-Type': 'application/json',
-            },
+        // Get current user details from API
+        const response = await apiClient.get('/users/currentUser', {
+          headers: {
+            Authorization: `Bearer ${token.accessToken}`,
           },
-        )
+        })
 
-        if (response.ok) {
-          const userData = await response.json()
+        const userData = response.data
 
-          // Use the API response data
-          session.user = {
-            id: token.id,
-            accessToken: token.accessToken,
-            provider: token.provider,
-            ...userData, // Spread all user data from API
-          }
-        } else {
-          return {
-            ...session,
-            user: undefined,
-          }
+        // Build session with API data and token info
+        session.user = {
+          id: token.id,
+          accessToken: token.accessToken,
+          provider: token.provider,
+          email: token.email,
+          phoneNumber: token.phoneNumber,
+          ...userData, // Spread all user data from API
         }
-      } catch (error) {
+
+        return session
+      } catch (error: any) {
+
         return {
           ...session,
           user: undefined,
         }
       }
-
-      return session
     },
   },
 
   pages: {
-    signIn: '/[lang]/login',
+    signIn: '/login',
   },
 
   session: {
@@ -203,7 +181,6 @@ const handler = NextAuth({
 
   secret: process.env.NEXTAUTH_SECRET,
 
-  // Add debug mode for development
   debug: process.env.NODE_ENV === 'development',
 })
 

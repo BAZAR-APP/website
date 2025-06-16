@@ -4,16 +4,22 @@ import Image from 'next/image'
 import Like from '../../public/images/Like.svg'
 import Checkbox from './CheckBox/CheckBox'
 import { Slider } from 'radix-ui'
-import { amenities, locations } from '@/lib/constant'
+import { amenities as allAmenities } from '@/lib/constant'
+
+import { locations } from '@/lib/constant'
+import { useChaletFiltersStore } from '../../stores/useChaletFiltersStore'
 
 const FilterSidebar = () => {
   const [value, setValue] = React.useState(50)
-
+  const { setFilters, city, amenities, resetFilters } = useChaletFiltersStore()
   return (
     <div className="lg:w-80 w-full py-5 h-full overflow-y-auto w-500px-1440 xl:mr-3 mr-0">
       <div className="flex items-center justify-between mb-6">
         <h3 className="sm:text-[25px] text-lg leading-8 font-semibold text-[#1F2937]">Filter By</h3>
-        <button className="text-[#29397E] text-base leading-6 font-normal cursor-pointer">
+        <button
+          className="text-[#29397E] text-base leading-6 font-normal cursor-pointer"
+          onClick={resetFilters}
+        >
           Reset
         </button>
       </div>
@@ -25,6 +31,11 @@ const FilterSidebar = () => {
               key={location}
               label={location}
               className="text-sm text-gray-700 !cursor-pointer"
+              checked={city.includes(location)}
+              onChange={(checked) => {
+                const updated = checked ? [...city, location] : city.filter((c) => c !== location)
+                setFilters({ city: updated })
+              }}
             />
           ))}
         </div>
@@ -57,24 +68,35 @@ const FilterSidebar = () => {
 
       <FilterSection title="Amenities">
         <div className="flex flex-col gap-1.5">
-          {amenities.map((amenity) => (
-            <Checkbox key={amenity} label={amenity} className="text-sm text-gray-700 cursor-pointer" />
+          {allAmenities.map((amenity) => (
+            <Checkbox
+              key={amenity}
+              label={amenity}
+              className="text-sm text-gray-700 cursor-pointer"
+              checked={amenities.includes(amenity)}
+              onChange={(checked) => {
+                const updated = checked
+                  ? [...amenities, amenity]
+                  : amenities.filter((c) => c !== amenity)
+
+                setFilters({ amenities: updated })
+              }}
+            />
           ))}
         </div>
       </FilterSection>
 
       <FilterSection title="Rating">
         <div className="flex items-center justify-between rounded-[8px] px-0.5 bg-[#F9FAFB]">
-          {[1, 2, 3, 4, 5].map((rating, index) => (
+          {[1, 2, 3, 4, 5].map((rating) => (
             <div
               key={rating}
-              className={`h-12 w-full flex items-center justify-center ${index !== 4 ? 'border-r border-[#F2F2F7]' : ''}`}
+              // onClick={() => setFilters({ rating })}
+              className="cursor-pointer h-12 w-full flex items-center justify-center border-r border-[#F2F2F7] last:border-none"
             >
-              <div className="flex items-center gap-1.5 md:max-w-[240px] max-w-auto">
+              <div className="flex items-center gap-1.5">
                 <span className="text-sm text-gray-700">{rating}</span>
-                <span>
-                  <Image src={Like} alt="Unlike" />
-                </span>
+                <Image src={Like} alt="Like" />
               </div>
             </div>
           ))}

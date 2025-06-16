@@ -8,6 +8,8 @@ import { mockProperties } from '@/lib/constant'
 import { Grid } from '@radix-ui/themes'
 import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
+import { useChaletsQuery } from '@/lib/hooks/api/useChaletsQuery'
+import { Chalet, ChaletResponse } from '../../../../../../types/chalets'
 
 const ExploreChalets = () => {
   const router = useRouter()
@@ -15,6 +17,8 @@ const ExploreChalets = () => {
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 9
   const totalPages = Math.ceil(mockProperties.length / itemsPerPage)
+  const { data, isLoading } = useChaletsQuery()
+
   return (
     <div className="min-h-screen lg:px-14 md:px-12 px-10 xxl-p mx-auto">
       <h2 className="font-semibold md:text-[39px] sm:text-2xl text-xl leading-11 text-[#19191A] pt-5">
@@ -33,11 +37,10 @@ const ExploreChalets = () => {
           />
 
           <Grid columns={{ initial: '1', sm: '2', lg: '3', xl: '4' }} gap="4" width="100%">
-            {mockProperties.map((property) => (
+            {data?.map((chalet: Chalet, index: number) => (
               <PropertyCard
-                key={property.id}
-                {...property}
-                onClick={() => router.push(`/explore/chalets/${property.id}`)}
+                chalet={chalet}
+                onClick={() => {}}
               />
             ))}
           </Grid>
