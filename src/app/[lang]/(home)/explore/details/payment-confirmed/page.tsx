@@ -56,9 +56,9 @@ const ActionLink = ({
   </Link>
 )
 
-const PaymentConfirmed = ({ bookingConfirmed = false }: PaymentConfirmedProps) => {
+const PaymentConfirmed = () => {
   const data = mockData
-
+  const bookingConfirmed = false
   const refundInfo = [
     {
       icon: <CircleDollarSign className="w-4 h-4" />,
@@ -96,7 +96,13 @@ const PaymentConfirmed = ({ bookingConfirmed = false }: PaymentConfirmedProps) =
 
   return (
     <div className="flex justify-center flex-col items-center md:w-[603px] w-full mx-auto md:px-0 px-6 my-7">
-      <Image src="/images/PayConfirm.svg" width={117} height={117} alt="Icon" className='pb-5 pt-8' />
+      <Image
+        src="/images/PayConfirm.svg"
+        width={117}
+        height={117}
+        alt="Icon"
+        className="pb-5 pt-8"
+      />
       <h3 className="lg:text-[39px] md:text-3xl sm:text-2xl text-xl font-semibold py-1 leading-[47px] text-[#19191A] text-center md:pt-6 pt-3 w-full">
         Payment Confirmed
       </h3>

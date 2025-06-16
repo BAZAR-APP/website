@@ -18,7 +18,7 @@ const Page = () => {
       case 2:
         return <UserInfo onNext={() => setStep(3)} />
       case 3:
-        return <Payment onNext={() => setStep(4)} />
+        return <Payment />
       default:
         return null
     }
