@@ -1,4 +1,4 @@
-import { Locale } from '../../../i18n.config'
+"use client"
 import {
   BannerSection,
   ChaletsCard,
@@ -11,11 +11,9 @@ import {
   WhyBookSection,
 } from '@/components'
 
-export default async function Home({ params }: { params: Promise<{ lang: Locale }> }) {
-  const { lang } = await params
-
+export default function Home() {
   return (
-    <div className='max-w-xxl mx-auto'>
+    <div className="max-w-xxl mx-auto">
       <BannerSection />
       <LuxuryExperience
         title="Escape to luxury and comfort at Bazar"

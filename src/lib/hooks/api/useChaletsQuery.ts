@@ -21,7 +21,7 @@ const fetchChalets = async (filters: any): Promise<ChaletResponse> => {
   return res.data
 }
 
-export const useChaletsQuery = () => {
+export const useChaletsQuery = (enabled = true) => {
   const filters = useChaletFiltersStore(
     useShallow((state) => ({
       page: state.page,
@@ -42,5 +42,6 @@ export const useChaletsQuery = () => {
     queryFn: () => fetchChalets(memoizedFilters),
     staleTime: 5 * 60 * 1000,
     gcTime: 10 * 60 * 1000,
+    enabled
   })
 }
