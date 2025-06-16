@@ -1,10 +1,10 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import CommonButton from '@/components/Button/Button'
 import OneTimePassword from '@/components/OTPInput'
 import Image from 'next/image'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { useMutation } from '@tanstack/react-query'
 import api from '@/lib/axios'
 import toast from 'react-hot-toast'
@@ -13,17 +13,24 @@ import { extractErrorMessage } from '@/lib/utils'
 const RESEND_INTERVAL = 60 // seconds
 
 const VerifyAccount = () => {
-  const searchParams = useSearchParams()
-  const mode = searchParams?.get('mode')
-  const userId = searchParams?.get('userId')
-  const phone = searchParams?.get('phone')
-
   const [otp, setOtp] = useState('')
   const [timer, setTimer] = useState(RESEND_INTERVAL)
-  const router = useRouter()
+  const [mode, setMode] = useState<string | null>(null)
+  const [userId, setUserId] = useState<string | null>(null)
+  const [phone, setPhone] = useState<string | null>(null)
 
+  const router = useRouter()
   const isOtpFilled = otp.trim().length > 5
 
+  // Read URL params from window.location
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search)
+      setMode(params.get('mode'))
+      setUserId(params.get('userId'))
+      setPhone(params.get('phone'))
+    }
+  }, [])
   // Timer logic
   useEffect(() => {
     if (timer <= 0) return
@@ -74,52 +81,54 @@ const VerifyAccount = () => {
   })
 
   return (
-    <div className="flex flex-col items-center justify-center h-full">
-      <div className="max-w-[360px] h-[90vh] overflow-y-auto flex flex-col justify-center gap-[24px]">
-        <Image
-          src="/images/Logo.svg"
-          alt="logo"
-          width={150}
-          height={48}
-          className="min-[1440px]:py-3"
-         />
+    <Suspense>
+      <div className="flex flex-col items-center justify-center h-full">
+        <div className="max-w-[360px] h-[90vh] overflow-y-auto flex flex-col justify-center gap-[24px]">
+          <Image
+            src="/images/Logo.svg"
+            alt="logo"
+            width={150}
+            height={48}
+            className="min-[1440px]:py-3"
+          />
 
-        <div className="flex flex-col gap-[12px]">
-          <h2 className="text-primary font-semibold min-[1440px]:pb-3 text-[24px] sm:text-[32px] leading-tight">
-            Verify Your
-            <br /> Account
-          </h2>
-          <p className="!text-secondary font-600 text-[16px]">
-            Enter the 5-digit code sent to your phone to complete verification.
-          </p>
-        </div>
-
-        <OneTimePassword className="flex gap-[8px] min-[1440px]:pt-1" onChange={setOtp} />
-
-        <div className="flex justify-between items-center">
-          <div className="text-[#484A4C] font-normal">
-            Didn’t Receive a Code?{' '}
-            <button
-              disabled={timer > 0 || resendMutation.isPending}
-              onClick={() => resendMutation.mutate()}
-              className={`font-bold cursor-pointer ${timer > 0 ? 'text-gray-400' : 'text-[#29397E]'}`}
-            >
-              Resend
-            </button>
+          <div className="flex flex-col gap-[12px]">
+            <h2 className="text-primary font-semibold min-[1440px]:pb-3 text-[24px] sm:text-[32px] leading-tight">
+              Verify Your
+              <br /> Account
+            </h2>
+            <p className="!text-secondary font-600 text-[16px]">
+              Enter the 5-digit code sent to your phone to complete verification.
+            </p>
           </div>
-          <div className="text-[#29397E] font-bold min-[1440px]:py-1">{formatTime(timer)}</div>
-        </div>
 
-        <CommonButton
-          intent={isOtpFilled ? 'primary' : 'secondary'}
-          disabled={!isOtpFilled || verifyMutation.isPending}
-          onClick={() => verifyMutation.mutate()}
-          className={`min-[1440px]:py-3 ${!isOtpFilled ? '!text-[#1F2A37]' : ''}`}
-        >
-          {verifyMutation.isPending ? 'Verifying...' : 'Verify'}
-        </CommonButton>
+          <OneTimePassword className="flex gap-[8px] min-[1440px]:pt-1" onChange={setOtp} />
+
+          <div className="flex justify-between items-center">
+            <div className="text-[#484A4C] font-normal">
+              Didn’t Receive a Code?{' '}
+              <button
+                disabled={timer > 0 || resendMutation.isPending}
+                onClick={() => resendMutation.mutate()}
+                className={`font-bold cursor-pointer ${timer > 0 ? 'text-gray-400' : 'text-[#29397E]'}`}
+              >
+                Resend
+              </button>
+            </div>
+            <div className="text-[#29397E] font-bold min-[1440px]:py-1">{formatTime(timer)}</div>
+          </div>
+
+          <CommonButton
+            intent={isOtpFilled ? 'primary' : 'secondary'}
+            disabled={!isOtpFilled || verifyMutation.isPending}
+            onClick={() => verifyMutation.mutate()}
+            className={`min-[1440px]:py-3 ${!isOtpFilled ? '!text-[#1F2A37]' : ''}`}
+          >
+            {verifyMutation.isPending ? 'Verifying...' : 'Verify'}
+          </CommonButton>
+        </div>
       </div>
-    </div>
+    </Suspense>
   )
 }
 

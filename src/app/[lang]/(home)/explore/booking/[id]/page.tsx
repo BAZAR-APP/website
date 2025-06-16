@@ -1,15 +1,17 @@
 'use client'
-import React, { useMemo, useCallback } from 'react'
+
+import React, { useMemo, useCallback, useEffect, useState } from 'react'
 import { MapPin, ChevronRight } from 'lucide-react'
 import { Button } from '@/components'
 import ChaletRules from '@/components/ChaletsRules'
 import Image from 'next/image'
 import Location from '@/components/Location'
-import { useRouter } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import CancelBooking from '@/components/Booking/CancelBooking'
 import useToggle from '@/lib/hooks/useToggle'
 import ModalDialog from '@/components/ModalDialog/Dialog'
 
+// Define the interfaces for your data structure (these are correct)
 interface AddOn {
   name: string
   price: number
@@ -27,34 +29,34 @@ interface DateRange {
 
 type PaymentStatus = 'fully_paid' | 'partially_paid'
 
-interface BookingDetailsProps {
+// This interface is for the data that the component will *use*, not for the page props directly.
+// You might rename it to something like `BookingData` or `ChaletBookingDetails`
+interface BookingData {
   id: string
-  title?: string
-  location?: string
-  points?: number
-  guests?: string
-  propertyType?: string
-  beds?: number
-  baths?: number
-  amenities?: string[]
-  dateRange?: DateRange
-  imageUrl?: string
-  imageAlt?: string
-  paymentStatus?: PaymentStatus
-  totalAmount?: number
-  paidAmount?: number
-  remainingAmount?: number
-  securityDeposit?: number
-  addOns?: AddOn[]
-  paymentDueDate?: string
-  priceBreakdown?: PriceBreakdownItem[]
-  onViewDetails?: () => void
-  onViewLocation?: () => void
-  onPayRemaining?: () => void
-  onCancelBooking?: () => void
+  title: string
+  location: string
+  points: number
+  guests: string
+  propertyType: string
+  beds: number
+  baths: number
+  amenities: string[]
+  dateRange: DateRange
+  imageUrl: string
+  imageAlt: string
+  paymentStatus: PaymentStatus
+  totalAmount: number
+  paidAmount: number
+  remainingAmount: number
+  securityDeposit: number
+  addOns: AddOn[]
+  paymentDueDate: string
+  priceBreakdown: PriceBreakdownItem[]
 }
 
-const DEFAULT_VALUES = {
+// Default values as you have them, which are useful for initial state or fallback
+const DEFAULT_VALUES: BookingData = {
+  id: '', // Add ID here if it's part of your default, or handle its absence
   title: 'Luxury Lakeside Retreat',
   location: 'Al Khiran',
   points: 200,
@@ -66,7 +68,7 @@ const DEFAULT_VALUES = {
   dateRange: { from: '20/3/2025', to: '24/3/2025' },
   imageUrl: 'https://picsum.photos/seed/beach/311/190',
   imageAlt: 'Property image',
-  paymentStatus: 'partially_paid' as PaymentStatus,
+  paymentStatus: 'partially_paid',
   totalAmount: 440,
   paidAmount: 220,
   remainingAmount: 220,
@@ -78,8 +80,9 @@ const DEFAULT_VALUES = {
     { description: 'Refundable Deposit', amount: 200 },
     { description: 'Flower Arrangement', amount: 30 },
   ],
-} as const
+}
 
+// Helper components (no changes needed for these, just including for completeness)
 const PaymentStatusBadge: React.FC<{ status: PaymentStatus }> = React.memo(
   function PaymentStatusBadge({ status }) {
     const statusConfig = {
@@ -251,7 +254,11 @@ const PaymentSection: React.FC<{
 
       <div className="flex flex-col gap-4 min-h-[200px] pt-10">
         {paymentStatus !== 'fully_paid' && (
-          <Button intent="primary" className="w-full !px-0 !text-sm !text-[#FFFFFF]" onClick={onPayRemaining}>
+          <Button
+            intent="primary"
+            className="w-full !px-0 !text-sm !text-[#FFFFFF]"
+            onClick={onPayRemaining}
+          >
             Pay Remaining Amount {remainingAmount} KD Now
           </Button>
         )}
@@ -263,41 +270,61 @@ const PaymentSection: React.FC<{
   )
 })
 
-const BookingDetails: React.FC<BookingDetailsProps> = (props) => {
+// Define the props for your Next.js Page Component
+
+export default function BookingDetailsPage() {
   const router = useRouter()
+  const { id } = useParams() as { id: string }
+
+  const [bookingData, setBookingData] = useState<BookingData | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    // In a real application, you would fetch the booking details
+    // from an API based on the 'id'.
+    // For this example, we'll simulate a fetch with DEFAULT_VALUES.
+    const fetchBookingDetails = async () => {
+      try {
+        setLoading(true)
+        // Simulate API call
+        await new Promise((resolve) => setTimeout(resolve, 500)) // Simulate network delay
+
+        // In a real app:
+        // const response = await fetch(`/api/bookings/${id}`);
+        // if (!response.ok) {
+        //   throw new Error('Failed to fetch booking details');
+        // }
+        // const data: BookingData = await response.json();
+        // setBookingData(data);
+
+        // For now, use DEFAULT_VALUES and assign the ID
+        setBookingData({ ...DEFAULT_VALUES, id: id })
+      } catch (err) {
+        setError('Failed to load booking details.')
+        console.error(err)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    if (id) {
+      fetchBookingDetails()
+    }
+  }, [id])
+
   const { isOpen: isCancelOpen, toggle: toggleCancel } = useToggle(false)
   const { isOpen: isConfirmCancel, toggle: confirmCancelToggle } = useToggle(false)
-  const {
-    title = DEFAULT_VALUES.title,
-    location = DEFAULT_VALUES.location,
-    points = DEFAULT_VALUES.points,
-    guests = DEFAULT_VALUES.guests,
-    propertyType = DEFAULT_VALUES.propertyType,
-    beds = DEFAULT_VALUES.beds,
-    baths = DEFAULT_VALUES.baths,
-    amenities = DEFAULT_VALUES.amenities,
-    dateRange = DEFAULT_VALUES.dateRange,
-    imageUrl = DEFAULT_VALUES.imageUrl,
-    imageAlt = DEFAULT_VALUES.imageAlt,
-    paymentStatus = DEFAULT_VALUES.paymentStatus,
-    totalAmount = DEFAULT_VALUES.totalAmount,
-    paidAmount = DEFAULT_VALUES.paidAmount,
-    remainingAmount = DEFAULT_VALUES.remainingAmount,
-    securityDeposit = DEFAULT_VALUES.securityDeposit,
-    addOns = DEFAULT_VALUES.addOns,
-    paymentDueDate = DEFAULT_VALUES.paymentDueDate,
-    priceBreakdown = DEFAULT_VALUES.priceBreakdown,
-    onViewDetails,
-    onViewLocation,
-  } = props
 
   const handleViewDetails = useCallback(() => {
-    onViewDetails?.()
-  }, [onViewDetails])
+    // Navigate to chalet details page
+    router.push(`/explore/chalets/${bookingData?.id || 'some-default-chalet-id'}`)
+  }, [router, bookingData])
 
   const handleViewLocation = useCallback(() => {
-    onViewLocation?.()
-  }, [onViewLocation])
+    // Implement logic to view location, maybe open a map or navigate to a map page
+    console.log('View exact location')
+  }, [])
 
   const handlePayRemaining = () => {
     router.push('/explore/booking/complete-payment/')
@@ -307,11 +334,23 @@ const BookingDetails: React.FC<BookingDetailsProps> = (props) => {
     toggleCancel()
   }
 
+  if (loading) {
+    return <div className="p-10 text-center">Loading booking details...</div>
+  }
+
+  if (error) {
+    return <div className="p-10 text-center text-red-500">{error}</div>
+  }
+
+  if (!bookingData) {
+    return <div className="p-10 text-center">Booking details not found.</div>
+  }
+
   return (
-    <div className='2xl:px-22 xl:px-15 md:px-10 sm:px-7 px-3'>
+    <div className="2xl:px-22 xl:px-15 md:px-10 sm:px-7 px-3">
       <div className="lg:px-20 md:px-14 sm:px-10 px-8 mx-auto py-9">
         <h1 className="md:text-[39px] text-[24px] md:leading-[47px] leading-8 font-semibold text-[#19191A] sm:mb-2">
-          {title}
+          {bookingData.title}
         </h1>
         <p className="mb-6 md:text-[20px] text-sm md:leading-[24px] leading-4 text-[#484A4C] sm:pt-0 pt-1">
           Track your stays, check-in details, and booking status here.
@@ -322,8 +361,8 @@ const BookingDetails: React.FC<BookingDetailsProps> = (props) => {
             <div className="bg-white rounded-lg">
               <div className="lg:w-[470px] w-full pt-3">
                 <Image
-                  src={imageUrl}
-                  alt={imageAlt}
+                  src={bookingData.imageUrl}
+                  alt={bookingData.imageAlt}
                   width={500}
                   height={500}
                   className="w-full h-64 object-cover rounded-lg"
@@ -333,27 +372,27 @@ const BookingDetails: React.FC<BookingDetailsProps> = (props) => {
 
               <div className="space-y-4">
                 <div className="flex items-center flex-wrap gap-2 pt-3">
-                  <h3 className="text-[16px] font-medium text-[#19191A]">{title}</h3>
-                  {points > 0 && (
+                  <h3 className="text-[16px] font-medium text-[#19191A]">{bookingData.title}</h3>
+                  {bookingData.points > 0 && (
                     <div className="flex bg-[#E1F3FF] items-center gap-1 rounded py-1 px-1.5 max-w-[110px]">
                       <Image src="/images/Points.svg" width={16} height={16} alt="Points Icon" />
-                      <span className="text-[#29397E] text-sm">{points} Points</span>
+                      <span className="text-[#29397E] text-sm">{bookingData.points} Points</span>
                     </div>
                   )}
                 </div>
 
                 <Location
                   icon={<MapPin className="w-4 h-4 text-[#8E8E93]" />}
-                  text={location}
+                  text={bookingData.location}
                   className="text-[#8E8E93] text-sm"
                 />
 
                 <PropertyInfo
-                  guests={guests}
-                  propertyType={propertyType}
-                  beds={beds}
-                  baths={baths}
-                  amenities={Array.from(amenities)}
+                  guests={bookingData.guests}
+                  propertyType={bookingData.propertyType}
+                  beds={bookingData.beds}
+                  baths={bookingData.baths}
+                  amenities={Array.from(bookingData.amenities)}
                 />
 
                 <div className="flex items-center gap-3 flex-wrap">
@@ -375,19 +414,19 @@ const BookingDetails: React.FC<BookingDetailsProps> = (props) => {
               </div>
             </div>
 
-            <DateSection dateRange={dateRange} />
-            <AddOnsSection addOns={addOns.slice()} />
+            <DateSection dateRange={bookingData.dateRange} />
+            <AddOnsSection addOns={bookingData.addOns} />
             <ChaletRules />
           </div>
 
           <PaymentSection
-            paymentStatus={paymentStatus}
-            totalAmount={totalAmount}
-            paidAmount={paidAmount}
-            remainingAmount={remainingAmount}
-            securityDeposit={securityDeposit}
-            paymentDueDate={paymentDueDate}
-            priceBreakdown={Array.from(priceBreakdown)}
+            paymentStatus={bookingData.paymentStatus}
+            totalAmount={bookingData.totalAmount}
+            paidAmount={bookingData.paidAmount}
+            remainingAmount={bookingData.remainingAmount}
+            securityDeposit={bookingData.securityDeposit}
+            paymentDueDate={bookingData.paymentDueDate}
+            priceBreakdown={Array.from(bookingData.priceBreakdown)}
             onPayRemaining={handlePayRemaining}
             onCancelBooking={handleCancelBooking}
           />
@@ -400,7 +439,11 @@ const BookingDetails: React.FC<BookingDetailsProps> = (props) => {
           confirmCancelToggle()
         }}
       />
-      <ModalDialog isOpen={isConfirmCancel} setIsOpen={confirmCancelToggle} className="lg:min-w-[524px] min-w-[auto]">
+      <ModalDialog
+        isOpen={isConfirmCancel}
+        setIsOpen={confirmCancelToggle}
+        className="lg:min-w-[524px] min-w-[auto]"
+      >
         <div className="text-center">
           <Image
             src="/images/PayConfirm.svg"
@@ -409,7 +452,9 @@ const BookingDetails: React.FC<BookingDetailsProps> = (props) => {
             alt="Success"
             className="mx-auto"
           />
-          <h3 className="md:text-[25px] text-xl font-semibold mt-4 text-[#19191A] pt-3">Booking Cancelled</h3>
+          <h3 className="md:text-[25px] text-xl font-semibold mt-4 text-[#19191A] pt-3">
+            Booking Cancelled
+          </h3>
           <p className=" md:text-xl text-[16px] text-[#484A4C] mt-2">
             Your booking has been successfully cancelled. If applicable, your refund will be
             processed according to the cancellation policy.
@@ -434,5 +479,3 @@ const BookingDetails: React.FC<BookingDetailsProps> = (props) => {
     </div>
   )
 }
-
-export default BookingDetails

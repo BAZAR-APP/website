@@ -10,6 +10,7 @@ import Button from '../Button/Button'
 import { useParams, useRouter } from 'next/navigation'
 import { LanguageSwitcher } from './LanguageSwitcher'
 import { i18n, Locale } from '../../../i18n.config'
+import { useSession } from 'next-auth/react'
 
 interface HeaderProps {
   className?: string
@@ -31,6 +32,7 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({ className = '', isLoggedIn = true, dictionary }) => {
   const params = useParams() as { lang?: Locale } | null
   const lang = params?.lang ?? 'en'
+  const { data: user } = useSession()
 
   const [isSideNavOpen, setIsSideNavOpen] = useState(false)
   const router = useRouter()
@@ -69,7 +71,7 @@ const Header: React.FC<HeaderProps> = ({ className = '', isLoggedIn = true, dict
       <div className="hidden lg:flex items-center justify-between w-full">
         <Logo />
         <Navigation />
-        {isLoggedIn ? (
+        {user?.user?.accessToken ? (
           <div className="flex items-center space-x-4 gap-5">
             <NotificationIcon />
             <UserProfile
@@ -80,7 +82,13 @@ const Header: React.FC<HeaderProps> = ({ className = '', isLoggedIn = true, dict
           </div>
         ) : (
           <div className="flex items-center space-x-4">
-            <Button onClick={() => router.push('/en/login')} type="button" size="md" intent="ghost" className='!text-[#484A4C]'>
+            <Button
+              onClick={() => router.push('/en/login')}
+              type="button"
+              size="md"
+              intent="ghost"
+              className="!text-[#484A4C]"
+            >
               Sign In
             </Button>
             <Button
@@ -94,7 +102,7 @@ const Header: React.FC<HeaderProps> = ({ className = '', isLoggedIn = true, dict
           </div>
         )}
       </div>
-      <div className="hidden lg:block">
+      <div className="hidden">
         <LanguageSwitcher
           lang={lang ?? 'en'}
           label={dictionary?.footer?.language || ''}
@@ -124,7 +132,7 @@ const Header: React.FC<HeaderProps> = ({ className = '', isLoggedIn = true, dict
         userName="Fahd Al-Mutiri"
         avatarSrc=""
         onLogout={() => console.log('User logged out')}
-        isLoggedIn={isLoggedIn}
+        isLoggedIn={!!user?.user?.accessToken}
         LanguageSwitcher={
           <LanguageSwitcher
             lang={lang ?? 'en'}

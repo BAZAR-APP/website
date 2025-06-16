@@ -2,9 +2,8 @@
 
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
 import { useMutation } from '@tanstack/react-query'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 
 import CommonButton from '@/components/Button/Button'
 import { CommonInput } from '@/components'
@@ -12,6 +11,7 @@ import { resetPasswordSchema } from '@/lib/validationSchemas'
 import { toast } from '@/lib/toast'
 import { extractErrorMessage } from '@/lib/utils'
 import Image from 'next/image'
+import { Suspense, useEffect, useState } from 'react'
 
 interface PasswordFormData {
   password: string
@@ -20,8 +20,14 @@ interface PasswordFormData {
 
 const ChangePassword = () => {
   const router = useRouter()
-  const searchParams = useSearchParams()
-  const token = searchParams?.get('token')
+  const [token, setToken] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search)
+      setToken(params.get('token'))
+    }
+  }, [])
   const {
     handleSubmit,
     formState: { errors, isValid },
@@ -74,59 +80,61 @@ const ChangePassword = () => {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center h-full">
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="max-w-[360px] h-[90vh] overflow-y-auto flex flex-col justify-center gap-[24px]"
-      >
-        <Image
-          src={'/images/Logo.svg'}
-          alt="Logo"
-          width={150}
-          height={48}
-          className="min-[1440px]:py-3"
-        />
-
-        <div className="flex flex-col gap-[12px]">
-          <h2 className="text-primary font-semibold text-[24px] min-[1440px]:py-3 max-[1440px]:text-[32px] min-[1441px]:text-[39px] leading-tight">
-            Set A New Password
-          </h2>
-          <p className="text-secondary font-400 text-[16px]">
-            Create a strong password to secure your account.
-          </p>
-        </div>
-
-        <CommonInput
-          name="password"
-          type="password"
-          label="New Password"
-          className="!bg-[#F9FAFB] !text-[#484A4C] !rounded-[8px] !border-none min-[1440px]:my-1 !h-[42px]"
-          value={watch('password')}
-          onChange={handlePasswordChange}
-          error={!!errors?.password}
-          errorMessage={errors?.password?.message}
-        />
-
-        <CommonInput
-          name="confirmPassword"
-          type="password"
-          label="Confirm New Password"
-          className="!bg-[#F9FAFB] !text-[#484A4C] !rounded-[8px] min-[1440px]:my-1 !border-none !h-[42px]"
-          value={watch('confirmPassword')}
-          onChange={handlePasswordChange}
-          error={!!errors?.confirmPassword}
-          errorMessage={errors?.confirmPassword?.message}
-        />
-
-        <CommonButton
-          type="submit"
-          className="w-full h-[48px] bg-[#29397E] text-white min-[1440px]:my-3 gap-2 pt-3 pr-5 pb-3 pl-5 rounded-lg"
-          disabled={!isValid || mutation?.isPending}
+    <Suspense>
+      <div className="flex flex-col items-center justify-center h-full">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="max-w-[360px] h-[90vh] overflow-y-auto flex flex-col justify-center gap-[24px]"
         >
-          {mutation.isPending ? 'Submitting...' : 'Create New Password'}
-        </CommonButton>
-      </form>
-    </div>
+          <Image
+            src={'/images/Logo.svg'}
+            alt="Logo"
+            width={150}
+            height={48}
+            className="min-[1440px]:py-3"
+          />
+
+          <div className="flex flex-col gap-[12px]">
+            <h2 className="text-primary font-semibold text-[24px] min-[1440px]:py-3 max-[1440px]:text-[32px] min-[1441px]:text-[39px] leading-tight">
+              Set A New Password
+            </h2>
+            <p className="text-secondary font-400 text-[16px]">
+              Create a strong password to secure your account.
+            </p>
+          </div>
+
+          <CommonInput
+            name="password"
+            type="password"
+            label="New Password"
+            className="!bg-[#F9FAFB] !text-[#484A4C] !rounded-[8px] !border-none min-[1440px]:my-1 !h-[42px]"
+            value={watch('password')}
+            onChange={handlePasswordChange}
+            error={!!errors?.password}
+            errorMessage={errors?.password?.message}
+          />
+
+          <CommonInput
+            name="confirmPassword"
+            type="password"
+            label="Confirm New Password"
+            className="!bg-[#F9FAFB] !text-[#484A4C] !rounded-[8px] min-[1440px]:my-1 !border-none !h-[42px]"
+            value={watch('confirmPassword')}
+            onChange={handlePasswordChange}
+            error={!!errors?.confirmPassword}
+            errorMessage={errors?.confirmPassword?.message}
+          />
+
+          <CommonButton
+            type="submit"
+            className="w-full h-[48px] bg-[#29397E] text-white min-[1440px]:my-3 gap-2 pt-3 pr-5 pb-3 pl-5 rounded-lg"
+            disabled={!isValid || mutation?.isPending}
+          >
+            {mutation.isPending ? 'Submitting...' : 'Create New Password'}
+          </CommonButton>
+        </form>
+      </div>
+    </Suspense>
   )
 }
 
