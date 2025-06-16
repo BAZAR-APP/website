@@ -1,5 +1,4 @@
 import React from 'react';
-import { CheckCircle } from 'lucide-react';
 import { StarRating } from "@/components"
 import Image from 'next/image';
 

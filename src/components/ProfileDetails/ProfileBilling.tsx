@@ -1,4 +1,5 @@
 import DatePicker from "../DatePicker/DatePicker";
+import Pagination from "../Pagination";
 import ProfileBillingCard from "./ProfileBookingCard";
 
 const billingItems = [
@@ -97,11 +98,11 @@ const billingItems = [
 const ProfileBilling = () => {
     return (
         <>
-            <div className="flex gap-[141px] items-center self-stretch shrink-0 flex-nowrap relative z-[38]">
-                <span className="h-[32px] shrink-0 basis-auto font-['Inter'] text-[25px] font-semibold leading-[32px] text-[#19191a] relative text-left whitespace-nowrap z-[39]">
+            <div className="flex gap-[32px] md:gap-[141px] flex-col md:flex-row md:items-center self-stretch shrink-0 flex-nowrap relative z-[38]  mb-[20px] md:mb-[40px]">
+                <span className="h-[32px] shrink-0 basis-auto text-[25px] font-semibold leading-[32px] text-[#19191a] relative text-left whitespace-nowrap z-[39]">
                     Pick Billing Period
                 </span>
-                <div className="flex w-[255px] flex-col gap-[8px] items-start shrink-0 flex-nowrap relative z-40">
+                <div className="flex max-w-[255px] flex-col gap-[8px] items-start shrink-0 flex-nowrap relative z-40">
                     <DatePicker />
                 </div>
             </div>
@@ -111,52 +112,9 @@ const ProfileBilling = () => {
                     <ProfileBillingCard key={item.id} {...item} />
                 ))}
             </div>
-
-            <div className="flex w-[617px] pt-[12px] pr-[24px] pb-[16px] pl-[24px] gap-[12px] justify-center items-center shrink-0 flex-nowrap relative z-[185]">
-                <div className="flex items-center grow shrink-0 basis-0 flex-nowrap relative z-[186]">
-                    <div className="flex w-[111px] pt-[8px] pr-[12px] pb-[8px] pl-[12px] gap-[4px] justify-center items-center shrink-0 flex-nowrap bg-[#fdfdfe] rounded-[8px] border-solid border border-[#cfd4dc] relative overflow-hidden shadow-[0_1px_2px_0_rgba(16,24,40,0.05)] z-[187]">
-                        <div className="w-[20px] h-[20px] shrink-0 bg-[url(https://codia-f2c.s3.us-west-1.amazonaws.com/image/2025-06-11/CQ6yqSj5n8.png)] bg-cover bg-no-repeat relative overflow-hidden z-[188]" />
-                        <div className="flex w-[63px] pt-0 pr-[2px] pb-0 pl-[2px] justify-center items-center shrink-0 flex-nowrap relative z-[189]">
-                            <span className="h-[20px] shrink-0 basis-auto font-['Inter'] text-[14px] font-semibold leading-[20px] text-[#19191a] relative text-left whitespace-nowrap z-[190]">
-                                Previous
-                            </span>
-                        </div>
-                    </div>
-                </div>
-                <div className="flex w-[124px] gap-[2px] items-start shrink-0 flex-nowrap relative z-[191]">
-                    <div className="w-[40px] h-[40px] shrink-0 bg-[#e1f2ff] rounded-[50px] relative overflow-hidden z-[192]">
-                        <div className="flex w-[40px] h-[40px] pt-[8px] pr-[8px] pb-[8px] pl-[8px] justify-center items-center flex-nowrap rounded-[8px] absolute top-0 left-0 z-[193]">
-                            <span className="flex w-[7px] h-[20px] justify-center items-start shrink-0 basis-auto font-['Inter'] text-[14px] font-medium leading-[20px] text-[#19191a] relative text-center whitespace-nowrap z-[194]">
-                                1
-                            </span>
-                        </div>
-                    </div>
-                    <div className="w-[40px] h-[40px] shrink-0 rounded-[8px] relative overflow-hidden z-[195]">
-                        <div className="flex w-[40px] h-[40px] pt-[8px] pr-[8px] pb-[8px] pl-[8px] justify-center items-center flex-nowrap rounded-[8px] absolute top-0 left-0 z-[196]">
-                            <span className="flex w-[9px] h-[20px] justify-center items-start shrink-0 basis-auto font-['Inter'] text-[14px] font-medium leading-[20px] text-[#484a4c] relative text-center whitespace-nowrap z-[197]">
-                                2
-                            </span>
-                        </div>
-                    </div>
-                    <div className="w-[40px] h-[40px] shrink-0 rounded-[8px] relative overflow-hidden z-[198]">
-                        <div className="flex w-[40px] h-[40px] pt-[8px] pr-[8px] pb-[8px] pl-[8px] justify-center items-center flex-nowrap rounded-[8px] absolute top-0 left-0 z-[199]">
-                            <span className="flex w-[10px] h-[20px] justify-center items-start shrink-0 basis-auto font-['Inter'] text-[14px] font-medium leading-[20px] text-[#484a4c] relative text-center whitespace-nowrap z-[200]">
-                                3
-                            </span>
-                        </div>
-                    </div>
-                </div>
-                <div className="flex justify-end items-center grow shrink-0 basis-0 flex-nowrap relative z-[201]">
-                    <div className="flex w-[84px] pt-[8px] pr-[12px] pb-[8px] pl-[12px] gap-[4px] justify-center items-center shrink-0 flex-nowrap bg-[#fdfdfe] rounded-[8px] border-solid border border-[#cfd4dc] relative overflow-hidden shadow-[0_1px_2px_0_rgba(16,24,40,0.05)] z-[202]">
-                        <div className="flex w-[36px] pt-0 pr-[2px] pb-0 pl-[2px] justify-center items-center shrink-0 flex-nowrap relative z-[203]">
-                            <span className="h-[20px] shrink-0 basis-auto font-['Inter'] text-[14px] font-semibold leading-[20px] text-[#19191a] relative text-left whitespace-nowrap z-[204]">
-                                Next
-                            </span>
-                        </div>
-                        <div className="w-[20px] h-[20px] shrink-0 bg-[url(https://codia-f2c.s3.us-west-1.amazonaws.com/image/2025-06-11/cYYXELTcjk.png)] bg-cover bg-no-repeat relative overflow-hidden z-[205]" />
-                    </div>
-                </div>
-            </div>
+            <Pagination currentPage={1} totalPages={1} onPageChange={function (page: number): void {
+                throw new Error("Function not implemented.");
+            }} />
 
         </>
     )

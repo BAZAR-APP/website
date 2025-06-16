@@ -11,7 +11,7 @@ const DatePicker: React.FC = () => {
 
     const handleEndDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setEndDate(e.target.value);
-        setShowPicker(false); // Auto-close after selecting end
+        setShowPicker(false);
     };
 
     const formattedDateRange = () => {
@@ -34,20 +34,20 @@ const DatePicker: React.FC = () => {
             {/* Trigger Input */}
             <div
                 onClick={() => setShowPicker(!showPicker)}
-                className="flex items-center gap-2 p-2 border border-gray-300 rounded-lg bg-white cursor-pointer"
+                className="flex items-center gap-2 p-2 border-2 border-gray-300 rounded-lg bg-white cursor-pointer"
             >
                 <div
                     className="w-5 h-5 bg-cover bg-no-repeat"
                     style={{
                         backgroundImage:
-                            "url('https://codia-f2c.s3.us-west-1.amazonaws.com/image/2025-06-11/tsSPJkyOX1.png')",
+                            "url('/images/calendar.svg')",
                     }}
                 />
                 <input
                     type="text"
                     value={formattedDateRange() || 'Select Date Range'}
                     readOnly
-                    className="w-full bg-white text-sm text-gray-800 cursor-pointer focus:outline-none"
+                    className="w-full bg-white text-sm !text-[#344054] font-[600] cursor-pointer focus:outline-none"
                 />
             </div>
 
@@ -59,13 +59,13 @@ const DatePicker: React.FC = () => {
                             type="date"
                             value={startDate}
                             onChange={handleStartDateChange}
-                            className="border border-gray-300 rounded-md p-1"
+                            className="border border-gray-300 rounded-md p-1 text-[#344054]"
                         />
                         <input
                             type="date"
                             value={endDate}
                             onChange={handleEndDateChange}
-                            className="border border-gray-300 rounded-md p-1"
+                            className="border border-gray-300 rounded-md p-1 text-[#344054]"
                         />
                         <button
                             onClick={() => setShowPicker(false)}
