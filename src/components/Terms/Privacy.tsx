@@ -1,6 +1,6 @@
 const Privacy = () => {
     return (
-        <div className="main-container flex flex-col gap-10 justify-center items-start bg-white relative overflow-hidden mx-auto px-5 py-10 max-w-screen-xl">
+        <div className="flex flex-col gap-10 items-start bg-white relative overflow-hidden mx-auto px-6 py-12 md:px-16 md:py-16 sm:gap-8 sm:px-4 sm:py-6">
 
             <div className="flex flex-col gap-4 items-start w-full max-w-full sm:max-w-[921px]">
                 <h1 className="text-[#19191A] text-2xl sm:text-3xl md:text-[39px] font-bold">

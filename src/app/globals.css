@@ -207,7 +207,7 @@ html body * {
 }
 
 .max-w-xxl {
-  max-width: 1900px;
+  max-width: 1920px;
 }
 
 .rt-BaseCheckboxRoot:where(.rt-variant-surface):where([data-state='checked'],
