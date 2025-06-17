@@ -10,6 +10,7 @@ import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 import { useChaletsQuery } from '@/lib/hooks/api/useChaletsQuery'
 import { Chalet } from '../../../../../../types/chalets'
+import { PropertyCardSkeleton } from '@/components/Skeletons/chaletsCardSkeleton'
 
 const ExploreChalets = () => {
   const router = useRouter()
@@ -31,22 +32,32 @@ const ExploreChalets = () => {
           <SearchHeader />
           <SearchResults
             location="Al Khobar"
-            totalResults={2555}
+            totalResults={data?.length || 0}
             sortBy={sortBy}
             onSortChange={setSortBy}
           />
 
-          <Grid columns={{ initial: '1', sm: '2', lg: '3', xl: '4' }} gap="4" width="100%">
-            {data?.map((chalet: Chalet, index: number) => (
-              <PropertyCard chalet={chalet} onClick={() => {}} key={index}/>
-            ))}
-          </Grid>
+          {isLoading ? (
+            <Grid columns={{ initial: '1', sm: '2', lg: '3', xl: '4' }} gap="4" width="100%">
+              {Array.from({ length: 6 }).map((_, index) => (
+                <PropertyCardSkeleton key={index} />
+              ))}
+            </Grid>
+          ) : (
+            <>
+              <Grid columns={{ initial: '1', sm: '2', lg: '3', xl: '4' }} gap="4" width="100%">
+                {data?.map((chalet: Chalet, index: number) => (
+                  <PropertyCard chalet={chalet} onClick={() => {}} key={index} />
+                ))}
+              </Grid>
 
-          <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={setCurrentPage}
-          />
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={setCurrentPage}
+              />
+            </>
+          )}
         </div>
       </div>
     </div>

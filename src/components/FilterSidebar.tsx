@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
+import debounce from 'lodash.debounce'
 import FilterSection from './FilterSection'
 import Image from 'next/image'
 import Like from '../../public/images/Like.svg'
@@ -10,8 +11,34 @@ import { locations } from '@/lib/constant'
 import { useChaletFiltersStore } from '../../stores/useChaletFiltersStore'
 
 const FilterSidebar = () => {
-  const [value, setValue] = React.useState(50)
-  const { setFilters, city, amenities, resetFilters } = useChaletFiltersStore()
+  const { setFilters, city, amenities, resetFilters, minPrice, maxPrice } = useChaletFiltersStore()
+  const [currentRange, setCurrentRange] = useState([minPrice, maxPrice])
+
+  useEffect(() => {
+    setCurrentRange([minPrice, maxPrice])
+  }, [minPrice, maxPrice])
+
+  const debouncedSetFilters = useCallback(
+    debounce((values) => {
+      setFilters({
+        minPrice: values[0],
+        maxPrice: values[1],
+      })
+    }, 500),
+    [setFilters],
+  )
+
+  const handleRangeChange = (values: any) => {
+    setCurrentRange(values)
+    debouncedSetFilters(values)
+  }
+
+  useEffect(() => {
+    return () => {
+      debouncedSetFilters.cancel()
+    }
+  }, [debouncedSetFilters])
+
   return (
     <div className="lg:w-80 w-full py-5 h-full overflow-y-auto w-500px-1440 xl:mr-3 mr-0">
       <div className="flex items-center justify-between mb-6">
@@ -45,23 +72,27 @@ const FilterSidebar = () => {
         <div className="mt-5 w-full">
           <Slider.Root
             className="relative flex items-center select-none touch-none w-full h-5"
-            min={0}
-            max={100}
+            min={1}
+            max={3000}
             step={1}
-            value={[value]}
-            onValueChange={([val]) => setValue(val)}
+            value={currentRange}
+            onValueChange={handleRangeChange}
           >
             <Slider.Track className="bg-[#E5E7EB] relative grow rounded-full h-2">
               <Slider.Range className="absolute bg-[#29397E] h-2 rounded-full" />
             </Slider.Track>
             <Slider.Thumb
-              className="block w-[22px] h-[22px] bg-white border border-gray-200 rounded-full shadow-sm focus:outline-none"
-              aria-label="Price range"
+              className="cursor-pointer block w-[22px] h-[22px] bg-white border border-gray-200 rounded-full shadow-sm focus:outline-none"
+              aria-label="Minimum price"
+            />
+            <Slider.Thumb
+              className="cursor-pointer block w-[22px] h-[22px] bg-white border border-gray-200 rounded-full shadow-sm focus:outline-none"
+              aria-label="Maximum price"
             />
           </Slider.Root>
           <div className="flex z-10 gap-10 justify-between items-start p-0 mt-3 mb-0 text-sm font-medium text-center text-[#4B5563] max-md:mb-2.5">
-            <span className="leading-none">0 KD</span>
-            <span className="leading-none">3000 KD</span>
+            <span className="leading-none">{currentRange?.[0]} KD</span>
+            <span className="leading-none">{currentRange?.[1]} KD</span>
           </div>
         </div>
       </FilterSection>
