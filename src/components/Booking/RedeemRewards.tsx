@@ -103,7 +103,6 @@ const RedeemRewards = () => {
             </Button>
           </div>
         )}
-
         {step === 'copy' && selectedDiscount && (
           <div className="flex flex-col items-center justify-center">
             <div className="bg-[#F9FAFB] rounded-[20.125px]">
