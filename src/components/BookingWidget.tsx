@@ -39,9 +39,17 @@ interface BookingWidgetProps {
   setCheckOut?: (date: Date | undefined) => void
   guests?: number
   setGuests?: (guests: number) => void
-  maxGuests?: number
+  maxGuests?: string
   packageOptions?: PackageOption[]
   bookingConfig?: BookingConfig
+  packageInfo: {
+    perHourCost: number | undefined
+    perNightCost: number | undefined
+    weekendCost: number | undefined
+    weekDaysCost: number | undefined
+    fullWeekCost: number | undefined
+    fullMonthCost: number | undefined
+  }
 }
 
 const PricingRow = ({
@@ -53,7 +61,7 @@ const PricingRow = ({
 }: {
   title: string
   subtitle: string
-  price: number
+  price: number | undefined
   currency: string
   checked?: boolean
 }) => (
@@ -90,6 +98,7 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
       currency: 'KWD',
     },
   },
+  packageInfo,
 }) => {
   const { setValue, watch } = useForm()
   const quantity = watch('guests') ?? 1
@@ -129,33 +138,33 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
         </h2>
       </div>
       <div className="px-6 space-y-3">
-        {currentPackage && (
+        {packageInfo && (
           <>
             <PricingRow
               title="Weekend"
               subtitle="Thursday to Saturday"
-              price={currentPackage.weekendPrice}
+              price={packageInfo.weekendCost}
               currency={bookingConfig.currency}
               checked
             />
             <PricingRow
               title="Weekday"
               subtitle="Friday to Wednesday"
-              price={currentPackage.weekdayPrice}
+              price={packageInfo.weekDaysCost}
               currency={bookingConfig.currency}
               checked
             />
             <PricingRow
               title="Full Week"
               subtitle="7 consecutive nights"
-              price={currentPackage.fullWeekPrice}
+              price={packageInfo.fullWeekCost}
               currency={bookingConfig.currency}
               checked
             />
             <PricingRow
               title="Full Month"
               subtitle="30 consecutive nights"
-              price={currentPackage.fullMonthPrice}
+              price={packageInfo.fullMonthCost}
               currency={bookingConfig.currency}
               checked
             />

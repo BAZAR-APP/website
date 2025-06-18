@@ -47,7 +47,7 @@ const ExploreChalets = () => {
             <>
               <Grid columns={{ initial: '1', sm: '2', lg: '3', xl: '4' }} gap="4" width="100%">
                 {data?.map((chalet: Chalet, index: number) => (
-                  <PropertyCard chalet={chalet} onClick={() => {}} key={index} />
+                  <PropertyCard chalet={chalet} onClick={() => router.push(`/explore/chalets/${chalet?.id}`)} key={index} />
                 ))}
               </Grid>
 

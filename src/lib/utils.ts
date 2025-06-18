@@ -43,3 +43,11 @@ export function extractErrorMessage(error: any): string {
 
   return 'Something went wrong'
 }
+
+export function capitalizeWords(str: string): string {
+  return str
+    .toLowerCase()
+    .split(' ')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ')
+}
