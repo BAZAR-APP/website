@@ -3,6 +3,7 @@
 import { Button, CommonInput } from '@/components'
 import ModalDialog from '@/components/ModalDialog/Dialog'
 import useToggle from '@/lib/hooks/useToggle'
+import { copyToClipboard } from '@/lib/utils'
 import { Text } from '@radix-ui/themes'
 import { ChevronRight } from 'lucide-react'
 import Image from 'next/image'
@@ -31,6 +32,7 @@ const RedeemRewards = () => {
   }
 
   const handleClose = () => {
+    copyToClipboard('SEAVILLA20DIS')
     setStep('select')
     setSelectedDiscount(null)
     toggle()
@@ -117,6 +119,7 @@ const RedeemRewards = () => {
               <CommonInput
                 placeholder="SEAVILLA20DIS"
                 type="text"
+                readonly
                 className="w-full md:w-[300px] !px-4 bg-[#F3F4F6] !rounded-md !text-sm !h-[42px] !border-none shadow-none !focus:ring-0 !focus:outline-none"
               />
               <Button
