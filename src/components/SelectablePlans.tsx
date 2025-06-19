@@ -1,9 +1,8 @@
 'use client'
-
-import { useState } from 'react'
 import { Star } from 'lucide-react'
 import PriceDetailCard from './PriceDetailCard'
 import { Badge } from './BadgePill'
+import { useBookingStore } from '../../stores/useBookingStore'
 
 const plans = [
   {
@@ -46,8 +45,7 @@ const plans = [
 ]
 
 export default function SelectablePlans() {
-  const [selected, setSelected] = useState('members')
-
+  const { setPlan, selectedPlan } = useBookingStore()
   return (
     <div className="flex flex-wrap justify-between xl:gap-0 gap-18 mx-auto md:pt-15 pt-10 border-b border-[#E5E7EB] md:pb-12 pb-10">
       {plans.map((plan) => (
@@ -57,8 +55,8 @@ export default function SelectablePlans() {
           subtitle={plan.subtitle}
           price={plan.price}
           description={plan.description}
-          isSelected={selected === plan.id}
-          onClick={() => setSelected(plan.id)}
+          isSelected={selectedPlan === plan.id}
+          onClick={() => setPlan(plan.id)}
           isPopular={plan.isPopular}
           badge={plan.badge.type !== 'promo' ? plan.badge : undefined}
         />

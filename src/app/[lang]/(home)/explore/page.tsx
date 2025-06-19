@@ -11,6 +11,7 @@ import React, { useState } from 'react'
 import { useChaletsQuery } from '@/lib/hooks/api/useChaletsQuery'
 import { PropertyCardSkeleton } from '@/components/Skeletons/chaletsCardSkeleton'
 import { Chalet } from '../../../../../types/chalets'
+import { useBookingStore } from '../../../../../stores/useBookingStore'
 
 const ExploreChalets = () => {
   const router = useRouter()
@@ -19,7 +20,7 @@ const ExploreChalets = () => {
   const itemsPerPage = 9
   const totalPages = Math.ceil(mockProperties.length / itemsPerPage)
   const { data, isLoading } = useChaletsQuery()
-
+  const { resetBooking } = useBookingStore()
   return (
     <div className="min-h-screen lg:px-14 md:px-12 px-10 xxl-p mx-auto">
       <h2 className="font-semibold md:text-[39px] sm:text-2xl text-xl leading-11 text-[#19191A] pt-5">
@@ -47,7 +48,14 @@ const ExploreChalets = () => {
             <>
               <Grid columns={{ initial: '1', sm: '2', lg: '3', xl: '4' }} gap="4" width="100%">
                 {data?.map((chalet: Chalet, index: number) => (
-                  <PropertyCard chalet={chalet} onClick={() => router.push(`/chalet/${chalet?.id}`)} key={index} />
+                  <PropertyCard
+                    chalet={chalet}
+                    onClick={() => {
+                      resetBooking()
+                      router.push(`/chalet/${chalet?.id}`)
+                    }}
+                    key={index}
+                  />
                 ))}
               </Grid>
 
