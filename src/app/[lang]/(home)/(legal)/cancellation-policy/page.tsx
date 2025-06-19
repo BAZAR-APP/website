@@ -30,7 +30,7 @@ const Page = () => {
       <Button
         intent="transperent"
         className="!px-0 !py-0"
-        onClick={() => router.push(`/explore/booking/${params.id}/`)}
+        onClick={()=> router.back()}
       >
         <ChevronLeft className="w-5 h-5 text-[#9EA0A2]" />
         <span className="text-[#484A4C]">Back</span>

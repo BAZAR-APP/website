@@ -12,9 +12,9 @@ import HotelMap from '@/components/LocationMap'
 import { Metadata } from 'next'
 import { getServerSession } from 'next-auth/next'
 import { authOptions } from '@/lib/auth'
-import { Chalet } from '../../../../../../../types/chalets'
 import { toast } from '@/lib/toast'
 import { extractErrorMessage } from '@/lib/utils'
+import { Chalet } from '../../../../../../types/chalets'
 
 export async function generateMetadata({
   params,

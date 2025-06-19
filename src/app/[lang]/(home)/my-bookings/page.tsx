@@ -53,7 +53,7 @@ const Booking = () => {
         <BookingCard
           key={property.id}
           {...property}
-          onClick={() => router.push(`/explore/booking/${property.id}`)}
+          onClick={() => router.push(`/my-bookings/${property.id}`)}
           onSeeDetails={handleSeeDetails}
           onViewInvoice={handleViewInvoice}
           showRating={activeTab === 'completed'}

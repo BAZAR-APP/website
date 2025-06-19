@@ -8,6 +8,7 @@ import { priceDetails } from '@/lib/constant'
 import { useFormContext } from 'react-hook-form'
 import PriceRowUI from './PriceRow'
 import RedeemRewards from './Booking/RedeemRewards'
+import { useParams } from 'next/navigation'
 
 // Extracted common text styles
 const textStyles = {
@@ -75,6 +76,8 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
   earnPoints = true,
   finalPayment = false,
 }) => {
+  const { id } = useParams()
+  
   const { getValues, watch } = useFormContext()
   const romanticWeekend = watch('romanticWeekend')
 
@@ -164,7 +167,7 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
             {couponCode && <CouponSection />}
 
             {showBookButton && (
-              <Link href="/explore/details/payment-confirmed/">
+              <Link href={`/chalet/${id}/booking/payment-confirmed/`}>
                 <Button className="w-[100%] text-white mt-3.5 !px-0 rounded-lg font-medium cursor-pointer">
                   {isSplitPayment ? 'Book Now with 50% Payment' : 'Book Now'}
                 </Button>

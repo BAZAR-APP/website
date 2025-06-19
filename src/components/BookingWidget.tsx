@@ -6,6 +6,7 @@ import Deposit from '../../public/images/Deposit.svg'
 import Button from './Button/Button'
 import Link from 'next/link'
 import { useForm } from 'react-hook-form'
+import { useParams } from 'next/navigation'
 
 interface PackageOption {
   id: string
@@ -100,6 +101,8 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
   },
   packageInfo,
 }) => {
+  const { id } = useParams()
+
   const { setValue, watch } = useForm()
   const quantity = watch('guests') ?? 1
   const handleQuantityChange = (newQuantity: number) => {
@@ -227,7 +230,7 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
         </div>
       </div>
       <div className="px-5 pb-5">
-        <Link href="/explore/details">
+        <Link href={`/chalet/${id}/booking`}>
           <Button className="w-[100%] mb-5 text-white py-2 rounded-lg font-medium cursor-pointer">
             Book Now
           </Button>

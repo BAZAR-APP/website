@@ -9,8 +9,8 @@ import { Grid } from '@radix-ui/themes'
 import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 import { useChaletsQuery } from '@/lib/hooks/api/useChaletsQuery'
-import { Chalet } from '../../../../../../types/chalets'
 import { PropertyCardSkeleton } from '@/components/Skeletons/chaletsCardSkeleton'
+import { Chalet } from '../../../../../types/chalets'
 
 const ExploreChalets = () => {
   const router = useRouter()
@@ -47,7 +47,7 @@ const ExploreChalets = () => {
             <>
               <Grid columns={{ initial: '1', sm: '2', lg: '3', xl: '4' }} gap="4" width="100%">
                 {data?.map((chalet: Chalet, index: number) => (
-                  <PropertyCard chalet={chalet} onClick={() => router.push(`/explore/chalets/${chalet?.id}`)} key={index} />
+                  <PropertyCard chalet={chalet} onClick={() => router.push(`/chalet/${chalet?.id}`)} key={index} />
                 ))}
               </Grid>
 

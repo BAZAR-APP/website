@@ -47,7 +47,7 @@ const Login = () => {
       })
 
       if (result?.ok) {
-        router.replace(`/explore/chalets`)
+        router.replace(`/explore/`)
       } else {
         toast.error(result?.error ?? '')
       }
@@ -159,7 +159,7 @@ const Login = () => {
         <div className="flex justify-center items-center gap-6 w-full min-[1440px]:my-3">
           <button
             onClick={() =>
-              signIn('google', { callbackUrl: `${process.env.NEXT_PUBLIC_URL}/explore/chalets` })
+              signIn('google', { callbackUrl: `${process.env.NEXT_PUBLIC_URL}/explore/` })
             }
             className="shrink-0"
           >
