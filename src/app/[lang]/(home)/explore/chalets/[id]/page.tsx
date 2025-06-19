@@ -128,7 +128,7 @@ export default async function ChaletDetailsPage({
 
   return (
     <div className="min-h-screen bg-white">
-      <div className="mx-auto max-w-7xl">
+      <div className="mx-auto max-p">
         <PropertyDetailsCard
           title={data?.title || ''}
           location={data?.city || ''}
