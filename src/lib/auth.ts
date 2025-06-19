@@ -73,7 +73,8 @@ export const authOptions: NextAuthOptions = {
           if (response.status === 200 || response.status === 201) {
             const userData = response.data
 
-            user.id = userData.user?.userId?.toString() || userData.userId?.toString() || profile?.sub
+            user.id =
+              userData.user?.userId?.toString() || userData.userId?.toString() || profile?.sub
             user.accessToken = userData.accessToken || userData.user?.accessToken
             user.email = profile?.email
             user.name = profile?.name
@@ -91,6 +92,7 @@ export const authOptions: NextAuthOptions = {
     },
 
     async jwt({ token, user, account, trigger }) {
+      // Initial sign in
       if (user) {
         token.id = user.id
         token.accessToken = user.accessToken
@@ -99,6 +101,7 @@ export const authOptions: NextAuthOptions = {
         token.provider = account?.provider || ''
       }
 
+      // Validate token on subsequent requests
       if (token.accessToken && trigger !== 'signIn') {
         try {
           await apiClient.get('/users/currentUser', {
@@ -106,8 +109,9 @@ export const authOptions: NextAuthOptions = {
               Authorization: `Bearer ${token.accessToken}`,
             },
           })
-          return token
-        } catch (error: any) {
+
+          return token // token still valid
+        } catch (error) {
           return {
             ...token,
             id: '',
@@ -115,6 +119,7 @@ export const authOptions: NextAuthOptions = {
             phoneNumber: undefined,
             provider: undefined,
             email: undefined,
+            isInvalid: true, // 👈 mark as invalid for session()
           }
         }
       }
@@ -123,11 +128,17 @@ export const authOptions: NextAuthOptions = {
     },
 
     async session({ session, token }) {
-      if (!token.id || !token.accessToken) {
-        return {
-          ...session,
-          user: undefined,
+      if (!token.accessToken || token.isInvalid || !token.id) {
+        // Instead of returning null, mark session as invalid
+        session.user = {
+          id: '',
+          accessToken: undefined,
+          provider: undefined,
+          email: undefined,
+          phoneNumber: undefined,
         }
+        ;(session as any).invalid = true
+        return session
       }
 
       try {
@@ -149,11 +160,16 @@ export const authOptions: NextAuthOptions = {
         }
 
         return session
-      } catch (error: any) {
-        return {
-          ...session,
-          user: undefined,
+      } catch (error) {
+        session.user = {
+          id: '',
+          accessToken: undefined,
+          provider: undefined,
+          email: undefined,
+          phoneNumber: undefined,
         }
+        ;(session as any).invalid = true
+        return session
       }
     },
   },

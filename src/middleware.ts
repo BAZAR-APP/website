@@ -4,7 +4,6 @@ import { match } from '@formatjs/intl-localematcher'
 import Negotiator from 'negotiator'
 import { i18n } from '../i18n.config'
 
-
 const PROTECTED_PATHS = ['/explore', '/profile', '/notifications', '/loyalty-points']
 
 function getLocale(request: NextRequest): string {
@@ -51,7 +50,7 @@ export async function middleware(request: NextRequest) {
 
   const isProtected = PROTECTED_PATHS.some((path) => pathname.includes(path))
 
-  if (isProtected && !token) {
+  if (isProtected && !token?.accessToken) {
     const locale = getLocale(request)
     return NextResponse.redirect(new URL(`/${locale}/login`, request.url))
   }
