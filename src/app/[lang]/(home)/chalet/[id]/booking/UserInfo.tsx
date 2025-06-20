@@ -30,7 +30,7 @@ const UserInfo: React.FC<UserInfoProps> = ({ onNext }) => {
           Please provide your name and contact info to complete the booking.
         </p>
         <div className="flex justify-between flex-wrap md:gap-2 gap-10">
-          <ContactForm onSubmit={handleFormSubmit} />
+          <ContactForm  />
 
           <div className="pb-7 md:px-3">
             <BookingSummary couponCode />

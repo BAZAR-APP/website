@@ -1,19 +1,22 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import CommonInput from './CommonInput/Input'
 import Image from 'next/image'
+import { useSession } from 'next-auth/react'
 
 interface ContactFormData {
-  fullName: string
-  phone: string
-  email: string
-  address: string
+  fullName?: string
+  phone?: string
+  email?: string
+  address?: string
 }
 
 interface ContactFormProps {
-  onSubmit: (data: ContactFormData) => void
+  onSubmit?: (data: ContactFormData) => void
 }
 
 const ContactForm: React.FC<ContactFormProps> = ({ onSubmit }) => {
+  const { data: user } = useSession()
+
   const [formData, setFormData] = useState<ContactFormData>({
     fullName: '',
     phone: '',
@@ -21,9 +24,17 @@ const ContactForm: React.FC<ContactFormProps> = ({ onSubmit }) => {
     address: '',
   })
 
+  useEffect(() => {
+    if (user?.user) {
+      setFormData({
+        fullName: user?.user?.fullName,
+      })
+    }
+  }, [user])
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    onSubmit(formData)
+    onSubmit?.(formData)
   }
 
   const handleInputChange = (field: keyof ContactFormData, value: string) => {
@@ -43,7 +54,15 @@ const ContactForm: React.FC<ContactFormProps> = ({ onSubmit }) => {
           className={'!bg-[#F9FAFB] !text-[#484A4C] !rounded-[8px] !border-none !h-[42px]'}
         />
         <CommonInput
-          icon={<Image src={'/images/countryFlag.svg'} alt="" className="w-[24px] h-[22px]" width={30} height={30} />}
+          icon={
+            <Image
+              src={'/images/countryFlag.svg'}
+              alt=""
+              className="w-[24px] h-[22px]"
+              width={30}
+              height={30}
+            />
+          }
           prefix="+965"
           name="phone"
           placeholder=""

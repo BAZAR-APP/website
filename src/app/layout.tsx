@@ -6,6 +6,8 @@ import './globals.css'
 import AuthSessionProvider from '@/components/Providers/SessionProvider'
 import { ToastProvider } from '@/components/Providers/ToastProvider'
 import { QueryProvider } from '@/components/Providers/QueryProvider'
+import { getServerSession } from 'next-auth'
+import { authOptions } from '@/lib/auth'
 
 // Font configurations
 const inter = Inter({
@@ -30,11 +32,13 @@ export const metadata: Metadata = {
   title: 'BAZAAR',
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const session = await getServerSession(authOptions)
+
   return (
     <html lang="en" className={`${inter.variable} ${geistMono.variable} ${tenorSans.variable}`}>
       <body
@@ -43,7 +47,7 @@ export default function RootLayout({
       >
         <ToastProvider />
         <Theme>
-          <AuthSessionProvider>
+          <AuthSessionProvider session={session}>
             <QueryProvider>{children}</QueryProvider>
           </AuthSessionProvider>
         </Theme>

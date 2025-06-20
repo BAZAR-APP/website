@@ -7,12 +7,17 @@ const api = axios.create({
     'Content-Type': 'application/json',
   },
 })
+let cachedToken: string | null = null
 
 api.interceptors.request.use(
   async (config) => {
-    const session = await getSession()
-    if (session?.user?.accessToken && config.headers) {
-      config.headers.Authorization = `Bearer ${session?.user.accessToken}`
+    if (!cachedToken) {
+      const session = await getSession()
+      cachedToken = session?.user?.accessToken || null
+    }
+
+    if (cachedToken && config.headers) {
+      config.headers.Authorization = `Bearer ${cachedToken}`
     }
     return config
   },
