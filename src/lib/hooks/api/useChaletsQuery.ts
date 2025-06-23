@@ -32,7 +32,7 @@ export const useChaletsQuery = (enabled = true) => {
       minPrice: state.minPrice,
       maxPrice: state.maxPrice,
       amenities: state.amenities,
-    }))
+    })),
   )
 
   const memoizedFilters = useMemo(() => filters, [filters])
@@ -42,6 +42,6 @@ export const useChaletsQuery = (enabled = true) => {
     queryFn: () => fetchChalets(memoizedFilters),
     staleTime: 5 * 60 * 1000,
     gcTime: 10 * 60 * 1000,
-    enabled
+    enabled,
   })
 }

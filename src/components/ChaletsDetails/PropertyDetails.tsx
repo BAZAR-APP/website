@@ -17,6 +17,13 @@ interface PropertyDetailsProps {
   badge: Badge | undefined
   isFamilyFriendlyOnly: boolean | undefined
   viewTypes: ViewType[] | undefined
+  isSelfCheckIn: boolean | undefined
+  area: string
+  host:
+    | {
+        fullName: String
+      }
+    | undefined
 }
 
 const PropertyDetails = ({
@@ -30,6 +37,9 @@ const PropertyDetails = ({
   badge,
   isFamilyFriendlyOnly = false,
   viewTypes = [],
+  isSelfCheckIn,
+  area,
+  host,
 }: PropertyDetailsProps) => {
   return (
     <section className="border-b border-[#E5E7EB] pb-8">
@@ -55,7 +65,7 @@ const PropertyDetails = ({
         <Flex align="center" gap="2" className="cursor-pointer sm:mt-0 mt-1">
           <Text className="text-sm leading-4 text-[#484A4C]">Hosted By</Text>
           <Avatar size="2" radius="full" fallback="FA" src="/images/Image.svg" />
-          <Text className="text-[16px] leading-6 font-medium text-[#19191A]">Omar Fayed</Text>
+          <Text className="text-[16px] leading-6 font-medium text-[#19191A]">{host?.fullName}</Text>
         </Flex>
       </div>
 
@@ -81,8 +91,8 @@ const PropertyDetails = ({
           />
         ))}
         <DetailItem icon="/images/Icon.svg" text={`${beds} Beds Max`} />
-        <DetailItem icon="/images/squreicon.svg" text="500 sqm²" />
-        <DetailItem icon="/images/self-icon.svg" text="Self Check-in" />
+        {area && <DetailItem icon="/images/squreicon.svg" text={area} />}
+        {isSelfCheckIn && <DetailItem icon="/images/self-icon.svg" text="Self Check-in" />}
         <DetailItem icon="/images/beds-svg.svg" text={`${bedrooms} Bedrooms`} />
         <DetailItem icon="/images/bath.svg" text={`${bathrooms} Bathrooms`} />
         {isFamilyFriendlyOnly && (

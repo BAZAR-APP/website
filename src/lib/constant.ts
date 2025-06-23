@@ -348,9 +348,7 @@ export const chaletRules = {
   },
 }
 export const priceDetails = [
-  { label: '100 KD x 4 nights', amount: '400 KWD' },
   { label: 'Refundable Deposit', amount: '200 KWD' },
-  { label: 'Flower Arrangement', amount: '30 KWD' },
 ]
 
 // Home Page Data

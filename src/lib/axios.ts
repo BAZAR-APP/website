@@ -1,3 +1,4 @@
+import { useQuery } from '@tanstack/react-query'
 import axios, { AxiosError, AxiosResponse } from 'axios'
 import { getSession, signOut } from 'next-auth/react'
 
@@ -34,9 +35,9 @@ api.interceptors.response.use(
     if (error.response) {
       const status = error.response.status
 
-      if (status === 401 || status === 403) {
-        await signOut({ callbackUrl: '/en/login' })
-      }
+      // if (status === 401 || status === 403) {
+      //   await signOut({ callbackUrl: '/en/login' })
+      // }
     }
     return Promise.reject(error)
   },
@@ -47,4 +48,37 @@ export default api
 export const fetcher = async (url: string) => {
   const res = await api.get(url)
   return res?.data
+}
+
+export interface UseQueryBaseParams {
+  queryKey: unknown[] // or a more specific type if known
+  url: string
+  params?: Record<string, any>
+  enabled?: boolean
+  refetchOnWindowFocus?: boolean
+  cacheTime?: number
+  staleTime?: number
+}
+
+export const useQueryBase = ({
+  queryKey,
+  url,
+  params = {},
+  enabled = true,
+  refetchOnWindowFocus = false,
+  cacheTime = 1000 * 60 * 60 * 24,
+  staleTime = 1000 * 60 * 60 * 24,
+}: UseQueryBaseParams) => {
+  return useQuery({
+    queryKey,
+    queryFn: async () => {
+      const response = await api.get(url, { params })
+
+      return response
+    },
+    enabled,
+    refetchOnWindowFocus,
+    gcTime: cacheTime,
+    staleTime,
+  })
 }

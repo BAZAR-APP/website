@@ -18,7 +18,7 @@ const AmenitiesList = ({ amenities }: AmenitiesListProps) => {
       <div className="text-[#19191A]">
         <h2 className="md:text-[25px] text-xl font-semibold mb-6">Amenities</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pb-6">
-          {amenities.map((amenity, index) => {
+          {amenities?.map((amenity, index) => {
             return (
               <div key={index} className="flex items-center gap-3">
                 <Image src={amenity?.iconPhotoId} width={20} height={12} alt={amenity?.title} />

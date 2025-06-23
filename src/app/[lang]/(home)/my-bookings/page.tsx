@@ -2,6 +2,7 @@
 
 import { Button } from '@/components'
 import BookingCard from '@/components/Booking/BookingCard'
+import { useQueryBase } from '@/lib/axios'
 import { bookingCardsData } from '@/lib/constant'
 import { useRouter } from 'next/navigation'
 import React from 'react'
@@ -9,6 +10,10 @@ import React from 'react'
 const Booking = () => {
   const router = useRouter()
   const [activeTab, setActiveTab] = React.useState<'current' | 'completed'>('current')
+  const { data, isLoading } = useQueryBase({
+    queryKey: ['my-bookings'],
+    url: '/booking',
+  })
 
   const handleSeeDetails = (id: string) => {
     console.log('See details for property:', id)

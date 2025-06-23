@@ -58,6 +58,7 @@ type CustomizeStayProps = {
 }
 export default function CustomizeStay({ onNext }: CustomizeStayProps) {
   const { watch } = useFormContext()
+
   const selectedAddons: Customization[] = watch('addons') || []
   const itemIconMap: Record<string, React.ReactNode> = {}
   services.forEach((section) => {

@@ -9,6 +9,12 @@ import { useFormContext } from 'react-hook-form'
 import PriceRowUI from './PriceRow'
 import RedeemRewards from './Booking/RedeemRewards'
 import { useParams } from 'next/navigation'
+import { useBookingStore } from '../../stores/useBookingStore'
+import { format } from 'date-fns'
+import { Customization } from '@/lib/types/booking'
+import api from '@/lib/axios'
+import { toast } from '@/lib/toast'
+import { extractErrorMessage } from '@/lib/utils'
 
 // Extracted common text styles
 const textStyles = {
@@ -77,12 +83,36 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
   finalPayment = false,
 }) => {
   const { id } = useParams()
-  
+
   const { getValues, watch } = useFormContext()
+  const selectedAddons: Customization[] = watch('addons') || []
+
+  const { selectedDates, selectedPlan, selectedRoom } = useBookingStore()
   const romanticWeekend = watch('romanticWeekend')
 
   const isSplitPayment = getValues()?.paymentOption === 'split'
+  const bookNow = async () => {
+    try {
+      const body = {
+        startDate: selectedDates?.checkIn,
+        endDate: selectedDates?.checkOut,
+        noOfNights: 0,
+        noOfGuests: 0,
+        totalCostAgainstNights: 0,
+        bookingStatus: 'PENDING',
+        refundableDepositAmount: 0,
+        grandTotal: 450,
+        chaletId: id,
+        sleepingRoomId: selectedRoom?.id,
+        chaletSubscriptionId: selectedPlan?.id,
+      }
+      const res = await api.post('/booking', body)
 
+      // /chalet/${id}/booking/payment-confirmed/
+    } catch (error) {
+      toast.error(extractErrorMessage(error))
+    }
+  }
   return (
     <>
       <div className="w-full md:max-w-sm rounded-lg bg-[#F9FAFB] sm:px-6 sm:py-5 p-3">
@@ -113,7 +143,8 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
 
             <div className={`flex items-center mb-3.5 ${textStyles.body}`}>
               <Calendar size={16} className="mr-2" />
-              From 20 March 2025 to 24 March 2025
+              From {format(selectedDates?.checkIn, 'd MMMM yyyy')} to{' '}
+              {format(selectedDates?.checkOut, 'd MMMM yyyy')}
             </div>
 
             {earnPoints && (
@@ -137,6 +168,13 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
             </div>
 
             <div className="space-y-3 text-sm pt-2 !text-[#19191A]">
+              {selectedAddons?.map((selectedAddon, index) => (
+                <PriceRowUI
+                  key={index}
+                  label={selectedAddon?.title}
+                  amount={selectedAddon?.costPerNight + ' KWD'}
+                />
+              ))}
               {priceDetails.map(({ label, amount }) => (
                 <PriceRowUI key={label} label={label} amount={amount} />
               ))}
@@ -167,11 +205,12 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
             {couponCode && <CouponSection />}
 
             {showBookButton && (
-              <Link href={`/chalet/${id}/booking/payment-confirmed/`}>
-                <Button className="w-[100%] text-white mt-3.5 !px-0 rounded-lg font-medium cursor-pointer">
-                  {isSplitPayment ? 'Book Now with 50% Payment' : 'Book Now'}
-                </Button>
-              </Link>
+              <Button
+                className="w-[100%] text-white mt-3.5 !px-0 rounded-lg font-medium cursor-pointer"
+                onClick={bookNow}
+              >
+                {isSplitPayment ? 'Book Now with 50% Payment' : 'Book Now'}
+              </Button>
             )}
           </div>
         </div>

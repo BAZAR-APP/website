@@ -14,7 +14,7 @@ import { getServerSession } from 'next-auth/next'
 import { authOptions } from '@/lib/auth'
 import { toast } from '@/lib/toast'
 import { extractErrorMessage } from '@/lib/utils'
-import { Chalet } from '../../../../../../types/chalets'
+import { Chalet, ChaletBedroom } from '../../../../../../types/chalets'
 
 export async function generateMetadata({
   params,
@@ -152,22 +152,19 @@ export default async function ChaletDetailsPage({
                 badge={data?.badge}
                 isFamilyFriendlyOnly={data?.isFamilyFriendlyOnly}
                 viewTypes={data?.viewTypes}
+                isSelfCheckIn={data?.isSelfCheckIn}
+                area={data?.area + ' ' + data?.areaUnit}
+                host={data?.host}
               />
-              <SelectablePlans />
+              <SelectablePlans subscriptions={data?.subscriptions || []} />
               <div className="border-b border-[#E5E7EB]">
-                <AmenitiesList amenities={data?.amenities || []} />
+                {/* <AmenitiesList amenities={data?.amenities || []} /> */}
                 <h2 className="md:text-[25px] text-xl font-semibold leading-[32px] text-[#19191A] mt-7">
                   Where you'll sleep
                 </h2>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-7 mb-10">
-                  {rooms.map((room, index) => (
-                    <BedroomCard
-                      key={index}
-                      roomNumber={room.roomNumber}
-                      bedType={room.bedType}
-                      bedCount={room.bedCount}
-                      imageSrc={room.imageSrc}
-                    />
+                  {data?.chaletRooms?.map((room: ChaletBedroom, index) => (
+                    <BedroomCard key={index} room={room} />
                   ))}
                 </div>
               </div>

@@ -5,8 +5,11 @@ import Image from 'next/image'
 import Deposit from '../../public/images/Deposit.svg'
 import Button from './Button/Button'
 import Link from 'next/link'
-import { useForm } from 'react-hook-form'
 import { useParams } from 'next/navigation'
+import { useBookingStore } from '../../stores/useBookingStore'
+import CustomPopOver from './CustomPopOver'
+import SimpleCalender from './Calender/SimpleCalender'
+import useToggle from '@/lib/hooks/useToggle'
 
 interface PackageOption {
   id: string
@@ -59,12 +62,14 @@ const PricingRow = ({
   price,
   currency,
   checked,
+  disabled = false,
 }: {
   title: string
   subtitle: string
   price: number | undefined
   currency: string
   checked?: boolean
+  disabled?: boolean
 }) => (
   <div className="flex justify-between items-center">
     <div>
@@ -75,7 +80,13 @@ const PricingRow = ({
     </div>
     <span className="text-sm leading-[17px] font-medium text-[#19191A] flex gap-2 items-center">
       {price} {currency}
-      <Radio name="example" value="1" defaultChecked={checked} className="!cursor-pointer" />
+      <Radio
+        name="example"
+        value=""
+        defaultChecked={false}
+        className="!cursor-pointer"
+        disabled={disabled}
+      />
     </span>
   </div>
 )
@@ -83,7 +94,6 @@ const PricingRow = ({
 const BookingWidget: React.FC<BookingWidgetProps> = ({
   checkIn,
   checkOut,
-  guests,
   packageOptions = [],
   bookingConfig = {
     refundableDeposit: 200,
@@ -100,14 +110,19 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
     },
   },
   packageInfo,
+  maxGuests,
 }) => {
-  const { id } = useParams()
+  const checkInPopUp = useToggle()
+  const checkOutPopUp = useToggle()
 
-  const { setValue, watch } = useForm()
-  const quantity = watch('guests') ?? 1
+  const { id } = useParams()
+  const { selectedPlan, selectedRoom, guests, setGuests, setDates, selectedDates } =
+    useBookingStore()
+
   const handleQuantityChange = (newQuantity: number) => {
-    if (newQuantity < 1) return
-    setValue('guests', newQuantity)
+    if (maxGuests && newQuantity > 0 && newQuantity <= +maxGuests) {
+      setGuests(newQuantity)
+    }
   }
 
   const selectedPackage = packageOptions[0]?.label || '100 KWD / night'
@@ -124,9 +139,15 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
   }
 
   const nights = calculateNights()
+  const formatDate = (date?: Date) => {
+    if (!date) return 'Select date'
+    const modifiedDate = new Date(date)
+    const day = modifiedDate.getDate().toString().padStart(2, '0')
+    const month = (modifiedDate.getMonth() + 1).toString().padStart(2, '0')
+    const year = modifiedDate.getFullYear()
 
-  const formatDate = (date?: Date) => date?.toLocaleDateString('en-GB') ?? '20/3/2025'
-
+    return `${day}/${month}/${year}`
+  }
   const total = (currentPackage?.basePrice ?? 0) * nights + bookingConfig.refundableDeposit
 
   return (
@@ -148,28 +169,28 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
               subtitle="Thursday to Saturday"
               price={packageInfo.weekendCost}
               currency={bookingConfig.currency}
-              checked
+              disabled={!!selectedPlan?.id}
             />
             <PricingRow
               title="Weekday"
               subtitle="Friday to Wednesday"
               price={packageInfo.weekDaysCost}
               currency={bookingConfig.currency}
-              checked
+              disabled={!!selectedPlan?.id}
             />
             <PricingRow
               title="Full Week"
               subtitle="7 consecutive nights"
               price={packageInfo.fullWeekCost}
               currency={bookingConfig.currency}
-              checked
+              disabled={!!selectedPlan?.id}
             />
             <PricingRow
               title="Full Month"
               subtitle="30 consecutive nights"
               price={packageInfo.fullMonthCost}
               currency={bookingConfig.currency}
-              checked
+              disabled={!!selectedPlan?.id}
             />
           </>
         )}
@@ -178,22 +199,60 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
         <div className="w-full rounded-xl border border-[#D1D5DB] overflow-hidden text-sm text-[#19191A]">
           <div className="grid grid-cols-2 divide-x divide-[#D1D5DB]">
             <div className="p-3">
-              <span className="block text-[10px] font-semibold">CHECK-IN</span>
-              <span className="block text-[14px] text-[#9EA0A2]">{formatDate(checkIn)}</span>
+              <CustomPopOver
+                isOpen={checkInPopUp.isOpen}
+                onClose={checkInPopUp.toggle}
+                triggerChildren={
+                  <span className="cursor-pointer">
+                    <span className="block text-[10px] font-semibold">CHECK-IN</span>
+                    <span className="block text-[14px] text-[#9EA0A2]">
+                      {formatDate(selectedDates?.checkIn)}
+                    </span>
+                  </span>
+                }
+              >
+                <SimpleCalender
+                  initialDate={selectedDates?.checkIn || new Date()}
+                  minDate={new Date()}
+                  onDateChange={(selectedDate: Date) => {
+                    setDates(selectedDate, selectedDates?.checkOut || new Date())
+                    checkInPopUp.toggle()
+                  }}
+                />
+              </CustomPopOver>
             </div>
             <div className="p-3">
-              <span className="block text-[10px] font-semibold">CHECKOUT</span>
-              <span className="block text-[14px] text-[#9EA0A2]">{formatDate(checkOut)}</span>
+              <CustomPopOver
+                isOpen={checkOutPopUp.isOpen}
+                onClose={checkOutPopUp.toggle}
+                triggerChildren={
+                  <span className="cursor-pointer">
+                    <span className="block text-[10px] font-semibold">CHECKOUT</span>
+                    <span className="block text-[14px] text-[#9EA0A2]">
+                      {formatDate(selectedDates?.checkOut)}
+                    </span>
+                  </span>
+                }
+              >
+                <SimpleCalender
+                  initialDate={selectedDates?.checkOut || new Date()}
+                  minDate={new Date()}
+                  onDateChange={(selectedDate: Date) => {
+                    setDates(selectedDates?.checkIn || new Date(), selectedDate)
+                    checkOutPopUp.toggle()
+                  }}
+                />
+              </CustomPopOver>
             </div>
           </div>
           <div className="border-t border-[#D1D5DB] px-3 py-2 flex items-center justify-between cursor-pointer">
             <div>
               <span className="block text-[10px] font-semibold">GUESTS</span>
-              <span className="block text-[14px] text-[#9EA0A2]">{guests} guests</span>
+              {guests && <span className="block text-[14px] text-[#9EA0A2]">{guests} guests</span>}
             </div>
             <div className="flex items-center gap-2 relative">
               <button
-                onClick={() => handleQuantityChange(quantity - 1)}
+                onClick={() => handleQuantityChange(guests - 1)}
                 className="flex cursor-pointer w-8 h-8 justify-center items-center relative p-[6.4px] rounded-[80px] border-[0.8px] border-solid border-[#E5E5EA]"
                 aria-label="Decrease quantity"
                 type="button"
@@ -208,9 +267,9 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
                   />
                 </svg>
               </button>
-              <span className="text-[#19191A] text-base font-medium leading-6">{quantity}</span>
+              <span className="text-[#19191A] text-base font-medium leading-6">{guests}</span>
               <button
-                onClick={() => handleQuantityChange(quantity + 1)}
+                onClick={() => handleQuantityChange(guests + 1)}
                 className="cursor-pointer flex w-8 h-8 justify-center items-center relative p-[6.4px] rounded-[80px] border-[0.8px] border-solid border-[#E5E5EA]"
                 aria-label="Increase quantity"
                 type="button"

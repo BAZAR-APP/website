@@ -1,66 +1,33 @@
 'use client'
-import { Star } from 'lucide-react'
 import PriceDetailCard from './PriceDetailCard'
-import { Badge } from './BadgePill'
 import { useBookingStore } from '../../stores/useBookingStore'
+import { FC } from 'react'
+import { ChaletSubscription } from '../../types/chalets'
 
-const plans = [
-  {
-    id: 'members',
-    title: '6 Hours',
-    subtitle: 'Weekdays',
-    price: '60 KWD',
-    description: '6-hour minimum',
-    isPopular: false,
-    badge: {
-      type: 'members' as const,
-      text: 'Members Only',
-      icon: <Star className="w-3 h-3" />,
-    } satisfies Badge,
-  },
-  {
-    id: 'exclusive',
-    title: '3 Days',
-    subtitle: 'Weekend',
-    price: '400 KWD',
-    description: 'Split payment available',
-    isPopular: true,
-    badge: {
-      type: 'exclusive' as const,
-      text: 'Exclusive',
-    } satisfies Badge,
-  },
-  {
-    id: 'promo',
-    title: '4 Days',
-    subtitle: 'Weekdays',
-    price: '400 KWD',
-    description: '',
-    isPopular: false,
-    badge: {
-      type: 'promo' as const,
-      text: 'Promo',
-    } satisfies Badge,
-  },
-]
-
-export default function SelectablePlans() {
+const SelectablePlans: FC<{ subscriptions: ChaletSubscription[] }> = ({ subscriptions = [] }) => {
   const { setPlan, selectedPlan } = useBookingStore()
+
   return (
     <div className="flex flex-wrap justify-between xl:gap-0 gap-18 mx-auto md:pt-15 pt-10 border-b border-[#E5E7EB] md:pb-12 pb-10">
-      {plans.map((plan) => (
+      {subscriptions.map((plan) => (
         <PriceDetailCard
           key={plan.id}
           title={plan.title}
-          subtitle={plan.subtitle}
-          price={plan.price}
-          description={plan.description}
-          isSelected={selectedPlan === plan.id}
-          onClick={() => setPlan(plan.id)}
-          isPopular={plan.isPopular}
-          badge={plan.badge.type !== 'promo' ? plan.badge : undefined}
+          subtitle={plan?.type}
+          price={plan.price + ' ' + plan?.priceUnit}
+          description={''}
+          isSelected={selectedPlan?.id === plan.id}
+          onClick={() => {
+            if (plan?.id === selectedPlan?.id) {
+              setPlan(null)
+            } else {
+              setPlan(plan)
+            }
+          }}
+          isPopular={true}
         />
       ))}
     </div>
   )
 }
+export default SelectablePlans
