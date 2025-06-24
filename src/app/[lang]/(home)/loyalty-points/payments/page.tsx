@@ -3,19 +3,45 @@ import { Button } from '@/components'
 import PaymentForm from '@/components/PaymentForm'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
-import React from 'react'
+import React, { useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
+import { useBuyLoyltyPointsStore } from '../../../../../../stores/useBuyLoyltyPoints'
+import api, { useQueryBase } from '@/lib/axios'
+import { useSession } from 'next-auth/react'
+import { extractErrorMessage } from '@/lib/utils'
+import { toast } from '@/lib/toast'
 
 const Payment = () => {
+  const { loyltyPoints } = useBuyLoyltyPointsStore()
+  const { data: user } = useSession()
+  const [loading, setLoading] = useState(false)
+  const { data } = useQueryBase({
+    queryKey: ['points'],
+    url: '/loyaltyPoints',
+  })
+
   const methods = useForm()
   const router = useRouter()
 
-  const summaryItems = [
-    { label: '1000 Points', value: '17 kd' },
-    { label: 'Taxes and Fees', value: '0 kd' },
-  ]
-
   const totalAmount = '17 kd'
+
+  const buyPoints = async () => {
+    setLoading(true)
+    try {
+      const res = await api.post('/loyaltyPointsPurchased/custom', {
+        userId: user?.user?.id,
+        pointsPurchased: loyltyPoints?.points,
+        isCustom: false,
+        discountNote: '',
+      })
+
+      router.push('/loyalty-points/payment-confirmed/')
+    } catch (error) {
+      toast.error(extractErrorMessage(error))
+    } finally {
+      setLoading(false)
+    }
+  }
 
   return (
     <FormProvider {...methods}>
@@ -41,19 +67,14 @@ const Payment = () => {
               <div className="flex gap-2 items-center">
                 <Image src="/images/purchase.svg" width={56} height={53} alt="Purchase icon" />
                 <p className="text-[16px] leading-[24px] font-medium text-[#29397E]">
-                  Purchase 1,000 Points
+                  Purchase {loyltyPoints?.points} Points
                 </p>
               </div>
 
-              {summaryItems.map((item, index) => (
-                <div
-                  key={index}
-                  className="text-[16px] leading-[19px] text-[#19191A] flex items-center w-full justify-between"
-                >
-                  <span>{item.label}</span>
-                  <span>{item.value}</span>
-                </div>
-              ))}
+              <div className="text-[16px] leading-[19px] text-[#19191A] flex items-center w-full justify-between">
+                <span>{loyltyPoints?.points} Points</span>
+                <span>{loyltyPoints?.price} KD</span>
+              </div>
 
               <div className="border-t w-full pt-4 mt-2 flex justify-between sm:text-[16px] text-sm leading-[24px] font-medium text-[#19191A]">
                 <span>Total</span>
@@ -62,9 +83,10 @@ const Payment = () => {
 
               <Button
                 className="w-full cursor-pointer"
-                onClick={() => router.push('/loyalty-points/payment-confirmed/')}
+                onClick={buyPoints}
+                disabled={loading}
               >
-                Pay {totalAmount} Now
+                {loading ? 'Submitting Payment…' : `Pay ${totalAmount} Now`}
               </Button>
             </div>
           </div>

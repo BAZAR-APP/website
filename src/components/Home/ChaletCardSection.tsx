@@ -1,7 +1,5 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
-import { HomeChaltesData } from '@/lib/constant'
 import { PropertyCard } from '@/components'
 import { useEffect, useState } from 'react'
 import { useChaletFiltersStore } from '../../../stores/useChaletFiltersStore'
@@ -13,7 +11,6 @@ interface ChaletsCardProps {
 }
 
 const ChaletsCard: React.FC<ChaletsCardProps> = ({ title }) => {
-  const router = useRouter()
   const [mount, setMount] = useState(false)
   const { setFilters } = useChaletFiltersStore()
 

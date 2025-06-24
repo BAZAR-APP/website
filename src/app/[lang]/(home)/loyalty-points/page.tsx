@@ -8,18 +8,25 @@ import Image from 'next/image'
 import ModalDialog from '@/components/ModalDialog/Dialog'
 import useToggle from '@/lib/hooks/useToggle'
 import { useParams } from 'next/navigation'
-import RedeemDiscountDailog from '@/components/RedeemDiscountDailog'
 import BuyPointsDialog from '@/components/BuyPointsDailog'
 import DiscountCard from '@/components/user/Dicounts/Card'
+import { useQueryBase } from '@/lib/axios'
+import { useSession } from 'next-auth/react'
+import AvailableDiscounts from '@/components/user/Dicounts/AvailableDiscounts'
 
 const LoyaltyPoints = () => {
   const { isOpen, toggle } = useToggle(false)
   const params = useParams() as { lang: Locale }
   const { lang } = params
-  const [isRedeemOpen, setIsRedeemOpen] = React.useState(false)
-  const [selectedDiscount, setSelectedDiscount] = React.useState<any>(null)
-  const [redeemStep, setRedeemStep] = React.useState<'select' | 'confirm' | 'copy'>('select')
+
   const [isDialogOpen, setDialogOpen] = React.useState(false)
+  const { data: user } = useSession()
+  const { data } = useQueryBase({
+    queryKey: ['points'],
+    url: `/loyaltyPoints?language=${lang}`,
+    cacheTime: 0,
+    staleTime: 0,
+  })
 
   const { page } = getDictionary(lang)
 
@@ -39,7 +46,7 @@ const LoyaltyPoints = () => {
             {page.loyaltyPoints.welcomeMessage}
           </p>
           <h1 className="text-[#FDFDFE] font-semibold sm:text-[39px] text-2xl leading-[47px]">
-            {page.loyaltyPoints.name}
+            {user?.user?.fullName}
           </h1>
         </div>
         <div className="w-full max-w-[83%] mx-auto">
@@ -50,8 +57,20 @@ const LoyaltyPoints = () => {
             {page.loyaltyPoints.description}
           </p>
           <div className="flex items-center justify-start flex-wrap my-8 gap-5">
-            <EarnedPointsCard currentPoints={300} maxPoints={500} page={page} />
-            <Image src={'/images/bazar-card.png'} width={630} height={250} className='2xl:w-[850px] xl:w-[630px] w-full' alt="Bazar Img" />
+            <EarnedPointsCard
+              currentPoints={data?.data?.totalPoints || 0}
+              maxPoints={3000}
+              page={page}
+              tier={data?.data?.tier}
+              lang={lang}
+            />
+            <Image
+              src={'/images/bazar-card.png'}
+              width={630}
+              height={250}
+              className="2xl:w-[850px] xl:w-[630px] w-full"
+              alt="Bazar Img"
+            />
           </div>
           <div className="flex items-center gap-10 flex-wrap py-4">
             {page.loyaltyPoints.actions.map((action: any, idx: number) => (
@@ -96,35 +115,7 @@ const LoyaltyPoints = () => {
               {page.loyaltyPoints.discountsTitle}
             </h3>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 2xl:grid-cols-7 gap-4 md:mt-8 mt-4 pb-4">
-              {page.loyaltyPoints.redeemableDiscounts.map(
-                (
-                  discount: {
-                    title: string
-                    pointsRequired: number
-                    icon: string
-                    cta: string
-                  },
-                  index: number,
-                ) => (
-                  <DiscountCard
-                    key={discount?.title + index}
-                    title={discount?.title}
-                    points={discount?.pointsRequired}
-                    onRedeemClick={() => {
-                      setSelectedDiscount({
-                        label: discount.title,
-                        points: discount.pointsRequired,
-                        icon: discount.icon,
-                      })
-                      setRedeemStep('confirm')
-                      setIsRedeemOpen(true)
-                    }}
-                    value={discount?.title?.includes('Discount') ? 'discount' : 'free'}
-                  />
-                ),
-              )}
-            </div>
+            <AvailableDiscounts />
           </div>
         </div>
       </div>
@@ -136,17 +127,7 @@ const LoyaltyPoints = () => {
       >
         <CompareTiers />
       </ModalDialog>
-      <RedeemDiscountDailog
-        isOpen={isRedeemOpen}
-        onClose={() => {
-          setIsRedeemOpen(false)
-          setRedeemStep('select')
-          setSelectedDiscount(null)
-        }}
-        selectedDiscount={selectedDiscount}
-        step={redeemStep}
-        setStep={setRedeemStep}
-      />
+
       <BuyPointsDialog isOpen={isDialogOpen} setIsOpen={() => setDialogOpen(false)} />
     </>
   )

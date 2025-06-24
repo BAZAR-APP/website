@@ -35,9 +35,9 @@ api.interceptors.response.use(
     if (error.response) {
       const status = error.response.status
 
-      // if (status === 401 || status === 403) {
-      //   await signOut({ callbackUrl: '/en/login' })
-      // }
+      if (status === 401 || status === 403) {
+        await signOut({ callbackUrl: '/en/login' })
+      }
     }
     return Promise.reject(error)
   },
