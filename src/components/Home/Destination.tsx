@@ -69,7 +69,7 @@ const DestinationSection: React.FC = () => {
                         Discover Your Next Destination
                     </h1>
                     <div
-                        className="grid grid-cols-4 gap-4 w-full max-md:grid-cols-2 max-sm:grid-cols-1"
+                        className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 w-full max-md:grid-cols-2 max-sm:grid-cols-1"
                         role="list"
                         aria-label="Available destinations"
                     >
