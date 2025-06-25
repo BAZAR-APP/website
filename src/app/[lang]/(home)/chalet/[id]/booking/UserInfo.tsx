@@ -33,7 +33,7 @@ const UserInfo: React.FC<UserInfoProps> = ({ onNext }) => {
           <ContactForm  />
 
           <div className="pb-7 md:px-3">
-            <BookingSummary couponCode />
+            <BookingSummary showRedeemeCodeSection />
           </div>
         </div>
         <div className=" border-t border-[#E5E7EB] pt-7">

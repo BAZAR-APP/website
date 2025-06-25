@@ -57,8 +57,7 @@ type CustomizeStayProps = {
   onNext: () => void
 }
 export default function CustomizeStay({ onNext }: CustomizeStayProps) {
-  const { watch } = useFormContext()
-
+  const { watch, setValue } = useFormContext()
   const selectedAddons: Customization[] = watch('addons') || []
   const itemIconMap: Record<string, React.ReactNode> = {}
   services.forEach((section) => {
@@ -123,7 +122,10 @@ export default function CustomizeStay({ onNext }: CustomizeStayProps) {
           Skip For Now
         </Button>
         <Button
-          onClick={() => onNext()}
+          onClick={() => {
+            setValue('selectedAddonsTotal', total)
+            onNext()
+          }}
           className="cursor-pointer bg-[#29397E] text-white py-2 rounded-lg text-sm font-medium w-[170px]"
         >
           Add For Booking

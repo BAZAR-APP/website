@@ -6,11 +6,14 @@ import { copyToClipboard } from '@/lib/utils'
 import { Text } from '@radix-ui/themes'
 import Image from 'next/image'
 import React from 'react'
+import { useFormContext } from 'react-hook-form'
 
 type Discount = {
   label: string
   points: number
   icon: string
+  couponCode: string
+  discountPercent: number
 }
 
 type RedeemDiscountDailogProps = {
@@ -28,12 +31,15 @@ const RedeemDiscountDailog = ({
   step,
   setStep,
 }: RedeemDiscountDailogProps) => {
+  const { setValue } = useFormContext()
+
   const handleRedeemNow = () => {
     setStep('copy')
   }
 
   const handleCopy = () => {
-    copyToClipboard('SEAVILLA20DIS') 
+    setValue('discountPercent', selectedDiscount?.discountPercent)
+    copyToClipboard(selectedDiscount?.couponCode)
     onClose()
   }
 
@@ -79,8 +85,9 @@ const RedeemDiscountDailog = ({
           </Text>
           <div className="flex flex-col md:flex-row items-center gap-3 !w-full md:mt-6 mt-4 mb-4">
             <CommonInput
-              placeholder="SEAVILLA20DIS"
+              placeholder={selectedDiscount?.couponCode}
               type="text"
+              readonly
               className="w-full md:w-[300px] !px-4 bg-[#F3F4F6] !rounded-md !text-sm !h-[42px] !border-none shadow-none !focus:ring-0 !focus:outline-none"
             />
             <Button

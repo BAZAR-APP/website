@@ -47,12 +47,17 @@ const PaymentSplitSection: React.FC = () => (
 )
 
 // Extracted coupon section component
-const CouponSection: React.FC = () => (
+const CouponSection: React.FC<{
+  onChange: (value: string) => void
+}> = ({ onChange }) => (
   <div className="relative">
     <CommonInput
       name="redeemCode"
       type="text"
-      onChange={() => {}}
+      onChange={(value) => {
+        console.log(value)
+        onChange?.(value?.target?.value)
+      }}
       placeholder="Apply redeemed code here"
       className={
         '!bg-[#F3F4F6] !text-[#484A4C] mt-1 relative !rounded-[8px] !border-none !h-[42px] placeholder:text-[#9EA0A2]'
@@ -67,7 +72,7 @@ const CouponSection: React.FC = () => (
 
 type BookingSummaryProps = {
   showBookButton?: boolean
-  couponCode?: boolean
+  showRedeemeCodeSection?: boolean
   paidAmount?: boolean
   remaingAmount?: boolean
   earnPoints?: boolean
@@ -76,7 +81,7 @@ type BookingSummaryProps = {
 
 const BookingSummary: React.FC<BookingSummaryProps> = ({
   showBookButton = false,
-  couponCode = false,
+  showRedeemeCodeSection = false,
   paidAmount = false,
   remaingAmount = false,
   earnPoints = true,
@@ -84,30 +89,42 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
 }) => {
   const { id } = useParams()
 
-  const { getValues, watch } = useFormContext()
+  const { getValues, watch, setValue } = useFormContext()
   const selectedAddons: Customization[] = watch('addons') || []
+  const selectedAddonsTotal = watch('selectedAddonsTotal')
 
-  const { selectedDates, selectedPlan, selectedRoom } = useBookingStore()
+  const { selectedDates, selectedPlan, selectedRoom, guests } = useBookingStore()
   const romanticWeekend = watch('romanticWeekend')
+  const discountPercent = watch('discountPercent')
+  console.log(discountPercent)
 
   const isSplitPayment = getValues()?.paymentOption === 'split'
+  const grandTotal =
+    selectedAddonsTotal + 200 + Number(selectedPlan?.price) + (romanticWeekend ? 25 : 0)
+
   const bookNow = async () => {
+    const customizations = selectedAddons?.map((customization: Customization) => ({
+      id: customization?.id,
+      quantity: customization?.selectedQuantity,
+    }))
+
     try {
       const body = {
         startDate: selectedDates?.checkIn,
         endDate: selectedDates?.checkOut,
         noOfNights: 0,
-        noOfGuests: 0,
+        noOfGuests: guests,
         totalCostAgainstNights: 0,
         bookingStatus: 'PENDING',
         refundableDepositAmount: 0,
-        grandTotal: 450,
+        grandTotal: grandTotal,
         chaletId: id,
         sleepingRoomId: selectedRoom?.id,
         chaletSubscriptionId: selectedPlan?.id,
+        customizations: customizations,
+        isRomanticBookingSelected: romanticWeekend,
       }
-      const res = await api.post('/booking', body)
-
+      await api.post('/booking', body)
       // /chalet/${id}/booking/payment-confirmed/
     } catch (error) {
       toast.error(extractErrorMessage(error))
@@ -172,16 +189,17 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
                 <PriceRowUI
                   key={index}
                   label={selectedAddon?.title}
-                  amount={selectedAddon?.costPerNight + ' KWD'}
+                  amount={String(
+                    selectedAddon?.costPerNight * (Number(selectedAddon?.selectedQuantity) ?? 1) +
+                      ' KWD',
+                  )}
                 />
               ))}
-              {priceDetails.map(({ label, amount }) => (
-                <PriceRowUI key={label} label={label} amount={amount} />
-              ))}
+              <PriceRowUI label={'Refundable Deposit'} amount={'200 KWD'} />
               {romanticWeekend && <PriceRowUI label={'Romantic Weekend'} amount={'25 KWD'} />}
               <hr className="my-4" />
 
-              <PriceRowUI label={'Total'} amount={'420 KWD'} labelFont="medium" />
+              <PriceRowUI label={'Total'} amount={`${grandTotal} KWD`} labelFont="medium" />
             </div>
 
             <p
@@ -202,7 +220,13 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
               </div>
             )}
             {isSplitPayment && <PaymentSplitSection />}
-            {couponCode && <CouponSection />}
+            {showRedeemeCodeSection && (
+              <CouponSection
+                onChange={(value: string) => {
+                  setValue('redeemed_code', value)
+                }}
+              />
+            )}
 
             {showBookButton && (
               <Button

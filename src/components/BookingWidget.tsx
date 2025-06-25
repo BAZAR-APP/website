@@ -10,6 +10,7 @@ import { useBookingStore } from '../../stores/useBookingStore'
 import CustomPopOver from './CustomPopOver'
 import SimpleCalender from './Calender/SimpleCalender'
 import useToggle from '@/lib/hooks/useToggle'
+import { format } from 'date-fns'
 
 interface PackageOption {
   id: string
@@ -116,8 +117,7 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
   const checkOutPopUp = useToggle()
 
   const { id } = useParams()
-  const { selectedPlan, selectedRoom, guests, setGuests, setDates, selectedDates } =
-    useBookingStore()
+  const { selectedPlan, guests, setGuests, setDates, selectedDates } = useBookingStore()
 
   const handleQuantityChange = (newQuantity: number) => {
     if (maxGuests && newQuantity > 0 && newQuantity <= +maxGuests) {
@@ -139,16 +139,8 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
   }
 
   const nights = calculateNights()
-  const formatDate = (date?: Date) => {
-    if (!date) return 'Select date'
-    const modifiedDate = new Date(date)
-    const day = modifiedDate.getDate().toString().padStart(2, '0')
-    const month = (modifiedDate.getMonth() + 1).toString().padStart(2, '0')
-    const year = modifiedDate.getFullYear()
 
-    return `${day}/${month}/${year}`
-  }
-  const total = (currentPackage?.basePrice ?? 0) * nights + bookingConfig.refundableDeposit
+  const total = (Number(selectedPlan?.price) ?? 0) + bookingConfig.refundableDeposit
 
   return (
     <div className="bg-[#F9FAFB] rounded-2xl">
@@ -206,7 +198,7 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
                   <span className="cursor-pointer">
                     <span className="block text-[10px] font-semibold">CHECK-IN</span>
                     <span className="block text-[14px] text-[#9EA0A2]">
-                      {formatDate(selectedDates?.checkIn)}
+                      {format(new Date(selectedDates?.checkIn), 'dd/MM/yyyy')}
                     </span>
                   </span>
                 }
@@ -229,7 +221,7 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
                   <span className="cursor-pointer">
                     <span className="block text-[10px] font-semibold">CHECKOUT</span>
                     <span className="block text-[14px] text-[#9EA0A2]">
-                      {formatDate(selectedDates?.checkOut)}
+                      {format(new Date(selectedDates?.checkOut), 'dd/MM/yyyy')}
                     </span>
                   </span>
                 }
@@ -314,15 +306,18 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
         </div>
       </div>
       <div className="px-5 pb-6 space-y-3">
-        <div className="flex justify-between items-center">
-          <span className="text-[16px] font-normal text-[#19191A] flex items-center">
-            {currentPackage?.basePrice ?? 0} {bookingConfig.refundPolicy.currency} × {nights} night
-            {nights > 1 ? 's' : ''}
-          </span>
-          <span className="font-normal text-[16px] text-[#19191A]">
-            {(currentPackage?.basePrice ?? 0) * nights} {bookingConfig.currency}
-          </span>
-        </div>
+        {!selectedPlan?.id && (
+          <div className="flex justify-between items-center">
+            <span className="text-[16px] font-normal text-[#19191A] flex items-center">
+              {currentPackage?.basePrice ?? 0} {bookingConfig.refundPolicy.currency} × {nights}{' '}
+              night
+              {nights > 1 ? 's' : ''}
+            </span>
+            <span className="font-normal text-[16px] text-[#19191A]">
+              {(currentPackage?.basePrice ?? 0) * nights} {bookingConfig.currency}
+            </span>
+          </div>
+        )}
 
         <div className="flex justify-between items-center">
           <div className="flex items-center space-x-2">
