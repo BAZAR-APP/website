@@ -88,7 +88,6 @@ const AccountDetails = () => {
   }
 
   const handleTextAreaChange = (e: React.ChangeEvent<HTMLTextAreaElement>): void => {
-    console.log(e.target.value)
     setAddress(e.target.value || '');
   }
 

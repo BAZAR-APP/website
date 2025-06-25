@@ -6,7 +6,7 @@ import { copyToClipboard } from '@/lib/utils'
 import { Text } from '@radix-ui/themes'
 import Image from 'next/image'
 import React from 'react'
-import { useFormContext } from 'react-hook-form'
+import { useUserStore } from '../../stores/useUserStore'
 
 type Discount = {
   label: string
@@ -31,14 +31,19 @@ const RedeemDiscountDailog = ({
   step,
   setStep,
 }: RedeemDiscountDailogProps) => {
-  const { setValue } = useFormContext()
+  const { setSelectedDiscount } = useUserStore()
 
   const handleRedeemNow = () => {
     setStep('copy')
   }
 
   const handleCopy = () => {
-    setValue('discountPercent', selectedDiscount?.discountPercent)
+    if (selectedDiscount) {
+      setSelectedDiscount({
+        couponCode: selectedDiscount?.couponCode,
+        discountPercent: selectedDiscount?.discountPercent,
+      })
+    }
     copyToClipboard(selectedDiscount?.couponCode)
     onClose()
   }

@@ -1,23 +1,12 @@
+'use client'
 import { useQueryBase } from '@/lib/axios'
-import { getDictionary } from '@/lib/dictionary'
 import { useParams } from 'next/navigation'
 import React, { FC, useState } from 'react'
-import { Locale } from '../../../../i18n.config'
 import DiscountCard from './Card'
 import RedeemDiscountDailog from '@/components/RedeemDiscountDailog'
 import clsx from 'clsx'
 import ModalDialog from '@/components/ModalDialog/Dialog'
-import useToggle from '@/lib/hooks/useToggle'
-import { useFormContext } from 'react-hook-form'
-export interface Discount {
-  id: string
-  name: string
-  pointsRequired: number
-  rewardType: 'DISCOUNT' | string
-  discountPercent: number
-  iconUrl: string
-  couponCode: string
-}
+import { Discount } from '../../../../types/user'
 
 const AvailableDiscounts: FC<{
   onClose?: (open: boolean) => void
@@ -52,7 +41,7 @@ const AvailableDiscounts: FC<{
         'grid grid-cols-2 sm:grid-cols-2 xl:grid-cols-2 gap-4 md:mt-8 mt-4 pb-4': showUserDisocunts,
       })}
     >
-      {availbleDiscounts?.map((discount, index) => (
+      {(showUserDisocunts ? userloyaltyPoints : availbleDiscounts)?.map((discount, index) => (
         <DiscountCard
           key={discount?.name + index}
           title={discount?.name}

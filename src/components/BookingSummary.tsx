@@ -1,11 +1,9 @@
+'use client'
 import React from 'react'
 import { MapPin, Calendar } from 'lucide-react'
 import Image from 'next/image'
-import Link from 'next/link'
 import Button from './Button/Button'
 import CommonInput from './CommonInput/Input'
-import { priceDetails } from '@/lib/constant'
-import { useFormContext } from 'react-hook-form'
 import PriceRowUI from './PriceRow'
 import RedeemRewards from './Booking/RedeemRewards'
 import { useParams } from 'next/navigation'
@@ -15,6 +13,8 @@ import { Customization } from '@/lib/types/booking'
 import api from '@/lib/axios'
 import { toast } from '@/lib/toast'
 import { extractErrorMessage } from '@/lib/utils'
+import { useFormContext } from 'react-hook-form'
+import { useUserStore } from '../../stores/useUserStore'
 
 // Extracted common text styles
 const textStyles = {
@@ -24,7 +24,32 @@ const textStyles = {
   darkText: 'text-[#19191A]',
 }
 
-// Extracted payment split section component
+// Coupon input section
+const CouponSection: React.FC<{
+  onChange: (value: string) => void
+  onApply: () => void
+  isDisabled: boolean
+}> = ({ onChange, onApply, isDisabled }) => (
+  <div className="relative">
+    <CommonInput
+      name="redeemCode"
+      type="text"
+      onChange={(value) => onChange?.(value?.target?.value)}
+      placeholder="Apply redeemed code here"
+      className="!bg-[#F3F4F6] !text-[#484A4C] mt-1 relative !rounded-[8px] !border-none !h-[42px] placeholder:text-[#9EA0A2]"
+    />
+    <span
+      onClick={!isDisabled ? onApply : undefined}
+      className={`font-medium text-[14px] leading-[17px] absolute top-3.5 right-4 cursor-pointer ${
+        isDisabled ? 'text-[#B0B3B8] cursor-not-allowed' : 'text-[#29397E]'
+      }`}
+    >
+      Apply
+    </span>
+    <RedeemRewards />
+  </div>
+)
+
 const PaymentSplitSection: React.FC = () => (
   <>
     <hr className="my-4" />
@@ -46,30 +71,6 @@ const PaymentSplitSection: React.FC = () => (
   </>
 )
 
-// Extracted coupon section component
-const CouponSection: React.FC<{
-  onChange: (value: string) => void
-}> = ({ onChange }) => (
-  <div className="relative">
-    <CommonInput
-      name="redeemCode"
-      type="text"
-      onChange={(value) => {
-        console.log(value)
-        onChange?.(value?.target?.value)
-      }}
-      placeholder="Apply redeemed code here"
-      className={
-        '!bg-[#F3F4F6] !text-[#484A4C] mt-1 relative !rounded-[8px] !border-none !h-[42px] placeholder:text-[#9EA0A2]'
-      }
-    />
-    <span className="font-medium text-[14px] leading-[17px] absolute top-3.5 right-4 cursor-pointer text-[#29397E]">
-      Apply
-    </span>
-    <RedeemRewards />
-  </div>
-)
-
 type BookingSummaryProps = {
   showBookButton?: boolean
   showRedeemeCodeSection?: boolean
@@ -88,26 +89,36 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
   finalPayment = false,
 }) => {
   const { id } = useParams()
-
   const { getValues, watch, setValue } = useFormContext()
+  const { selectedDiscount } = useUserStore()
+  const [isDiscountApplied, setIsDiscountApplied] = React.useState(false)
+  const [discountedTotal, setDiscountedTotal] = React.useState<number | null>(null)
+
   const selectedAddons: Customization[] = watch('addons') || []
   const selectedAddonsTotal = watch('selectedAddonsTotal')
+  const redeemedCode = watch('redeemed_code')
+  const romanticWeekend = watch('romanticWeekend')
 
   const { selectedDates, selectedPlan, selectedRoom, guests } = useBookingStore()
-  const romanticWeekend = watch('romanticWeekend')
-  const discountPercent = watch('discountPercent')
-  console.log(discountPercent)
-
   const isSplitPayment = getValues()?.paymentOption === 'split'
+
   const grandTotal =
     selectedAddonsTotal + 200 + Number(selectedPlan?.price) + (romanticWeekend ? 25 : 0)
+
+  const handleApplyDiscount = () => {
+    if (!selectedDiscount?.discountPercent || !grandTotal) return
+    const discountAmount = (grandTotal * selectedDiscount?.discountPercent) / 100
+    const finalTotal = grandTotal - discountAmount
+    setDiscountedTotal(finalTotal)
+    setIsDiscountApplied(true)
+    toast.success(`Discount of ${selectedDiscount?.discountPercent}% applied!`)
+  }
 
   const bookNow = async () => {
     const customizations = selectedAddons?.map((customization: Customization) => ({
       id: customization?.id,
       quantity: customization?.selectedQuantity,
     }))
-
     try {
       const body = {
         startDate: selectedDates?.checkIn,
@@ -117,7 +128,7 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
         totalCostAgainstNights: 0,
         bookingStatus: 'PENDING',
         refundableDepositAmount: 0,
-        grandTotal: grandTotal,
+        grandTotal: isDiscountApplied ? discountedTotal : grandTotal,
         chaletId: id,
         sleepingRoomId: selectedRoom?.id,
         chaletSubscriptionId: selectedPlan?.id,
@@ -125,11 +136,11 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
         isRomanticBookingSelected: romanticWeekend,
       }
       await api.post('/booking', body)
-      // /chalet/${id}/booking/payment-confirmed/
     } catch (error) {
       toast.error(extractErrorMessage(error))
     }
   }
+
   return (
     <>
       <div className="w-full md:max-w-sm rounded-lg bg-[#F9FAFB] sm:px-6 sm:py-5 p-3">
@@ -169,9 +180,8 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
                 <div className="text-sm text-[#9EA0A2] mb-3">
                   You&apos;ll earn 200 points with this booking!
                 </div>
-
                 <div className="flex bg-[#E1F3FF] items-center justify-between gap-1 rounded py-1 px-1.5 max-w-[111px]">
-                  <Image src={'/images/Points.svg'} width={16} height={16} alt="Points-Icon" />
+                  <Image src="/images/Points.svg" width={16} height={16} alt="Points" />
                   <span className="text-[#29397E] text-sm">200 Points</span>
                 </div>
               </>
@@ -189,48 +199,64 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
                 <PriceRowUI
                   key={index}
                   label={selectedAddon?.title}
-                  amount={String(
+                  amount={
                     selectedAddon?.costPerNight * (Number(selectedAddon?.selectedQuantity) ?? 1) +
-                      ' KWD',
-                  )}
+                    ' KWD'
+                  }
                 />
               ))}
-              <PriceRowUI label={'Refundable Deposit'} amount={'200 KWD'} />
-              {romanticWeekend && <PriceRowUI label={'Romantic Weekend'} amount={'25 KWD'} />}
+              <PriceRowUI label="Refundable Deposit" amount="200 KWD" />
+              {romanticWeekend && <PriceRowUI label="Romantic Weekend" amount="25 KWD" />}
               <hr className="my-4" />
 
-              <PriceRowUI label={'Total'} amount={`${grandTotal} KWD`} labelFont="medium" />
+              {isDiscountApplied && (
+                <div className="flex justify-between items-center text-sm text-[#9EA0A2] line-through">
+                  <span>Original Total</span>
+                  <span>{grandTotal.toFixed(2)} KWD</span>
+                </div>
+              )}
+              <PriceRowUI
+                label={isDiscountApplied ? 'Discounted Total' : 'Total'}
+                amount={`${(isDiscountApplied ? discountedTotal : grandTotal)?.toFixed(2)} KWD`}
+                labelFont="medium"
+              />
             </div>
 
-            <p
-              className={`flex items-center mb-2 mt-4 !text-[#9EA0A2] ${textStyles.body} self-stretch`}
-            >
+            <p className={`flex items-center mb-2 mt-4 ${textStyles.body} self-stretch`}>
               Deposit will be returned after your stay, subject to property condition.
             </p>
+
             {paidAmount && (
               <div className="font-medium text-base leading-[150%] flex items-center justify-between gap-2 py-2 text-[#29397E]">
                 <span>Paid Amount</span>
                 <span>220 KWD</span>
               </div>
             )}
+
             {remaingAmount && (
               <div className="font-medium text-base leading-[150%] flex items-center justify-between gap-2 py-2 text-[#29397E]">
                 <span>Remaining Balance</span>
                 <span>220 KWD</span>
               </div>
             )}
+
             {isSplitPayment && <PaymentSplitSection />}
+
             {showRedeemeCodeSection && (
               <CouponSection
                 onChange={(value: string) => {
                   setValue('redeemed_code', value)
+                  setIsDiscountApplied(false)
+                  setDiscountedTotal(null)
                 }}
+                onApply={handleApplyDiscount}
+                isDisabled={!redeemedCode}
               />
             )}
 
             {showBookButton && (
               <Button
-                className="w-[100%] text-white mt-3.5 !px-0 rounded-lg font-medium cursor-pointer"
+                className="w-full text-white mt-3.5 !px-0 rounded-lg font-medium cursor-pointer"
                 onClick={bookNow}
               >
                 {isSplitPayment ? 'Book Now with 50% Payment' : 'Book Now'}
@@ -239,6 +265,7 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
           </div>
         </div>
       </div>
+
       {finalPayment && (
         <p className="italic font-normal text-base leading-[19px] text-[#9EA0A2] w-full max-w-[390px] py-4">
           This is your final payment. Once completed, your booking will be fully secured.
