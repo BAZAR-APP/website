@@ -174,7 +174,6 @@ export default async function ChaletDetailsPage({
             <div className="lg:col-span-1">
               <BookingWidget
                 maxGuests={data?.maxNoOfGuests || ''}
-                packageOptions={propertyData.packageOptions}
                 bookingConfig={propertyData.bookingConfig}
                 guests={2}
                 packageInfo={{
