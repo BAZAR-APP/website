@@ -12,22 +12,14 @@ interface EarnedPointsCardProps {
 }
 
 export const EarnedPointsCard: React.FC<EarnedPointsCardProps> = ({
-  page,
   currentPoints,
   maxPoints,
   tier = '',
   lang,
 }) => {
-  const tiercustom =
-    currentPoints >= 0 && currentPoints <= 500
-      ? 'Platinum'
-      : currentPoints > 500 && currentPoints <= 900
-        ? 'Gold'
-        : currentPoints > 900
-          ? 'Platinum'
-          : ''
 
-  const { name, range, title, message, icon } = getTierInfo(tiercustom, lang)
+
+  const { name, range, title, message, icon } = getTierInfo(tier, lang)
 
   return (
     <section className="flex flex-col items-start p-4 gap-2 w-full lg:max-w-[351px] max-w-full bg-[#F9FAFB] rounded-[16px]">

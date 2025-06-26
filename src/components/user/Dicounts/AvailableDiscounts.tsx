@@ -53,6 +53,7 @@ const AvailableDiscounts: FC<{
               icon: discount.iconUrl,
               couponCode: discount?.couponCode,
               discountPercent: discount?.discountPercent,
+              id: discount?.id,
             })
             setRedeemStep('confirm')
             setIsRedeemOpen(true)
