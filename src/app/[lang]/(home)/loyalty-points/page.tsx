@@ -22,7 +22,7 @@ const LoyaltyPoints = () => {
   const [isDialogOpen, setDialogOpen] = React.useState(false)
   const { data: user } = useSession()
   const { data } = useQueryBase({
-    queryKey: ['points'],
+    queryKey: ['earnedPoints'],
     url: `/loyaltyPoints?language=${lang}`,
     cacheTime: 0,
     staleTime: 0,

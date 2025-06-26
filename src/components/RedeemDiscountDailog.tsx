@@ -10,6 +10,7 @@ import { useUserStore } from '../../stores/useUserStore'
 import api from '@/lib/axios'
 import { useSession } from 'next-auth/react'
 import { toast } from '@/lib/toast'
+import { useQueryClient } from '@tanstack/react-query'
 
 type Discount = {
   label: string
@@ -38,7 +39,8 @@ const RedeemDiscountDailog = ({
   const { setSelectedDiscount } = useUserStore()
   const { data: user } = useSession()
   const [loading, setLoading] = useState(false)
-  
+  const queryClient = useQueryClient()
+
   const handleRedeemNow = async () => {
     try {
       setLoading(true)
@@ -47,6 +49,12 @@ const RedeemDiscountDailog = ({
         rewardId: selectedDiscount?.id,
       })
       setStep('copy')
+      await Promise.all(
+        ['earnedPoints', 'loyaltyPoints', 'loyaltyRewards'].map((key) =>
+          queryClient.invalidateQueries({ queryKey: [key] }),
+        ),
+      )
+
       toast.success('Redeemed successfully')
     } catch (error) {
       toast.error(extractErrorMessage(error))

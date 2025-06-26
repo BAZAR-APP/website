@@ -10,6 +10,7 @@ const PROTECTED_PATHS = [
   '/notifications',
   '/loyalty-points',
   '/my-bookings',
+  '/chalet',
 ]
 
 function getLocale(request: NextRequest): string {
