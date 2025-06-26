@@ -11,7 +11,7 @@ import Image from 'next/image'
 import { useParams } from 'next/navigation'
 import React, { useState } from 'react'
 import { Locale } from '../../../i18n.config'
-import AvailableDiscounts, { Discount } from '../user/Dicounts/AvailableDiscounts'
+import AvailableDiscounts  from '../user/Dicounts/AvailableDiscounts'
 import DiscountCard from '../user/Dicounts/Card'
 
 const discounts = [

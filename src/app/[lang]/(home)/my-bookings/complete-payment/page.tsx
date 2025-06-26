@@ -24,7 +24,7 @@ const CompletePayment: React.FC = () => {
             <div className="sticky top-8">
               <BookingSummary
                 showBookButton={true}
-                couponCode={true}
+                showRedeemeCodeSection={true}
                 paidAmount={true}
                 remaingAmount={true}
                 earnPoints={false}

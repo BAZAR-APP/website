@@ -46,7 +46,7 @@ const WhyBookSection = () => {
                         Experience comfort, trust, and flexibility—every stay, every time.
                     </p>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full md:w-[80%]">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full lg:w-[80%] md:w-[100%]">
                     {features.map((feature, index) => (
                         <div key={index} className="bg-[rgba(249,250,251,0.3)] rounded-[20px] p-4 md:p-6 flex flex-col gap-4">
                             <div className="flex w-[60px] h-[60px] md:w-[80px] md:h-[80px] justify-center items-center bg-[#29397e] rounded-full shadow-md">

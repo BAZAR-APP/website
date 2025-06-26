@@ -12,12 +12,13 @@ interface EarnedPointsCardProps {
 }
 
 export const EarnedPointsCard: React.FC<EarnedPointsCardProps> = ({
-  page,
   currentPoints,
   maxPoints,
   tier = '',
   lang,
 }) => {
+
+
   const { name, range, title, message, icon } = getTierInfo(tier, lang)
 
   return (

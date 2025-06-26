@@ -130,10 +130,33 @@ export const getTierInfo = (tier: string, lang: 'en' | 'ar' = 'en'): TierInfo =>
       key === 'platinum'
         ? '/images/platinumTier.svg'
         : key === 'gold'
-        ? '/images/goldTier.svg'
-        : key === 'diamond'
-        ? '/images/platinumTier.svg'
-        : '/icons/default.png',
+          ? '/images/goldTier.svg'
+          : key === 'diamond'
+            ? '/images/platinumTier.svg'
+            : '/icons/default.png',
   }
 }
 
+export default function calculateCustomLoyltyPointsPrice(
+  pointsToBuy: number,
+  userTier: string,
+): number {
+  let rate: number
+
+  switch (userTier) {
+    case 'platinum':
+      rate = 8
+      break
+    case 'gold':
+      rate = 27
+      break
+    case 'diamond':
+      rate = 36
+      break
+    default:
+      throw new Error('Invalid user tier')
+  }
+
+  const price = pointsToBuy / rate
+  return Number(price.toFixed(2))
+}

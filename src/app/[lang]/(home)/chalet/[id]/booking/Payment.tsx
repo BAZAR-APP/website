@@ -17,7 +17,7 @@ const UserInfo: React.FC = () => {
 
         <div className="w-full xl:w-1/3 pb-7 px-3">
           <div className="sticky top-8">
-            <BookingSummary showBookButton={true} couponCode={true} />
+            <BookingSummary showBookButton={true} showRedeemeCodeSection={true} />
           </div>
         </div>
       </div>

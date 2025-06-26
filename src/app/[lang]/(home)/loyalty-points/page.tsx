@@ -9,16 +9,16 @@ import ModalDialog from '@/components/ModalDialog/Dialog'
 import useToggle from '@/lib/hooks/useToggle'
 import { useParams } from 'next/navigation'
 import BuyPointsDialog from '@/components/BuyPointsDailog'
-import DiscountCard from '@/components/user/Dicounts/Card'
 import { useQueryBase } from '@/lib/axios'
 import { useSession } from 'next-auth/react'
 import AvailableDiscounts from '@/components/user/Dicounts/AvailableDiscounts'
+import { useBuyLoyltyPointsStore } from '../../../../../stores/useBuyLoyltyPoints'
 
 const LoyaltyPoints = () => {
   const { isOpen, toggle } = useToggle(false)
   const params = useParams() as { lang: Locale }
   const { lang } = params
-
+  const { setSelectedPackageLoyaltyPoints } = useBuyLoyltyPointsStore()
   const [isDialogOpen, setDialogOpen] = React.useState(false)
   const { data: user } = useSession()
   const { data } = useQueryBase({
@@ -30,6 +30,14 @@ const LoyaltyPoints = () => {
 
   const { page } = getDictionary(lang)
 
+  const tiercustom =
+    data?.data?.totalPoints >= 0 && data?.data?.totalPoints <= 500
+      ? 'Platinum'
+      : data?.data?.totalPoints > 500 && data?.data?.totalPoints <= 900
+        ? 'Gold'
+        : data?.data?.totalPoints > 900
+          ? 'Diamond'
+          : ''
   return (
     <>
       <div className="py-10">
@@ -59,9 +67,9 @@ const LoyaltyPoints = () => {
           <div className="flex items-center justify-start flex-wrap my-8 gap-5">
             <EarnedPointsCard
               currentPoints={data?.data?.totalPoints || 0}
-              maxPoints={3000}
+              maxPoints={30000}
               page={page}
-              tier={data?.data?.tier}
+              tier={tiercustom}
               lang={lang}
             />
             <Image
@@ -99,6 +107,8 @@ const LoyaltyPoints = () => {
                     if (action.cta === 'Learn More') {
                       toggle()
                     } else if (action.cta === 'Buy Points') {
+                      setSelectedPackageLoyaltyPoints(null)
+
                       setDialogOpen(true)
                     }
                   }}
@@ -128,7 +138,16 @@ const LoyaltyPoints = () => {
         <CompareTiers />
       </ModalDialog>
 
-      <BuyPointsDialog isOpen={isDialogOpen} setIsOpen={() => setDialogOpen(false)} />
+      {isDialogOpen && (
+        <BuyPointsDialog
+          isOpen={isDialogOpen}
+          currentUserTier={tiercustom}
+          setIsOpen={() => {
+            setSelectedPackageLoyaltyPoints(null)
+            setDialogOpen(false)
+          }}
+        />
+      )}
     </>
   )
 }

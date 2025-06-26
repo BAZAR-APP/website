@@ -2,11 +2,14 @@
 
 import { Button, CommonInput } from '@/components'
 import ModalDialog from '@/components/ModalDialog/Dialog'
-import { copyToClipboard } from '@/lib/utils'
+import { copyToClipboard, extractErrorMessage } from '@/lib/utils'
 import { Text } from '@radix-ui/themes'
 import Image from 'next/image'
-import React from 'react'
+import React, { useState } from 'react'
 import { useUserStore } from '../../stores/useUserStore'
+import api from '@/lib/axios'
+import { useSession } from 'next-auth/react'
+import { toast } from '@/lib/toast'
 
 type Discount = {
   label: string
@@ -14,6 +17,7 @@ type Discount = {
   icon: string
   couponCode: string
   discountPercent: number
+  id: string
 }
 
 type RedeemDiscountDailogProps = {
@@ -32,9 +36,23 @@ const RedeemDiscountDailog = ({
   setStep,
 }: RedeemDiscountDailogProps) => {
   const { setSelectedDiscount } = useUserStore()
-
-  const handleRedeemNow = () => {
-    setStep('copy')
+  const { data: user } = useSession()
+  const [loading, setLoading] = useState(false)
+  
+  const handleRedeemNow = async () => {
+    try {
+      setLoading(true)
+      await api.post('loyaltyRewardsRedemption', {
+        userId: user?.user?.id,
+        rewardId: selectedDiscount?.id,
+      })
+      setStep('copy')
+      toast.success('Redeemed successfully')
+    } catch (error) {
+      toast.error(extractErrorMessage(error))
+    } finally {
+      setLoading(false)
+    }
   }
 
   const handleCopy = () => {
@@ -71,6 +89,8 @@ const RedeemDiscountDailog = ({
             intent="primary"
             onClick={handleRedeemNow}
             className="md:mt-6 mt-4 w-full"
+            loading={loading}
+            disabled={loading}
           >
             Redeem Now
           </Button>
