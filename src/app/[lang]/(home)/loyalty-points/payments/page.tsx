@@ -12,7 +12,8 @@ import { extractErrorMessage } from '@/lib/utils'
 import { toast } from '@/lib/toast'
 
 const Payment = () => {
-  const { loyltyPoints } = useBuyLoyltyPointsStore()
+  const { selectedPackageLoyaltyPoints } = useBuyLoyltyPointsStore()
+
   const { data: user } = useSession()
   const [loading, setLoading] = useState(false)
   const { data } = useQueryBase({
@@ -28,14 +29,20 @@ const Payment = () => {
   const buyPoints = async () => {
     setLoading(true)
     try {
-      const res = await api.post('/loyaltyPointsPurchased/custom', {
-        userId: user?.user?.id,
-        pointsPurchased: loyltyPoints?.points,
-        isCustom: false,
-        discountNote: '',
-      })
+      if (selectedPackageLoyaltyPoints?.isCustom) {
+        await api.post('/loyaltyPointsPurchased/custom', {
+          userId: user?.user?.id,
+          pointsPurchased: selectedPackageLoyaltyPoints?.points,
+          isCustom: selectedPackageLoyaltyPoints?.isCustom,
+          discountNote: '',
+        })
+      } else {
+        await api.post(
+          `/loyaltyPointsPackages/buy?userId=${user?.user?.id}&packageId=${selectedPackageLoyaltyPoints?.id}`,
+        )
+      }
 
-      router.push('/loyalty-points/payment-confirmed/')
+      router.replace('/loyalty-points/payment-confirmed/')
     } catch (error) {
       toast.error(extractErrorMessage(error))
     } finally {
@@ -67,13 +74,13 @@ const Payment = () => {
               <div className="flex gap-2 items-center">
                 <Image src="/images/purchase.svg" width={56} height={53} alt="Purchase icon" />
                 <p className="text-[16px] leading-[24px] font-medium text-[#29397E]">
-                  Purchase {loyltyPoints?.points} Points
+                  Purchase {selectedPackageLoyaltyPoints?.points} Points
                 </p>
               </div>
 
               <div className="text-[16px] leading-[19px] text-[#19191A] flex items-center w-full justify-between">
-                <span>{loyltyPoints?.points} Points</span>
-                <span>{loyltyPoints?.price} KD</span>
+                <span>{selectedPackageLoyaltyPoints?.points} Points</span>
+                <span>{selectedPackageLoyaltyPoints?.price} KD</span>
               </div>
 
               <div className="border-t w-full pt-4 mt-2 flex justify-between sm:text-[16px] text-sm leading-[24px] font-medium text-[#19191A]">
@@ -81,11 +88,7 @@ const Payment = () => {
                 <span>{totalAmount}</span>
               </div>
 
-              <Button
-                className="w-full cursor-pointer"
-                onClick={buyPoints}
-                disabled={loading}
-              >
+              <Button className="w-full cursor-pointer" onClick={buyPoints} disabled={loading}>
                 {loading ? 'Submitting Payment…' : `Pay ${totalAmount} Now`}
               </Button>
             </div>

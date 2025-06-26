@@ -1,28 +1,29 @@
-import React, { useState } from 'react'
+'use client'
+import React, { useEffect, useState } from 'react'
 import ModalDialog from './ModalDialog/Dialog'
 import Button from './Button/Button'
 import CommonInput from './CommonInput/Input'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useBuyLoyltyPointsStore } from '../../stores/useBuyLoyltyPoints'
+import { useQueryBase } from '@/lib/axios'
+import { LoyaltyPointsPackages } from '@/lib/types/loylty-points'
+import calculateCustomLoyltyPointsPrice from '@/lib/utils'
 
 type BuyPointsDialogProps = {
   isOpen: boolean
   setIsOpen: () => void
+  currentUserTier: string
 }
 
-const pointOptions = [
-  { points: 100, price: 2 },
-  { points: 250, price: 5 },
-  { points: 500, price: 9, discount: 'save 10%' },
-  { points: 1000, price: 17, discount: 'save 15%' },
-  { points: 2000, price: 30, discount: 'save 25%' },
-]
-
-const BuyPointsDialog: React.FC<BuyPointsDialogProps> = ({ isOpen, setIsOpen }) => {
-  const { setLoyltyPoints } = useBuyLoyltyPointsStore()
+const BuyPointsDialog: React.FC<BuyPointsDialogProps> = ({
+  isOpen,
+  setIsOpen,
+  currentUserTier,
+}) => {
+  const { setSelectedPackageLoyaltyPoints, selectedPackageLoyaltyPoints } =
+    useBuyLoyltyPointsStore()
   const [custom, setCustom] = useState(false)
-  const [customAmount, setCustomAmount] = useState('')
   const [selected, setSelected] = useState<number | null>(null)
   const router = useRouter()
   const handleSelect = (index: number) => {
@@ -33,13 +34,14 @@ const BuyPointsDialog: React.FC<BuyPointsDialogProps> = ({ isOpen, setIsOpen }) 
   const handleCustomSelect = () => {
     setSelected(null)
     setCustom(true)
+    setSelectedPackageLoyaltyPoints(null)
   }
 
-  const calculateCustomPrice = () => {
-    const points = parseInt(customAmount, 10)
-    if (!points || points <= 0) return 0
-    return (points * 0.02).toFixed(2)
-  }
+  const { data } = useQueryBase({
+    queryKey: ['loyaltyPointsPackages'],
+    url: `/loyaltyPointsPackages`,
+  })
+  const LoyaltyPointsPackagesList = data?.data?.data as LoyaltyPointsPackages[]
 
   return (
     <ModalDialog
@@ -53,19 +55,19 @@ const BuyPointsDialog: React.FC<BuyPointsDialogProps> = ({ isOpen, setIsOpen }) 
       </p>
 
       <div className="flex flex-col items-start space-y-3 my-4">
-        {pointOptions.map((option, index) => (
+        {LoyaltyPointsPackagesList?.map((option: LoyaltyPointsPackages, index) => (
           <button
-            key={option.points}
+            key={option?.id}
             className={`sm:!px-4 !px-3 !py-2 border !rounded-[12px] cursor-pointer transition ${
               selected === index
                 ? 'bg-[#29397E] text-white'
                 : 'border-[#D0D5DD] transition text-[#344054]'
             }`}
             onClick={() => {
-              console.log(option);
-              setLoyltyPoints({
+              setSelectedPackageLoyaltyPoints({
                 points: option?.points,
-                price: option?.price,
+                price: Number(option?.price),
+                id: option?.id,
               })
               handleSelect(index)
             }}
@@ -93,12 +95,25 @@ const BuyPointsDialog: React.FC<BuyPointsDialogProps> = ({ isOpen, setIsOpen }) 
           <div className="relative w-full my-2.5">
             <CommonInput
               type="text"
-              readonly
               placeholder="Enter points amount..."
               className="!w-full relative bg-[#F3F4F6] border border-[#D0D5DD] !rounded-md !text-sm !h-[42px]"
+              onChange={(value) => {
+                setSelectedPackageLoyaltyPoints({
+                  price: calculateCustomLoyltyPointsPrice(
+                    +value?.target?.value,
+                    currentUserTier?.toLocaleLowerCase(),
+                  ),
+                  points: +value?.target?.value,
+                  isCustom: true,
+                })
+              }}
             />
             <span className="absolute top-3 right-3 text-[14px] leading-[17px] font-medium text-[#29397E]">
-              {calculateCustomPrice()} KD
+              {calculateCustomLoyltyPointsPrice(
+                selectedPackageLoyaltyPoints?.points || 0,
+                currentUserTier?.toLocaleLowerCase(),
+              )}{' '}
+              KD
             </span>
           </div>
         )}
@@ -118,7 +133,11 @@ const BuyPointsDialog: React.FC<BuyPointsDialogProps> = ({ isOpen, setIsOpen }) 
         </ul>
       </div>
 
-      <Button className="w-full" onClick={() => router.push('/loyalty-points/payments')}>
+      <Button
+        className="w-full"
+        onClick={() => router.push('/loyalty-points/payments')}
+        disabled={!selectedPackageLoyaltyPoints?.points}
+      >
         Buy Now
       </Button>
     </ModalDialog>
