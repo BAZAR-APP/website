@@ -4,6 +4,7 @@ import Button from './Button/Button'
 import CommonInput from './CommonInput/Input'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
+import { useBuyLoyltyPointsStore } from '../../stores/useBuyLoyltyPoints'
 
 type BuyPointsDialogProps = {
   isOpen: boolean
@@ -19,6 +20,7 @@ const pointOptions = [
 ]
 
 const BuyPointsDialog: React.FC<BuyPointsDialogProps> = ({ isOpen, setIsOpen }) => {
+  const { setLoyltyPoints } = useBuyLoyltyPointsStore()
   const [custom, setCustom] = useState(false)
   const [customAmount, setCustomAmount] = useState('')
   const [selected, setSelected] = useState<number | null>(null)
@@ -59,7 +61,14 @@ const BuyPointsDialog: React.FC<BuyPointsDialogProps> = ({ isOpen, setIsOpen }) 
                 ? 'bg-[#29397E] text-white'
                 : 'border-[#D0D5DD] transition text-[#344054]'
             }`}
-            onClick={() => handleSelect(index)}
+            onClick={() => {
+              console.log(option);
+              setLoyltyPoints({
+                points: option?.points,
+                price: option?.price,
+              })
+              handleSelect(index)
+            }}
           >
             <span className="text-[14px] leading-[17px] font-medium">
               {option.points} Points – {option.price} KD

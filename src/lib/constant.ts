@@ -12,8 +12,8 @@ export const getUserNameInitials = (name: string) =>
 
 export const navItems = [
   { label: 'Home', href: '/' },
-  { label: 'Explore', href: '/explore/chalets' },
-  { label: 'My Bookings', href: '/explore/booking/' },
+  { label: 'Explore', href: '/explore' },
+  { label: 'My Bookings', href: '/my-bookings/' },
   { label: 'Loyalty Points', href: '/loyalty-points' },
 ]
 
@@ -214,7 +214,7 @@ export const getVisiblePages = (currentPage: number, totalPages: number): number
 export const quickLinks = [
   { label: 'Home', href: '/' },
   { label: 'About Us', href: '/about' },
-  { label: 'Explore', href: '/explore/chalets' },
+  { label: 'Explore', href: '/explore/' },
   { label: 'Terms & Conditions', href: '/terms-conditions/' },
   { label: 'Privacy Policy', href: '/privacy-policy/' },
 ]
@@ -348,9 +348,7 @@ export const chaletRules = {
   },
 }
 export const priceDetails = [
-  { label: '100 KD x 4 nights', amount: '400 KWD' },
   { label: 'Refundable Deposit', amount: '200 KWD' },
-  { label: 'Flower Arrangement', amount: '30 KWD' },
 ]
 
 // Home Page Data

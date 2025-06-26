@@ -46,12 +46,10 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
   paymentDetail = true,
   addNowBooking = true,
 }) => {
-  const { register, handleSubmit, watch, setValue } = useFormContext<PaymentFormData>()
-
+  const { register, handleSubmit, watch, setValue } = useFormContext()
   const romanticWeekend = watch('romanticWeekend')
   const paymentOption = watch('paymentOption')
-
-  const onFormSubmit = (data: PaymentFormData) => {
+  const onFormSubmit = (data: any) => {
     onSubmit?.(data)
   }
 

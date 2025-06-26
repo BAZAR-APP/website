@@ -2,6 +2,8 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
 @import '@radix-ui/themes/styles.css';
+@import 'react-date-range/dist/styles.css';
+@import 'react-date-range/dist/theme/default.css';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -207,7 +209,7 @@ html body * {
 }
 
 .max-w-xxl {
-  max-width: 1920px;
+  max-width: 1930px;
 }
 
 .rt-BaseCheckboxRoot:where(.rt-variant-surface):where([data-state='checked'],

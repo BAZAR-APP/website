@@ -1,6 +1,8 @@
 import { AddOns } from '@/components/Booking/add-ons/AddOns'
 import Button from '@/components/Button/Button'
-import { AddOnItem } from '@/lib/types/booking'
+import { fetcher } from '@/lib/axios'
+import { AddOnItem, Customization, GroupedCustomization } from '@/lib/types/booking'
+import { useQuery } from '@tanstack/react-query'
 
 import {
   PartyPopper,
@@ -55,8 +57,8 @@ type CustomizeStayProps = {
   onNext: () => void
 }
 export default function CustomizeStay({ onNext }: CustomizeStayProps) {
-  const { watch } = useFormContext()
-  const selectedAddons: AddOnItem[] = watch('addons') || []
+  const { watch, setValue } = useFormContext()
+  const selectedAddons: Customization[] = watch('addons') || []
   const itemIconMap: Record<string, React.ReactNode> = {}
   services.forEach((section) => {
     section.items.forEach((item) => {
@@ -64,8 +66,8 @@ export default function CustomizeStay({ onNext }: CustomizeStayProps) {
     })
   })
   const total = selectedAddons.reduce((acc, item) => {
-    const qty = item.quantity ?? 0
-    return acc + item.price * qty
+    const qty = item.selectedQuantity ?? 0
+    return acc + item.costPerNight * +qty
   }, 0)
 
   return (
@@ -96,13 +98,13 @@ export default function CustomizeStay({ onNext }: CustomizeStayProps) {
             Selected add-ons will be added to your total booking payment.
           </p>
           <ul className="space-y-2 w-full text-sm">
-            {selectedAddons.map((item) => (
-              <li key={item?.label} className="flex justify-between items-center">
+            {selectedAddons.map((item, index) => (
+              <li key={item?.title + index} className="flex justify-between items-center">
                 <div className="flex items-center gap-2">
-                  <div dangerouslySetInnerHTML={{ __html: item.icon }} />
-                  <span>{item?.label}</span>
+                  <div dangerouslySetInnerHTML={{ __html: item.iconPhotoId }} />
+                  <span>{item?.title}</span>
                 </div>
-                <span>{item?.price * (item?.quantity ?? 1)} KWD</span>
+                <span>{item?.costPerNight * (Number(item?.selectedQuantity) ?? 1)} KWD</span>
               </li>
             ))}
           </ul>
@@ -120,7 +122,10 @@ export default function CustomizeStay({ onNext }: CustomizeStayProps) {
           Skip For Now
         </Button>
         <Button
-          onClick={() => onNext()}
+          onClick={() => {
+            setValue('selectedAddonsTotal', total)
+            onNext()
+          }}
           className="cursor-pointer bg-[#29397E] text-white py-2 rounded-lg text-sm font-medium w-[170px]"
         >
           Add For Booking

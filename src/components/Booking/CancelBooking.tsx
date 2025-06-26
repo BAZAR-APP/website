@@ -33,7 +33,7 @@ const CancelBooking: React.FC<CancelBookingProps> = ({ isOpen, setIsOpen, onCanc
         <Button
           intent="transperent"
           className="cursor-pointer !py-0 !px-0 w-full flex gap-2.5 items-center justify-center text-[16px] !text-[#29397E] font-medium underline underline-offset-3"
-          onClick={() => router.push(`/explore/booking/${params.id}/cancellation-policy`)}
+          onClick={() => router.push(`/cancellation-policy`)}
         >
           Cancellation Policy <ChevronRight className="w-3 h-3" strokeWidth={3} />
         </Button>

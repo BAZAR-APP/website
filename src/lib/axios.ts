@@ -1,4 +1,4 @@
-// lib/axios.ts
+import { useQuery } from '@tanstack/react-query'
 import axios, { AxiosError, AxiosResponse } from 'axios'
 import { getSession, signOut } from 'next-auth/react'
 
@@ -8,17 +8,17 @@ const api = axios.create({
     'Content-Type': 'application/json',
   },
 })
+let cachedToken: string | null = null
 
-// Request interceptor – attach token
 api.interceptors.request.use(
   async (config) => {
-    console.log(config)
-    console.log(process.env.NEXT_PUBLIC_NESTJS_API_URL)
+    if (!cachedToken) {
+      const session = await getSession()
+      cachedToken = session?.user?.accessToken || null
+    }
 
-    const session = await getSession()
-
-    if (session?.user?.accessToken && config.headers) {
-      config.headers.Authorization = `Bearer ${session?.user.accessToken}`
+    if (cachedToken && config.headers) {
+      config.headers.Authorization = `Bearer ${cachedToken}`
     }
     return config
   },
@@ -27,7 +27,6 @@ api.interceptors.request.use(
   },
 )
 
-// Response interceptor – handle success & errors
 api.interceptors.response.use(
   (response: AxiosResponse) => {
     return response
@@ -36,9 +35,8 @@ api.interceptors.response.use(
     if (error.response) {
       const status = error.response.status
 
-      // Handle specific status codes
       if (status === 401 || status === 403) {
-        await signOut({ callbackUrl: '/en/login' }) // or your custom login route
+        await signOut({ callbackUrl: '/en/login' })
       }
     }
     return Promise.reject(error)
@@ -46,3 +44,41 @@ api.interceptors.response.use(
 )
 
 export default api
+
+export const fetcher = async (url: string) => {
+  const res = await api.get(url)
+  return res?.data
+}
+
+export interface UseQueryBaseParams {
+  queryKey: unknown[] // or a more specific type if known
+  url: string
+  params?: Record<string, any>
+  enabled?: boolean
+  refetchOnWindowFocus?: boolean
+  cacheTime?: number
+  staleTime?: number
+}
+
+export const useQueryBase = ({
+  queryKey,
+  url,
+  params = {},
+  enabled = true,
+  refetchOnWindowFocus = false,
+  cacheTime = 1000 * 60 * 60 * 24,
+  staleTime = 1000 * 60 * 60 * 24,
+}: UseQueryBaseParams) => {
+  return useQuery({
+    queryKey,
+    queryFn: async () => {
+      const response = await api.get(url, { params })
+
+      return response
+    },
+    enabled,
+    refetchOnWindowFocus,
+    gcTime: cacheTime,
+    staleTime,
+  })
+}

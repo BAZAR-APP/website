@@ -318,7 +318,7 @@ export default function BookingDetailsPage() {
 
   const handleViewDetails = useCallback(() => {
     // Navigate to chalet details page
-    router.push(`/explore/chalets/${bookingData?.id || 'some-default-chalet-id'}`)
+    router.push(`/chalet/${bookingData?.id || 'some-default-chalet-id'}`)
   }, [router, bookingData])
 
   const handleViewLocation = useCallback(() => {
@@ -327,7 +327,7 @@ export default function BookingDetailsPage() {
   }, [])
 
   const handlePayRemaining = () => {
-    router.push('/explore/booking/complete-payment/')
+    router.push('/my-bookings/complete-payment/')
   }
 
   const handleCancelBooking = () => {
@@ -468,7 +468,7 @@ export default function BookingDetailsPage() {
               Back to My Bookings
             </Button>
             <Button
-              onClick={() => router.push('/explore/chalets/')}
+              onClick={() => router.push('/explore/')}
               className="cursor-pointer bg-[#29397E] text-[#FDFDFE] rounded-lg text-[16px] font-medium !w-full"
             >
               Browse Chalets

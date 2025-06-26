@@ -38,7 +38,7 @@ const ThanksReviewDialog: React.FC<ThanksReviewDialogProps> = ({ isOpen, setIsOp
             Back to My Bookings
           </Button>
           <Button
-            onClick={() => router.push('/explore/chalets/')}
+            onClick={() => router.push('/explore/')}
             className="cursor-pointer bg-[#29397E] text-[#FDFDFE] py-2 rounded-lg text-[16px] font-medium !w-full"
           >
             Browse Chalets

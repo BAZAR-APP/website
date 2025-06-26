@@ -5,7 +5,12 @@ import Image from 'next/image'
 import Deposit from '../../public/images/Deposit.svg'
 import Button from './Button/Button'
 import Link from 'next/link'
-import { useForm } from 'react-hook-form'
+import { useParams } from 'next/navigation'
+import { useBookingStore } from '../../stores/useBookingStore'
+import CustomPopOver from './CustomPopOver'
+import SimpleCalender from './Calender/SimpleCalender'
+import useToggle from '@/lib/hooks/useToggle'
+import { format } from 'date-fns'
 
 interface PackageOption {
   id: string
@@ -39,9 +44,17 @@ interface BookingWidgetProps {
   setCheckOut?: (date: Date | undefined) => void
   guests?: number
   setGuests?: (guests: number) => void
-  maxGuests?: number
+  maxGuests?: string
   packageOptions?: PackageOption[]
   bookingConfig?: BookingConfig
+  packageInfo: {
+    perHourCost: number | undefined
+    perNightCost: number | undefined
+    weekendCost: number | undefined
+    weekDaysCost: number | undefined
+    fullWeekCost: number | undefined
+    fullMonthCost: number | undefined
+  }
 }
 
 const PricingRow = ({
@@ -50,12 +63,14 @@ const PricingRow = ({
   price,
   currency,
   checked,
+  disabled = false,
 }: {
   title: string
   subtitle: string
-  price: number
+  price: number | undefined
   currency: string
   checked?: boolean
+  disabled?: boolean
 }) => (
   <div className="flex justify-between items-center">
     <div>
@@ -66,7 +81,13 @@ const PricingRow = ({
     </div>
     <span className="text-sm leading-[17px] font-medium text-[#19191A] flex gap-2 items-center">
       {price} {currency}
-      <Radio name="example" value="1" defaultChecked={checked} className="!cursor-pointer" />
+      <Radio
+        name="example"
+        value=""
+        defaultChecked={false}
+        className="!cursor-pointer"
+        disabled={disabled}
+      />
     </span>
   </div>
 )
@@ -74,7 +95,6 @@ const PricingRow = ({
 const BookingWidget: React.FC<BookingWidgetProps> = ({
   checkIn,
   checkOut,
-  guests,
   packageOptions = [],
   bookingConfig = {
     refundableDeposit: 200,
@@ -90,12 +110,19 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
       currency: 'KWD',
     },
   },
+  packageInfo,
+  maxGuests,
 }) => {
-  const { setValue, watch } = useForm()
-  const quantity = watch('guests') ?? 1
+  const checkInPopUp = useToggle()
+  const checkOutPopUp = useToggle()
+
+  const { id } = useParams()
+  const { selectedPlan, guests, setGuests, setDates, selectedDates } = useBookingStore()
+
   const handleQuantityChange = (newQuantity: number) => {
-    if (newQuantity < 1) return
-    setValue('guests', newQuantity)
+    if (maxGuests && newQuantity > 0 && newQuantity <= +maxGuests) {
+      setGuests(newQuantity)
+    }
   }
 
   const selectedPackage = packageOptions[0]?.label || '100 KWD / night'
@@ -113,9 +140,7 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
 
   const nights = calculateNights()
 
-  const formatDate = (date?: Date) => date?.toLocaleDateString('en-GB') ?? '20/3/2025'
-
-  const total = (currentPackage?.basePrice ?? 0) * nights + bookingConfig.refundableDeposit
+  const total = (Number(selectedPlan?.price) ?? 0) + bookingConfig.refundableDeposit
 
   return (
     <div className="bg-[#F9FAFB] rounded-2xl">
@@ -129,35 +154,35 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
         </h2>
       </div>
       <div className="px-6 space-y-3">
-        {currentPackage && (
+        {packageInfo && (
           <>
             <PricingRow
               title="Weekend"
               subtitle="Thursday to Saturday"
-              price={currentPackage.weekendPrice}
+              price={packageInfo.weekendCost}
               currency={bookingConfig.currency}
-              checked
+              disabled={!!selectedPlan?.id}
             />
             <PricingRow
               title="Weekday"
               subtitle="Friday to Wednesday"
-              price={currentPackage.weekdayPrice}
+              price={packageInfo.weekDaysCost}
               currency={bookingConfig.currency}
-              checked
+              disabled={!!selectedPlan?.id}
             />
             <PricingRow
               title="Full Week"
               subtitle="7 consecutive nights"
-              price={currentPackage.fullWeekPrice}
+              price={packageInfo.fullWeekCost}
               currency={bookingConfig.currency}
-              checked
+              disabled={!!selectedPlan?.id}
             />
             <PricingRow
               title="Full Month"
               subtitle="30 consecutive nights"
-              price={currentPackage.fullMonthPrice}
+              price={packageInfo.fullMonthCost}
               currency={bookingConfig.currency}
-              checked
+              disabled={!!selectedPlan?.id}
             />
           </>
         )}
@@ -166,22 +191,60 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
         <div className="w-full rounded-xl border border-[#D1D5DB] overflow-hidden text-sm text-[#19191A]">
           <div className="grid grid-cols-2 divide-x divide-[#D1D5DB]">
             <div className="p-3">
-              <span className="block text-[10px] font-semibold">CHECK-IN</span>
-              <span className="block text-[14px] text-[#9EA0A2]">{formatDate(checkIn)}</span>
+              <CustomPopOver
+                isOpen={checkInPopUp.isOpen}
+                onClose={checkInPopUp.toggle}
+                triggerChildren={
+                  <span className="cursor-pointer">
+                    <span className="block text-[10px] font-semibold">CHECK-IN</span>
+                    <span className="block text-[14px] text-[#9EA0A2]">
+                      {format(new Date(selectedDates?.checkIn), 'dd/MM/yyyy')}
+                    </span>
+                  </span>
+                }
+              >
+                <SimpleCalender
+                  initialDate={selectedDates?.checkIn || new Date()}
+                  minDate={new Date()}
+                  onDateChange={(selectedDate: Date) => {
+                    setDates(selectedDate, selectedDates?.checkOut || new Date())
+                    checkInPopUp.toggle()
+                  }}
+                />
+              </CustomPopOver>
             </div>
             <div className="p-3">
-              <span className="block text-[10px] font-semibold">CHECKOUT</span>
-              <span className="block text-[14px] text-[#9EA0A2]">{formatDate(checkOut)}</span>
+              <CustomPopOver
+                isOpen={checkOutPopUp.isOpen}
+                onClose={checkOutPopUp.toggle}
+                triggerChildren={
+                  <span className="cursor-pointer">
+                    <span className="block text-[10px] font-semibold">CHECKOUT</span>
+                    <span className="block text-[14px] text-[#9EA0A2]">
+                      {format(new Date(selectedDates?.checkOut), 'dd/MM/yyyy')}
+                    </span>
+                  </span>
+                }
+              >
+                <SimpleCalender
+                  initialDate={selectedDates?.checkOut || new Date()}
+                  minDate={new Date()}
+                  onDateChange={(selectedDate: Date) => {
+                    setDates(selectedDates?.checkIn || new Date(), selectedDate)
+                    checkOutPopUp.toggle()
+                  }}
+                />
+              </CustomPopOver>
             </div>
           </div>
           <div className="border-t border-[#D1D5DB] px-3 py-2 flex items-center justify-between cursor-pointer">
             <div>
               <span className="block text-[10px] font-semibold">GUESTS</span>
-              <span className="block text-[14px] text-[#9EA0A2]">{guests} guests</span>
+              {guests && <span className="block text-[14px] text-[#9EA0A2]">{guests} guests</span>}
             </div>
             <div className="flex items-center gap-2 relative">
               <button
-                onClick={() => handleQuantityChange(quantity - 1)}
+                onClick={() => handleQuantityChange(guests - 1)}
                 className="flex cursor-pointer w-8 h-8 justify-center items-center relative p-[6.4px] rounded-[80px] border-[0.8px] border-solid border-[#E5E5EA]"
                 aria-label="Decrease quantity"
                 type="button"
@@ -196,9 +259,9 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
                   />
                 </svg>
               </button>
-              <span className="text-[#19191A] text-base font-medium leading-6">{quantity}</span>
+              <span className="text-[#19191A] text-base font-medium leading-6">{guests}</span>
               <button
-                onClick={() => handleQuantityChange(quantity + 1)}
+                onClick={() => handleQuantityChange(guests + 1)}
                 className="cursor-pointer flex w-8 h-8 justify-center items-center relative p-[6.4px] rounded-[80px] border-[0.8px] border-solid border-[#E5E5EA]"
                 aria-label="Increase quantity"
                 type="button"
@@ -218,7 +281,7 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
         </div>
       </div>
       <div className="px-5 pb-5">
-        <Link href="/explore/details">
+        <Link href={`/chalet/${id}/booking`}>
           <Button className="w-[100%] mb-5 text-white py-2 rounded-lg font-medium cursor-pointer">
             Book Now
           </Button>
@@ -243,15 +306,18 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
         </div>
       </div>
       <div className="px-5 pb-6 space-y-3">
-        <div className="flex justify-between items-center">
-          <span className="text-[16px] font-normal text-[#19191A] flex items-center">
-            {currentPackage?.basePrice ?? 0} {bookingConfig.refundPolicy.currency} × {nights} night
-            {nights > 1 ? 's' : ''}
-          </span>
-          <span className="font-normal text-[16px] text-[#19191A]">
-            {(currentPackage?.basePrice ?? 0) * nights} {bookingConfig.currency}
-          </span>
-        </div>
+        {!selectedPlan?.id && (
+          <div className="flex justify-between items-center">
+            <span className="text-[16px] font-normal text-[#19191A] flex items-center">
+              {currentPackage?.basePrice ?? 0} {bookingConfig.refundPolicy.currency} × {nights}{' '}
+              night
+              {nights > 1 ? 's' : ''}
+            </span>
+            <span className="font-normal text-[16px] text-[#19191A]">
+              {(currentPackage?.basePrice ?? 0) * nights} {bookingConfig.currency}
+            </span>
+          </div>
+        )}
 
         <div className="flex justify-between items-center">
           <div className="flex items-center space-x-2">
