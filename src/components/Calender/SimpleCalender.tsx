@@ -12,15 +12,15 @@ interface SimpleCalendarProps {
   [key: string]: any // For additional props
 }
 
-const SimpleCalendar: React.FC<SimpleCalendarProps> = ({ 
-  onDateChange, 
+const SimpleCalendar: React.FC<SimpleCalendarProps> = ({
+  onDateChange,
   initialDate = new Date(),
   minDate,
   maxDate,
   disabledDates,
   showMonthAndYearPickers = true,
   showDateDisplay = true,
-  ...otherProps 
+  ...otherProps
 }) => {
   const handleDateChange = (date: Date) => {
     if (onDateChange) {
@@ -29,7 +29,7 @@ const SimpleCalendar: React.FC<SimpleCalendarProps> = ({
   }
 
   return (
-    <Calendar 
+    <Calendar
       date={initialDate}
       onChange={handleDateChange}
       minDate={minDate}

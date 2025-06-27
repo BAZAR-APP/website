@@ -20,6 +20,7 @@ const ChaletsCard: React.FC<ChaletsCardProps> = ({ title }) => {
   }, [setFilters])
 
   const { data } = useChaletsQuery(mount)
+  if (!data?.data?.length) return null
   return (
     <section className="flex w-full flex-col items-center box-border bg-white gap-24 px-0 py-0 max-md:gap-16 max-md:py-16 max-sm:gap-12 max-sm:py-8">
       <div className="flex flex-col items-start gap-12 w-full ">

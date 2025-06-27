@@ -33,6 +33,7 @@ const Header: React.FC<HeaderProps> = ({ className = '', isLoggedIn = true, dict
   const params = useParams() as { lang?: Locale } | null
   const lang = params?.lang ?? 'en'
   const { data: user } = useSession()
+console.log(user);
 
   const [isSideNavOpen, setIsSideNavOpen] = useState(false)
   const router = useRouter()
@@ -76,7 +77,7 @@ const Header: React.FC<HeaderProps> = ({ className = '', isLoggedIn = true, dict
             <NotificationIcon />
             <UserProfile
               userName="Fahd Al-Mutiri"
-              avatarSrc="/images/Image.svg"
+              avatarSrc={user?.user?.photoURL || '/images/Image.svg'}
               onLogout={() => console.log('User logged out')}
             />
           </div>

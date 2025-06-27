@@ -47,7 +47,7 @@ const Login = () => {
       })
 
       if (result?.ok) {
-        router.replace(`/explore/`)
+        router.replace(`/`)
       } else {
         toast.error(result?.error ?? '')
       }

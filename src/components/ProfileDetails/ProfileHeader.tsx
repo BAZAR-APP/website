@@ -22,7 +22,12 @@ const ProfileHeader = () => {
         {/* Profile Image */}
         <div className="flex items-center justify-center w-[96px] h-[104px]">
           <div className="relative w-[96px] h-[96px]">
-            <div className="rounded-full w-full h-full bg-[url('https://codia-f2c.s3.us-west-1.amazonaws.com/image/2025-06-11/i3wsd1dC5N.png')] bg-cover bg-center" />
+            <div
+              className={`rounded-full w-full h-full bg-cover bg-center`}
+              style={{
+                backgroundImage: `url(${user?.user?.photoURL})`,
+              }}
+            />
             <div className="absolute w-[40%] h-[37%] bg-[url('/images/camera.svg')] bg-cover bg-center rounded-full right-[-10px] bottom-0" />
           </div>
         </div>

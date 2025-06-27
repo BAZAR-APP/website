@@ -4,6 +4,9 @@ import { usePathname } from 'next/navigation'
 import Link from 'next/link'
 import { Text } from '@radix-ui/themes'
 import { navItems } from '@/lib/constant'
+import { useSession } from 'next-auth/react'
+
+const authenticatedPages = ['My Bookings', 'Loyalty Points']
 
 interface NavigationProps {
   className?: string
@@ -11,11 +14,19 @@ interface NavigationProps {
 
 const Navigation: React.FC<NavigationProps> = ({ className = '' }) => {
   const pathname = usePathname()
+  const { data: session } = useSession()
+
+  const filteredNavItems = navItems.filter(({ label }) => {
+    if (authenticatedPages.includes(label)) {
+      return !!session?.user?.id
+    }
+    return true
+  })
 
   return (
     <nav className={`${className}`}>
       <ul className="hidden lg:flex items-center space-x-8">
-        {navItems.map(({ label, href }) => (
+        {filteredNavItems.map(({ label, href }) => (
           <li key={label}>
             <Link
               href={href}
@@ -30,7 +41,7 @@ const Navigation: React.FC<NavigationProps> = ({ className = '' }) => {
       </ul>
 
       <ul className="lg:hidden flex flex-col space-y-1">
-        {navItems.map(({ label, href }) => (
+        {filteredNavItems.map(({ label, href }) => (
           <li key={label}>
             <Link
               href={href}

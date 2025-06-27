@@ -5,7 +5,6 @@ import Negotiator from 'negotiator'
 import { i18n } from '../i18n.config'
 
 const PROTECTED_PATHS = [
-  '/explore',
   '/profile',
   '/notifications',
   '/loyalty-points',

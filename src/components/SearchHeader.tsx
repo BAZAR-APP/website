@@ -1,11 +1,10 @@
 'use client'
-
-import React, { useState } from 'react'
+import React from 'react'
 import { Search } from 'lucide-react'
-import { Popover, Text, Box, Separator } from '@radix-ui/themes'
+import { Popover, Text, Box } from '@radix-ui/themes'
 import { fields } from '@/lib/constant'
 import { Button } from '@/components'
-import { Calendar } from 'react-date-range'
+import SimpleCalender from './Calender/SimpleCalender'
 
 const locations = ['New York', 'London', 'Paris', 'Dubai', 'Tokyo']
 
@@ -19,7 +18,13 @@ const LocationDropdown = () => (
   </Box>
 )
 
-const CalendarMock = () => <Calendar />
+const CalendarMock = () => (
+  <SimpleCalender
+    initialDate={new Date()}
+    minDate={new Date()}
+    onDateChange={(selectedDate: Date) => {}}
+  />
+)
 
 const SearchHeader = () => {
   const quantity = 1
