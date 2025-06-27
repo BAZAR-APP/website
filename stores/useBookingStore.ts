@@ -10,6 +10,12 @@ type BookingState = {
   setDates: (checkIn: Date, checkOut: Date) => void
   setGuests: (guests: number) => void
   resetBooking: () => void
+  setNoOfNights: (guests: number) => void
+  setTotalCostAgainstNights: (guests: number) => void
+  setPackageAmount: (guests: number) => void
+  noOfNights: number | null
+  totalCostAgainstNights: number | null
+  packageAmount: number | null
 }
 
 import { persist } from 'zustand/middleware'
@@ -20,16 +26,25 @@ export const useBookingStore = create(
     (set) => ({
       selectedPlan: null,
       selectedRoom: null,
+      noOfNights: null,
+      totalCostAgainstNights: null,
+      packageAmount: null,
       selectedDates: { checkIn: new Date(), checkOut: new Date() },
       guests: 1,
       setPlan: (plan) => set({ selectedPlan: plan }),
       setRoom: (room) => set({ selectedRoom: room }),
       setDates: (checkIn, checkOut) => set({ selectedDates: { checkIn, checkOut } }),
       setGuests: (guests) => set({ guests }),
+      setNoOfNights: (noOfNights) => set({ noOfNights }),
+      setPackageAmount: (packageAmount) => set({ packageAmount }),
+      setTotalCostAgainstNights: (totalCostAgainstNights) => set({ totalCostAgainstNights }),
       resetBooking: () =>
         set({
           selectedPlan: null,
           selectedRoom: null,
+          noOfNights: null,
+          totalCostAgainstNights: null,
+          packageAmount: null,
           selectedDates: { checkIn: new Date(), checkOut: new Date() },
           guests: 1,
         }),

@@ -6,7 +6,7 @@ import Button from './Button/Button'
 import CommonInput from './CommonInput/Input'
 import PriceRowUI from './PriceRow'
 import RedeemRewards from './Booking/RedeemRewards'
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import { useBookingStore } from '../../stores/useBookingStore'
 import { format } from 'date-fns'
 import { Customization } from '@/lib/types/booking'
@@ -93,17 +93,25 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
   const { selectedDiscount } = useUserStore()
   const [isDiscountApplied, setIsDiscountApplied] = React.useState(false)
   const [discountedTotal, setDiscountedTotal] = React.useState<number | null>(null)
-
+  const router = useRouter()
   const selectedAddons: Customization[] = watch('addons') || []
   const selectedAddonsTotal = watch('selectedAddonsTotal')
   const redeemedCode = watch('redeemed_code')
   const romanticWeekend = watch('romanticWeekend')
 
-  const { selectedDates, selectedPlan, selectedRoom, guests } = useBookingStore()
+  const {
+    selectedDates,
+    selectedPlan,
+    selectedRoom,
+    guests,
+    packageAmount,
+    noOfNights,
+    totalCostAgainstNights,
+    resetBooking,
+  } = useBookingStore()
   const isSplitPayment = getValues()?.paymentOption === 'split'
 
-  const grandTotal =
-    selectedAddonsTotal + 200 + Number(selectedPlan?.price) + (romanticWeekend ? 25 : 0)
+  const grandTotal = selectedAddonsTotal + 200 + Number(packageAmount) + (romanticWeekend ? 25 : 0)
 
   const handleApplyDiscount = () => {
     if (!selectedDiscount?.discountPercent || !grandTotal) return
@@ -123,9 +131,9 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
       const body = {
         startDate: selectedDates?.checkIn,
         endDate: selectedDates?.checkOut,
-        noOfNights: 0,
         noOfGuests: guests,
-        totalCostAgainstNights: 0,
+        noOfNights: noOfNights || 0,
+        totalCostAgainstNights: totalCostAgainstNights || 0,
         bookingStatus: 'PENDING',
         refundableDepositAmount: 0,
         grandTotal: isDiscountApplied ? discountedTotal : grandTotal,
@@ -133,9 +141,11 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
         sleepingRoomId: selectedRoom?.id,
         chaletSubscriptionId: selectedPlan?.id,
         customizations: customizations,
-        isRomanticBookingSelected: romanticWeekend,
+        isRomanticBookingSelected: !!romanticWeekend,
       }
       await api.post('/booking', body)
+      resetBooking()
+      router.replace(`/chalet/${id}/booking/payment-confirmed`)
     } catch (error) {
       toast.error(extractErrorMessage(error))
     }
