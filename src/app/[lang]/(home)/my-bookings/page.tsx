@@ -4,6 +4,7 @@ import { Button } from '@/components'
 import BookingCard from '@/components/Booking/BookingCard'
 import { useQueryBase } from '@/lib/axios'
 import { bookingCardsData } from '@/lib/constant'
+import { IBooking } from '@/lib/types/booking'
 import { useRouter } from 'next/navigation'
 import React from 'react'
 
@@ -12,8 +13,9 @@ const Booking = () => {
   const [activeTab, setActiveTab] = React.useState<'current' | 'completed'>('current')
   const { data, isLoading } = useQueryBase({
     queryKey: ['my-bookings'],
-    url: '/booking',
+    url: '/booking/me',
   })
+  const bookings = data?.data?.bookings as IBooking[]
 
   const handleSeeDetails = (id: string) => {
     console.log('See details for property:', id)
@@ -54,14 +56,14 @@ const Booking = () => {
         </Button>
       </div>
 
-      {bookingCardsData.map((property) => (
+      {bookings?.map((booking: IBooking) => (
         <BookingCard
-          key={property.id}
-          {...property}
-          onClick={() => router.push(`/my-bookings/${property.id}`)}
+          key={booking.id}
+          onClick={() => router.push(`/my-bookings/${booking.id}`)}
           onSeeDetails={handleSeeDetails}
           onViewInvoice={handleViewInvoice}
           showRating={activeTab === 'completed'}
+          booking={booking}
         />
       ))}
     </div>

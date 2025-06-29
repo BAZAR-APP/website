@@ -32,6 +32,10 @@ export const useChaletsQuery = (enabled = true) => {
       minPrice: state.minPrice,
       maxPrice: state.maxPrice,
       amenities: state.amenities,
+      noOfGuests:state?.guests,
+      checkIn:state?.checkin,
+      checkOut:state?.checkout
+
     })),
   )
 

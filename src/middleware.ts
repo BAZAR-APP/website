@@ -55,6 +55,9 @@ export async function middleware(request: NextRequest) {
   const token = await getToken({ req: request, secret: process.env.NEXTAUTH_SECRET })
 
   const isProtected = PROTECTED_PATHS.some((path) => pathname.includes(path))
+console.log(isProtected,'is protected');
+console.log(pathname);
+
 
   if (isProtected && !token?.accessToken) {
     const locale = getLocale(request)

@@ -33,7 +33,6 @@ const Header: React.FC<HeaderProps> = ({ className = '', isLoggedIn = true, dict
   const params = useParams() as { lang?: Locale } | null
   const lang = params?.lang ?? 'en'
   const { data: user } = useSession()
-console.log(user);
 
   const [isSideNavOpen, setIsSideNavOpen] = useState(false)
   const router = useRouter()

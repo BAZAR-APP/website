@@ -158,7 +158,7 @@ export default async function ChaletDetailsPage({
               />
               <SelectablePlans subscriptions={data?.subscriptions || []} />
               <div className="border-b border-[#E5E7EB]">
-                {/* <AmenitiesList amenities={data?.amenities || []} /> */}
+                <AmenitiesList amenities={data?.amenities || []} />
                 <h2 className="md:text-[25px] text-xl font-semibold leading-[32px] text-[#19191A] mt-7">
                   Where you'll sleep
                 </h2>

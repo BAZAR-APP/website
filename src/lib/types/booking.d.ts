@@ -31,3 +31,19 @@ export type GroupedCustomization = {
   }
   customizations: Customization[]
 }
+
+export interface IBooking {
+  id: string;
+  startDate: string; // ISO date string
+  endDate: string;   // ISO date string
+  noOfNights: number;
+  noOfGuests: number;
+  totalCostAgainstNights: number;
+  refundableDepositAmount: number;
+  grandTotal: number;
+  chaletId: string;
+  userId: string;
+  sleepingRoomId: string | null;
+  chaletSubscriptionId: string | null;
+  bookingStatus: 'pending' | 'confirmed' | 'cancelled' | string; // You can tighten this union if other statuses are known
+}
