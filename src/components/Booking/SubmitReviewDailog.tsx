@@ -1,9 +1,12 @@
-import React from 'react'
+import React, { useState } from 'react'
 import ModalDialog from '../ModalDialog/Dialog'
 import Button from '../Button/Button'
 import Image from 'next/image'
 import { ChevronRight, Download, MapPin } from 'lucide-react'
 import Location from '../Location'
+import { submitReview } from '@/lib/constant'
+import { IBooking } from '@/lib/types/booking'
+import StarRating from '../About/StarRating'
 
 export interface SubmitReviewData {
   title: string
@@ -20,9 +23,10 @@ export interface SubmitReviewData {
 interface SubmitReviewDialogProps {
   isOpen: boolean
   setIsOpen: (isOpen: boolean) => void
-  onSubmit: () => void
+  onSubmit: (data: { rating: number; text: string }) => void
   onCancel?: () => void
-  data: SubmitReviewData
+  data: IBooking
+  loading: boolean
 }
 
 const SubmitReviewDialog: React.FC<SubmitReviewDialogProps> = ({
@@ -31,8 +35,13 @@ const SubmitReviewDialog: React.FC<SubmitReviewDialogProps> = ({
   onSubmit,
   onCancel = () => setIsOpen(false),
   data,
+  loading = false,
 }) => {
-  const { title, points, guests, propertyType, beds, baths, amenities, imageUrl, imageAlt } = data
+  const [rating, setRating] = useState(0)
+  const [reviewText, setReviewText] = useState('')
+
+  const { title, points, guests, propertyType, beds, baths, amenities, imageUrl, imageAlt } =
+    submitReview
 
   return (
     <ModalDialog
@@ -45,11 +54,7 @@ const SubmitReviewDialog: React.FC<SubmitReviewDialogProps> = ({
         Tell us what you loved (or what we can do better). Your feedback helps us improve!
       </p>
 
-      <div className="flex gap-1 pb-5 pt-2">
-        {[...Array(5)].map((_, i) => (
-          <Image key={i} src="/images/Unfilld.svg" width={40} height={40} alt="Star icon" />
-        ))}
-      </div>
+      <StarRating rating={rating} onChange={setRating} />
 
       <div className="w-full h-[216px] flex-shrink-0">
         <Image
@@ -70,7 +75,7 @@ const SubmitReviewDialog: React.FC<SubmitReviewDialogProps> = ({
       </div>
 
       <div className="text-sm text-[#8E8E93] leading-5 pt-2">
-        {guests} <span className="text-[#9EA0A2] text-[9px] pr-1">&bull;</span>
+        {data?.noOfGuests} guests <span className="text-[#9EA0A2] text-[9px] pr-1">&bull;</span>
         {propertyType} <span className="text-[#9EA0A2] text-[9px] pr-1">&bull;</span>
         {beds} beds <span className="text-[#9EA0A2] text-[9px] pr-1">&bull;</span>
         {baths} baths
@@ -97,7 +102,8 @@ const SubmitReviewDialog: React.FC<SubmitReviewDialogProps> = ({
           className="text-sm font-medium !px-0 !py-0 text-[#29397E] underline underline-offset-2 flex gap-1 items-center"
         >
           <MapPin className="w-3.5 h-3.5 text-[#29397E]" />
-          <span> View Exact Location</span> <ChevronRight className="w-3 h-3 mt-0.5" strokeWidth={3} />
+          <span> View Exact Location</span>{' '}
+          <ChevronRight className="w-3 h-3 mt-0.5" strokeWidth={3} />
         </Button>
         <Button
           onClick={() => {}}
@@ -117,9 +123,12 @@ const SubmitReviewDialog: React.FC<SubmitReviewDialogProps> = ({
         </Button>
       </div>
       <textarea
-        className="w-full h-52 mt-6 p-3 bg-[#F9FAFB] text-[#9EA0A2] focus:border-none focus:outline-none rounded resize-none text-[16px]"
+        className="w-full h-52 mt-6 p-3 bg-[#F9FAFB] text-[#19191A] focus:border-none focus:outline-none rounded resize-none text-[16px]"
         placeholder="Write about your stay—what you liked, how the chalet was, or anything you'd like future guests to know..."
+        value={reviewText}
+        onChange={(e) => setReviewText(e.target.value)}
       />
+
       <div className="flex flex-col md:flex-row justify-between gap-4 pt-4">
         <Button
           onClick={onCancel}
@@ -129,8 +138,14 @@ const SubmitReviewDialog: React.FC<SubmitReviewDialogProps> = ({
           Cancel
         </Button>
         <Button
-          onClick={onSubmit}
+          onClick={() => {
+            onSubmit({ rating, text: reviewText })
+            setRating(0)
+            setReviewText('')
+          }}
           className="w-full py-2 text-[16px] font-medium text-[#FDFDFE] bg-indigo-800 rounded-lg cursor-pointer"
+          disabled={loading}
+          loading={loading}
         >
           Submit Review
         </Button>

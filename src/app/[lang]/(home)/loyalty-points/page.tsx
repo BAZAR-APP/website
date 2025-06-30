@@ -30,14 +30,6 @@ const LoyaltyPoints = () => {
 
   const { page } = getDictionary(lang)
 
-  const tiercustom =
-    data?.data?.totalPoints >= 0 && data?.data?.totalPoints <= 500
-      ? 'Platinum'
-      : data?.data?.totalPoints > 500 && data?.data?.totalPoints <= 900
-        ? 'Gold'
-        : data?.data?.totalPoints > 900
-          ? 'Diamond'
-          : ''
   return (
     <>
       <div className="py-10">
@@ -69,7 +61,7 @@ const LoyaltyPoints = () => {
               currentPoints={data?.data?.totalPoints || 0}
               maxPoints={30000}
               page={page}
-              tier={tiercustom}
+              tier={data?.data?.userTier}
               lang={lang}
             />
             <Image
@@ -141,7 +133,7 @@ const LoyaltyPoints = () => {
       {isDialogOpen && (
         <BuyPointsDialog
           isOpen={isDialogOpen}
-          currentUserTier={tiercustom}
+          currentUserTier={data?.data?.userTier}
           setIsOpen={() => {
             setSelectedPackageLoyaltyPoints(null)
             setDialogOpen(false)

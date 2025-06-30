@@ -10,10 +10,13 @@ const fetchChalets = async (filters: any): Promise<ChaletResponse> => {
 
   for (const key in filters) {
     const value = filters[key]
+
     if (Array.isArray(value)) {
-      value.forEach((v) => searchParams.append(key, v))
-    } else {
-      searchParams.set(key, value)
+      if (value.length > 0) {
+        searchParams.set(key, value.join(','))
+      }
+    } else if (value !== undefined && value !== null) {
+      searchParams.set(key, String(value))
     }
   }
 
@@ -32,10 +35,9 @@ export const useChaletsQuery = (enabled = true) => {
       minPrice: state.minPrice,
       maxPrice: state.maxPrice,
       amenities: state.amenities,
-      noOfGuests:state?.guests,
-      checkIn:state?.checkin,
-      checkOut:state?.checkout
-
+      noOfGuests: state?.guests,
+      checkIn: state?.checkin,
+      checkOut: state?.checkout,
     })),
   )
 

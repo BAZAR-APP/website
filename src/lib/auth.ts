@@ -12,6 +12,20 @@ const apiClient = axios.create({
   },
 })
 
+// Helper function to validate current user
+async function validateCurrentUser(accessToken: string) {
+  try {
+    const response = await apiClient.get('/users/currentUser', {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    })
+    return { isValid: true, userData: response.data }
+  } catch (error) {
+    return { isValid: false, userData: null }
+  }
+}
+
 export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
@@ -35,7 +49,14 @@ export const authOptions: NextAuthOptions = {
           const responseData = response.data
           const user = responseData.user || responseData
 
-          if (user?.userId) {
+          if (user?.userId && user?.accessToken) {
+            // Validate the user immediately after login
+            const validation = await validateCurrentUser(user.accessToken)
+
+            if (!validation.isValid) {
+              throw new Error('User validation failed after login')
+            }
+
             return {
               id: user.userId.toString(),
               name: user.fullName,
@@ -72,18 +93,30 @@ export const authOptions: NextAuthOptions = {
 
           if (response.status === 200 || response.status === 201) {
             const userData = response.data
+            const accessToken = userData.accessToken || userData.user?.accessToken
 
-            user.id =
-              userData.user?.userId?.toString() || userData.userId?.toString() || profile?.sub
-            user.accessToken = userData.accessToken || userData.user?.accessToken
-            user.email = profile?.email
-            user.name = profile?.name
+            if (accessToken) {
+              // Validate the user immediately after Google signup
+              const validation = await validateCurrentUser(accessToken)
 
-            return true
+              if (!validation.isValid) {
+                console.error('Google user validation failed after signup')
+                return false
+              }
+
+              user.id =
+                userData.user?.userId?.toString() || userData.userId?.toString() || profile?.sub
+              user.accessToken = accessToken
+              user.email = profile?.email
+              user.name = profile?.name
+
+              return true
+            }
           }
 
           return false
         } catch (error: any) {
+          console.error('Google auth error:', error)
           return false
         }
       }
@@ -92,35 +125,41 @@ export const authOptions: NextAuthOptions = {
     },
 
     async jwt({ token, user, account, trigger }) {
-      // Initial sign in
-      if (user) {
+      // Initial sign in - store user data in token
+      if (user && account) {
         token.id = user.id
-        token.accessToken = user.accessToken
-        token.phoneNumber = user.phoneNumber
+        token.accessToken = (user as any).accessToken
+        token.phoneNumber = (user as any).phoneNumber
         token.email = user.email ?? undefined
-        token.provider = account?.provider || ''
+        token.provider = account.provider || ''
+        token.lastValidated = Date.now()
+        return token
       }
 
-      // Validate token on subsequent requests
-      if (token.accessToken && trigger !== 'signIn') {
-        try {
-          await apiClient.get('/users/currentUser', {
-            headers: {
-              Authorization: `Bearer ${token.accessToken}`,
-            },
-          })
+      // For subsequent requests, validate the token periodically
+      if (token.accessToken && token.id) {
+        const now = Date.now()
+        const lastValidated = typeof token.lastValidated === 'number' ? token.lastValidated : 0
+        const validationInterval = 5 * 60 * 1000 // 5 minutes
 
-          return token // token still valid
-        } catch (error) {
-          return {
-            ...token,
-            id: '',
-            accessToken: undefined,
-            phoneNumber: undefined,
-            provider: undefined,
-            email: undefined,
-            isInvalid: true, // 👈 mark as invalid for session()
+        // Only validate if it's been more than 5 minutes since last validation
+        // or if this is not the initial sign-in
+        if (trigger !== 'signIn' && now - lastValidated > validationInterval) {
+          const validation = await validateCurrentUser(token.accessToken as string)
+
+          if (!validation.isValid) {
+            // Clear token data but maintain JWT structure
+            token.id = undefined
+            token.accessToken = undefined
+            token.phoneNumber = undefined
+            token.provider = undefined
+            token.email = undefined
+            token.isInvalid = true
+            return token
           }
+
+          // Update last validated timestamp
+          token.lastValidated = now
         }
       }
 
@@ -128,49 +167,49 @@ export const authOptions: NextAuthOptions = {
     },
 
     async session({ session, token }) {
+      // If token is marked as invalid or missing required fields, return invalid session
       if (!token.accessToken || token.isInvalid || !token.id) {
-        // Instead of returning null, mark session as invalid
-        session.user = {
-          id: '',
-          accessToken: undefined,
-          provider: undefined,
-          email: undefined,
-          phoneNumber: undefined,
-        }
-        ;(session as any).invalid = true
-        return session
-      }
-
-      try {
-        const response = await apiClient.get('/users/currentUser', {
-          headers: {
-            Authorization: `Bearer ${token.accessToken}`,
+        return {
+          ...session,
+          user: {
+            id: undefined,
+            accessToken: undefined,
+            provider: undefined,
+            email: undefined,
+            phoneNumber: undefined,
           },
-        })
-
-        const userData = response.data
-
-        session.user = {
-          id: token.id,
-          accessToken: token.accessToken,
-          provider: token.provider,
-          email: token.email,
-          phoneNumber: token.phoneNumber,
-          ...userData,
+          expires: new Date(0).toISOString(), // Expired session
         }
-
-        return session
-      } catch (error) {
-        session.user = {
-          id: '',
-          accessToken: undefined,
-          provider: undefined,
-          email: undefined,
-          phoneNumber: undefined,
-        }
-        ;(session as any).invalid = true
-        return session
       }
+
+      // Always validate current user for session creation
+      const validation = await validateCurrentUser(token.accessToken as string)
+
+      if (!validation.isValid) {
+        return {
+          ...session,
+          user: {
+            id: undefined,
+            accessToken: undefined,
+            provider: undefined,
+            email: undefined,
+            phoneNumber: undefined,
+          },
+          expires: new Date(0).toISOString(), // Expired session
+        }
+      }
+
+      // Build valid session with current user data
+      session.user = {
+        id: token.id as string,
+        accessToken: token.accessToken as string,
+        provider: token.provider as string,
+        email: token.email as string,
+        phoneNumber: token.phoneNumber as string,
+        ...validation.userData, // Include fresh user data from API
+      }
+
+      return session
     },
   },
 

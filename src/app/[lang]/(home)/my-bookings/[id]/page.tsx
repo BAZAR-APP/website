@@ -10,6 +10,8 @@ import { useParams, useRouter } from 'next/navigation'
 import CancelBooking from '@/components/Booking/CancelBooking'
 import useToggle from '@/lib/hooks/useToggle'
 import ModalDialog from '@/components/ModalDialog/Dialog'
+import { useQueryBase } from '@/lib/axios'
+import { IBooking } from '@/lib/types/booking'
 
 // Define the interfaces for your data structure (these are correct)
 interface AddOn {
@@ -68,7 +70,7 @@ const DEFAULT_VALUES: BookingData = {
   dateRange: { from: '20/3/2025', to: '24/3/2025' },
   imageUrl: 'https://picsum.photos/seed/beach/311/190',
   imageAlt: 'Property image',
-  paymentStatus: 'partially_paid',
+  paymentStatus: 'fully_paid',
   totalAmount: 440,
   paidAmount: 220,
   remainingAmount: 220,
@@ -276,43 +278,17 @@ export default function BookingDetailsPage() {
   const router = useRouter()
   const { id } = useParams() as { id: string }
 
-  const [bookingData, setBookingData] = useState<BookingData | null>(null)
-  const [loading, setLoading] = useState(true)
+  const [bookingData, setBookingData] = useState<BookingData | null>(DEFAULT_VALUES)
   const [error, setError] = useState<string | null>(null)
+  const { data, isLoading } = useQueryBase({
+    queryKey: ['bookingDetails', id],
+    url: `/booking/readById/${id}`,
+    staleTime: 0,
+    cacheTime: 0,
+    enabled: !!id,
+  })
 
-  useEffect(() => {
-    // In a real application, you would fetch the booking details
-    // from an API based on the 'id'.
-    // For this example, we'll simulate a fetch with DEFAULT_VALUES.
-    const fetchBookingDetails = async () => {
-      try {
-        setLoading(true)
-        // Simulate API call
-        await new Promise((resolve) => setTimeout(resolve, 500)) // Simulate network delay
-
-        // In a real app:
-        // const response = await fetch(`/api/bookings/${id}`);
-        // if (!response.ok) {
-        //   throw new Error('Failed to fetch booking details');
-        // }
-        // const data: BookingData = await response.json();
-        // setBookingData(data);
-
-        // For now, use DEFAULT_VALUES and assign the ID
-        setBookingData({ ...DEFAULT_VALUES, id: id })
-      } catch (err) {
-        setError('Failed to load booking details.')
-        console.error(err)
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    if (id) {
-      fetchBookingDetails()
-    }
-  }, [id])
-
+  const bookingDetails = data?.data as IBooking
   const { isOpen: isCancelOpen, toggle: toggleCancel } = useToggle(false)
   const { isOpen: isConfirmCancel, toggle: confirmCancelToggle } = useToggle(false)
 
@@ -334,7 +310,7 @@ export default function BookingDetailsPage() {
     toggleCancel()
   }
 
-  if (loading) {
+  if (isLoading) {
     return <div className="p-10 text-center">Loading booking details...</div>
   }
 

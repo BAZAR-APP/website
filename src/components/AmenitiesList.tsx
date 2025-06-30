@@ -21,7 +21,9 @@ const AmenitiesList = ({ amenities }: AmenitiesListProps) => {
           {amenities?.map((amenity, index) => {
             return (
               <div key={index} className="flex items-center gap-3">
-                <Image src={amenity?.iconPhotoId} width={20} height={12} alt={amenity?.title} />
+                {amenity?.iconPhotoId && (
+                  <Image src={amenity?.iconPhotoId} width={20} height={12} alt={amenity?.title} />
+                )}
                 <span>{capitalizeWords(amenity.title)}</span>
               </div>
             )

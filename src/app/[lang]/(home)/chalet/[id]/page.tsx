@@ -134,7 +134,7 @@ export default async function ChaletDetailsPage({
           location={data?.city || ''}
           rating={5}
           reviewCount={5}
-          images={data?.galleryPhotoIds || ['']}
+          images={data?.galleryPhotoURLs || ['']}
         />
 
         <div className="py-6 xl:px-22 lg:px-18 md:px-14 px-10">

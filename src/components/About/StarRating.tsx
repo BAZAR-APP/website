@@ -1,32 +1,36 @@
 // components/StarRating.tsx
-import React from 'react';
-import { Star, StarHalf } from 'lucide-react';
+import React from 'react'
+import { Star, StarHalf } from 'lucide-react'
 
 interface StarRatingProps {
-    rating: number;
-    totalStars?: number;
-    className?: string;
+  rating: number
+  totalStars?: number
+  className?: string
+  onChange?: (value: number) => void
 }
 
-const StarRating: React.FC<StarRatingProps> = ({ rating, totalStars = 5,   className = ""  }) => {
-    const fullStars = Math.floor(rating);
-    const hasHalfStar = rating % 1 >= 0.5;
+const StarRating: React.FC<StarRatingProps> = ({ rating, totalStars = 5, onChange }) => {
+  return (
+    <div className="flex gap-1 pb-5 pt-2 cursor-pointer">
+      {Array.from({ length: totalStars }, (_, index) => {
+        const starValue = index + 1
+        const isFull = starValue <= rating
+        const isHalf = !isFull && starValue - 0.5 === rating
 
-    return (
+        return (
+          <div key={index} onClick={() => onChange?.(starValue)}>
+            {isFull ? (
+              <Star fill="#FBBF24" strokeWidth={0} />
+            ) : isHalf ? (
+              <StarHalf fill="#FBBF24" strokeWidth={0} />
+            ) : (
+              <Star fill="#fff" stroke="#FBBF24" />
+            )}
+          </div>
+        )
+      })}
+    </div>
+  )
+}
 
-        <div className={`flex mb-4 ${className}`}>  
-            {Array.from({ length: totalStars }, (_, index) => {
-                if (index < fullStars) {
-                    return <Star key={index} fill="#FBBF24" strokeWidth={0} />;
-                } else if (index === fullStars && hasHalfStar) {
-                    return <StarHalf key={index} fill="#FBBF24" strokeWidth={0} />;
-                } else {
-                    return <Star key={index} fill="#fff" strokeWidth={0} />;
-                }
-            })}
-        </div>
-
-    );
-};
-
-export default StarRating;
+export default StarRating

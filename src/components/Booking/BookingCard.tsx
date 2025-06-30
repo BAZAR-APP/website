@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { MapPin, ChevronRight } from 'lucide-react'
 import Image from 'next/image'
 import Location from '../Location'
@@ -7,9 +7,11 @@ import StarRating from '../About/StarRating'
 import useToggle from '@/lib/hooks/useToggle'
 import SubmitReviewDialog from './SubmitReviewDailog'
 import ThanksReviewDialog from './ThanksReviewDialog' // Make sure this is the correct path
-import { submitReview } from '@/lib/constant'
 import { IBooking } from '@/lib/types/booking'
 import { format } from 'date-fns'
+import api from '@/lib/axios'
+import { toast } from '@/lib/toast'
+import { extractErrorMessage } from '@/lib/utils'
 
 interface BookingCardProps {
   booking: IBooking
@@ -28,7 +30,26 @@ const BookingCard: React.FC<BookingCardProps> = ({
 }) => {
   const { isOpen: isReviewOpen, open: openReview, close: closeReview } = useToggle(false)
   const { isOpen: isThanksOpen, open: openThanks, close: closeThanks } = useToggle(false)
-
+  const [loading, setIsLoading] = useState(false)
+  const submitReview = async (data: { rating: number; text: string }) => {
+    setIsLoading(true)
+    try {
+      await api.post('/chalets/review', {
+        rating: data?.rating,
+        reviewText: data?.text,
+        rewardPoints: 200,
+        isPublished: true,
+        chaletId: booking?.chaletId,
+        bookingId: booking?.id,
+      })
+      closeReview()
+      openThanks()
+    } catch (error) {
+      toast.error(extractErrorMessage(error))
+    } finally {
+      setIsLoading(false)
+    }
+  }
   return (
     <>
       <div
@@ -90,17 +111,16 @@ const BookingCard: React.FC<BookingCardProps> = ({
               From {format(new Date(), 'dd/MM/yyyy')} To {format(new Date(), 'dd/MM/yyyy')}
             </p>
           </div>
-          {showRating && (
-            <button
-              onClick={(e) => {
-                e.stopPropagation()
-                openReview()
-              }}
-              className="cursor-pointer"
-            >
-              <StarRating className="!mb-0" rating={5} />
-            </button>
-          )}
+          <button
+            onClick={(e) => {
+              e.stopPropagation()
+              if (booking?.review?.id) return
+              openReview()
+            }}
+            className="cursor-pointer"
+          >
+            <StarRating className="!mb-0" rating={Number(booking?.review?.rating)} />
+          </button>
           <div className="flex items-center gap-2 justify-between flex-wrap">
             <Button
               onClick={() => onSeeDetails?.(booking?.id)}
@@ -120,17 +140,19 @@ const BookingCard: React.FC<BookingCardProps> = ({
         </div>
       </div>
 
-      <SubmitReviewDialog
-        isOpen={isReviewOpen}
-        setIsOpen={closeReview}
-        onSubmit={() => {
-          closeReview()
-          openThanks()
-        }}
-        data={submitReview}
-      />
+      {isReviewOpen && (
+        <SubmitReviewDialog
+          isOpen={isReviewOpen}
+          setIsOpen={closeReview}
+          onSubmit={(data: { rating: number; text: string }) => {
+            submitReview(data)
+          }}
+          data={booking}
+          loading={loading}
+        />
+      )}
 
-      <ThanksReviewDialog isOpen={isThanksOpen} setIsOpen={closeThanks} />
+      {isThanksOpen && <ThanksReviewDialog isOpen={isThanksOpen} setIsOpen={closeThanks} />}
     </>
   )
 }
