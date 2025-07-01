@@ -4,7 +4,6 @@ export type ChaletFilters = {
   page: number
   limit: number
   language: 'en' | 'ar'
-  viewType: string[]
   city: string[]
   minPrice: number
   maxPrice: number
@@ -20,7 +19,6 @@ export const useChaletFiltersStore = create<ChaletFilters>((set) => ({
   page: 1,
   limit: 20,
   language: 'en',
-  viewType: [],
   city: [],
   minPrice: 0,
   maxPrice: 3000,
@@ -40,7 +38,6 @@ export const useChaletFiltersStore = create<ChaletFilters>((set) => ({
       page: 1,
       limit: 20,
       language: 'en',
-      viewType: [],
       city: [],
       minPrice: 0,
       maxPrice: 3000,
