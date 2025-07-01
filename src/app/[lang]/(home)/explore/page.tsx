@@ -57,10 +57,9 @@ const ExploreChalets = () => {
             </Grid>
           ) : (
             <>
-              <Grid columns={{ initial: '1', sm: '2', lg: '3', xl: '4' }} gap="4" width="100%">
-                {data &&
-                  data?.data.length &&
-                  data?.data?.map((chalet: Chalet, index: number) => (
+              {data && data?.data?.length > 0 ? (
+                <Grid columns={{ initial: '1', sm: '2', lg: '3', xl: '4' }} gap="4" width="100%">
+                  {data?.data.map((chalet: Chalet, index: number) => (
                     <PropertyCard
                       chalet={chalet}
                       onClick={() => {
@@ -70,7 +69,16 @@ const ExploreChalets = () => {
                       key={index}
                     />
                   ))}
-              </Grid>
+                </Grid>
+              ) : (
+                <div className="text-center py-16">
+                  <h3 className="text-2xl font-semibold text-gray-700">No chalets found</h3>
+                  <p className="text-gray-500 mt-2">
+                    Try adjusting your filters or search criteria.
+                  </p>
+                </div>
+              )}
+
               {data && data?.data?.length > 0 && totalPages > 1 && (
                 <Pagination
                   currentPage={page}

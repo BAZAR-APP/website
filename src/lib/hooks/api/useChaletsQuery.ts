@@ -10,13 +10,12 @@ const fetchChalets = async (filters: any): Promise<ChaletResponse> => {
 
   for (const key in filters) {
     const value = filters[key]
-
-    if (Array.isArray(value)) {
-      if (value.length > 0) {
-        searchParams.set(key, value.join(','))
+    if (value) {
+      if (Array.isArray(value)) {
+        value.forEach((v) => searchParams.append(key, v))
+      } else {
+        searchParams.set(key, value)
       }
-    } else if (value !== undefined && value !== null) {
-      searchParams.set(key, String(value))
     }
   }
 

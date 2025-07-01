@@ -30,6 +30,7 @@ export interface Chalet {
   country: string
   postalCode: string
   amenities: Amenity[]
+  isFavourite: boolean
   viewTypes: ViewType[]
   badgeId: string
   badge: Badge
@@ -43,7 +44,7 @@ export interface Chalet {
   isSelfCheckIn: boolean
   area: Number
   areaUnit: String
-  galleryPhotoURLs:string[]
+  galleryPhotoURLs: string[]
 }
 
 export interface Amenity {

@@ -9,9 +9,9 @@ export type ChaletFilters = {
   minPrice: number
   maxPrice: number
   amenities: string[]
-  guests:number
-  checkin:string
-  checkout:string
+  guests: number
+  checkin: string
+  checkout: string
   setFilters: (filters: Partial<ChaletFilters>) => void
   resetFilters: () => void
 }
@@ -25,9 +25,9 @@ export const useChaletFiltersStore = create<ChaletFilters>((set) => ({
   minPrice: 0,
   maxPrice: 3000,
   amenities: [],
-  guests:0,
-  checkin:'',
-  checkout:'',
+  guests: 0,
+  checkin: '',
+  checkout: '',
   setFilters: (
     filters: Partial<ChaletFilters> | ((state: ChaletFilters) => Partial<ChaletFilters>),
   ) =>
