@@ -8,11 +8,16 @@ import React, { useState, useMemo } from 'react'
 import { dumyNotifications } from '@/lib/constant'
 import useToggle from '@/lib/hooks/useToggle'
 import NotificationSettingsDialog from '@/components/Notification/NotificationSettingsDialog'
+import { useQueryBase } from '@/lib/axios'
 
 const Notifications = () => {
   const [activeTab, setActiveTab] = useState<NotificationTab>('all')
   const [visibleCount, setVisibleCount] = useState(10)
   const [, setSelectedNotification] = useState<NotificationData | null>(null)
+  const { data } = useQueryBase({
+    queryKey: ['notificationTypes'],
+    url: `/notificationTypes`,
+  })
 
   const handleTabChange = (tab: NotificationTab) => {
     setActiveTab(tab)

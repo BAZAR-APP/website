@@ -1,3 +1,5 @@
+import { Chalet } from '../../../types/chalets'
+
 export type AddOnItem = {
   icon: string
   label: string
@@ -50,4 +52,5 @@ export interface IBooking {
     rating: string
     id: string
   }
+  chalet: Chalet
 }

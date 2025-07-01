@@ -42,5 +42,8 @@ export const useChaletFiltersStore = create<ChaletFilters>((set) => ({
       minPrice: 0,
       maxPrice: 3000,
       amenities: [],
+      guests: 0,
+      checkin: '',
+      checkout: '',
     }),
 }))

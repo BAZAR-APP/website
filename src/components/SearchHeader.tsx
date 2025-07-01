@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Search } from 'lucide-react'
 import { Popover } from '@radix-ui/themes'
 import { fields } from '@/lib/constant'
@@ -8,6 +8,7 @@ import SimpleCalender from './Calender/SimpleCalender'
 import Checkbox from './CheckBox/CheckBox'
 import { useChaletFiltersStore } from '../../stores/useChaletFiltersStore'
 import { usePathname, useRouter } from 'next/navigation'
+import { format } from 'date-fns'
 
 const locations = [
   'Al Khobar',
@@ -26,20 +27,26 @@ const CalendarMock = ({ onDateChange }: { onDateChange: (date: Date) => void }) 
 const SearchHeader = () => {
   const path = usePathname()
   const router = useRouter()
-  const { city: storeCity, setFilters } = useChaletFiltersStore()
+  const {
+    city: storeCity,
+    checkin: storeCheckIn,
+    checkout: storeCheckOut,
+    guests: storeGuests,
+    setFilters,
+  } = useChaletFiltersStore()
 
   const [localCity, setLocalCity] = useState<string[]>(storeCity)
-  const [guests, setGuests] = useState(0)
-  const [checkin, setCheckin] = useState<Date | null>(null)
-  const [checkout, setCheckout] = useState<Date | null>(null)
+  const [guests, setGuests] = useState(storeGuests || 0)
+  const [checkin, setCheckin] = useState<Date | null>(storeCheckIn ? new Date(storeCheckIn) : null)
+  const [checkout, setCheckout] = useState<Date | null>(
+    storeCheckOut ? new Date(storeCheckOut) : null,
+  )
 
   // Popover open states
   const [openIndex, setOpenIndex] = useState<number | null>(null)
 
   const toggleCity = (location: string, checked: boolean) => {
-    const updated = checked
-      ? [...localCity, location]
-      : localCity.filter((c) => c !== location)
+    const updated = checked ? [...localCity, location] : localCity.filter((c) => c !== location)
     setLocalCity(updated)
     if (!checked || updated.length > 0) {
       setOpenIndex(null)
@@ -69,21 +76,31 @@ const SearchHeader = () => {
       case 'Location':
         return localCity.length ? localCity.join(', ') : field.placeholder
       case 'Check in':
-        return checkin ? checkin.toDateString() : field.placeholder
+        return checkin ? format(checkin, 'dd/MM/yyyy') : field.placeholder
       case 'Check out':
-        return checkout ? checkout.toDateString() : field.placeholder
+        return checkout ? format(checkout, 'dd/MM/yyyy') : field.placeholder
       case 'Guests':
         return guests > 0 ? `${guests} Guest${guests > 1 ? 's' : ''}` : field.placeholder
       default:
         return field.placeholder
     }
   }
-
+  
+  useEffect(() => {
+    setLocalCity(storeCity)
+    setGuests(storeGuests || 0)
+    setCheckin(storeCheckIn ? new Date(storeCheckIn) : null)
+    setCheckout(storeCheckOut ? new Date(storeCheckOut) : null)
+  }, [storeCity, storeGuests, storeCheckIn, storeCheckOut])
   return (
     <div className="flex flex-col md:flex-row items-center p-2.5 gap-7 bg-[#F9FAFB] md:rounded-full rounded-xl w-auto md:w-full mx-2">
       <div className="grid grid-cols-2 gap-3 w-full md:flex md:flex-row md:gap-0 md:divide-x divide-[#E5E7EB] justify-between">
         {fields.map((field, index) => (
-          <Popover.Root key={index} open={openIndex === index} onOpenChange={(open) => setOpenIndex(open ? index : null)}>
+          <Popover.Root
+            key={index}
+            open={openIndex === index}
+            onOpenChange={(open) => setOpenIndex(open ? index : null)}
+          >
             <Popover.Trigger>
               <button
                 onClick={() => setOpenIndex(index)}

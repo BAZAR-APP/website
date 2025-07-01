@@ -58,7 +58,7 @@ const BookingCard: React.FC<BookingCardProps> = ({
       >
         <div className="w-full md:max-w-[311px] max-w-full flex-shrink-0">
           <Image
-            src={'https://picsum.photos/seed/lakeside/311/190'}
+            src={booking?.chalet?.photoId || 'https://picsum.photos/seed/lakeside/311/190'}
             alt={'alt'}
             className="w-full h-full max-h-[216px] object-cover rounded-[12px]"
             width={305}
@@ -70,7 +70,7 @@ const BookingCard: React.FC<BookingCardProps> = ({
           {' '}
           <div className="flex items-center flex-wrap gap-2 justify-between">
             <h3 className="lg:text-xl text-lg font-normal text-[#484A4C] truncate">
-              {'Title From API'}
+              {booking?.chalet?.title}
             </h3>
             <div className="lg:text-[18px] text-[16px] leading-[28px] font-medium text-[#484A4C]">
               {booking?.grandTotal} KWD
@@ -79,7 +79,7 @@ const BookingCard: React.FC<BookingCardProps> = ({
           <div className="flex items-center gap-2 flex-wrap">
             <Location
               icon={<MapPin className="w-4 h-4 text-[#8E8E93]" />}
-              text={'location from api'}
+              text={booking?.chalet?.city}
               className="text-[#8E8E93] text-sm"
             />
 
@@ -93,12 +93,12 @@ const BookingCard: React.FC<BookingCardProps> = ({
             <span className="text-[#9EA0A2] text-[8px] pr-1">&bull;</span>
             <span>{'booking type form api'}</span>{' '}
             <span className="text-[#9EA0A2] text-[8px] pr-1">&bull;</span>
-            <span>{'room from api'}</span> beds{' '}
+            <span>{booking?.chalet?.maxNoOfBeds}</span> beds{' '}
             <span className="text-[#9EA0A2] text-[8px] pr-1">&bull;</span>
-            <span>{'baths from api'}</span> baths &nbsp;
-            {['Fireplace', 'Hiking Trails', 'Pet Friendly'].map((amenity, index) => (
+            <span>{booking?.chalet?.noOfBaths}</span> baths &nbsp;
+            {booking?.chalet?.amenities.map((amenity, index) => (
               <span key={index} className="text-[#8E8E93] text-sm font-normal">
-                <span>{amenity}</span>
+                <span>{amenity?.title}</span>
                 {index < ['Fireplace', 'Hiking Trails', 'Pet Friendly'].length - 1 && (
                   <span className="mx-1 text-[#9EA0A2] text-[8px]">&bull;</span>
                 )}
@@ -108,7 +108,7 @@ const BookingCard: React.FC<BookingCardProps> = ({
           <div className="flex sm:items-center items-start gap-1">
             <Image src="/images/date.svg" width={20} height={20} alt="Date icon" />
             <p className="text-sm leading-[17px] text-[#9EA0A2] pt-[1.5px]">
-              From {format(new Date(), 'dd/MM/yyyy')} To {format(new Date(), 'dd/MM/yyyy')}
+              From {format(new Date(booking?.startDate), 'dd/MM/yyyy')} To {format(new Date(booking?.endDate), 'dd/MM/yyyy')}
             </p>
           </div>
           <button

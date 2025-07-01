@@ -12,6 +12,7 @@ import useToggle from '@/lib/hooks/useToggle'
 import ModalDialog from '@/components/ModalDialog/Dialog'
 import { useQueryBase } from '@/lib/axios'
 import { IBooking } from '@/lib/types/booking'
+import { format } from 'date-fns'
 
 // Define the interfaces for your data structure (these are correct)
 interface AddOn {
@@ -153,7 +154,7 @@ const DateSection: React.FC<{ dateRange: DateRange }> = React.memo(function Date
             CHECK-IN
           </label>
           <div className="text-[14px] leading-[17px] text-[#9EA0A2]">
-            {dateRange.from || 'Not set'}
+            {format(new Date(dateRange?.from), 'dd/MM/yyyy') || 'Not set'}
           </div>
         </div>
         <div className="px-0.5">
@@ -161,7 +162,7 @@ const DateSection: React.FC<{ dateRange: DateRange }> = React.memo(function Date
             CHECKOUT
           </label>
           <div className="text-[14px] leading-[17px] text-[#9EA0A2]">
-            {dateRange.to || 'Not set'}
+            {format(new Date(dateRange?.to), 'dd/MM/yyyy') || 'Not set'}
           </div>
         </div>
       </div>
@@ -326,7 +327,7 @@ export default function BookingDetailsPage() {
     <div className="2xl:px-22 xl:px-15 md:px-10 sm:px-7 px-3">
       <div className="lg:px-20 md:px-14 sm:px-10 px-8 mx-auto py-9">
         <h1 className="md:text-[39px] text-[24px] md:leading-[47px] leading-8 font-semibold text-[#19191A] sm:mb-2">
-          {bookingData.title}
+          {bookingDetails?.chalet?.title}
         </h1>
         <p className="mb-6 md:text-[20px] text-sm md:leading-[24px] leading-4 text-[#484A4C] sm:pt-0 pt-1">
           Track your stays, check-in details, and booking status here.
@@ -337,7 +338,7 @@ export default function BookingDetailsPage() {
             <div className="bg-white rounded-lg">
               <div className="lg:w-[470px] w-full pt-3">
                 <Image
-                  src={bookingData.imageUrl}
+                  src={bookingDetails?.chalet?.photoId || bookingData.imageUrl}
                   alt={bookingData.imageAlt}
                   width={500}
                   height={500}
@@ -348,7 +349,9 @@ export default function BookingDetailsPage() {
 
               <div className="space-y-4">
                 <div className="flex items-center flex-wrap gap-2 pt-3">
-                  <h3 className="text-[16px] font-medium text-[#19191A]">{bookingData.title}</h3>
+                  <h3 className="text-[16px] font-medium text-[#19191A]">
+                    {bookingDetails?.chalet?.title}
+                  </h3>
                   {bookingData.points > 0 && (
                     <div className="flex bg-[#E1F3FF] items-center gap-1 rounded py-1 px-1.5 max-w-[110px]">
                       <Image src="/images/Points.svg" width={16} height={16} alt="Points Icon" />
@@ -359,16 +362,16 @@ export default function BookingDetailsPage() {
 
                 <Location
                   icon={<MapPin className="w-4 h-4 text-[#8E8E93]" />}
-                  text={bookingData.location}
+                  text={bookingDetails?.chalet?.city}
                   className="text-[#8E8E93] text-sm"
                 />
 
                 <PropertyInfo
-                  guests={bookingData.guests}
+                  guests={String(bookingDetails?.noOfGuests)}
                   propertyType={bookingData.propertyType}
                   beds={bookingData.beds}
                   baths={bookingData.baths}
-                  amenities={Array.from(bookingData.amenities)}
+                  amenities={bookingDetails?.chalet?.amenities?.map((item) => item?.title)}
                 />
 
                 <div className="flex items-center gap-3 flex-wrap">
@@ -390,14 +393,19 @@ export default function BookingDetailsPage() {
               </div>
             </div>
 
-            <DateSection dateRange={bookingData.dateRange} />
+            <DateSection
+              dateRange={{
+                from: bookingDetails?.startDate,
+                to: bookingDetails?.endDate,
+              }}
+            />
             <AddOnsSection addOns={bookingData.addOns} />
             <ChaletRules />
           </div>
 
           <PaymentSection
             paymentStatus={bookingData.paymentStatus}
-            totalAmount={bookingData.totalAmount}
+            totalAmount={bookingDetails?.grandTotal}
             paidAmount={bookingData.paidAmount}
             remainingAmount={bookingData.remainingAmount}
             securityDeposit={bookingData.securityDeposit}

@@ -30,8 +30,8 @@ export default function Home() {
       <WhyBookSection />
       <DestinationSection />
       <div className="flex flex-col gap-[100px] md:px-16 max-md:px-5">
-        <ChaletsCard title={'Most Booked'} />
-        <ChaletsCard title={'Close to the Beach'} />
+        <ChaletsCard title={'Most Booked'} queryKey={'most-booked'} endpoint={'/chalets/mostBooked'}/>
+        <ChaletsCard title={'Close to the Beach'} queryKey={'sea-views'} endpoint={'/chalets/viewType'}/>
       </div>
       <RewardsSection />
       <ChatHero />
