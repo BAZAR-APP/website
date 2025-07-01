@@ -5,13 +5,25 @@ import Image from 'next/image'
 import Like from '../../public/images/Like.svg'
 import Checkbox from './CheckBox/CheckBox'
 import { Slider } from 'radix-ui'
-import { amenities as allAmenities } from '@/lib/constant'
 
 import { locations } from '@/lib/constant'
 import { useChaletFiltersStore } from '../../stores/useChaletFiltersStore'
+import { useQueryBase } from '@/lib/axios'
+import { Amenity } from '../../types/chalets'
 
 const FilterSidebar = () => {
   const { setFilters, city, amenities, resetFilters, minPrice, maxPrice } = useChaletFiltersStore()
+  const { data } = useQueryBase({
+    queryKey: ['amenities'],
+    url: `/amenity?language=${'en'}`,
+    cacheTime: 0,
+    staleTime: 0,
+  })
+  const amenitiesList = (data?.data?.amenities as Amenity[])?.map((item: Amenity) => ({
+    label: item?.title,
+    value: item?.id,
+  }))
+
   const [currentRange, setCurrentRange] = useState([minPrice, maxPrice])
 
   useEffect(() => {
@@ -99,16 +111,16 @@ const FilterSidebar = () => {
 
       <FilterSection title="Amenities">
         <div className="flex flex-col gap-1.5">
-          {allAmenities.map((amenity) => (
+          {amenitiesList?.map((amenity) => (
             <Checkbox
-              key={amenity}
-              label={amenity}
+              key={amenity?.value}
+              label={amenity?.label}
               className="text-sm text-gray-700 cursor-pointer"
-              checked={amenities.includes(amenity)}
+              checked={amenities.includes(amenity?.value)}
               onChange={(checked) => {
                 const updated = checked
-                  ? [...amenities, amenity]
-                  : amenities.filter((c) => c !== amenity)
+                  ? [...amenities, amenity?.value]
+                  : amenities.filter((c) => c !== amenity?.value)
 
                 setFilters({ amenities: updated })
               }}

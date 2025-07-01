@@ -1,8 +1,10 @@
 import { Heart, MapPin } from 'lucide-react'
 import Image from 'next/image'
 import Star from '../../public/images/Like.svg'
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Chalet } from '../../types/chalets'
+import api from '@/lib/axios'
+import { useQueryClient } from '@tanstack/react-query'
 
 interface PropertyCardProps {
   onClick?: () => void
@@ -11,9 +13,34 @@ interface PropertyCardProps {
 }
 
 const PropertyCard: React.FC<PropertyCardProps> = ({ onClick, chalet, isMember = false }) => {
+  const queryClient = useQueryClient()
+  const [isFavourite, setIsFavourite] = useState(chalet?.isFavourite || false)
+
+  useEffect(() => {
+    setIsFavourite(chalet?.isFavourite || false)
+  }, [chalet?.isFavourite])
+
+  const toggleFavourite = async () => {
+    const prevState = isFavourite
+    setIsFavourite(!prevState) // optimistic update
+
+    try {
+      await api.post('/favouriteChalets', {
+        chaletId: chalet?.id,
+        isFavourite: !prevState,
+      })
+      queryClient.invalidateQueries({ queryKey: ['chalets'] }) // get real data next time
+    } catch (error) {
+      setIsFavourite(prevState) // rollback on error
+    }
+  }
+
   return (
     <div
-      onClick={onClick}
+      onClick={(e) => {
+        e.stopPropagation()
+        onClick?.()
+      }}
       className="flex flex-col w-full max-w-[350px] p-4 gap-4 bg-[#F9FAFB] cursor-pointer rounded-[16px] mx-auto"
     >
       <div className="w-full h-[184px]">
@@ -29,10 +56,22 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ onClick, chalet, isMember =
       <div className="flex flex-col gap-4">
         <div className="flex items-center gap-1 justify-between">
           <h3 className="sm:text-xl text-lg font-normal text-[#484A4C]">{chalet?.title}</h3>
-          <button aria-label="Add to favorites">
-            <Heart className="w-5 h-5 text-[#29397E]" />
+          <button
+            aria-label="Add to favorites"
+            className="cursor-pointer"
+            onClick={(e) => {
+              e.stopPropagation()
+              toggleFavourite()
+            }}
+          >
+            {isFavourite ? (
+              <Heart className="w-5 h-5 text-[#29397E] fill-[#29397E]" />
+            ) : (
+              <Heart className="w-5 h-5 text-[#29397E]" />
+            )}
           </button>
         </div>
+
 
         <div className="flex flex-wrap items-center text-sm text-[#8E8E93] gap-x-2">
           <MapPin className="w-4 h-4" />

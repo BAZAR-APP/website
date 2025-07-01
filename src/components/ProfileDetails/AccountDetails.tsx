@@ -204,9 +204,9 @@ const AccountDetails = () => {
       >
         <ProfileOTPModal>
           <PhoneOtpVerification
-            userId={user?.user?.id}
+            userId={user?.user?.id || ''}
             handleSuccess={verifyPhoneModel.close}
-            phone={user?.user?.phoneNumber}
+            phone={user?.user?.phoneNumber || ''}
           />
         </ProfileOTPModal>
       </ModalDialog>

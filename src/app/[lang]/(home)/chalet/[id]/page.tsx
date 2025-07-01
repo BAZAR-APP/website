@@ -134,7 +134,7 @@ export default async function ChaletDetailsPage({
           location={data?.city || ''}
           rating={5}
           reviewCount={5}
-          images={data?.galleryPhotoIds || ['']}
+          images={data?.galleryPhotoURLs || ['']}
         />
 
         <div className="py-6 xl:px-22 lg:px-18 md:px-14 px-10">
@@ -158,7 +158,7 @@ export default async function ChaletDetailsPage({
               />
               <SelectablePlans subscriptions={data?.subscriptions || []} />
               <div className="border-b border-[#E5E7EB]">
-                {/* <AmenitiesList amenities={data?.amenities || []} /> */}
+                <AmenitiesList amenities={data?.amenities || []} />
                 <h2 className="md:text-[25px] text-xl font-semibold leading-[32px] text-[#19191A] mt-7">
                   Where you'll sleep
                 </h2>
