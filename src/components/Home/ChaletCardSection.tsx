@@ -1,8 +1,5 @@
 'use client'
-
 import { PropertyCard } from '@/components'
-import { useEffect, useState } from 'react'
-import { useChaletFiltersStore } from '../../../stores/useChaletFiltersStore'
 import { useChaletsQuery } from '@/lib/hooks/api/useChaletsQuery'
 import { Chalet } from '../../../types/chalets'
 
@@ -11,15 +8,7 @@ interface ChaletsCardProps {
 }
 
 const ChaletsCard: React.FC<ChaletsCardProps> = ({ title }) => {
-  const [mount, setMount] = useState(false)
-  const { setFilters } = useChaletFiltersStore()
-
-  useEffect(() => {
-    setFilters({ viewType: ['sea view'] })
-    setMount(true)
-  }, [setFilters])
-
-  const { data } = useChaletsQuery(mount)
+  const { data } = useChaletsQuery()
   if (!data?.data?.length) return null
   return (
     <section className="flex w-full flex-col items-center box-border bg-white gap-24 px-0 py-0 max-md:gap-16 max-md:py-16 max-sm:gap-12 max-sm:py-8">

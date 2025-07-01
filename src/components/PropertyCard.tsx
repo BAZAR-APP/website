@@ -1,3 +1,4 @@
+"use client"
 import { Heart, MapPin } from 'lucide-react'
 import Image from 'next/image'
 import Star from '../../public/images/Like.svg'

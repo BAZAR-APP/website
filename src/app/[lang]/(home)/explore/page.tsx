@@ -6,7 +6,7 @@ import SearchHeader from '@/components/SearchHeader'
 import SearchResults from '@/components/SearchResults'
 import { Grid } from '@radix-ui/themes'
 import { useRouter } from 'next/navigation'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { useChaletsQuery } from '@/lib/hooks/api/useChaletsQuery'
 import { PropertyCardSkeleton } from '@/components/Skeletons/chaletsCardSkeleton'
 import { Chalet } from '../../../../../types/chalets'
@@ -16,7 +16,6 @@ import { useChaletFiltersStore } from '../../../../../stores/useChaletFiltersSto
 const ExploreChalets = () => {
   const router = useRouter()
   const [sortBy, setSortBy] = useState('recommended')
-  const [mount, setMount] = useState(false)
   const { page, setFilters } = useChaletFiltersStore()
 
   const handlePageChange = (newPage: number) => {
@@ -24,12 +23,7 @@ const ExploreChalets = () => {
   }
   const { resetBooking } = useBookingStore()
 
-  useEffect(() => {
-    setFilters({ viewType: [''] })
-    setMount(true)
-  }, [setFilters])
-
-  const { data, isLoading } = useChaletsQuery(mount)
+  const { data, isLoading } = useChaletsQuery()
   const totalPages = Math.ceil((data?.total || 0) / (data?.limit || 0))
 
   return (
