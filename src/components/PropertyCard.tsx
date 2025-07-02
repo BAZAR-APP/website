@@ -42,7 +42,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ onClick, chalet, isMember =
         e.stopPropagation()
         onClick?.()
       }}
-      className="flex flex-col w-full max-w-[350px] p-4 gap-4 bg-[#F9FAFB] cursor-pointer rounded-[16px] mx-auto"
+      className="flex flex-col w-full min-w-full sm:min-w-[300px] max-w-[350px] p-4 gap-4 bg-[#F9FAFB] cursor-pointer rounded-[16px] mx-auto"
     >
       <div className="w-full h-[184px]">
         <Image
