@@ -23,6 +23,7 @@ type CommonInputProps = {
   | 'url'
   | 'week'
   name?: string
+  autoComplete?: string
   className?: string
   icon?: ReactNode
   prefix?: string
@@ -45,6 +46,7 @@ const CommonInput: React.FC<CommonInputProps> = ({
   readonly = false,
   error = false,
   errorMessage = '',
+  autoComplete = 'off',
   maxLength,
 }) => {
   const inputId = name || `input-${label?.toLowerCase().replace(/\s+/g, '-')}`
@@ -77,7 +79,7 @@ const CommonInput: React.FC<CommonInputProps> = ({
           readOnly={readonly}
           className="w-full bg-transparent outline-none text-sm text-[#484A4C] font-normal placeholder:text-[#484A4C] hover:outline-none hover:ring-0 focus:outline-none focus:ring-0"
           maxLength={maxLength}
-          autoComplete="off"
+          autoComplete={autoComplete}
         />
       </div>
       {error && errorMessage && <p className="text-red-500 text-[12px] transition-all">{errorMessage}</p>}

@@ -127,6 +127,7 @@ const SignUp = () => {
               className={'bg-[#F9FAFB]'}
               value={watch('password')}
               onChange={handlePasswordChange}
+              autoComplete='new-password'
               type="password"
               error={!!errors?.password}
               errorMessage={errors?.password?.message}

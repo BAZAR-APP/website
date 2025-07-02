@@ -92,6 +92,7 @@ const Login = () => {
 
         <form
           onSubmit={handleSubmit(onSubmit)}
+          autoComplete='off'
           className="flex flex-col min-[1440px]:gap-6 gap-[16px]"
         >
           <div>
@@ -106,6 +107,7 @@ const Login = () => {
               }
               type="text"
               label="Phone"
+              autoComplete='off'
               value={watch('phone')}
               onChange={handlePhoneChange}
               maxLength={8}
@@ -118,6 +120,7 @@ const Login = () => {
             <CommonInput
               name="password"
               label="Password"
+              autoComplete='new-password'
               className={'bg-[#F9FAFB]'}
               value={watch('password')}
               onChange={handlePasswordChange}

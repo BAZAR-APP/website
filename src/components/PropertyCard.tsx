@@ -128,9 +128,9 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ onClick, chalet, isMember =
                 </>
               ) : (
                 <>
-                  <span className="sm:text-[18px] text-sm">{chalet?.perHourCost} KD</span>
+                  <span className="sm:text-[18px] text-sm">{chalet?.perNightCost} KD</span>
                   <span className="text-sm leading-4 font-normal text-[#484A4C]">
-                    /{chalet?.perHourCost}
+                    /{chalet?.perNightCost}
                   </span>
                 </>
               )}

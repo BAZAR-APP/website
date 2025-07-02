@@ -32,9 +32,9 @@ const ExploreChalets = () => {
         Explore Chalets
       </h2>
 
-      <div className="flex lg:flex-row flex-col py-6 xxl-gap">
+      <div className="flex lg:flex-row flex-col py-6 gap-1 xxl-gap">
         <FilterSidebar />
-        <div className="">
+        <div className="full-width">
           <SearchHeader />
           <SearchResults
             location="Al Khobar"

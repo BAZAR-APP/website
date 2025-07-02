@@ -183,7 +183,10 @@ html body * {
 .font-tenor {
   font-family: var(--font-tenor-sans), serif !important;
 }
-
+.full-width {
+  width: -webkit-fill-available !important;
+  width: fill-available !important;
+}
 @layer utilities {
   @media (min-width: 1640px) {
     .w-500px-1440 {
@@ -212,8 +215,10 @@ html body * {
   max-width: 1930px;
 }
 
-.rt-BaseCheckboxRoot:where(.rt-variant-surface):where([data-state='checked'],
-  [data-state='indeterminate']):before {
+.rt-BaseCheckboxRoot:where(.rt-variant-surface):where(
+    [data-state='checked'],
+    [data-state='indeterminate']
+  ):before {
   background-color: var(--primary-blue) !important;
   cursor: pointer !important;
 }
@@ -235,11 +240,11 @@ input::-webkit-inner-spin-button {
   margin: 0;
 }
 .rt-BaseCheckboxRoot.rt-variant-surface[data-state='unchecked']:before {
-  background-color: #F9FAFB !important;
-  border-color: #D1D5DB !important;
+  background-color: #f9fafb !important;
+  border-color: #d1d5db !important;
   cursor: pointer !important;
 }
 
-input[type=number] {
+input[type='number'] {
   -moz-appearance: textfield;
 }
