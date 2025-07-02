@@ -338,7 +338,7 @@ export default function BookingDetailsPage() {
             <div className="bg-white rounded-lg">
               <div className="lg:w-[470px] w-full pt-3">
                 <Image
-                  src={bookingDetails?.chalet?.photoId || bookingData.imageUrl}
+                  src={bookingDetails?.chalet?.photoURL || bookingData.imageUrl}
                   alt={bookingData.imageAlt}
                   width={500}
                   height={500}

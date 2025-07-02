@@ -7,15 +7,11 @@ import { PropertyCardSkeleton } from '../Skeletons/chaletsCardSkeleton'
 const ProfileChaletListing = () => {
   const { data: res, isLoading } = useQueryBase({
     queryKey: ['favouriteChalets'],
-    url: '/favouriteChalets/user',
+    url: '/favouriteChalets/me',
   })
+  console.log(res)
 
-  const chalets = res?.data
-    ?.filter((item: any) => item?.isFavourite)
-    .map((item: any) => ({
-      ...item?.chalet,
-      isFavourite: item?.isFavourite,
-    })) as unknown as Chalet[]
+  const chalets = res?.data?.data as Chalet[]
 
   return (
     <>
