@@ -45,6 +45,7 @@ export interface Chalet {
   area: Number
   areaUnit: String
   galleryPhotoURLs: string[]
+  photoURL: string
 }
 
 export interface Amenity {

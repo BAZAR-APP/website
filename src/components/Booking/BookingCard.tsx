@@ -58,7 +58,7 @@ const BookingCard: React.FC<BookingCardProps> = ({
       >
         <div className="w-full md:max-w-[311px] max-w-full flex-shrink-0">
           <Image
-            src={booking?.chalet?.photoId || 'https://picsum.photos/seed/lakeside/311/190'}
+            src={booking?.chalet?.photoURL || 'https://picsum.photos/seed/lakeside/311/190'}
             alt={'alt'}
             className="w-full h-full max-h-[216px] object-cover rounded-[12px]"
             width={305}
