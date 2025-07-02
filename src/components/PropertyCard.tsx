@@ -103,16 +103,15 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ onClick, chalet, isMember =
             </span>
           ))} */}
         </div>
-        <div className="flex items-center justify-between flex-nowrap">
+        <div className="flex items-center justify-between">
+          {!isMember && (
+            <div className="flex items-center sm:flex-nowrap flex-wrap text-sm text-gray-700">
+              <span className="mr-1">{5}</span>
+              <Image src={Star} alt="Star" width={16} height={16} />
+              <span className="text-gray-500 sm:ml-1">({200} reviews)</span>
+            </div>
+          )}
           <div className="flex items-center justify-between ">
-            {!isMember && (
-              <div className="flex items-center sm:flex-nowrap flex-wrap text-sm text-gray-700">
-                <span className="mr-1">{5}</span>
-                <Image src={Star} alt="Star" width={16} height={16} />
-                <span className="text-gray-500 sm:ml-1">({200} reviews)</span>
-              </div>
-            )}
-
             <div className="flex items-center font-medium text-[16px] leading-7 text-[#484A4C]">
               {isMember ? (
                 <>

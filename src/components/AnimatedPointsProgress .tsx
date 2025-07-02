@@ -52,7 +52,7 @@ export const AnimatedPointsProgress = ({
   const strokeDashoffset = circumference - (animatedProgress / 100) * circumference
 
   return (
-    <div className="flex items-center justify-center">
+    <div className="flex items-center justify-center mx-auto">
       <div className="relative w-[160px] h-[160px] flex items-center justify-center">
         {/* Background Circle */}
         <svg className="absolute inset-0 w-full h-full transform -rotate-90" viewBox="0 0 200 200">

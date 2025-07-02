@@ -13,7 +13,7 @@ interface PaginationProps {
 const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPageChange }) => {
 
   const navButtonStyles =
-    'flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed'
+    'flex items-center px-4 py-2 text-sm cursor-pointer font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed'
 
   return (
     <nav className="flex items-center justify-between mt-8 flex-wrap gap-2 sm:px-5 mb-3" aria-label="Pagination">
@@ -40,8 +40,8 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
               onClick={() => onPageChange(page)}
               aria-current={isActive ? 'page' : undefined}
               className={`w-[40px] h-[40px] text-sm font-medium flex items-center justify-center ${isActive
-                ? 'bg-[#E1F3FF] text-[#000] rounded-full'
-                : 'bg-white text-gray-700 rounded-[8px] border border-gray-300 hover:bg-gray-50' // inactive page
+                ? 'bg-[#E1F3FF] text-[#000] rounded-full cursor-pointer'
+                : 'bg-white text-gray-700 rounded-full border cursor-pointer border-[#E1F3FF] hover:bg-gray-50' // inactive page
                 }`}
             >
               {page}
