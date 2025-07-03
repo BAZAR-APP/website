@@ -58,6 +58,7 @@ interface TierInfo {
   title: string
   message: string
   icon: string
+  iconURL?: string
 }
 
 export const getTierInfo = (tier: string, lang: 'en' | 'ar' = 'en'): TierInfo => {
@@ -108,7 +109,7 @@ export const getTierInfo = (tier: string, lang: 'en' | 'ar' = 'en'): TierInfo =>
     unknown: {
       en: {
         name: 'Unknown',
-        range: '',
+        range: '0',
         title: 'Unknown Tier',
         message: 'Start earning to unlock rewards!',
       },

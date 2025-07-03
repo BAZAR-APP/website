@@ -36,6 +36,15 @@ const BuyPointsDialog: React.FC<BuyPointsDialogProps> = ({
     setCustom(true)
     setSelectedPackageLoyaltyPoints(null)
   }
+  const tierLimits = {
+    platinum: 800000,
+    gold: 2700000,
+    diamond: 3600000,
+  }
+  type TierKey = keyof typeof tierLimits
+  const tierKey = currentUserTier?.toLowerCase() as TierKey
+  const maxPointsAllowed = tierLimits[tierKey] ?? 100000
+  const minPointsAllowed = 1
 
   const { data } = useQueryBase({
     queryKey: ['loyaltyPointsPackages'],
@@ -95,15 +104,20 @@ const BuyPointsDialog: React.FC<BuyPointsDialogProps> = ({
           <div className="relative w-full my-2.5">
             <CommonInput
               type="text"
-              placeholder="Enter points amount..."
+              placeholder={`Enter between ${minPointsAllowed.toLocaleString()} - ${maxPointsAllowed.toLocaleString()} points`}
+              min={minPointsAllowed}
+              maxLength={maxPointsAllowed.toString().length}
               className="!w-full relative bg-[#F3F4F6] border border-[#D0D5DD] !rounded-md !text-sm !h-[42px]"
-              onChange={(value) => {
+              onChange={(e) => {
+                const raw = e.target.value.replace(/[^\d]/g, '') 
+                const value = Math.min(+raw, maxPointsAllowed)
+                const finalValue = value < minPointsAllowed ? minPointsAllowed : value
                 setSelectedPackageLoyaltyPoints({
                   price: calculateCustomLoyltyPointsPrice(
-                    +value?.target?.value,
-                    currentUserTier?.toLocaleLowerCase(),
+                    finalValue,
+                    currentUserTier?.toLowerCase(),
                   ),
-                  points: +value?.target?.value,
+                  points: finalValue,
                   isCustom: true,
                 })
               }}

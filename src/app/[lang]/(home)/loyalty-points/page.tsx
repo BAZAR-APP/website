@@ -59,7 +59,7 @@ const LoyaltyPoints = () => {
           <div className="flex items-center justify-start flex-wrap my-8 gap-5">
             <EarnedPointsCard
               currentPoints={data?.data?.totalPoints || 0}
-              maxPoints={30000}
+              maxPoints={10000000}
               page={page}
               tier={data?.data?.userTier}
               lang={lang}

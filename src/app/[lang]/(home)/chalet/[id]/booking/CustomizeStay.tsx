@@ -19,6 +19,7 @@ import {
   Clapperboard,
   SwordIcon,
 } from 'lucide-react'
+import Image from 'next/image'
 import { useFormContext } from 'react-hook-form'
 
 const services = [
@@ -101,7 +102,9 @@ export default function CustomizeStay({ onNext }: CustomizeStayProps) {
             {selectedAddons.map((item, index) => (
               <li key={item?.title + index} className="flex justify-between items-center">
                 <div className="flex items-center gap-2">
-                  <div dangerouslySetInnerHTML={{ __html: item.iconPhotoId }} />
+                  {item?.iconPhotoUrl && (
+                    <Image src={item?.iconPhotoUrl ?? ''} width={20} height={12} alt="icon" />
+                  )}
                   <span>{item?.title}</span>
                 </div>
                 <span>{item?.costPerNight * (Number(item?.selectedQuantity) ?? 1)} KWD</span>

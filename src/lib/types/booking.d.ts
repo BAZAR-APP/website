@@ -14,6 +14,7 @@ export type Customization = {
   costPerNight: number
   iconTitle: string | null
   iconPhotoId: string
+  iconPhotoUrl: string | null
   is24HourNotice: boolean
   customizationCategoryId: string
   createdAt: string
