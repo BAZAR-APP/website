@@ -73,7 +73,6 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ onClick, chalet, isMember =
           </button>
         </div>
 
-
         <div className="flex flex-wrap items-center text-sm text-[#8E8E93] gap-x-2">
           <MapPin className="w-4 h-4" />
           <span>{chalet?.city}</span>
@@ -87,21 +86,21 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ onClick, chalet, isMember =
         </div>
 
         <div className="text-sm text-[#8E8E93] leading-5">
-          {chalet?.maxNoOfGuests}{' '}
+          {chalet?.maxNoOfGuests} guests
           <span className="text-[#9EA0A2] font-normal text-[9px] pr-1">&bull;</span>
-          Home <span className="text-[#9EA0A2] font-normal text-[9px] pr-1">&bull;</span>
-          {chalet?.maxNoOfBeds}{' '}
+          Entire Home <span className="text-[#9EA0A2] font-normal text-[9px] pr-1">&bull;</span>
+          {chalet?.maxNoOfBeds} beds
           <span className="text-[#9EA0A2] font-normal text-[9px] pr-1">&bull;</span>
-          {chalet?.noOfBaths}
+          {chalet?.noOfBaths} baths
           <br />
-          {/* {chalet?.amenities.map((amenity, index) => (
-            <span key={index} className="text-[#8E8E93] text-sm font-normal">
-              {amenity}
-              {index < amenities.length - 1 && (
+          {chalet?.amenities?.map((amenity, index) => (
+            <span key={amenity.id} className="text-[#8E8E93] text-sm font-normal">
+              {amenity.title}
+              {index < chalet.amenities.length - 1 && (
                 <span className="mx-1 text-[#9EA0A2] font-normal text-[9px]">&bull;</span>
               )}
             </span>
-          ))} */}
+          ))}
         </div>
         <div className="flex items-center justify-between">
           {!isMember && (

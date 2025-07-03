@@ -106,7 +106,7 @@ const PaymentConfirmed = () => {
       <h3 className="lg:text-[39px] md:text-3xl sm:text-2xl text-xl font-semibold py-1 leading-[47px] text-[#19191A] text-center md:pt-6 pt-3 w-full">
         Payment Confirmed
       </h3>
-      <p className="lg:text-[20px] md:text-[16px] text-sm md:leading-[28px] lg:leading-[34px] leading-5 py-1 text-[#484A4C] text-center">
+      <div className="lg:text-[20px] md:text-[16px] text-sm md:leading-[28px] lg:leading-[34px] leading-5 py-1 text-[#484A4C] text-center">
         {bookingConfirmed ? (
           'Your booking is complete. Thank you for choosing us!'
         ) : (
@@ -115,7 +115,7 @@ const PaymentConfirmed = () => {
             You earned {data.points} points. Track and redeem them in your profile anytime!
           </>
         )}
-      </p>
+      </div>
       <div className="w-full max-w-[540px]">
         <Image
           src={data.imageUrl}
