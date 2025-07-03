@@ -15,9 +15,10 @@ const Notifications = () => {
   const [visibleCount, setVisibleCount] = useState(10)
   const [, setSelectedNotification] = useState<NotificationData | null>(null)
   const { data } = useQueryBase({
-    queryKey: ['notificationTypes'],
-    url: `/notificationTypes`,
+    queryKey: ['messages'],
+    url: `/messages`,
   })
+  console.log(data)
 
   const handleTabChange = (tab: NotificationTab) => {
     setActiveTab(tab)
@@ -47,7 +48,6 @@ const Notifications = () => {
 
   const handleNotificationClick = (notification: NotificationData) => {
     setSelectedNotification(notification)
-    console.log('Notification clicked:', notification)
   }
   const { isOpen, toggle } = useToggle(false)
   return (
@@ -126,7 +126,7 @@ const Notifications = () => {
           </div>
         </section>
       </main>
-      <NotificationSettingsDialog isOpen={isOpen} setIsOpen={toggle} />
+      {isOpen && <NotificationSettingsDialog isOpen={isOpen} setIsOpen={toggle} />}
     </>
   )
 }
