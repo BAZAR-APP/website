@@ -28,7 +28,7 @@ const AmenitiesDialog: React.FC<AmenitiesDialogProps> = ({ isOpen, setIsOpen, am
         {amenities?.map((amenity, index) => {
           return (
             <div key={index} className="flex items-center gap-3">
-              <Image src={amenity?.iconPhotoId} width={20} height={12} alt={amenity?.title} />
+              <Image src={amenity?.iconPhotoUrl || ''} width={20} height={12} alt={amenity?.title ?? 'Amenity icon'} />
               <span>{capitalizeWords(amenity.title)}</span>
             </div>
           )

@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import React from 'react'
 
 interface AddOnCardProps {
@@ -22,7 +23,7 @@ export const AddOnCard: React.FC<AddOnCardProps> = ({
   return (
     <div className="flex flex-col items-start gap-3 self-stretch relative bg-gray-50 px-6 py-4 rounded-2xl">
       <div className="flex items-center gap-3 relative px-0 py-1">
-        <div dangerouslySetInnerHTML={{ __html: icon }} />
+        {icon && <Image src={icon} width={20} height={12} alt="icon" />}
         <div className="text-[#19191A] text-base font-normal relative">{label}</div>
         {is24HourNotice && (
           <div className="text-[#29397E] text-center text-sm font-normal relative gap-0.5 bg-[#E1F3FF] px-1.5 py-1 rounded-md">

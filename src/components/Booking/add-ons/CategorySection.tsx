@@ -55,7 +55,7 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
                 className="flex flex-col justify-center items-start gap-6 self-stretch relative"
               >
                 <AddOnCard
-                  icon={item?.iconPhotoId}
+                  icon={item?.iconPhotoUrl ?? ''}
                   label={item?.title}
                   price={item?.costPerNight}
                   is24HourNotice={item?.is24HourNotice}

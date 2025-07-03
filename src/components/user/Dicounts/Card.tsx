@@ -4,6 +4,7 @@ import { useParams } from 'next/navigation'
 import React, { FC } from 'react'
 import { Locale } from '../../../../i18n.config'
 import { LockIcon } from 'lucide-react'
+import clsx from 'clsx'
 
 const renderIcons = {
   discount: '/images/discount-shape.svg',
@@ -27,13 +28,13 @@ const DiscountCard: FC<{
         disabled ? 'opacity-50 pointer-events-none' : ''
       }`}
     >
-      {disabled && (
-        <div className="absolute inset-0 bg-[#00000] flex items-center justify-center rounded-xl">
-          <LockIcon />
-        </div>
-      )}
-
-      <div className="mb-3">
+      <div
+        className={clsx(
+          'mb-3 relative',
+          disabled &&
+            'rounded-[20px] flex justify-center bg-black/50 backdrop-blur-sm z-[2] w-full pointer-events-none',
+        )}
+      >
         <Image
           src={renderIcons[value]}
           alt={title}
@@ -41,6 +42,11 @@ const DiscountCard: FC<{
           height={160}
           className="w-[122px] h-[122px]"
         />
+        {disabled && (
+          <div className="absolute inset-0 bg-[#00000] flex items-center justify-center rounded-xl">
+            <LockIcon />
+          </div>
+        )}
       </div>
 
       <p className="self-start text-[20px] leading-6 text-[#19191A]">{title}</p>

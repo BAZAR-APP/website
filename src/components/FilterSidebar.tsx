@@ -19,10 +19,12 @@ const FilterSidebar = () => {
     cacheTime: 0,
     staleTime: 0,
   })
-  const amenitiesList = (data?.data?.amenities as Amenity[])?.map((item: Amenity) => ({
-    label: item?.title,
-    value: item?.id,
-  }))
+  const amenitiesList = Array.isArray(data?.data?.data)
+    ? data.data.data.map((item: Amenity) => ({
+        label: item.title,
+        value: item.id,
+      }))
+    : []
 
   const [currentRange, setCurrentRange] = useState([minPrice, maxPrice])
 
@@ -111,7 +113,7 @@ const FilterSidebar = () => {
 
       <FilterSection title="Amenities">
         <div className="flex flex-col gap-1.5">
-          {amenitiesList?.map((amenity) => (
+          {amenitiesList?.map((amenity: { label: string; value: string }) => (
             <Checkbox
               key={amenity?.value}
               label={amenity?.label}

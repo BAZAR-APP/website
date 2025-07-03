@@ -23,8 +23,8 @@ const Payment = () => {
 
   const methods = useForm()
   const router = useRouter()
-
-  const totalAmount = '17 kd'
+  const taxesAmount = 0
+  const totalAmount = (selectedPackageLoyaltyPoints?.price ?? 0) + taxesAmount
 
   const buyPoints = async () => {
     setLoading(true)
@@ -82,10 +82,13 @@ const Payment = () => {
                 <span>{selectedPackageLoyaltyPoints?.points} Points</span>
                 <span>{selectedPackageLoyaltyPoints?.price} KD</span>
               </div>
-
+              <div className="text-[16px] leading-[19px] text-[#19191A] flex items-center w-full justify-between">
+                <span>Taxes and Fees</span>
+                <span>{taxesAmount} KD</span>
+              </div>
               <div className="border-t w-full pt-4 mt-2 flex justify-between sm:text-[16px] text-sm leading-[24px] font-medium text-[#19191A]">
                 <span>Total</span>
-                <span>{totalAmount}</span>
+                <span>{totalAmount} KD</span>
               </div>
 
               <Button className="w-full cursor-pointer" onClick={buyPoints} disabled={loading}>

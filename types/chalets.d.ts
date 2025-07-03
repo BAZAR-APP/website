@@ -53,7 +53,8 @@ export interface Amenity {
   title: string
   hasCustomizedIcon: boolean
   iconTitle: string | null
-  iconPhotoId: string
+  iconPhotoId?: string
+  iconPhotoUrl?: string | null
   status: string
 }
 

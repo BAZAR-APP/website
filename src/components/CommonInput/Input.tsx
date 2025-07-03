@@ -3,7 +3,7 @@
 import { ReactNode } from 'react'
 import { Text, Flex } from '@radix-ui/themes'
 
-type CommonInputProps = {
+type CommonInputProps = React.InputHTMLAttributes<HTMLInputElement> & {
   label?: string
   placeholder?: string
   value?: string
@@ -48,6 +48,7 @@ const CommonInput: React.FC<CommonInputProps> = ({
   errorMessage = '',
   autoComplete = 'off',
   maxLength,
+  ...rest
 }) => {
   const inputId = name || `input-${label?.toLowerCase().replace(/\s+/g, '-')}`
 
@@ -80,6 +81,7 @@ const CommonInput: React.FC<CommonInputProps> = ({
           className="w-full bg-transparent outline-none text-sm text-[#484A4C] font-normal placeholder:text-[#484A4C] hover:outline-none hover:ring-0 focus:outline-none focus:ring-0"
           maxLength={maxLength}
           autoComplete={autoComplete}
+          {...rest}
         />
       </div>
       {error && errorMessage && <p className="text-red-500 text-[12px] transition-all">{errorMessage}</p>}
