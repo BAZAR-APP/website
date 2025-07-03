@@ -1,7 +1,7 @@
 'use client'
 import { Button } from '@/components'
 import { NotificationTab, NotificationTabs } from '@/components/Notification/NotificationTabs'
-import { NotificationItem, NotificationData } from '@/components/Notification/NotificationItem'
+import { NotificationItem } from '@/components/Notification/NotificationItem'
 import Image from 'next/image'
 import { ChevronRight } from 'lucide-react'
 import React, { useState, useMemo } from 'react'
@@ -11,13 +11,13 @@ import NotificationSettingsDialog from '@/components/Notification/NotificationSe
 import { useQueryBase } from '@/lib/axios'
 import { NotificationMessage, NotificationResponse } from '@/lib/types/notification'
 import { useRouter } from 'next/navigation'
+import { Skeleton } from '@/components/Skeletons/Skeleton'
 
 const Notifications = () => {
   const [activeTab, setActiveTab] = useState<NotificationTab>('all')
   const [visibleCount, setVisibleCount] = useState(10)
   const router = useRouter()
-  const [, setSelectedNotification] = useState<NotificationMessage | null>(null)
-  const { data } = useQueryBase({
+  const { data, isLoading } = useQueryBase({
     queryKey: ['messages'],
     url: `/messages`,
     staleTime: 0,
@@ -56,6 +56,7 @@ const Notifications = () => {
       router.push(`/my-bookings/96122adb-031f-4bac-91a4-bc370ca6f3ed/`)
     }
   }
+  
   const { isOpen, toggle } = useToggle(false)
   return (
     <>
@@ -83,55 +84,76 @@ const Notifications = () => {
 
         <NotificationTabs activeTab={activeTab} onTabChange={handleTabChange} />
 
-        <section
-          className="flex w-full gap-10 text-sm font-normal mt-10 max-md:max-w-full"
-          role="tabpanel"
-          id={`${activeTab}-panel`}
-          aria-labelledby={`${activeTab}-tab`}
-        >
-          <div className="justify-center items-stretch border-[color:var(--Grays-Gray-6,#F2F2F7)] relative flex min-w-60 w-[481px] flex-col bg-[#F9FAFB] pl-4 pr-2.5 py-2 rounded-2xl border-0 border-solid">
-            <div className="space-y-2">
-              {notifications?.messages.map((notification: NotificationMessage, index) => (
-                <React.Fragment key={notification.id}>
-                  <NotificationItem notification={notification} onClick={handleNotificationClick} />
-                  {index < notifications?.messages.length - 1 && (
-                    <div className="border-gray-100 border bg-[#F3F4F6] min-h-px w-full border-solid" />
-                  )}
-                </React.Fragment>
-              ))}
-            </div>
-
-            {hasMore && (
-              <Button
-                intent="transperent"
-                onClick={handleLoadMore}
-                className="flex items-center justify-start !px-0 !py-1.5 gap-1 text-base text-[#19191A] font-medium underline underline-offset-2 mt-2"
-                aria-label={`Load more notifications. Currently showing ${visibleCount} of ${filteredNotifications.length}`}
+        {isLoading ? (
+          <div className="flex flex-col space-y-6">
+            {[...Array(3)].map((_, index) => (
+              <div
+                key={index}
+                className="flex min-w-60 w-[481px] flex-col gap-6 bg-gray-50 p-6 rounded-2xl"
               >
-                <span className="text-[#19191A]">Show more Notifications</span>
-                <ChevronRight className="w-3 h-3" strokeWidth={3} />
-              </Button>
-            )}
-
-            {filteredNotifications.length === 0 && (
-              <div className="text-center py-8">
-                <Image
-                  src={'/images/NotificationNon.svg'}
-                  width={120}
-                  height={120}
-                  alt="Notification icon"
-                  className="text-center mx-auto"
-                />
-                <h3 className="text-[#19191A] text-[25px] leading-[32px] font-semibold text-center pt-6 pb-2.5">
-                  No Notifications Yet
-                </h3>
-                <p className="font-normal text-[14px] leading-[17px] text-[#484A4C] text-center">
-                  Stay tuned — your updates will appear <br /> here.
-                </p>
+                <div className="flex flex-col gap-4 w-full">
+                  <div className="flex flex-col gap-3 w-full">
+                    <Skeleton className="h-4 w-full" />
+                    <Skeleton className="h-4 w-4/5" />
+                  </div>
+                </div>
               </div>
-            )}
+            ))}
           </div>
-        </section>
+        ) : (
+          <section
+            className="flex w-full gap-10 text-sm font-normal mt-10 max-md:max-w-full"
+            role="tabpanel"
+            id={`${activeTab}-panel`}
+            aria-labelledby={`${activeTab}-tab`}
+          >
+            <div className="justify-center items-stretch border-[color:var(--Grays-Gray-6,#F2F2F7)] relative flex min-w-60 w-[481px] flex-col bg-[#F9FAFB] pl-4 pr-2.5 py-2 rounded-2xl border-0 border-solid">
+              <div className="space-y-2">
+                {notifications?.messages.map((notification: NotificationMessage, index) => (
+                  <React.Fragment key={notification.id}>
+                    <NotificationItem
+                      notification={notification}
+                      onClick={handleNotificationClick}
+                    />
+                    {index < notifications?.messages.length - 1 && (
+                      <div className="border-gray-100 border bg-[#F3F4F6] min-h-px w-full border-solid" />
+                    )}
+                  </React.Fragment>
+                ))}
+              </div>
+
+              {hasMore && (
+                <Button
+                  intent="transperent"
+                  onClick={handleLoadMore}
+                  className="flex items-center justify-start !px-0 !py-1.5 gap-1 text-base text-[#19191A] font-medium underline underline-offset-2 mt-2"
+                  aria-label={`Load more notifications. Currently showing ${visibleCount} of ${filteredNotifications.length}`}
+                >
+                  <span className="text-[#19191A]">Show more Notifications</span>
+                  <ChevronRight className="w-3 h-3" strokeWidth={3} />
+                </Button>
+              )}
+
+              {filteredNotifications.length === 0 && (
+                <div className="text-center py-8">
+                  <Image
+                    src={'/images/NotificationNon.svg'}
+                    width={120}
+                    height={120}
+                    alt="Notification icon"
+                    className="text-center mx-auto"
+                  />
+                  <h3 className="text-[#19191A] text-[25px] leading-[32px] font-semibold text-center pt-6 pb-2.5">
+                    No Notifications Yet
+                  </h3>
+                  <p className="font-normal text-[14px] leading-[17px] text-[#484A4C] text-center">
+                    Stay tuned — your updates will appear <br /> here.
+                  </p>
+                </div>
+              )}
+            </div>
+          </section>
+        )}
       </main>
       {isOpen && <NotificationSettingsDialog isOpen={isOpen} setIsOpen={toggle} />}
     </>
