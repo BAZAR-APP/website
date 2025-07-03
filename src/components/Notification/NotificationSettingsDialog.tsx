@@ -1,11 +1,35 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import ModalDialog from '../ModalDialog/Dialog'
 import { Switch } from 'radix-ui'
-import { initialNotificationItems } from '@/lib/constant'
+import axios from 'axios'
+import api, { useQueryBase } from '@/lib/axios'
+import { useSession } from 'next-auth/react'
+import { toast } from '@/lib/toast'
+import { extractErrorMessage } from '@/lib/utils'
 
-export type NotificationItem = {
+type NotificationType = {
+  id: string
   title: string
-  options: { label: string; checked: boolean; switchId: string }[]
+}
+
+type UserNotificationSetting = {
+  userId: string
+  notificationTypeId: string
+  IsInAppAllowed: boolean
+  IsEmailAllowed: boolean
+  id: string
+}
+
+type NotificationOption = {
+  label: string
+  switchId: 'inApp' | 'email'
+  checked: boolean
+}
+
+type NotificationItem = {
+  title: string
+  typeId: string
+  options: NotificationOption[]
 }
 
 type NotificationSettingsDialogProps = {
@@ -13,22 +37,97 @@ type NotificationSettingsDialogProps = {
   setIsOpen: (open: boolean) => void
 }
 
-type NotificationOptionProps = {
-  label: string
-  checked: boolean
-  switchId: string
-  onToggle: () => void
-}
-
-const NotificationOption: React.FC<NotificationOptionProps> = ({
-  label,
-  checked,
-  switchId,
-  onToggle,
+const NotificationSettingsDialog: React.FC<NotificationSettingsDialogProps> = ({
+  isOpen,
+  setIsOpen,
 }) => {
-  return (
+  const [notifications, setNotifications] = useState<NotificationItem[]>([])
+  const { data: session } = useSession()
+  const { data: typesRes, isLoading: loadingTypes } = useQueryBase({
+    queryKey: ['notificationTypes'],
+    url: '/notificationTypes',
+  })
+
+  const types = typesRes?.data?.data as NotificationType[]
+  const {
+    data: userSettingsRes,
+    refetch: refetchUserSettings,
+    isLoading: loadingSettings,
+  } = useQueryBase({
+    queryKey: ['userNotificationSettings'],
+    url: '/userNotificationSettings',
+  })
+  const userSettings = userSettingsRes?.data?.data as UserNotificationSetting[]
+  useEffect(() => {
+    if (!types || !userSettings) return
+
+    const merged: NotificationItem[] = types.map((type) => {
+      const setting = userSettings.find((s) => s.notificationTypeId === type.id)
+
+      return {
+        title: type.title,
+        typeId: type.id,
+        options: [
+          {
+            label: 'In-App',
+            switchId: 'inApp',
+            checked: setting?.IsInAppAllowed ?? false,
+          },
+          {
+            label: 'Email',
+            switchId: 'email',
+            checked: setting?.IsEmailAllowed ?? false,
+          },
+        ],
+      }
+    })
+
+    setNotifications(merged)
+  }, [types, userSettings])
+
+  const handleToggle = async (itemIndex: number, optionIndex: number) => {
+    const updated = [...notifications]
+    const notif = updated[itemIndex]
+    const option = notif.options[optionIndex]
+
+    option.checked = !option.checked
+    setNotifications(updated)
+
+    const existingSetting = userSettings?.find((s) => s.notificationTypeId === notif.typeId)
+
+    const payload: Partial<UserNotificationSetting> = {
+      userId: session?.user?.id || '',
+      notificationTypeId: notif.typeId,
+      IsInAppAllowed: notif.options.find((opt) => opt.switchId === 'inApp')?.checked ?? false,
+      IsEmailAllowed: notif.options.find((opt) => opt.switchId === 'email')?.checked ?? false,
+    }
+
+    try {
+      if (existingSetting?.id) {
+        await api.patch(`/userNotificationSettings/update/${existingSetting.id}`, payload)
+      } else {
+        await api.post('/userNotificationSettings', payload)
+      }
+
+      await refetchUserSettings()
+    } catch (error) {
+      toast.error(extractErrorMessage(error))
+      option.checked = !option.checked
+      setNotifications([...updated])
+    }
+  }
+
+  const NotificationOption: React.FC<{
+    label: string
+    checked: boolean
+    switchId: string
+    onToggle: () => void
+  }> = ({ label, checked, switchId, onToggle }) => (
     <div className="flex items-center justify-between gap-2">
-      <label htmlFor={switchId} className="text-[#484A4C] sm:text-base text-[15px] font-normal leading-[19px]">
+      <label
+        htmlFor={switchId}
+        className="text-[#484A4C] sm:text-base text-[15px] font-normal leading-[19px]"
+      >
         {label}
       </label>
       <Switch.Root
@@ -44,28 +143,6 @@ const NotificationOption: React.FC<NotificationOptionProps> = ({
       </Switch.Root>
     </div>
   )
-}
-
-const NotificationSettingsDialog: React.FC<NotificationSettingsDialogProps> = ({
-  isOpen,
-  setIsOpen,
-}) => {
-  const [notifications, setNotifications] = useState(initialNotificationItems)
-
-  const toggleOption = (itemIndex: number, optionIndex: number) => {
-    setNotifications((prev) =>
-      prev.map((item, i) =>
-        i === itemIndex
-          ? {
-              ...item,
-              options: item.options.map((opt, j) =>
-                j === optionIndex ? { ...opt, checked: !opt.checked } : opt,
-              ),
-            }
-          : item,
-      ),
-    )
-  }
 
   return (
     <ModalDialog
@@ -80,18 +157,20 @@ const NotificationSettingsDialog: React.FC<NotificationSettingsDialogProps> = ({
 
       <div className="space-y-6 overflow-y-auto">
         {notifications.map((item, itemIndex) => (
-          <div key={item.title}>
-            <p className="text-[#19191A] sm:text-base text-[15px] font-medium leading-[150%] mb-5">{item.title}</p>
+          <div key={item.typeId}>
+            <p className="text-[#19191A] sm:text-base text-[15px] font-medium leading-[150%] mb-5">
+              {item.title}
+            </p>
             <div className="flex flex-col gap-4">
               {item.options.map((option, optionIndex) => {
-                const switchId = `${itemIndex}-${optionIndex}`
+                const id = `${itemIndex}-${optionIndex}`
                 return (
                   <NotificationOption
-                    key={switchId}
+                    key={id}
                     label={option.label}
                     checked={option.checked}
-                    switchId={switchId}
-                    onToggle={() => toggleOption(itemIndex, optionIndex)}
+                    switchId={id}
+                    onToggle={() => handleToggle(itemIndex, optionIndex)}
                   />
                 )
               })}
