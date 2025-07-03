@@ -1,6 +1,14 @@
 import { clsx, type ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 import { toast } from './toast'
+import {
+  parseISO,
+  differenceInMinutes,
+  differenceInHours,
+  differenceInDays,
+  differenceInWeeks,
+  differenceInMonths,
+} from 'date-fns'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -160,4 +168,32 @@ export default function calculateCustomLoyltyPointsPrice(
 
   const price = pointsToBuy / rate
   return Number(price.toFixed(2))
+}
+export const formatRelativeTime = (dateString: string) => {
+  try {
+    const date = parseISO(dateString)
+    const now = new Date()
+    const minutes = differenceInMinutes(now, date)
+    const hours = differenceInHours(now, date)
+
+    const days = differenceInDays(now, date)
+    const weeks = differenceInWeeks(now, date)
+    const months = differenceInMonths(now, date)
+
+    if (minutes < 1) {
+      return 'now'
+    } else if (minutes < 60) {
+      return `${minutes}m`
+    } else if (hours < 24) {
+      return `${hours}h`
+    } else if (days < 7) {
+      return `${days}d`
+    } else if (weeks < 4) {
+      return `${weeks}w`
+    } else {
+      return `${months}mo`
+    }
+  } catch (error) {
+    return 'Invalid date'
+  }
 }

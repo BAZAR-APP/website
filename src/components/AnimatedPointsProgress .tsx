@@ -1,15 +1,12 @@
 import { Progress } from '@radix-ui/themes'
 import React, { useState, useEffect } from 'react'
 
-export const AnimatedPointsProgress = ({
-  earnedPoints = 255,
-  maxPoints = 400,
-  animationDuration = 2000,
-}) => {
+export const AnimatedPointsProgress = ({ earnedPoints = 255, animationDuration = 2000 }) => {
+  const maxPoints = 2000
   const [animatedPoints, setAnimatedPoints] = useState(0)
   const [animatedProgress, setAnimatedProgress] = useState(0)
 
-  const progressPercentage = (earnedPoints / maxPoints) * 100
+  const progressPercentage = Math.min((earnedPoints / maxPoints) * 100, 100)
 
   useEffect(() => {
     // Animate the points counter
@@ -46,10 +43,11 @@ export const AnimatedPointsProgress = ({
     }
   }, [earnedPoints, progressPercentage, animationDuration])
 
-  // Calculate stroke dash array and offset for the circular progress
+  // Clamp visual progress to 100%
   const radius = 90
   const circumference = 2 * Math.PI * radius
-  const strokeDashoffset = circumference - (animatedProgress / 100) * circumference
+  const cappedProgress = Math.min(animatedProgress, 100)
+  const strokeDashoffset = circumference - (cappedProgress / 100) * circumference
 
   return (
     <div className="flex items-center justify-center mx-auto">
@@ -92,7 +90,7 @@ export const AnimatedPointsProgress = ({
 
       {/* Radix UI Themes Progress Bar Alternative (Hidden by default) */}
       <div className="hidden">
-        <Progress value={animatedProgress} className='w-[160px]' />
+        <Progress value={animatedProgress} className="w-[160px]" />
       </div>
     </div>
   )

@@ -5,7 +5,6 @@ import { getTierInfo } from '@/lib/utils'
 
 interface EarnedPointsCardProps {
   currentPoints: number
-  maxPoints: number
   page: any
   tier: string
   lang: 'en' | 'ar'
@@ -13,7 +12,6 @@ interface EarnedPointsCardProps {
 
 export const EarnedPointsCard: React.FC<EarnedPointsCardProps> = ({
   currentPoints,
-  maxPoints,
   tier = '',
   lang,
 }) => {
@@ -30,7 +28,7 @@ export const EarnedPointsCard: React.FC<EarnedPointsCardProps> = ({
       </div>
 
       <div className="flex flex-col w-full gap-[16px]">
-        <AnimatedPointsProgress earnedPoints={currentPoints} maxPoints={maxPoints} />
+        <AnimatedPointsProgress earnedPoints={currentPoints}  />
 
         <div className="text-center">
           <div className="flex items-center gap-[4px] mb-[8px]">

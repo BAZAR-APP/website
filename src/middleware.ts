@@ -4,7 +4,13 @@ import { match } from '@formatjs/intl-localematcher'
 import Negotiator from 'negotiator'
 import { i18n } from '../i18n.config'
 
-const PROTECTED_PATHS = ['/profile', '/notifications', '/loyalty-points', '/my-bookings']
+const PROTECTED_PATHS = [
+  '/profile',
+  '/notifications',
+  '/loyalty-points',
+  '/my-bookings',
+  '/chalet',
+]
 
 function getLocale(request: NextRequest): string {
   const negotiatorHeaders: Record<string, string> = {}

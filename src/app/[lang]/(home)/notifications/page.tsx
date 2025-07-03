@@ -9,16 +9,21 @@ import { dumyNotifications } from '@/lib/constant'
 import useToggle from '@/lib/hooks/useToggle'
 import NotificationSettingsDialog from '@/components/Notification/NotificationSettingsDialog'
 import { useQueryBase } from '@/lib/axios'
+import { NotificationMessage, NotificationResponse } from '@/lib/types/notification'
+import { useRouter } from 'next/navigation'
 
 const Notifications = () => {
   const [activeTab, setActiveTab] = useState<NotificationTab>('all')
   const [visibleCount, setVisibleCount] = useState(10)
-  const [, setSelectedNotification] = useState<NotificationData | null>(null)
+  const router = useRouter()
+  const [, setSelectedNotification] = useState<NotificationMessage | null>(null)
   const { data } = useQueryBase({
     queryKey: ['messages'],
     url: `/messages`,
+    staleTime: 0,
+    cacheTime: 0,
   })
-  console.log(data)
+  const notifications = data?.data as NotificationResponse
 
   const handleTabChange = (tab: NotificationTab) => {
     setActiveTab(tab)
@@ -46,8 +51,10 @@ const Notifications = () => {
     setVisibleCount((prev) => Math.min(prev + 5, filteredNotifications.length))
   }
 
-  const handleNotificationClick = (notification: NotificationData) => {
-    setSelectedNotification(notification)
+  const handleNotificationClick = (notification: NotificationMessage) => {
+    if (notification?.additionalData?.action === 'BOOKING_CONFIRMED') {
+      router.push(`/my-bookings/96122adb-031f-4bac-91a4-bc370ca6f3ed/`)
+    }
   }
   const { isOpen, toggle } = useToggle(false)
   return (
@@ -84,10 +91,10 @@ const Notifications = () => {
         >
           <div className="justify-center items-stretch border-[color:var(--Grays-Gray-6,#F2F2F7)] relative flex min-w-60 w-[481px] flex-col bg-[#F9FAFB] pl-4 pr-2.5 py-2 rounded-2xl border-0 border-solid">
             <div className="space-y-2">
-              {visibleNotifications.map((notification, index) => (
+              {notifications?.messages.map((notification: NotificationMessage, index) => (
                 <React.Fragment key={notification.id}>
                   <NotificationItem notification={notification} onClick={handleNotificationClick} />
-                  {index < visibleNotifications.length - 1 && (
+                  {index < notifications?.messages.length - 1 && (
                     <div className="border-gray-100 border bg-[#F3F4F6] min-h-px w-full border-solid" />
                   )}
                 </React.Fragment>
