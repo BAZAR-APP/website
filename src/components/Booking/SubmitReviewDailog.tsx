@@ -4,21 +4,8 @@ import Button from '../Button/Button'
 import Image from 'next/image'
 import { ChevronRight, Download, MapPin } from 'lucide-react'
 import Location from '../Location'
-import { submitReview } from '@/lib/constant'
 import { IBooking } from '@/lib/types/booking'
 import StarRating from '../About/StarRating'
-
-export interface SubmitReviewData {
-  title: string
-  points: number
-  guests: string
-  propertyType: string
-  beds: number
-  baths: number
-  amenities: string[]
-  imageUrl: string
-  imageAlt: string
-}
 
 interface SubmitReviewDialogProps {
   isOpen: boolean
@@ -40,8 +27,26 @@ const SubmitReviewDialog: React.FC<SubmitReviewDialogProps> = ({
   const [rating, setRating] = useState(0)
   const [reviewText, setReviewText] = useState('')
 
-  const { title, points, guests, propertyType, beds, baths, amenities, imageUrl, imageAlt } =
-    submitReview
+  const propertyTitle = data?.chalet?.title || 'Property'
+  const guests = data?.noOfGuests || 0
+  const propertyType = data?.chalet?.isEntireHomeAvailabe ? 'Entire Home' : 'Private Room'
+  const beds = data?.chalet?.maxNoOfBeds || 0
+  const baths = data?.chalet?.noOfBaths || 0
+  const amenities = data?.chalet?.amenities?.map((a) => a.title) || []
+  const imageUrl = data?.chalet?.photoURL || '/images/fallback.jpg'
+  const imageAlt = propertyTitle
+  const points = (data?.chalet?.noOfLoyalityPoints as number) || 0
+
+  const fullAddress = [
+    data?.chalet?.pinTitle,
+    data?.chalet?.street1,
+    data?.chalet?.street2,
+    data?.chalet?.city,
+    data?.chalet?.state,
+    data?.chalet?.country,
+  ]
+    .filter(Boolean)
+    .join(', ')
 
   return (
     <ModalDialog
@@ -55,19 +60,19 @@ const SubmitReviewDialog: React.FC<SubmitReviewDialogProps> = ({
       </p>
 
       <StarRating rating={rating} onChange={setRating} />
-
-      <div className="w-full h-[216px] flex-shrink-0">
-        <Image
-          src={imageUrl}
-          alt={imageAlt}
-          className="w-full h-full object-cover rounded-[12px]"
-          width={400}
-          height={400}
-        />
-      </div>
-
+      {imageUrl && (
+        <div className="w-full h-[216px] flex-shrink-0">
+          <Image
+            src={imageUrl}
+            alt={imageAlt}
+            className="w-full h-full object-cover rounded-[12px]"
+            width={400}
+            height={400}
+          />
+        </div>
+      )}
       <div className="flex items-center flex-wrap gap-3 pt-3">
-        <h3 className="text-[16px] font-medium text-[#19191A]">{title}</h3>
+        <h3 className="text-[16px] font-medium text-[#19191A]">{propertyTitle}</h3>
         <div className="flex bg-[#E1F3FF] items-center gap-1 rounded py-1 px-1.5 max-w-[110px]">
           <Image src="/images/Points.svg" width={16} height={16} alt="Points Icon" />
           <span className="text-[#29397E] text-sm">{points} Points</span>
@@ -75,23 +80,28 @@ const SubmitReviewDialog: React.FC<SubmitReviewDialogProps> = ({
       </div>
 
       <div className="text-sm text-[#8E8E93] leading-5 pt-2">
-        {data?.noOfGuests} guests <span className="text-[#9EA0A2] text-[9px] pr-1">&bull;</span>
+        {guests} guests <span className="text-[#9EA0A2] text-[9px] pr-1">&bull;</span>
         {propertyType} <span className="text-[#9EA0A2] text-[9px] pr-1">&bull;</span>
         {beds} beds <span className="text-[#9EA0A2] text-[9px] pr-1">&bull;</span>
         {baths} baths
-        {amenities.map((amenity, index) => (
-          <span key={index} className="text-[#8E8E93] text-sm font-normal">
-            {amenity}
-            {index < amenities.length - 1 && (
-              <span className="mx-1 text-[#9EA0A2] text-[9px]">&bull;</span>
-            )}
-          </span>
-        ))}
+        {amenities.length > 0 && (
+          <>
+            <span className="text-[#9EA0A2] text-[9px] px-1">&bull;</span>
+            {amenities.map((title, index) => (
+              <span key={index} className="text-[#8E8E93] text-sm font-normal">
+                {title}
+                {index < amenities.length - 1 && (
+                  <span className="mx-1 text-[#9EA0A2] text-[9px]">&bull;</span>
+                )}
+              </span>
+            ))}
+          </>
+        )}
         <br />
         <Location
           className="flex items-start py-1.5"
-          icon={<MapPin className="w-3.5 h-3.5 text-[#8E8E93] mt-1" />}
-          text="Sea Villa Retreat, Block 5, Street 12, Villa 27, Al Khiran, Ahmadi, Kuwait"
+          icon={<MapPin className="w-4.5 h-4.5 text-[#8E8E93] mt-1" />}
+          text={fullAddress}
         />
       </div>
 

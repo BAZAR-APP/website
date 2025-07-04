@@ -85,13 +85,13 @@ const BookingCard: React.FC<BookingCardProps> = ({
 
             <div className="flex bg-[#E1F3FF] items-center gap-1 rounded py-1 px-1.5 max-w-[110px]">
               <Image src="/images/Points.svg" width={16} height={16} alt="Points Icon" />
-              <span className="text-[#29397E] text-sm">{booking?.noOfGuests} Points</span>
+              <span className="text-[#29397E] text-sm">{booking?.chalet?.noOfLoyalityPoints} Points</span>
             </div>
           </div>
           <p className="text-sm w-full text-[#8E8E93] leading-5">
-            <span> {booking?.noOfGuests} </span>
-            <span className="text-[#9EA0A2] text-[8px] pr-1">&bull;</span>
-            <span>{'booking type form api'}</span>{' '}
+            <span> {booking?.noOfGuests} guests </span>
+            {/* <span className="text-[#9EA0A2] text-[8px] pr-1">&bull;</span> */}
+            {/* <span>{'booking type form api'}</span>{' '} */}
             <span className="text-[#9EA0A2] text-[8px] pr-1">&bull;</span>
             <span>{booking?.chalet?.maxNoOfBeds}</span> beds{' '}
             <span className="text-[#9EA0A2] text-[8px] pr-1">&bull;</span>

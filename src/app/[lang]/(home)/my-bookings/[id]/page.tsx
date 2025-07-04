@@ -18,6 +18,7 @@ import { format } from 'date-fns'
 interface AddOn {
   name: string
   price: number
+  icon?: string
 }
 
 interface PriceBreakdownItem {
@@ -124,7 +125,7 @@ const PropertyInfo: React.FC<{
   amenities: string[]
 }> = React.memo(function PropertyInfo({ guests, propertyType, beds, baths, amenities }) {
   const infoItems = useMemo(
-    () => [guests, propertyType, `${beds} beds`, `${baths} baths`, ...amenities],
+    () => [`${guests} guests`, propertyType, `${beds} beds`, `${baths} baths`, ...amenities],
     [guests, propertyType, beds, baths, amenities],
   )
 
@@ -177,8 +178,8 @@ const AddOnsSection: React.FC<{ addOns: AddOn[] }> = React.memo(function AddOnsS
     <div>
       <h2 className="font-semibold text-[25px] leading-8 text-[#19191A] mb-4">Add-ons</h2>
       {addOns.map((addOn, index) => (
-        <div key={`${addOn.name}-${index}`} className="flex items-center flex-wrap gap-2">
-          <Image src={'/images/Addon.svg'} width={24} height={24} alt="Add icon" />
+        <div key={`${addOn.name}-${index}`} className="flex items-center flex-wrap gap-2 mb-1">
+          <Image src={addOn.icon || '/images/Addon.svg'} width={16} height={16} alt="Add icon" />
           <span className="text-base leading-[19px] text-[#19191A]">{addOn.name}</span>
           <span className="text-base leading-[19px] text-[#19191A]">{addOn.price} KWD</span>
         </div>
@@ -290,6 +291,16 @@ export default function BookingDetailsPage() {
   })
 
   const bookingDetails = data?.data as IBooking
+  const addOns = useMemo(() => {
+    return (
+      bookingDetails?.bookingCustomizations?.map((item) => ({
+        name: item.customization?.title ?? 'Unnamed Add-On',
+        price: item.totalCost ?? 0,
+        icon: item.customization?.iconPhotoUrl ?? '',
+      })) ?? []
+    )
+  }, [bookingDetails])
+
   const { isOpen: isCancelOpen, toggle: toggleCancel } = useToggle(false)
   const { isOpen: isConfirmCancel, toggle: confirmCancelToggle } = useToggle(false)
 
@@ -399,7 +410,7 @@ export default function BookingDetailsPage() {
                 to: bookingDetails?.endDate,
               }}
             />
-            <AddOnsSection addOns={bookingData.addOns} />
+            <AddOnsSection addOns={addOns} />
             <ChaletRules />
           </div>
 

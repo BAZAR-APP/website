@@ -54,4 +54,33 @@ export interface IBooking {
     id: string
   }
   chalet: Chalet
+  bookingCustomizations?: {
+    id: string
+    noOfCustomizations: number
+    singleUnitCost: number
+    totalCost: number
+    customizationId: string
+    customization: {
+      id: string
+      title: string
+      titleInArabic: string
+      costUnit: string
+      costUnitInArabic: string
+      costPerNight: number
+      costPerNightInArabic: string
+      iconTitle: string
+      iconPhotoId: string
+      iconPhotoUrl: string
+      is24HourNotice: boolean
+      customizationCategoryId: string
+      customizationCategory: {
+        id: string
+        title: string
+      }
+      createdAt: string
+      updatedAt: string
+    }
+    createdAt: string
+    updatedAt: string
+  }[]
 }

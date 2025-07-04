@@ -103,7 +103,7 @@ export default function CustomizeStay({ onNext }: CustomizeStayProps) {
               <li key={item?.title + index} className="flex justify-between items-center">
                 <div className="flex items-center gap-2">
                   {item?.iconPhotoUrl && (
-                    <Image src={item?.iconPhotoUrl ?? ''} width={20} height={12} alt="icon" />
+                    <Image src={item?.iconPhotoUrl ?? ''} width={16} height={16} alt="icon" />
                   )}
                   <span>{item?.title}</span>
                 </div>

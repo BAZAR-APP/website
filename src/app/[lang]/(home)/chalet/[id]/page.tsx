@@ -5,14 +5,14 @@ import ReviewsSection from '@/components/ReviewsSection'
 import BookingWidget from '@/components/BookingWidget'
 import ChaletsRules from '@/components/ChaletsRules'
 import Calender from '@/components/Calender/Calender'
-import { propertyData, rooms } from '@/lib/constant'
+import { propertyData } from '@/lib/constant'
 import SelectablePlans from '@/components/SelectablePlans'
 import BedroomCard from '@/components/BedroomCard'
 import HotelMap from '@/components/LocationMap'
 import { Metadata } from 'next'
 import { getServerSession } from 'next-auth/next'
 import { authOptions } from '@/lib/auth'
-import { toast } from '@/lib/toast'
+import toast from 'react-hot-toast'
 import { extractErrorMessage } from '@/lib/utils'
 import { Chalet, ChaletBedroom } from '../../../../../../types/chalets'
 
@@ -132,8 +132,8 @@ export default async function ChaletDetailsPage({
         <PropertyDetailsCard
           title={data?.title || ''}
           location={data?.city || ''}
-          rating={5}
-          reviewCount={5}
+          rating={data?.rating ?? 0}
+          reviewCount={data?.noOfReviews ?? 0}
           images={data?.galleryPhotoURLs || ['']}
         />
 
@@ -146,8 +146,8 @@ export default async function ChaletDetailsPage({
                 bedrooms={data?.noOfBaths || ''}
                 bathrooms={data?.noOfBedrooms || ''}
                 title={data?.title || ''}
-                beds={data?.noOfBedrooms || ''}
-                points={200}
+                beds={data?.maxNoOfBeds || ''}
+                points={data?.noOfLoyalityPoints || 0}
                 trustedByPlatform={data?.trustedByPlatform ?? false}
                 badge={data?.badge}
                 isFamilyFriendlyOnly={data?.isFamilyFriendlyOnly}
@@ -158,7 +158,7 @@ export default async function ChaletDetailsPage({
               />
               <SelectablePlans subscriptions={data?.subscriptions || []} />
               <div className="border-b border-[#E5E7EB]">
-                <AmenitiesList amenities={data?.amenities || []} />
+                <AmenitiesList amenities={(data?.amenities || []).slice(0, 10)} />
                 <h2 className="md:text-[25px] text-xl font-semibold leading-[32px] text-[#19191A] mt-7">
                   Where you'll sleep
                 </h2>
