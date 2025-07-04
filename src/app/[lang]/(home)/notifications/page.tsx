@@ -1,11 +1,11 @@
 'use client'
+
 import { Button } from '@/components'
 import { NotificationTab, NotificationTabs } from '@/components/Notification/NotificationTabs'
 import { NotificationItem } from '@/components/Notification/NotificationItem'
 import Image from 'next/image'
 import { ChevronRight } from 'lucide-react'
-import React, { useState, useMemo } from 'react'
-import { dumyNotifications } from '@/lib/constant'
+import React, { useState, useMemo, useEffect } from 'react'
 import useToggle from '@/lib/hooks/useToggle'
 import NotificationSettingsDialog from '@/components/Notification/NotificationSettingsDialog'
 import { useQueryBase } from '@/lib/axios'
@@ -15,49 +15,48 @@ import { Skeleton } from '@/components/Skeletons/Skeleton'
 
 const Notifications = () => {
   const [activeTab, setActiveTab] = useState<NotificationTab>('all')
-  const [visibleCount, setVisibleCount] = useState(10)
+  const [page, setPage] = useState(1)
+  const limit = 10
+  const [allMessages, setAllMessages] = useState<NotificationMessage[]>([])
   const router = useRouter()
+
   const { data, isLoading } = useQueryBase({
-    queryKey: ['messages'],
+    queryKey: ['messages', page, activeTab],
     url: `/messages`,
     staleTime: 0,
     cacheTime: 0,
   })
+// ?page=${page}&limit=${limit}
   const notifications = data?.data as NotificationResponse
+  const total = notifications?.info?.total || 0
+  const totalPages = Math.ceil(total / limit)
+
+  useEffect(() => {
+    if (notifications?.messages) {
+      setAllMessages((prev) => [...prev, ...notifications.messages])
+    }
+  }, [notifications])
 
   const handleTabChange = (tab: NotificationTab) => {
     setActiveTab(tab)
-    setVisibleCount(10)
+    setPage(1)
+    setAllMessages([])
   }
 
-  const filteredNotifications = useMemo(() => {
-    if (activeTab === 'all') return dumyNotifications
-
-    const categoryMap: Record<NotificationTab, string[]> = {
-      all: [],
-      bookings: ['booking'],
-      payments: ['payment'],
-      profile: ['profile'],
-    }
-
-    const categories = categoryMap[activeTab] || []
-    return dumyNotifications.filter((n) => categories.includes(n.category))
-  }, [activeTab])
-
-  const visibleNotifications = filteredNotifications.slice(0, visibleCount)
-  const hasMore = visibleCount < filteredNotifications.length
-
   const handleLoadMore = () => {
-    setVisibleCount((prev) => Math.min(prev + 5, filteredNotifications.length))
+    if (page < totalPages) {
+      setPage((prev) => prev + 1)
+    }
   }
 
   const handleNotificationClick = (notification: NotificationMessage) => {
     if (notification?.additionalData?.action === 'BOOKING_CONFIRMED') {
-      router.push(`/my-bookings/96122adb-031f-4bac-91a4-bc370ca6f3ed/`)
+      router.push(`/my-bookings/${notification?.additionalData?.bookingId}/`)
     }
   }
-  
+
   const { isOpen, toggle } = useToggle(false)
+
   return (
     <>
       <main className="items-stretch self-stretch flex flex-col bg-[#FDFDFE] pt-6 pb-16 lg:px-32 md:px-22 sm:px-12 px-8 mx-auto max-md:px-5 min-h-screen">
@@ -84,7 +83,7 @@ const Notifications = () => {
 
         <NotificationTabs activeTab={activeTab} onTabChange={handleTabChange} />
 
-        {isLoading ? (
+        {isLoading && page === 1 ? (
           <div className="flex flex-col space-y-6">
             {[...Array(3)].map((_, index) => (
               <div
@@ -108,33 +107,35 @@ const Notifications = () => {
             aria-labelledby={`${activeTab}-tab`}
           >
             <div className="justify-center items-stretch border-[color:var(--Grays-Gray-6,#F2F2F7)] relative flex min-w-60 w-[481px] flex-col bg-[#F9FAFB] pl-4 pr-2.5 py-2 rounded-2xl border-0 border-solid">
-              <div className="space-y-2">
-                {notifications?.messages.map((notification: NotificationMessage, index) => (
-                  <React.Fragment key={notification.id}>
-                    <NotificationItem
-                      notification={notification}
-                      onClick={handleNotificationClick}
-                    />
-                    {index < notifications?.messages.length - 1 && (
-                      <div className="border-gray-100 border bg-[#F3F4F6] min-h-px w-full border-solid" />
-                    )}
-                  </React.Fragment>
-                ))}
-              </div>
+              {allMessages.length > 0 ? (
+                <>
+                  <div className="space-y-2">
+                    {allMessages.map((notification, index) => (
+                      <React.Fragment key={notification.id}>
+                        <NotificationItem
+                          notification={notification}
+                          onClick={handleNotificationClick}
+                        />
+                        {index < allMessages.length - 1 && (
+                          <div className="border-gray-100 border bg-[#F3F4F6] min-h-px w-full border-solid" />
+                        )}
+                      </React.Fragment>
+                    ))}
+                  </div>
 
-              {hasMore && (
-                <Button
-                  intent="transperent"
-                  onClick={handleLoadMore}
-                  className="flex items-center justify-start !px-0 !py-1.5 gap-1 text-base text-[#19191A] font-medium underline underline-offset-2 mt-2"
-                  aria-label={`Load more notifications. Currently showing ${visibleCount} of ${filteredNotifications.length}`}
-                >
-                  <span className="text-[#19191A]">Show more Notifications</span>
-                  <ChevronRight className="w-3 h-3" strokeWidth={3} />
-                </Button>
-              )}
-
-              {filteredNotifications.length === 0 && (
+                  {page < totalPages && (
+                    <Button
+                      intent="transperent"
+                      onClick={handleLoadMore}
+                      className="flex items-center justify-start !px-0 !py-1.5 gap-1 text-base text-[#19191A] font-medium underline underline-offset-2 mt-2"
+                      aria-label={`Load more notifications. Currently showing ${allMessages.length} of ${total}`}
+                    >
+                      <span className="text-[#19191A]">Show more Notifications</span>
+                      <ChevronRight className="w-3 h-3" strokeWidth={3} />
+                    </Button>
+                  )}
+                </>
+              ) : (
                 <div className="text-center py-8">
                   <Image
                     src={'/images/NotificationNon.svg'}

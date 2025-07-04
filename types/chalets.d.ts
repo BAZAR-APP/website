@@ -1,3 +1,10 @@
+export interface Booking {
+  id: string
+  startDate: string // or Date, depending on how you handle dates
+  endDate: string // or Date
+  bookingStatus: 'pending' // can be a union type if there are more statuses later
+}
+export type Bookings = Booking[]
 export interface Chalet {
   id: string
   title: string
@@ -46,6 +53,7 @@ export interface Chalet {
   areaUnit: String
   galleryPhotoURLs: string[]
   photoURL: string
+  bookings: Bookings
 }
 
 export interface Amenity {

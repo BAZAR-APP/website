@@ -15,6 +15,7 @@ export interface NotificationMessage {
   additionalData: {
     userContext: string
     action: string
+    bookingId?: string
   }
   state: 'not_opened' | 'opened' | string
   createdAt: string
