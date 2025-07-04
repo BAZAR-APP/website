@@ -11,6 +11,7 @@ import SimpleCalender from './Calender/SimpleCalender'
 import useToggle from '@/lib/hooks/useToggle'
 import { format, addDays } from 'date-fns'
 import { capitalizeWords } from '@/lib/utils'
+import { Bookings } from '../../types/chalets'
 
 interface PackageOption {
   id: string
@@ -55,6 +56,7 @@ interface BookingWidgetProps {
     fullWeekCost: number | undefined
     fullMonthCost: number | undefined
   }
+  bookings: Bookings
 }
 
 // Package types enum for better type safety
@@ -122,6 +124,7 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
   },
   packageInfo,
   maxGuests,
+  bookings,
 }) => {
   const checkInPopUp = useToggle()
   const checkOutPopUp = useToggle()
@@ -139,6 +142,7 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
     setGuests,
     setDates,
   } = useBookingStore()
+  console.log(selectedDates)
 
   const handleQuantityChange = (newQuantity: number) => {
     if (maxGuests && newQuantity > 0 && newQuantity <= +maxGuests) {

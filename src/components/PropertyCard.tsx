@@ -6,6 +6,7 @@ import React, { useState, useEffect } from 'react'
 import { Chalet } from '../../types/chalets'
 import api from '@/lib/axios'
 import { useQueryClient } from '@tanstack/react-query'
+import { useSession } from 'next-auth/react'
 
 interface PropertyCardProps {
   onClick?: () => void
@@ -16,12 +17,13 @@ interface PropertyCardProps {
 const PropertyCard: React.FC<PropertyCardProps> = ({ onClick, chalet, isMember = false }) => {
   const queryClient = useQueryClient()
   const [isFavourite, setIsFavourite] = useState(chalet?.isFavourite || false)
-
+  const { data: session } = useSession()
   useEffect(() => {
     setIsFavourite(chalet?.isFavourite || false)
   }, [chalet?.isFavourite])
 
   const toggleFavourite = async () => {
+    if (!session?.user?.accessToken) return
     const prevState = isFavourite
     setIsFavourite(!prevState) // optimistic update
 
@@ -57,20 +59,22 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ onClick, chalet, isMember =
       <div className="flex flex-col gap-4">
         <div className="flex items-center gap-1 justify-between">
           <h3 className="sm:text-xl text-lg font-normal text-[#484A4C]">{chalet?.title}</h3>
-          <button
-            aria-label="Add to favorites"
-            className="cursor-pointer"
-            onClick={(e) => {
-              e.stopPropagation()
-              toggleFavourite()
-            }}
-          >
-            {isFavourite ? (
-              <Heart className="w-5 h-5 text-[#29397E] fill-[#29397E]" />
-            ) : (
-              <Heart className="w-5 h-5 text-[#29397E]" />
-            )}
-          </button>
+          {session?.user?.id && (
+            <button
+              aria-label="Add to favorites"
+              className="cursor-pointer"
+              onClick={(e) => {
+                e.stopPropagation()
+                toggleFavourite()
+              }}
+            >
+              {isFavourite ? (
+                <Heart className="w-5 h-5 text-[#29397E] fill-[#29397E]" />
+              ) : (
+                <Heart className="w-5 h-5 text-[#29397E]" />
+              )}
+            </button>
+          )}
         </div>
 
         <div className="flex flex-wrap items-center text-sm text-[#8E8E93] gap-x-2">

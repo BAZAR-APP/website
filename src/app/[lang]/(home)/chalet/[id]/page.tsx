@@ -125,6 +125,7 @@ export default async function ChaletDetailsPage({
   } catch (error) {
     toast.error(extractErrorMessage(error))
   }
+console.log(data);
 
   return (
     <div className="min-h-screen bg-white">
@@ -184,6 +185,7 @@ export default async function ChaletDetailsPage({
                   fullWeekCost: data?.fullWeekCost,
                   fullMonthCost: data?.fullMonthCost,
                 }}
+                bookings={data?.bookings || []}
               />
             </div>
           </div>
