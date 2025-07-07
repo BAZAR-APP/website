@@ -157,8 +157,8 @@ export default async function ChaletDetailsPage({
               <PropertyDetails
                 description={data?.description || ''}
                 maxGuests={data?.maxNoOfGuests || ''}
-                bedrooms={data?.noOfBaths || ''}
-                bathrooms={data?.noOfBedrooms || ''}
+                bedrooms={data?.noOfBedrooms || ''}
+                bathrooms={data?.noOfBaths || ''}
                 title={data?.title || ''}
                 beds={data?.maxNoOfBeds || ''}
                 points={data?.noOfLoyalityPoints || 0}
