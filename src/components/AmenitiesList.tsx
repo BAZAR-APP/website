@@ -30,7 +30,7 @@ const AmenitiesList = ({ amenities, allAmenities }: AmenitiesListProps) => {
             )
           })}
         </div>
-        {amenities?.length > 10 && (
+        {allAmenities?.length > 10 && (
           <Button
             onClick={toggle}
             intent="transperent"
