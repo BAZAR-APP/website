@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 import { PropertyCard } from '@/components'
 import { Chalet } from '../../../types/chalets'
 import api from '@/lib/axios'
+import clsx from 'clsx'
 
 interface ChaletsCardProps {
   title: string
@@ -53,7 +54,16 @@ const ChaletsCard: React.FC<ChaletsCardProps> = ({ title, endpoint }) => {
       <div className="flex flex-col items-start gap-12 w-full">
         <h1 className="w-full text-black text-[32px] md:text-[39px] font-semibold">{title}</h1>
 
-        <div className="flex justify-start overflow-x-auto gap-5 w-full" ref={scrollRef} onScroll={handleScroll}>
+        <div
+          className={clsx(
+            'flex justify-start overflow-x-auto gap-5',
+            chalets.length <= 3 ? 'w-auto' : 'w-full',
+            chalets.length <= 4 ? '2xl:w-auto' : '2xl:w-full',
+          )}
+          ref={scrollRef}
+          onScroll={handleScroll}
+        >
+          {' '}
           {chalets.map((chalet, index) => (
             <PropertyCard chalet={chalet} onClick={() => {}} key={index} isMember={true} />
           ))}

@@ -18,18 +18,20 @@ const AmenitiesList = ({ amenities, allAmenities }: AmenitiesListProps) => {
     <>
       <div className="text-[#19191A]">
         <h2 className="md:text-[25px] text-xl font-semibold mb-6">Amenities</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pb-6">
-          {amenities?.map((amenity, index) => {
-            return (
+        {amenities?.length === 0 ? (
+          <div className="text-center text-lg text-gray-500 py-4">No Amenities Available</div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pb-6">
+            {amenities?.map((amenity, index) => (
               <div key={index} className="flex items-center gap-3">
                 {amenity?.iconPhotoUrl && (
                   <Image src={amenity?.iconPhotoUrl} width={20} height={12} alt={amenity?.title} />
                 )}
                 <span>{capitalizeWords(amenity.title)}</span>
               </div>
-            )
-          })}
-        </div>
+            ))}
+          </div>
+        )}
         {allAmenities?.length > 10 && (
           <Button
             onClick={toggle}

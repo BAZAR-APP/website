@@ -1,8 +1,7 @@
 'use client'
 import React from 'react'
 import { DropdownMenu, Avatar, Text, Flex } from '@radix-ui/themes'
-import { ChevronDown, LogOut } from 'lucide-react'
-import { getUserNameInitials } from '@/lib/constant'
+import { ChevronDown, LogOut, User } from 'lucide-react'
 import { signOut, useSession } from 'next-auth/react'
 import Link from 'next/link'
 
@@ -24,12 +23,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ userName, avatarSrc = '' }) =
             gap="2"
             className="cursor-pointer border-none outline-none font-medium"
           >
-            <Avatar
-              size="3"
-              radius="full"
-              fallback={getUserNameInitials(user?.user?.fullName || userName)}
-              src={avatarSrc}
-            />
+            <Avatar size="4" radius="full" fallback={<User size={30} color="#333" />} src={avatarSrc} />
             <h2 className="text-[16px] font-[500] text-[#19191A] leading-6">
               {user?.user?.fullName || userName}
             </h2>

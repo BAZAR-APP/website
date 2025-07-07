@@ -8,6 +8,13 @@ const SelectablePlans: FC<{ subscriptions: ChaletSubscription[] }> = ({ subscrip
   const { setPlan, selectedPlan } = useBookingStore()
   const shouldUseLargeGap = subscriptions.length > 3
 
+  if (subscriptions.length === 0) {
+    return (
+      <div className="text-center text-lg text-gray-500 pt-8 pb-14 w-full border-b border-[#E5E7EB]">
+        No Subscription Plans Available
+      </div>
+    )
+  }
   return (
     <div
       className={`flex flex-wrap justify-start mx-auto md:pt-15 pt-10 border-b border-[#E5E7EB] md:pb-12 pb-10 ${

@@ -179,11 +179,17 @@ export default async function ChaletDetailsPage({
                 <h2 className="md:text-[25px] text-xl font-semibold leading-[32px] text-[#19191A] mt-7">
                   Where you'll sleep
                 </h2>
+              {data?.chaletRooms?.length === 0 ? (
+                <div className="text-center text-lg text-gray-500 py-10 w-full">
+                  No Rooms Available
+                </div>
+              ) : (
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-7 mb-10">
                   {data?.chaletRooms?.map((room: ChaletBedroom, index) => (
                     <BedroomCard key={index} room={room} />
                   ))}
                 </div>
+              )}
               </div>
               <Calender />
             </div>

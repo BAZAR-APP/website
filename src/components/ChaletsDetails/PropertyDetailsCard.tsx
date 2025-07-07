@@ -2,7 +2,7 @@
 import LikeStar from '../../../public/images/Like.svg'
 import Image from 'next/image'
 import SocialShareWrapper from '../SocialShareWrapper'
-import { MapPin, Plus } from 'lucide-react'
+import { MapPin } from 'lucide-react'
 import Location from '../Location'
 import { useState } from 'react'
 import ModalDialog from '../ModalDialog/Dialog'
@@ -142,12 +142,13 @@ const PropertyDetailsCard = ({
                   />
                   {isLastImage && (
                     <div
-                      className="absolute inset-0 bg-black bg-opacity-10 flex items-center justify-center cursor-pointer hover:bg-opacity-70 transition-all"
+                      className="absolute inset-0 bg-opacity-10 flex items-center justify-center cursor-pointer hover:bg-opacity-70 transition-all"
                       onClick={() => setShowAllImages(true)}
+                      style={{ backgroundColor: 'rgba(0, 0, 0, 0.4)', backdropFilter: 'blur(1px)' }}
                     >
                       <div className="text-white text-center">
-                        <Plus className="w-8 h-8 mx-auto mb-1" />
-                        <span className="text-lg font-semibold">+{images.length - 5}</span>
+                        {/* <Plus className="w-8 h-8 mx-auto mb-1" /> */}
+                        <span className="text-4xl font-semibold">+{images.length - 5}</span>
                       </div>
                     </div>
                   )}
@@ -195,7 +196,7 @@ const PropertyDetailsCard = ({
         <ModalDialog
           isOpen={showAllImages}
           setIsOpen={setShowAllImages}
-          className="max-w-2xl lg:max-w-[67%] xl:max-w-[75%] max-h-[90vh]"
+          className="max-w-2xl lg:max-w-[70%] xl:max-w-[90%] 2xl:max-w-[75%] max-h-[90vh]"
         >
           <div className=" overflow-y-auto p-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
@@ -206,7 +207,7 @@ const PropertyDetailsCard = ({
                     alt={`${title} view ${i + 1}`}
                     width={400}
                     height={300}
-                    className="w-full h-48 object-cover"
+                    className="w-full h-48 lg:h-64 object-cover"
                   />
                 </div>
               ))}

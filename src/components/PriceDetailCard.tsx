@@ -43,7 +43,7 @@ const PriceDetailCard: React.FC<PriceDetailCardProps> = ({
 
       <div className="text-center flex flex-col gap-1.5">
         <h3 className="text-[16px] leading-[24px] font-medium text-[#19191A]">{title}</h3>
-        <p className="text-xs leading-[15px] font-normal text-[#484A4C] text-center">{subtitle}</p>
+        <p className="text-xs leading-[15px] font-normal text-[#484A4C] text-center capitalize">{subtitle}</p>
         <div className="md:text-[20px] text-lg leading-[24px] font-bold text-[#19191A] text-center">
           {price}
         </div>
