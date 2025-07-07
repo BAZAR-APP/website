@@ -57,8 +57,8 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ onClick, chalet, isMember =
       </div>
 
       <div className="flex flex-col gap-4">
-        <div className="flex items-center gap-1 justify-between">
-          <h3 className="sm:text-xl text-lg font-normal text-[#484A4C]">{chalet?.title}</h3>
+        <div className="flex items-center gap-2 justify-between">
+          <h3 className="sm:text-xl text-lg font-normal text-[#484A4C] truncate">{chalet?.title}</h3>
           {session?.user?.id && (
             <button
               aria-label="Add to favorites"
@@ -89,7 +89,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ onClick, chalet, isMember =
           )}
         </div>
 
-        <div className="text-sm text-[#8E8E93] leading-5">
+        <div className="text-sm text-[#8E8E93] leading-5 truncate">
           {chalet?.minNoOfGuests ?? 0}-{chalet?.maxNoOfGuests ?? 0} guests{' '}
           <span className="text-[#9EA0A2] font-normal text-[9px] pr-1">&bull;</span>
           {chalet?.isEntireHomeAvailabe && (

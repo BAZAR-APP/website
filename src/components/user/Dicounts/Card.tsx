@@ -6,7 +6,7 @@ import { Locale } from '../../../../i18n.config'
 import { LockIcon } from 'lucide-react'
 import clsx from 'clsx'
 
-const renderIcons = {
+export const renderIcons = {
   discount: '/images/discount-shape.svg',
   free: '/images/free-icon.svg',
 }

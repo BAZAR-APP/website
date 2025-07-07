@@ -116,7 +116,7 @@ export default async function ChaletDetailsPage({
         },
       }),
       fetch(
-        `${process.env.NEXT_PUBLIC_NESTJS_API_URL}/chaletAmenity/readByChaletId/${id}?language=${lang}`,
+        `${process.env.NEXT_PUBLIC_NESTJS_API_URL}/chaletAmenity/readByChaletId/${id}?language=${lang}&limit=1000`,
         {
           method: 'GET',
           headers: {
@@ -134,7 +134,7 @@ export default async function ChaletDetailsPage({
 
     if (amenitiesRes.ok) {
       const amenitiesData = await amenitiesRes.json()
-      allAmenities = Array.isArray(amenitiesData) ? amenitiesData : amenitiesData.data || []
+      allAmenities = Array.isArray(amenitiesData?.data) ? amenitiesData.data : []
     }
   } catch (error) {
     toast.error(extractErrorMessage(error))

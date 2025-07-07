@@ -2,7 +2,7 @@
 import { useQueryBase } from '@/lib/axios'
 import { useParams } from 'next/navigation'
 import React, { FC, useState } from 'react'
-import DiscountCard from './Card'
+import DiscountCard, { renderIcons } from './Card'
 import RedeemDiscountDailog from '@/components/RedeemDiscountDailog'
 import clsx from 'clsx'
 import ModalDialog from '@/components/ModalDialog/Dialog'
@@ -41,7 +41,12 @@ const AvailableDiscounts: FC<{
         'grid grid-cols-2 sm:grid-cols-2 xl:grid-cols-2 gap-4 md:mt-8 mt-4 pb-4': showUserDisocunts,
       })}
     >
-      {(showUserDisocunts ? userloyaltyPoints : availbleDiscounts)?.map((discount, index) => (
+      {(showUserDisocunts ? userloyaltyPoints : availbleDiscounts)?.map((discount, index) => {
+      const iconKey: 'discount' | 'free' =
+        discount?.rewardType?.toLowerCase() === 'discount'
+          ? 'discount'
+          : 'free'
+      return (
         <DiscountCard
           key={discount?.name + index}
           title={discount?.name}
@@ -50,7 +55,7 @@ const AvailableDiscounts: FC<{
             setSelectedDiscount({
               label: discount?.name,
               points: discount.pointsRequired,
-              icon: discount.iconUrl,
+              icon: renderIcons[iconKey],
               couponCode: discount?.couponCode,
               discountPercent: discount?.discountPercent,
               id: discount?.id,
@@ -59,7 +64,7 @@ const AvailableDiscounts: FC<{
             setIsRedeemOpen(true)
             setIsOpen(false)
           }}
-          value={discount?.name?.includes('Discount') ? 'discount' : 'free'}
+          value={iconKey}
           disabled={
             showUserDisocunts
               ? false
@@ -68,7 +73,8 @@ const AvailableDiscounts: FC<{
                 )
           }
         />
-      ))}
+      )
+    })}
     </div>
   )
 
