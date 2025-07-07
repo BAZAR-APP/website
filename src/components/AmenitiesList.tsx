@@ -30,14 +30,16 @@ const AmenitiesList = ({ amenities, allAmenities }: AmenitiesListProps) => {
             )
           })}
         </div>
-        <Button
-          onClick={toggle}
-          intent="transperent"
-          size="sm"
-          className="cursor-pointer border border-[#19191A] text-sm font-medium sm:max-w-[170px] w-full "
-        >
-          Show all Amenities
-        </Button>
+        {amenities?.length > 10 && (
+          <Button
+            onClick={toggle}
+            intent="transperent"
+            size="sm"
+            className="cursor-pointer border border-[#19191A] text-sm font-medium sm:max-w-[170px] w-full "
+          >
+            Show all Amenities
+          </Button>
+        )}
       </div>
       <AmenitiesDialog isOpen={isOpen} setIsOpen={toggle} amenities={allAmenities} />
     </>
