@@ -29,12 +29,14 @@ const CouponSection: React.FC<{
   onChange: (value: string) => void
   onApply: () => void
   isDisabled: boolean
-}> = ({ onChange, onApply, isDisabled }) => (
+  value: any
+}> = ({ onChange, onApply, isDisabled, value }) => (
   <div className="relative">
     <CommonInput
       name="redeemCode"
       type="text"
       onChange={(value) => onChange?.(value?.target?.value)}
+      value={value}
       placeholder="Apply redeemed code here"
       className="!bg-[#F3F4F6] !text-[#484A4C] mt-1 relative !rounded-[8px] !border-none !h-[42px] placeholder:text-[#9EA0A2]"
     />
@@ -110,8 +112,7 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
     resetBooking,
   } = useBookingStore()
   const isSplitPayment = getValues()?.paymentOption === 'split'
-
-  const grandTotal = selectedAddonsTotal + Number(packageAmount) + (romanticWeekend ? 25 : 0)
+  const grandTotal = (selectedAddonsTotal ?? 0) + Number(packageAmount) + (romanticWeekend ? 25 : 0)
   const handleApplyDiscount = () => {
     if (!selectedDiscount?.discountPercent || !grandTotal) return
     const discountAmount = (grandTotal * selectedDiscount?.discountPercent) / 100
@@ -230,7 +231,7 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
               )}
               <PriceRowUI
                 label={isDiscountApplied ? 'Discounted Total' : 'Total'}
-                amount={`${(isDiscountApplied ? discountedTotal : grandTotal)} KWD`}
+                amount={`${isDiscountApplied ? discountedTotal : grandTotal} KWD`}
                 labelFont="medium"
               />
             </div>
@@ -264,6 +265,7 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
                 }}
                 onApply={handleApplyDiscount}
                 isDisabled={!redeemedCode}
+                value={selectedDiscount?.couponCode}
               />
             )}
 

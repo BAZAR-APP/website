@@ -25,7 +25,6 @@ const ExploreChalets = () => {
 
   const { data, isLoading } = useChaletsQuery()
   const totalPages = Math.ceil((data?.total || 0) / (data?.limit || 0))
-
   return (
     <div className="min-h-screen lg:px-14 md:px-12 px-10 xxl-p mx-auto">
       <h2 className="font-semibold md:text-[39px] sm:text-2xl text-xl leading-11 text-[#19191A] pt-5">

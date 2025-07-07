@@ -1,58 +1,8 @@
 import { AddOns } from '@/components/Booking/add-ons/AddOns'
 import Button from '@/components/Button/Button'
-import { fetcher } from '@/lib/axios'
-import { AddOnItem, Customization, GroupedCustomization } from '@/lib/types/booking'
-import { useQuery } from '@tanstack/react-query'
-
-import {
-  PartyPopper,
-  Flame,
-  Flower,
-  Cake,
-  Heart,
-  Bath,
-  Wifi,
-  Droplets,
-  MoreHorizontal,
-  Baby,
-  ToyBrick,
-  Clapperboard,
-  SwordIcon,
-} from 'lucide-react'
+import { Customization } from '@/lib/types/booking'
 import Image from 'next/image'
 import { useFormContext } from 'react-hook-form'
-
-const services = [
-  {
-    title: 'Luxury',
-    items: [
-      { name: 'BBQ setup with private chef', icon: <Flame size={16} /> },
-      { name: 'Swimming pool presentation', icon: <Droplets size={16} /> },
-      { name: 'Flower Arrangement', icon: <Flower size={16} /> },
-      { name: 'Birthday Setup', icon: <Cake size={16} /> },
-      { name: 'Anniversary Setup', icon: <Heart size={16} /> },
-    ],
-  },
-  {
-    title: 'Essentials',
-    items: [
-      { name: 'Towels', icon: <Bath size={16} /> },
-      { name: 'Tissues', icon: <PartyPopper size={16} /> },
-      { name: 'Cleaning Services', icon: <Clapperboard size={16} /> },
-      { name: 'WiFi', icon: <Wifi size={16} /> },
-      { name: 'Extra Water', icon: <Droplets size={16} /> },
-      { name: 'Others', icon: <MoreHorizontal size={16} /> },
-    ],
-  },
-  {
-    title: 'Kids',
-    items: [
-      { name: 'Pool Floaties/Toys', icon: <ToyBrick size={16} /> },
-      { name: 'Personal Swimming Trainer', icon: <SwordIcon size={16} /> },
-      { name: 'Baby Bed', icon: <Baby size={16} /> },
-    ],
-  },
-]
 
 type CustomizeStayProps = {
   onNext: () => void
@@ -60,12 +10,7 @@ type CustomizeStayProps = {
 export default function CustomizeStay({ onNext }: CustomizeStayProps) {
   const { watch, setValue } = useFormContext()
   const selectedAddons: Customization[] = watch('addons') || []
-  const itemIconMap: Record<string, React.ReactNode> = {}
-  services.forEach((section) => {
-    section.items.forEach((item) => {
-      itemIconMap[item.name] = item.icon
-    })
-  })
+
   const total = selectedAddons.reduce((acc, item) => {
     const qty = item.selectedQuantity ?? 0
     return acc + item.costPerNight * +qty
