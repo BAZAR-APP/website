@@ -142,25 +142,22 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
     setGuests,
     setDates,
   } = useBookingStore()
-  console.log(selectedDates)
 
   // Helper function to check if a date range overlaps with existing bookings
   const hasBookingConflict = (startDate: Date, endDate: Date): boolean => {
-    return bookings.some(booking => {
+    return bookings.some((booking) => {
       const bookingStart = new Date(booking.startDate)
       const bookingEnd = new Date(booking.endDate)
-      
+
       // Check if the ranges overlap
       // Two ranges overlap if: start1 < end2 AND start2 < end1
       return (
-        (isAfter(startDate, bookingStart) || isEqual(startDate, bookingStart)) && 
-        (isBefore(startDate, bookingEnd) || isEqual(startDate, bookingEnd))
-      ) || (
-        (isAfter(endDate, bookingStart) || isEqual(endDate, bookingStart)) && 
-        (isBefore(endDate, bookingEnd) || isEqual(endDate, bookingEnd))
-      ) || (
-        (isBefore(startDate, bookingStart) || isEqual(startDate, bookingStart)) && 
-        (isAfter(endDate, bookingEnd) || isEqual(endDate, bookingEnd))
+        ((isAfter(startDate, bookingStart) || isEqual(startDate, bookingStart)) &&
+          (isBefore(startDate, bookingEnd) || isEqual(startDate, bookingEnd))) ||
+        ((isAfter(endDate, bookingStart) || isEqual(endDate, bookingStart)) &&
+          (isBefore(endDate, bookingEnd) || isEqual(endDate, bookingEnd))) ||
+        ((isBefore(startDate, bookingStart) || isEqual(startDate, bookingStart)) &&
+          (isAfter(endDate, bookingEnd) || isEqual(endDate, bookingEnd)))
       )
     })
   }
@@ -174,7 +171,7 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
   // Helper function to get suggested checkout date for a package
   const getSuggestedCheckOutForPackage = (checkInDate: Date, packageType: PackageType): Date => {
     const checkInDay = checkInDate.getDay()
-    
+
     switch (packageType) {
       case PackageType.WEEKEND:
         if (checkInDay === 4) return addDays(checkInDate, 3) // Thursday to Sunday
@@ -280,13 +277,14 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
 
   // Helper function to check if a date is within any booking period
   const isDateBooked = (date: Date): boolean => {
-    return bookings.some(booking => {
+    return bookings.some((booking) => {
       const bookingStart = new Date(booking.startDate)
       const bookingEnd = new Date(booking.endDate)
-      
+
       // Check if date is within booking period (inclusive of start, exclusive of end)
-      return (isAfter(date, bookingStart) || isEqual(date, bookingStart)) && 
-             isBefore(date, bookingEnd)
+      return (
+        (isAfter(date, bookingStart) || isEqual(date, bookingStart)) && isBefore(date, bookingEnd)
+      )
     })
   }
 
@@ -390,7 +388,6 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
 
   const nights = calculateNights()
   const currentPrice = getCurrentPrice()
-console.log(selectedPlan);
 
   const total =
     (selectedPlan?.id
@@ -401,7 +398,7 @@ console.log(selectedPlan);
 
   useEffect(() => {
     if (selectedPlan?.id) {
-      setSelectedPackageType(null)
+      setSelectedPackageType(selectedPlan?.type?.toLocaleLowerCase() as PackageType)
       setDates(new Date(), new Date())
     }
   }, [selectedPlan])
@@ -430,7 +427,7 @@ console.log(selectedPlan);
               subtitle="Thursday to Saturday"
               price={packageInfo.weekendCost}
               currency={bookingConfig.currency}
-              checked={selectedPackageType === PackageType.WEEKEND}
+              checked={!selectedPlan?.id && selectedPackageType === PackageType.WEEKEND}
               disabled={!!selectedPlan?.id}
               onSelect={handlePackageSelect}
               packageType={PackageType.WEEKEND}
@@ -440,7 +437,7 @@ console.log(selectedPlan);
               subtitle="Friday to Wednesday"
               price={packageInfo.weekDaysCost}
               currency={bookingConfig.currency}
-              checked={selectedPackageType === PackageType.WEEKDAY}
+              checked={!selectedPlan?.id && selectedPackageType === PackageType.WEEKDAY}
               disabled={!!selectedPlan?.id}
               onSelect={handlePackageSelect}
               packageType={PackageType.WEEKDAY}
@@ -450,7 +447,7 @@ console.log(selectedPlan);
               subtitle="7 consecutive nights"
               price={packageInfo.fullWeekCost}
               currency={bookingConfig.currency}
-              checked={selectedPackageType === PackageType.FULL_WEEK}
+              checked={!selectedPlan?.id && selectedPackageType === PackageType.FULL_WEEK}
               disabled={!!selectedPlan?.id}
               onSelect={handlePackageSelect}
               packageType={PackageType.FULL_WEEK}
@@ -460,7 +457,7 @@ console.log(selectedPlan);
               subtitle="30 consecutive nights"
               price={packageInfo.fullMonthCost}
               currency={bookingConfig.currency}
-              checked={selectedPackageType === PackageType.FULL_MONTH}
+              checked={!selectedPlan?.id && selectedPackageType === PackageType.FULL_MONTH}
               disabled={!!selectedPlan?.id}
               onSelect={handlePackageSelect}
               packageType={PackageType.FULL_MONTH}
@@ -713,7 +710,7 @@ console.log(selectedPlan);
             </span>
           </div>
         )}
-        {selectedPackageType && (
+        {selectedPackageType && !selectedPlan?.id && (
           <div className="flex justify-between items-center">
             <span className="text-[16px] font-normal text-[#19191A] flex items-center">
               {capitalizeWords(selectedPackageType?.split('_')?.join(' '))}

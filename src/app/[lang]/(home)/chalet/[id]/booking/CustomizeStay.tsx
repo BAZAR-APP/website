@@ -121,6 +121,7 @@ export default function CustomizeStay({ onNext }: CustomizeStayProps) {
         <Button
           intent="ghost"
           className="text-[#19191A] py-2 rounded-lg text-sm font-medium w-[150px]"
+          onClick={onNext}
         >
           Skip For Now
         </Button>
@@ -129,6 +130,7 @@ export default function CustomizeStay({ onNext }: CustomizeStayProps) {
             setValue('selectedAddonsTotal', total)
             onNext()
           }}
+          disabled={selectedAddons?.length === 0}
           className="cursor-pointer bg-[#29397E] text-white py-2 rounded-lg text-sm font-medium w-[170px]"
         >
           Add For Booking

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { ChatHeader } from './ChatHeader'
 import { ChatMessage } from './ChatMessage'
 import { ChatInput } from './ChatInput'
-import { GeminiService } from './services/geminiService'
+import { OpenAIService } from './services/openaiService'
 import toast from 'react-hot-toast'
 
 interface Message {
@@ -33,16 +33,16 @@ export const ChatBot: React.FC = () => {
       showTopicSelector: true,
     },
   ])
-  const geminiService = new GeminiService()
+  const openaiService = new OpenAIService()
 
   const generateAIResponse = async (userMessage: string): Promise<string> => {
-    if (!geminiService) {
+    if (!openaiService) {
       return 'API key not configured. Please check your environment variables.'
     }
 
     try {
       const context = `You are a helpful customer service chatbot for a chalet booking service. The user has selected the topic: ${selectedTopic}. Please provide relevant assistance.`
-      return await geminiService.generateResponse(userMessage, context)
+      return await openaiService.generateResponse(userMessage, context)
     } catch (error) {
       toast.error('Failed to generate AI response. Please check your API key.')
       return "I apologize, but I'm having trouble processing your request right now. Please try again or check your API key."
@@ -109,7 +109,7 @@ export const ChatBot: React.FC = () => {
       <section className="flex items-start self-stretch bg-white p-4 max-sm:p-3 flex-1 overflow-hidden">
         <div className="flex w-[350px] flex-col items-start gap-5 p-0 max-sm:w-full h-full">
           <div className="flex flex-col gap-5 flex-1 overflow-y-auto">
-            {messages.map((message, index) => {
+            {messages.map((message) => {
               if (message.showTopicSelector) {
                 return (
                   <ChatMessage
