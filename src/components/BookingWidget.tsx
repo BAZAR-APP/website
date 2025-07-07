@@ -9,7 +9,16 @@ import { useBookingStore } from '../../stores/useBookingStore'
 import CustomPopOver from './CustomPopOver'
 import SimpleCalender from './Calender/SimpleCalender'
 import useToggle from '@/lib/hooks/useToggle'
-import { format, addDays, isAfter, isBefore, isEqual } from 'date-fns'
+import {
+  format,
+  addDays,
+  isAfter,
+  isBefore,
+  isEqual,
+  isSameDay,
+  startOfDay,
+  endOfDay,
+} from 'date-fns'
 import { capitalizeWords } from '@/lib/utils'
 import { Bookings } from '../../types/chalets'
 
@@ -145,20 +154,14 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
 
   // Helper function to check if a date range overlaps with existing bookings
   const hasBookingConflict = (startDate: Date, endDate: Date): boolean => {
-    return bookings.some((booking) => {
-      const bookingStart = new Date(booking.startDate)
-      const bookingEnd = new Date(booking.endDate)
+    const rangeStart = startOfDay(startDate)
+    const rangeEnd = endOfDay(endDate)
 
-      // Check if the ranges overlap
-      // Two ranges overlap if: start1 < end2 AND start2 < end1
-      return (
-        ((isAfter(startDate, bookingStart) || isEqual(startDate, bookingStart)) &&
-          (isBefore(startDate, bookingEnd) || isEqual(startDate, bookingEnd))) ||
-        ((isAfter(endDate, bookingStart) || isEqual(endDate, bookingStart)) &&
-          (isBefore(endDate, bookingEnd) || isEqual(endDate, bookingEnd))) ||
-        ((isBefore(startDate, bookingStart) || isEqual(startDate, bookingStart)) &&
-          (isAfter(endDate, bookingEnd) || isEqual(endDate, bookingEnd)))
-      )
+    return bookings.some((booking) => {
+      const bookingStart = startOfDay(new Date(booking.startDate))
+      const bookingEnd = endOfDay(new Date(booking.endDate))
+
+      return rangeStart <= bookingEnd && rangeEnd >= bookingStart
     })
   }
 
@@ -174,7 +177,7 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
 
     switch (packageType) {
       case PackageType.WEEKEND:
-        if (checkInDay === 4) return addDays(checkInDate, 3) // Thursday to Sunday
+        if (checkInDay === 4) return addDays(checkInDate, 2) // Thursday to Sunday
         if (checkInDay === 5) return addDays(checkInDate, 2) // Friday to Sunday
         if (checkInDay === 6) return addDays(checkInDate, 1) // Saturday to Sunday
         return addDays(checkInDate, 3) // Fallback
@@ -274,6 +277,23 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
 
     return disabledDates
   }, [selectedPackageType, getDateRestrictions])
+
+  const firstEnabledDate = useMemo(() => {
+    if (!selectedPackageType) return null
+
+    const today = new Date()
+    const endDate = addDays(today, 365)
+
+    for (let date = new Date(today); date <= endDate; date = addDays(date, 1)) {
+      const isDisabled = getDisabledDatesArray.some((disabled) => isSameDay(disabled, date))
+
+      if (!isDisabled) {
+        return date
+      }
+    }
+
+    return null
+  }, [selectedPackageType, getDisabledDatesArray, selectedPlan])
 
   // Helper function to check if a date is within any booking period
   const isDateBooked = (date: Date): boolean => {
@@ -400,9 +420,17 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
     if (selectedPlan?.id) {
       setSelectedPackageType(selectedPlan?.type?.toLocaleLowerCase() as PackageType)
       setDates(new Date(), new Date())
+    } else {
+      setSelectedPackageType(null)
+      setDates(new Date(), new Date())
     }
   }, [selectedPlan])
-
+  useEffect(() => {
+    if (firstEnabledDate) {
+      const suggestedCheckOut = getDateRestrictions.getSuggestedCheckOut(firstEnabledDate)
+      setDates(firstEnabledDate, suggestedCheckOut)
+    }
+  }, [firstEnabledDate])
   return (
     <div className="bg-[#F9FAFB] rounded-2xl">
       <div className="sm:p-5 p-4 !pb-4">

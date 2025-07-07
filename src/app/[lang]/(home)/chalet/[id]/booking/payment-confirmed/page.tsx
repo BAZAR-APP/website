@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
@@ -9,10 +9,8 @@ import toast from 'react-hot-toast'
 import { extractErrorMessage } from '@/lib/utils'
 import { Chalet } from '../../../../../../../../types/chalets'
 
-interface PaymentConfirmedProps {
-  bookingConfirmed?: boolean
-}
-const PaymentConfirmed = ({ bookingConfirmed = false }: PaymentConfirmedProps) => {
+const PaymentConfirmed = () => {
+  const bookingConfirmed = false
   const { data: session } = useSession()
   const { id, lang } = useParams() as { id: string; lang: 'en' | 'ar' }
   const [data, setData] = useState<Chalet | null>(null)

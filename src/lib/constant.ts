@@ -1,7 +1,5 @@
 import { NotificationData } from '@/components/Notification/NotificationItem'
 
-import { SubmitReviewData } from '@/components/Booking/SubmitReviewDailog'
-
 export const getUserNameInitials = (name: string) =>
   name
     .split(' ')
@@ -346,9 +344,7 @@ export const chaletRules = {
     refundTimeEstimate: 'Refund Time Estimate Within 72 Hours',
   },
 }
-export const priceDetails = [
-  { label: 'Refundable Deposit', amount: '200 KWD' },
-]
+export const priceDetails = [{ label: 'Refundable Deposit', amount: '200 KWD' }]
 
 // Home Page Data
 
@@ -659,7 +655,7 @@ export const dumyNotifications: NotificationData[] = [
     category: 'booking',
   },
 ]
-export const submitReview: SubmitReviewData = {
+export const submitReview = {
   title: 'Luxury Lakeside Retreat',
   points: 200,
   guests: '5–7 guests',
@@ -670,4 +666,3 @@ export const submitReview: SubmitReviewData = {
   imageUrl: 'https://picsum.photos/seed/lakeside/311/190',
   imageAlt: 'Luxury Lakeside Property Interior',
 }
-

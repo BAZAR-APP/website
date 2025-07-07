@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+import React, { useState } from 'react'
 import { MapPin, Calendar } from 'lucide-react'
 import Image from 'next/image'
 import Button from './Button/Button'
@@ -29,12 +29,14 @@ const CouponSection: React.FC<{
   onChange: (value: string) => void
   onApply: () => void
   isDisabled: boolean
-}> = ({ onChange, onApply, isDisabled }) => (
+  value: any
+}> = ({ onChange, onApply, isDisabled, value }) => (
   <div className="relative">
     <CommonInput
       name="redeemCode"
       type="text"
       onChange={(value) => onChange?.(value?.target?.value)}
+      value={value}
       placeholder="Apply redeemed code here"
       className="!bg-[#F3F4F6] !text-[#484A4C] mt-1 relative !rounded-[8px] !border-none !h-[42px] placeholder:text-[#9EA0A2]"
     />
@@ -90,7 +92,7 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
 }) => {
   const { id } = useParams()
   const { getValues, watch, setValue } = useFormContext()
-  const { selectedDiscount } = useUserStore()
+  const { selectedDiscount, setSelectedDiscount } = useUserStore()
   const [isDiscountApplied, setIsDiscountApplied] = React.useState(false)
   const [discountedTotal, setDiscountedTotal] = React.useState<number | null>(null)
   const router = useRouter()
@@ -98,7 +100,7 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
   const selectedAddonsTotal = watch('selectedAddonsTotal')
   const redeemedCode = watch('redeemed_code')
   const romanticWeekend = watch('romanticWeekend')
-
+  const [loading, setLoading] = useState(false)
   const {
     selectedDates,
     selectedPlan,
@@ -110,8 +112,7 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
     resetBooking,
   } = useBookingStore()
   const isSplitPayment = getValues()?.paymentOption === 'split'
-
-  const grandTotal = selectedAddonsTotal + Number(packageAmount) + (romanticWeekend ? 25 : 0)
+  const grandTotal = (selectedAddonsTotal ?? 0) + Number(packageAmount) + (romanticWeekend ? 25 : 0)
   const handleApplyDiscount = () => {
     if (!selectedDiscount?.discountPercent || !grandTotal) return
     const discountAmount = (grandTotal * selectedDiscount?.discountPercent) / 100
@@ -127,6 +128,7 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
       quantity: customization?.selectedQuantity,
     }))
     try {
+      setLoading(true)
       const body = {
         startDate: selectedDates?.checkIn,
         endDate: selectedDates?.checkOut,
@@ -143,10 +145,13 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
         isRomanticBookingSelected: !!romanticWeekend,
       }
       await api.post('/booking', body)
+      setSelectedDiscount(null)
       resetBooking()
       router.replace(`/chalet/${id}/booking/payment-confirmed`)
     } catch (error) {
       toast.error(extractErrorMessage(error))
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -230,7 +235,7 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
               )}
               <PriceRowUI
                 label={isDiscountApplied ? 'Discounted Total' : 'Total'}
-                amount={`${(isDiscountApplied ? discountedTotal : grandTotal)} KWD`}
+                amount={`${isDiscountApplied ? discountedTotal : grandTotal} KWD`}
                 labelFont="medium"
               />
             </div>
@@ -264,6 +269,7 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
                 }}
                 onApply={handleApplyDiscount}
                 isDisabled={!redeemedCode}
+                value={selectedDiscount?.couponCode}
               />
             )}
 
@@ -271,6 +277,8 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
               <Button
                 className="w-full text-white mt-3.5 !px-0 rounded-lg font-medium cursor-pointer"
                 onClick={bookNow}
+                loading={loading}
+                disabled={loading}
               >
                 {isSplitPayment ? 'Book Now with 50% Payment' : 'Book Now'}
               </Button>
