@@ -75,13 +75,13 @@ const LoyaltyPoints = () => {
             {page.loyaltyPoints.actions.map((action: any, idx: number) => (
               <div
                 key={idx}
-                className="flex flex-col items-start p-4 gap-4 w-full lg:w-[370px] xl:w-[490px] bg-[#29397E] rounded-2xl"
+                className="flex flex-col items-start p-4 gap-3 w-full lg:w-[370px] xl:w-[490px] bg-[#29397E] rounded-2xl"
               >
                 <div className="flex sm:flex-row flex-col sm:items-center items-start gap-2 mb-4">
                   <Image
                     src={idx === 0 ? '/images/aboutTier.svg' : '/images/buyPoints.svg'}
-                    width={105}
-                    height={105}
+                    width={idx === 0 ? 96 : 105}
+                    height={idx === 0 ? 96 : 105}
                     alt="Tier image"
                   />
                   <div>
