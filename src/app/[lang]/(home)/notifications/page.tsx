@@ -22,18 +22,19 @@ const Notifications = () => {
 
   const { data, isLoading } = useQueryBase({
     queryKey: ['messages', page, activeTab],
-    url: `/messages`,
+    url: `/messages?page=${page}&limit=${limit}`,
     staleTime: 0,
     cacheTime: 0,
   })
-// ?page=${page}&limit=${limit}
+  //
   const notifications = data?.data as NotificationResponse
-  const total = notifications?.info?.total || 0
+
+  const total = notifications?.total || 0
   const totalPages = Math.ceil(total / limit)
 
   useEffect(() => {
-    if (notifications?.messages) {
-      setAllMessages((prev) => [...prev, ...notifications.messages])
+    if (notifications?.data) {
+      setAllMessages((prev) => [...prev, ...notifications.data])
     }
   }, [notifications])
 

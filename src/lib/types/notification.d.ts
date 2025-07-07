@@ -1,9 +1,7 @@
 export interface NotificationResponse {
-  info: {
-    total: number
-    limit: number
-  }
-  messages: NotificationMessage[]
+  total: number
+  limit: number
+  data: NotificationMessage[]
 }
 
 export interface NotificationMessage {
