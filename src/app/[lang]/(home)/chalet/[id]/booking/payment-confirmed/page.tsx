@@ -7,32 +7,15 @@ import { useSession } from 'next-auth/react'
 import { ChevronRight, CircleDollarSign, Clock, Download, MapPin, PartyPopper } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { extractErrorMessage } from '@/lib/utils'
+import { Chalet } from '../../../../../../../../types/chalets'
 
-interface ChaletData {
-  id: string
-  title: string
-  photoURL: string
-  galleryPhotoURLs: string[]
-  amenities: { id: string; title: string; iconPhotoUrl?: string }[]
-  noOfLoyalityPoints?: number
-  noOfBaths: string
-  noOfBedrooms: string
-  maxNoOfBeds: string
-  maxNoOfGuests: string
-  isEntireHomeAvailabe: boolean
-  street1: string
-  street2: string
-  city: string
-  state: string
-  country: string
-}
 interface PaymentConfirmedProps {
   bookingConfirmed?: boolean
 }
 const PaymentConfirmed = ({ bookingConfirmed = false }: PaymentConfirmedProps) => {
   const { data: session } = useSession()
   const { id, lang } = useParams() as { id: string; lang: 'en' | 'ar' }
-  const [data, setData] = useState<ChaletData | null>(null)
+  const [data, setData] = useState<Chalet | null>(null)
   const [loading, setLoading] = useState(true)
   useEffect(() => {
     if (!id || !lang) return
@@ -142,7 +125,7 @@ const PaymentConfirmed = ({ bookingConfirmed = false }: PaymentConfirmedProps) =
         </h4>
         <InfoItem
           icon={<CircleDollarSign className="w-4 h-4" />}
-          text="Refundable Security Deposit: 100 KWD"
+          text="Refundable Security Deposit: 200 KWD"
         />
         <InfoItem
           icon={<PartyPopper className="w-4 h-4" />}

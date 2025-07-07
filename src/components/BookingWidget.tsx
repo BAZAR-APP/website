@@ -100,7 +100,7 @@ const PricingRow = ({
         value={packageType}
         checked={checked}
         onChange={() => onSelect(packageType)}
-        className="!cursor-pointer"
+        className={disabled ? 'cursor-not-allowed' : '!cursor-pointer'}
         disabled={disabled}
       />
     </span>
@@ -361,7 +361,7 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
           <>
             <PricingRow
               title="Weekend"
-              subtitle="Thursday to Sunday"
+              subtitle="Thursday to Saturday"
               price={packageInfo.weekendCost}
               currency={bookingConfig.currency}
               checked={selectedPackageType === PackageType.WEEKEND}

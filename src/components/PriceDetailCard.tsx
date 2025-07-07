@@ -24,7 +24,7 @@ const PriceDetailCard: React.FC<PriceDetailCardProps> = ({
 }) => {
   const containerClasses = `
   relative cursor-pointer transition-all duration-200 
-  md:w-[225px] w-full md:h-[155px] h-[170px] rounded-[30px] xxl-w
+  md:w-[225px] w-full md:min-h-[155px] min-h-[170px] h-full px-1 rounded-[30px] xxl-w
   flex flex-col items-center justify-center border border-[#E5E7EB]
   ${isSelected ? 'bg-white shadow-lg' : 'bg-white hover:border-gray-300 hover:shadow-md'}
 `

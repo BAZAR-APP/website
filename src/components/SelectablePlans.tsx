@@ -10,7 +10,7 @@ const SelectablePlans: FC<{ subscriptions: ChaletSubscription[] }> = ({ subscrip
 
   return (
     <div
-      className={`flex 2xl:flex-nowrap flex-wrap justify-start mx-auto md:pt-15 pt-10 border-b border-[#E5E7EB] md:pb-12 pb-10 ${
+      className={`flex flex-wrap justify-start mx-auto md:pt-15 pt-10 border-b border-[#E5E7EB] md:pb-12 pb-10 ${
         shouldUseLargeGap ? 'gap-14' : 'gap-6'
       }`}
     >
