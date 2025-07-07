@@ -82,36 +82,41 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ onClick, chalet, isMember =
           <span>{chalet?.city}</span>
           {isMember && (
             <div className="flex gap-1 items-center text-sm text-gray-700 ml-auto">
-              <span className="ml-2">{8}</span>
+              <span className="ml-2">{chalet?.rating ?? 0}</span>
               <Image src={Star} alt="Star" width={16} height={16} />
-              <span className="text-[#484A4C] ml-1">({'200'} reviews)</span>
+              <span className="text-[#484A4C] ml-1">({chalet?.noOfReviews ?? 0} reviews)</span>
             </div>
           )}
         </div>
 
         <div className="text-sm text-[#8E8E93] leading-5">
-          {chalet?.maxNoOfGuests}{' '}
+          {chalet?.minNoOfGuests ?? 0}-{chalet?.maxNoOfGuests ?? 0} guests{' '}
           <span className="text-[#9EA0A2] font-normal text-[9px] pr-1">&bull;</span>
-          Home <span className="text-[#9EA0A2] font-normal text-[9px] pr-1">&bull;</span>
-          {chalet?.maxNoOfBeds}{' '}
+          {chalet?.isEntireHomeAvailabe && (
+            <>
+              Entire Home <span className="text-[#9EA0A2] font-normal text-[9px] pr-1">&bull;</span>
+            </>
+          )}
+          {chalet?.maxNoOfBeds} beds{' '}
           <span className="text-[#9EA0A2] font-normal text-[9px] pr-1">&bull;</span>
-          {chalet?.noOfBaths}
+          {chalet?.noOfBaths} baths
           <br />
-          {/* {chalet?.amenities.map((amenity, index) => (
-            <span key={index} className="text-[#8E8E93] text-sm font-normal">
-              {amenity}
-              {index < amenities.length - 1 && (
-                <span className="mx-1 text-[#9EA0A2] font-normal text-[9px]">&bull;</span>
-              )}
-            </span>
-          ))} */}
+          {chalet?.isFreeWifi && (
+            <span className="text-sm text-[#8E8E93] leading-5">Wifi</span>
+          )}{' '}
+          {chalet?.isFreeParking && (
+            <>
+              <span className="text-[#9EA0A2] font-normal text-[9px] pr-1">&bull;</span>
+              <span className="text-sm text-[#8E8E93] leading-5">Free Parking</span>
+            </>
+          )}
         </div>
         <div className="flex items-center justify-between">
           {!isMember && (
             <div className="flex items-center sm:flex-nowrap flex-wrap text-sm text-gray-700">
-              <span className="mr-1">{5}</span>
+              <span className="mr-1">{chalet?.rating ?? 0}</span>
               <Image src={Star} alt="Star" width={16} height={16} />
-              <span className="text-gray-500 sm:ml-1">({200} reviews)</span>
+              <span className="text-gray-500 sm:ml-1">({chalet?.noOfReviews ?? 0} reviews)</span>
             </div>
           )}
           <div className="flex items-center justify-between ">

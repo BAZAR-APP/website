@@ -100,7 +100,7 @@ const PricingRow = ({
         value={packageType}
         checked={checked}
         onChange={() => onSelect(packageType)}
-        className="!cursor-pointer"
+        className={disabled ? 'cursor-not-allowed' : '!cursor-pointer'}
         disabled={disabled}
       />
     </span>
@@ -427,7 +427,7 @@ console.log(selectedPlan);
           <>
             <PricingRow
               title="Weekend"
-              subtitle="Thursday to Sunday"
+              subtitle="Thursday to Saturday"
               price={packageInfo.weekendCost}
               currency={bookingConfig.currency}
               checked={selectedPackageType === PackageType.WEEKEND}

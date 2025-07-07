@@ -14,8 +14,8 @@ import { Amenity } from '../../types/chalets'
 const FilterSidebar = () => {
   const { setFilters, city, amenities, resetFilters, minPrice, maxPrice } = useChaletFiltersStore()
   const { data } = useQueryBase({
-    queryKey: ['amenities'],
-    url: `/amenity?language=${'en'}`,
+    queryKey: ['amenities', 1],
+    url: `/amenity?language=en&limit=10&page=1`,
     cacheTime: 0,
     staleTime: 0,
   })

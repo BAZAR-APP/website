@@ -23,16 +23,12 @@ const DiscountCard: FC<{
   const { page } = getDictionary(lang)
 
   return (
-    <div
-      className={`relative bg-[#F9FAFB] p-4 rounded-xl flex flex-col items-center ${
-        disabled ? 'opacity-50 pointer-events-none' : ''
-      }`}
-    >
+    <div className={`relative bg-[#F9FAFB] p-4 rounded-xl flex flex-col items-center`}>
       <div
         className={clsx(
-          'mb-3 relative',
+          'mb-3 relative h-full',
           disabled &&
-            'rounded-[20px] flex justify-center bg-black/50 backdrop-blur-sm z-[2] w-full pointer-events-none',
+            'rounded-[20px] flex justify-center bg-black/50 backdrop-blur-sm z-[2] h-full w-full pointer-events-none',
         )}
       >
         <Image
@@ -54,7 +50,9 @@ const DiscountCard: FC<{
         {points} points
       </p>
       <button
-        className="mt-2 cursor-pointer self-start text-sm text-[#29397E] font-medium underline"
+        className={`mt-2 cursor-pointer self-start text-sm text-[#29397E] font-medium underline ${
+          disabled ? 'opacity-50 pointer-events-none' : ''
+        }`}
         onClick={!disabled ? onRedeemClick : undefined}
         disabled={disabled}
       >

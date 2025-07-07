@@ -84,7 +84,7 @@ const PropertyDetails = ({
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-6 mt-6 text-[#19191A] md:text-[16px] text-sm leading-[20px] pt-3">
         {viewTypes?.map((viewType: ViewType) => (
           <DetailItem
-            icon={viewType?.iconPhotoId}
+            icon={viewType?.iconPhotoUrl ?? ''}
             text={capitalizeWords(viewType?.title)}
             key={viewType?.id}
             alt={viewType?.title}

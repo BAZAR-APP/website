@@ -13,8 +13,13 @@ export interface Chalet {
   maxNoOfBeds: string
   noOfBaths: string
   maxNoOfGuests: string
+  noOfLoyalityPoints?: number
   minNoOfGuests: string
   isEntireHomeAvailabe: boolean
+  isFreeParking?: boolean
+  isFreeWifi?: boolean
+  rating?:number
+  noOfReviews?: number
   perHourCost: number
   perNightCost: number
   weekendCost: number
@@ -71,6 +76,7 @@ export interface ViewType {
   title: string
   hasCustomizedIcon: boolean
   iconTitle: string | null
+  iconPhotoUrl?: string | null
   iconPhotoId: string
 }
 

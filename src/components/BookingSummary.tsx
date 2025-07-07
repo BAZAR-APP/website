@@ -111,8 +111,7 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
   } = useBookingStore()
   const isSplitPayment = getValues()?.paymentOption === 'split'
 
-  const grandTotal = selectedAddonsTotal + 200 + Number(packageAmount) + (romanticWeekend ? 25 : 0)
-
+  const grandTotal = selectedAddonsTotal + Number(packageAmount) + (romanticWeekend ? 25 : 0)
   const handleApplyDiscount = () => {
     if (!selectedDiscount?.discountPercent || !grandTotal) return
     const discountAmount = (grandTotal * selectedDiscount?.discountPercent) / 100
@@ -215,19 +214,23 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
                   }
                 />
               ))}
-              <PriceRowUI label="Refundable Deposit" amount="200 KWD" />
+              {/* <PriceRowUI label="Refundable Deposit" amount="200 KWD" /> */}
               {romanticWeekend && <PriceRowUI label="Romantic Weekend" amount="25 KWD" />}
+              <PriceRowUI
+                label={'Package Amount'}
+                amount={`${Number(packageAmount)} KWD`}
+                labelFont="medium"
+              />
               <hr className="my-4" />
-
               {isDiscountApplied && (
                 <div className="flex justify-between items-center text-sm text-[#9EA0A2] line-through">
                   <span>Original Total</span>
-                  <span>{grandTotal.toFixed(2)} KWD</span>
+                  <span>{grandTotal} KWD</span>
                 </div>
               )}
               <PriceRowUI
                 label={isDiscountApplied ? 'Discounted Total' : 'Total'}
-                amount={`${(isDiscountApplied ? discountedTotal : grandTotal)?.toFixed(2)} KWD`}
+                amount={`${(isDiscountApplied ? discountedTotal : grandTotal)} KWD`}
                 labelFont="medium"
               />
             </div>

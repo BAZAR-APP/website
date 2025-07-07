@@ -167,7 +167,7 @@ export default function calculateCustomLoyltyPointsPrice(
   }
 
   const price = pointsToBuy / rate
-  return Number(price.toFixed(2))
+  return Number(price)
 }
 export const formatRelativeTime = (dateString: string) => {
   try {

@@ -15,7 +15,7 @@ const BedroomCard: React.FC<BedroomCardProps> = ({ className = '', room }) => {
   return (
     <>
       <div
-        className={`bg-white border border-[#E5E5EA] rounded-[20px] py-3 px-4 flex flex-col items-start text-center space-y-2.5 hover:shadow-md transition-shadow cursor-pointer min-w-[120px] ${className}`}
+        className={`bg-white border border-[#E5E5EA] rounded-[20px] py-3 px-4 flex flex-col items-start space-y-2.5 hover:shadow-md transition-shadow cursor-pointer min-w-[120px] ${className}`}
         onClick={() => setRoom(room)}
       >
         <div className="flex items-center justify-center">

@@ -53,7 +53,7 @@ const ChaletsCard: React.FC<ChaletsCardProps> = ({ title, endpoint }) => {
       <div className="flex flex-col items-start gap-12 w-full">
         <h1 className="w-full text-black text-[32px] md:text-[39px] font-semibold">{title}</h1>
 
-        <div className="flex justify-start overflow-x-auto gap-5 sm:w-auto w-full" ref={scrollRef} onScroll={handleScroll}>
+        <div className="flex justify-start overflow-x-auto gap-5 w-full" ref={scrollRef} onScroll={handleScroll}>
           {chalets.map((chalet, index) => (
             <PropertyCard chalet={chalet} onClick={() => {}} key={index} isMember={true} />
           ))}
