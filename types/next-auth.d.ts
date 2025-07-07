@@ -10,6 +10,7 @@ declare module 'next-auth' {
       email?: string
       phoneNumber?: string
       name?: string
+      userTierType?: string
       [key: string]: any
     }
   }

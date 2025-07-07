@@ -9,6 +9,7 @@ import { useBuyLoyltyPointsStore } from '../../stores/useBuyLoyltyPoints'
 import { useQueryBase } from '@/lib/axios'
 import { LoyaltyPointsPackages } from '@/lib/types/loylty-points'
 import calculateCustomLoyltyPointsPrice from '@/lib/utils'
+import OverlayLoader from './OverlayLoader'
 
 type BuyPointsDialogProps = {
   isOpen: boolean
@@ -46,7 +47,7 @@ const BuyPointsDialog: React.FC<BuyPointsDialogProps> = ({
   const maxPointsAllowed = tierLimits[tierKey] ?? 100000
   const minPointsAllowed = 1
 
-  const { data } = useQueryBase({
+  const { data, isLoading } = useQueryBase({
     queryKey: ['loyaltyPointsPackages'],
     url: `/loyaltyPointsPackages`,
   })
@@ -64,72 +65,95 @@ const BuyPointsDialog: React.FC<BuyPointsDialogProps> = ({
       </p>
 
       <div className="flex flex-col items-start space-y-3 my-4">
-        {LoyaltyPointsPackagesList?.map((option: LoyaltyPointsPackages, index) => (
-          <button
-            key={option?.id}
-            className={`sm:!px-4 !px-3 !py-2 border !rounded-[12px] cursor-pointer transition ${
-              selected === index
-                ? 'bg-[#29397E] text-white'
-                : 'border-[#D0D5DD] transition text-[#344054]'
-            }`}
-            onClick={() => {
-              setSelectedPackageLoyaltyPoints({
-                points: option?.points,
-                price: Number(option?.price),
-                id: option?.id,
-              })
-              handleSelect(index)
-            }}
-          >
-            <span className="text-[14px] leading-[17px] font-medium">
-              {option.points} Points – {option.price} KD
-            </span>
-            {option.discount && (
-              <span className="text-[14px] leading-[17px] font-medium">({option.discount})</span>
+        {isLoading ? (
+          <OverlayLoader open={isLoading} />
+        ) : (
+          <>
+            {LoyaltyPointsPackagesList?.map((option: LoyaltyPointsPackages, index) => (
+              <button
+                key={option?.id}
+                className={`sm:!px-4 !px-3 !py-2 border !rounded-[12px] cursor-pointer transition ${
+                  selected === index
+                    ? 'bg-[#29397E] text-white'
+                    : 'border-[#D0D5DD] transition text-[#344054]'
+                }`}
+                onClick={() => {
+                  setSelectedPackageLoyaltyPoints({
+                    points: option?.points,
+                    price: Number(option?.price),
+                    id: option?.id,
+                  })
+                  handleSelect(index)
+                }}
+              >
+                <span className="text-[14px] leading-[17px] font-medium">
+                  {option.points} Points – {option.price} KD
+                </span>
+                {option.discount && (
+                  <span className="text-[14px] leading-[17px] font-medium">
+                    ({option.discount})
+                  </span>
+                )}
+              </button>
+            ))}
+
+            <Button
+              intent="transperent"
+              className={`!px-4 !py-2 border !rounded-[12px] ${
+                custom ? 'bg-[#29397E] text-white' : 'border-[#D0D5DD] transition'
+              }`}
+              onClick={handleCustomSelect}
+              disabled={isLoading}
+            >
+              Custom
+            </Button>
+
+            {custom && (
+              <div className="relative w-full my-2.5">
+                <CommonInput
+                  type="text"
+                  placeholder={`Enter between ${minPointsAllowed.toLocaleString()} - ${maxPointsAllowed.toLocaleString()} points`}
+                  min={minPointsAllowed}
+                  maxLength={maxPointsAllowed.toString().length}
+                  className="!w-full relative bg-[#F3F4F6] border border-[#D0D5DD] !rounded-md !text-sm !h-[42px]"
+                  disabled={isLoading}
+                  onChange={(e) => {
+                    const raw = e.target.value.replace(/[^\d]/g, '')
+                    if (!raw) {
+                      setSelectedPackageLoyaltyPoints({
+                        price: 0,
+                        points: 0,
+                        isCustom: true,
+                      })
+                      return
+                    }
+
+                    const num = +raw
+
+                    if (num > maxPointsAllowed) return
+
+                    const finalValue = num < minPointsAllowed ? minPointsAllowed : num
+
+                    setSelectedPackageLoyaltyPoints({
+                      price: calculateCustomLoyltyPointsPrice(
+                        finalValue,
+                        currentUserTier?.toLowerCase(),
+                      ),
+                      points: finalValue,
+                      isCustom: true,
+                    })
+                  }}
+                />
+                <span className="absolute top-3 right-3 text-[14px] leading-[17px] font-medium text-[#29397E]">
+                  {calculateCustomLoyltyPointsPrice(
+                    selectedPackageLoyaltyPoints?.points || 0,
+                    currentUserTier?.toLocaleLowerCase(),
+                  ).toFixed(2)}{' '}
+                  KD
+                </span>
+              </div>
             )}
-          </button>
-        ))}
-
-        <Button
-          intent="transperent"
-          className={`!px-4 !py-2 border !rounded-[12px] ${
-            custom ? 'bg-[#29397E] text-white' : 'border-[#D0D5DD] transition'
-          }`}
-          onClick={handleCustomSelect}
-        >
-          Custom
-        </Button>
-
-        {custom && (
-          <div className="relative w-full my-2.5">
-            <CommonInput
-              type="text"
-              placeholder={`Enter between ${minPointsAllowed.toLocaleString()} - ${maxPointsAllowed.toLocaleString()} points`}
-              min={minPointsAllowed}
-              maxLength={maxPointsAllowed.toString().length}
-              className="!w-full relative bg-[#F3F4F6] border border-[#D0D5DD] !rounded-md !text-sm !h-[42px]"
-              onChange={(e) => {
-                const raw = e.target.value.replace(/[^\d]/g, '') 
-                const value = Math.min(+raw, maxPointsAllowed)
-                const finalValue = value < minPointsAllowed ? minPointsAllowed : value
-                setSelectedPackageLoyaltyPoints({
-                  price: calculateCustomLoyltyPointsPrice(
-                    finalValue,
-                    currentUserTier?.toLowerCase(),
-                  ),
-                  points: finalValue,
-                  isCustom: true,
-                })
-              }}
-            />
-            <span className="absolute top-3 right-3 text-[14px] leading-[17px] font-medium text-[#29397E]">
-              {calculateCustomLoyltyPointsPrice(
-                selectedPackageLoyaltyPoints?.points || 0,
-                currentUserTier?.toLocaleLowerCase(),
-              )}{' '}
-              KD
-            </span>
-          </div>
+          </>
         )}
       </div>
 
@@ -150,7 +174,7 @@ const BuyPointsDialog: React.FC<BuyPointsDialogProps> = ({
       <Button
         className="w-full"
         onClick={() => router.push('/loyalty-points/payments')}
-        disabled={!selectedPackageLoyaltyPoints?.points}
+        disabled={!selectedPackageLoyaltyPoints?.points || isLoading}
       >
         Buy Now
       </Button>

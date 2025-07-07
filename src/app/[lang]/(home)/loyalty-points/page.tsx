@@ -60,7 +60,7 @@ const LoyaltyPoints = () => {
             <EarnedPointsCard
               currentPoints={data?.data?.totalPoints || 0}
               page={page}
-              tier={data?.data?.userTier}
+              tier={user?.user?.userTierType || data?.data?.userTier}
               lang={lang}
             />
             <Image
@@ -132,7 +132,7 @@ const LoyaltyPoints = () => {
       {isDialogOpen && (
         <BuyPointsDialog
           isOpen={isDialogOpen}
-          currentUserTier={data?.data?.userTier}
+          currentUserTier={user?.user?.userTierType || data?.data?.userTier}
           setIsOpen={() => {
             setSelectedPackageLoyaltyPoints(null)
             setDialogOpen(false)
