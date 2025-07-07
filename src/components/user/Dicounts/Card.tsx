@@ -28,7 +28,7 @@ const DiscountCard: FC<{
         className={clsx(
           'mb-3 relative h-full',
           disabled &&
-            'rounded-[20px] flex justify-center bg-black/50 backdrop-blur-sm z-[2] h-full w-full pointer-events-none',
+            'rounded-[20px] flex justify-center items-center py-3.5 bg-black/50 backdrop-blur-sm z-[2] h-full w-full pointer-events-none',
         )}
       >
         <Image
@@ -40,7 +40,7 @@ const DiscountCard: FC<{
         />
         {disabled && (
           <div className="absolute inset-0 bg-[#00000] flex items-center justify-center rounded-xl">
-            <LockIcon />
+            <Image src="/images/lock.svg" alt="lock-icon" width={38} height={38} />
           </div>
         )}
       </div>

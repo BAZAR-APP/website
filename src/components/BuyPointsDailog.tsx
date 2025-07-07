@@ -93,7 +93,7 @@ const BuyPointsDialog: React.FC<BuyPointsDialogProps> = ({
         <Button
           intent="transperent"
           className={`!px-4 !py-2 border !rounded-[12px] ${
-            custom ? 'bg-[#29397E] text-white' : 'border-[#D0D5DD] transition'
+            custom ? 'bg-[#29397E] text-white' : 'border-[#D0D5DD] text-[#344054] transition'
           }`}
           onClick={handleCustomSelect}
         >
