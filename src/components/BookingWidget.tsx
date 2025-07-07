@@ -9,7 +9,7 @@ import { useBookingStore } from '../../stores/useBookingStore'
 import CustomPopOver from './CustomPopOver'
 import SimpleCalender from './Calender/SimpleCalender'
 import useToggle from '@/lib/hooks/useToggle'
-import { format, addDays } from 'date-fns'
+import { format, addDays, isAfter, isBefore, isEqual } from 'date-fns'
 import { capitalizeWords } from '@/lib/utils'
 import { Bookings } from '../../types/chalets'
 
@@ -144,6 +144,54 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
   } = useBookingStore()
   console.log(selectedDates)
 
+  // Helper function to check if a date range overlaps with existing bookings
+  const hasBookingConflict = (startDate: Date, endDate: Date): boolean => {
+    return bookings.some(booking => {
+      const bookingStart = new Date(booking.startDate)
+      const bookingEnd = new Date(booking.endDate)
+      
+      // Check if the ranges overlap
+      // Two ranges overlap if: start1 < end2 AND start2 < end1
+      return (
+        (isAfter(startDate, bookingStart) || isEqual(startDate, bookingStart)) && 
+        (isBefore(startDate, bookingEnd) || isEqual(startDate, bookingEnd))
+      ) || (
+        (isAfter(endDate, bookingStart) || isEqual(endDate, bookingStart)) && 
+        (isBefore(endDate, bookingEnd) || isEqual(endDate, bookingEnd))
+      ) || (
+        (isBefore(startDate, bookingStart) || isEqual(startDate, bookingStart)) && 
+        (isAfter(endDate, bookingEnd) || isEqual(endDate, bookingEnd))
+      )
+    })
+  }
+
+  // Helper function to check if a specific package period has conflicts
+  const hasPackageConflict = (checkInDate: Date, packageType: PackageType): boolean => {
+    const checkOutDate = getSuggestedCheckOutForPackage(checkInDate, packageType)
+    return hasBookingConflict(checkInDate, checkOutDate)
+  }
+
+  // Helper function to get suggested checkout date for a package
+  const getSuggestedCheckOutForPackage = (checkInDate: Date, packageType: PackageType): Date => {
+    const checkInDay = checkInDate.getDay()
+    
+    switch (packageType) {
+      case PackageType.WEEKEND:
+        if (checkInDay === 4) return addDays(checkInDate, 3) // Thursday to Sunday
+        if (checkInDay === 5) return addDays(checkInDate, 2) // Friday to Sunday
+        if (checkInDay === 6) return addDays(checkInDate, 1) // Saturday to Sunday
+        return addDays(checkInDate, 3) // Fallback
+      case PackageType.WEEKDAY:
+        return addDays(checkInDate, 5) // Friday to Wednesday
+      case PackageType.FULL_WEEK:
+        return addDays(checkInDate, 7)
+      case PackageType.FULL_MONTH:
+        return addDays(checkInDate, 30)
+      default:
+        return addDays(checkInDate, 1)
+    }
+  }
+
   const handleQuantityChange = (newQuantity: number) => {
     if (maxGuests && newQuantity > 0 && newQuantity <= +maxGuests) {
       setGuests(newQuantity)
@@ -156,7 +204,7 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
     setDates(new Date(), new Date())
   }
 
-  // Calendar date filtering logic based on selected package
+  // Calendar date filtering logic based on selected package and bookings
   const getDateRestrictions = useMemo(() => {
     if (!selectedPackageType)
       return { isDateDisabled: () => false, getSuggestedCheckOut: () => addDays(new Date(), 1) }
@@ -164,76 +212,39 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
     const isDateDisabled = (date: Date) => {
       const dayOfWeek = date.getDay() // 0 = Sunday, 1 = Monday, etc.
 
+      // First, check day-of-week restrictions for the package type
+      let isDayRestricted = false
       switch (selectedPackageType) {
         case PackageType.WEEKEND:
           // Weekend: Thursday to Saturday (Thu=4, Fri=5, Sat=6)
-          return ![4, 5, 6].includes(dayOfWeek)
-
+          isDayRestricted = ![4, 5, 6].includes(dayOfWeek)
+          break
         case PackageType.WEEKDAY:
           // Weekday: Friday to Wednesday (Fri=5)
-          // Only allow Friday as check-in day for weekday package
-          return dayOfWeek !== 5
-
+          isDayRestricted = dayOfWeek !== 5
+          break
         case PackageType.FULL_WEEK:
-          // Full week: any day is allowed for check-in
-          return false
-
         case PackageType.FULL_MONTH:
-          // Full month: any day is allowed for check-in
-          return false
-
+          // Full week/month: any day is allowed for check-in
+          isDayRestricted = false
+          break
         default:
-          return false
+          isDayRestricted = false
       }
+
+      // If the day is restricted by package type, disable it
+      if (isDayRestricted) return true
+
+      // Then check if this date would conflict with existing bookings
+      return hasPackageConflict(date, selectedPackageType)
     }
 
     const getSuggestedCheckOut = (checkInDate: Date) => {
-      const checkInDay = checkInDate.getDay() // 0 = Sunday, 1 = Monday, etc.
-
-      switch (selectedPackageType) {
-        case PackageType.WEEKEND:
-          // Weekend package: Always checkout on Sunday (day 0)
-          // Fixed checkout day approach for consistent weekend experience
-          if (checkInDay === 4) {
-            // Thursday
-            return addDays(checkInDate, 3) // Thursday to Sunday (3 nights)
-          } else if (checkInDay === 5) {
-            // Friday
-            return addDays(checkInDate, 2) // Friday to Sunday (2 nights)
-          } else if (checkInDay === 6) {
-            // Saturday
-            return addDays(checkInDate, 1) // Saturday to Sunday (1 night)
-          } else {
-            // Fallback - should not happen if date restrictions work correctly
-            return addDays(checkInDate, 3)
-          }
-
-        case PackageType.WEEKDAY:
-          // Weekday package: Check-in Friday, checkout Wednesday (5 nights)
-          // Friday (5) to Wednesday (3) = 5 nights
-          if (checkInDay === 5) {
-            // Friday
-            return addDays(checkInDate, 5) // Friday to Wednesday (5 nights)
-          } else {
-            // Fallback - should not happen if date restrictions work correctly
-            return addDays(checkInDate, 5)
-          }
-
-        case PackageType.FULL_WEEK:
-          // Full week: 7 consecutive nights
-          return addDays(checkInDate, 7)
-
-        case PackageType.FULL_MONTH:
-          // Full month: 30 consecutive nights
-          return addDays(checkInDate, 30)
-
-        default:
-          return addDays(checkInDate, 1)
-      }
+      return getSuggestedCheckOutForPackage(checkInDate, selectedPackageType)
     }
 
     return { isDateDisabled, getSuggestedCheckOut }
-  }, [selectedPackageType])
+  }, [selectedPackageType, bookings])
 
   // Get package description for checkout info
   const getPackageDescription = () => {
@@ -267,6 +278,62 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
     return disabledDates
   }, [selectedPackageType, getDateRestrictions])
 
+  // Helper function to check if a date is within any booking period
+  const isDateBooked = (date: Date): boolean => {
+    return bookings.some(booking => {
+      const bookingStart = new Date(booking.startDate)
+      const bookingEnd = new Date(booking.endDate)
+      
+      // Check if date is within booking period (inclusive of start, exclusive of end)
+      return (isAfter(date, bookingStart) || isEqual(date, bookingStart)) && 
+             isBefore(date, bookingEnd)
+    })
+  }
+
+  // Enhanced date filtering for non-package bookings
+  const getNonPackageDisabledDates = useMemo(() => {
+    if (selectedPackageType || selectedPlan?.id) return []
+
+    const disabledDates: Date[] = []
+    const today = new Date()
+    const endDate = addDays(today, 365)
+
+    // Add all dates that are already booked
+    for (let date = new Date(today); date <= endDate; date = addDays(date, 1)) {
+      if (isDateBooked(date)) {
+        disabledDates.push(new Date(date))
+      }
+    }
+
+    return disabledDates
+  }, [selectedPackageType, selectedPlan?.id, bookings])
+
+  // Get disabled dates for checkout calendar (non-package bookings)
+  const getCheckoutDisabledDates = useMemo(() => {
+    if (selectedPackageType || selectedPlan?.id) return []
+
+    const disabledDates: Date[] = []
+    const today = new Date()
+    const endDate = addDays(today, 365)
+    const checkInDate = selectedDates?.checkIn ? new Date(selectedDates.checkIn) : today
+
+    // For checkout, we need to disable dates that would create conflicts
+    for (let date = new Date(today); date <= endDate; date = addDays(date, 1)) {
+      // Skip dates before check-in
+      if (isBefore(date, checkInDate) || isEqual(date, checkInDate)) {
+        disabledDates.push(new Date(date))
+        continue
+      }
+
+      // Check if selecting this checkout date would conflict with any booking
+      if (hasBookingConflict(checkInDate, date)) {
+        disabledDates.push(new Date(date))
+      }
+    }
+
+    return disabledDates
+  }, [selectedPackageType, selectedPlan?.id, selectedDates?.checkIn, bookings])
+
   const calculateNights = () => {
     if (selectedDates?.checkIn && selectedDates?.checkOut) {
       const checkInDate = new Date(selectedDates.checkIn)
@@ -280,7 +347,6 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
   const getDefaultNights = () => {
     switch (selectedPackageType) {
       case PackageType.WEEKEND: {
-        // Calculate nights based on actual selected dates for weekend
         if (selectedDates?.checkIn && selectedDates?.checkOut) {
           const checkInDate = new Date(selectedDates.checkIn)
           const checkOutDate = new Date(selectedDates.checkOut)
@@ -290,14 +356,13 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
         return 3 // Default fallback
       }
       case PackageType.WEEKDAY: {
-        // Calculate nights based on actual selected dates for weekday
         if (selectedDates?.checkIn && selectedDates?.checkOut) {
           const checkInDate = new Date(selectedDates.checkIn)
           const checkOutDate = new Date(selectedDates.checkOut)
           const diffTime = checkOutDate.getTime() - checkInDate.getTime()
           return Math.ceil(diffTime / (1000 * 3600 * 24))
         }
-        return 5 // Default fallback - Friday to Wednesday (5 nights)
+        return 5 // Default fallback
       }
       case PackageType.FULL_WEEK:
         return 7
@@ -325,6 +390,7 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
 
   const nights = calculateNights()
   const currentPrice = getCurrentPrice()
+console.log(selectedPlan);
 
   const total =
     (selectedPlan?.id
@@ -488,6 +554,7 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
                   <SimpleCalender
                     initialDate={selectedDates?.checkIn || new Date()}
                     minDate={new Date()}
+                    disabledDates={getNonPackageDisabledDates}
                     onDateChange={(selectedDate: Date) => {
                       // Calculate next day for checkout
                       const nextDay = new Date(selectedDate)
@@ -538,8 +605,10 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
                       tomorrow.setDate(tomorrow.getDate() + 1)
                       return tomorrow
                     })()}
+                    disabledDates={getCheckoutDisabledDates}
                     onDateChange={(selectedDate: Date) => {
-                      setDates(selectedDates?.checkIn || new Date(), selectedDate)
+                      const checkInDate = selectedDates?.checkIn || new Date()
+                      setDates(checkInDate, selectedDate)
                       checkOutPopUp.toggle()
                     }}
                   />
@@ -592,7 +661,6 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
       </div>
 
       <div className="px-5 pb-5">
-        {/* <Link href={`/chalet/${id}/booking`}> */}
         <Button
           className={'w-[100%] mb-5 text-white py-2 rounded-lg font-medium cursor-pointer'}
           disabled={
@@ -611,7 +679,6 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
         >
           Book Now
         </Button>
-        {/* </Link> */}
       </div>
 
       {bookingConfig.paymentOptions.partialPayment && (
