@@ -8,9 +8,10 @@ import { capitalizeWords } from '@/lib/utils'
 
 interface AmenitiesListProps {
   amenities: Amenity[]
+  allAmenities: Amenity[]
 }
 
-const AmenitiesList = ({ amenities }: AmenitiesListProps) => {
+const AmenitiesList = ({ amenities, allAmenities }: AmenitiesListProps) => {
   const { isOpen, toggle } = useToggle(false)
 
   return (
@@ -38,7 +39,7 @@ const AmenitiesList = ({ amenities }: AmenitiesListProps) => {
           Show all Amenities
         </Button>
       </div>
-      <AmenitiesDialog isOpen={isOpen} setIsOpen={toggle} amenities={amenities} />
+      <AmenitiesDialog isOpen={isOpen} setIsOpen={toggle} amenities={allAmenities} />
     </>
   )
 }

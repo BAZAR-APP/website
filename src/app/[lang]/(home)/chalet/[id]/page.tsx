@@ -14,7 +14,7 @@ import { getServerSession } from 'next-auth/next'
 import { authOptions } from '@/lib/auth'
 import toast from 'react-hot-toast'
 import { extractErrorMessage } from '@/lib/utils'
-import { Chalet, ChaletBedroom } from '../../../../../../types/chalets'
+import { Amenity, Chalet, ChaletBedroom } from '../../../../../../types/chalets'
 
 export async function generateMetadata({
   params,
@@ -102,30 +102,43 @@ export default async function ChaletDetailsPage({
   const { id, lang } = await params
 
   let data: Chalet | null = null
+  let allAmenities: Amenity[] = []
 
   try {
     const session = await getServerSession(authOptions)
-
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_NESTJS_API_URL}/chalets/readById/${id}?language=${lang}`,
-      {
+    const [chaletRes, amenitiesRes] = await Promise.all([
+      fetch(`${process.env.NEXT_PUBLIC_NESTJS_API_URL}/chalets/readById/${id}?language=${lang}`, {
         method: 'GET',
         headers: {
           ...(session?.user?.accessToken && {
             Authorization: `Bearer ${session.user.accessToken}`,
           }),
         },
-      },
-    )
+      }),
+      fetch(
+        `${process.env.NEXT_PUBLIC_NESTJS_API_URL}/chaletAmenity/readByChaletId/${id}?language=${lang}`,
+        {
+          method: 'GET',
+          headers: {
+            ...(session?.user?.accessToken && {
+              Authorization: `Bearer ${session.user.accessToken}`,
+            }),
+          },
+        },
+      ),
+    ])
 
-    if (res.ok) {
-      const fetchedData = await res.json()
-      data = fetchedData as Chalet // Use fetched data if available
+    if (chaletRes.ok) {
+      data = await chaletRes.json()
+    }
+
+    if (amenitiesRes.ok) {
+      const amenitiesData = await amenitiesRes.json()
+      allAmenities = Array.isArray(amenitiesData) ? amenitiesData : amenitiesData.data || []
     }
   } catch (error) {
     toast.error(extractErrorMessage(error))
   }
-console.log(data);
 
   return (
     <div className="min-h-screen bg-white">
@@ -159,7 +172,10 @@ console.log(data);
               />
               <SelectablePlans subscriptions={data?.subscriptions || []} />
               <div className="border-b border-[#E5E7EB]">
-                <AmenitiesList amenities={(data?.amenities || []).slice(0, 10)} />
+                <AmenitiesList
+                  amenities={(allAmenities || []).slice(0, 10)}
+                  allAmenities={allAmenities}
+                />
                 <h2 className="md:text-[25px] text-xl font-semibold leading-[32px] text-[#19191A] mt-7">
                   Where you'll sleep
                 </h2>
