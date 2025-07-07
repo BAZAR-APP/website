@@ -58,7 +58,9 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ onClick, chalet, isMember =
 
       <div className="flex flex-col gap-4">
         <div className="flex items-center gap-2 justify-between">
-          <h3 className="sm:text-xl text-lg font-normal text-[#484A4C] truncate">{chalet?.title}</h3>
+          <h3 className="sm:text-xl text-lg font-normal text-[#484A4C] truncate">
+            {chalet?.title}
+          </h3>
           {session?.user?.id && (
             <button
               aria-label="Add to favorites"
@@ -124,21 +126,19 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ onClick, chalet, isMember =
               {isMember ? (
                 <>
                   <span className="md:text-[14px] text-[12px] font-bold text-primary">
-                    {chalet?.perHourCost} KD
+                    {chalet?.perNightCost} KD
                   </span>
                   <span className="md:text-[12px] text-[10px] leading-4 font-normal text-primary">
-                    /{chalet?.perHourCost}
+                    /night
                   </span>
-                  <span className="pl-2 md:text-[12px] text-[10px] font-overline leading-4 font-bold line-through text-primary">
-                    {chalet?.perHourCost} KD
-                  </span>
+                  {/* <span className="pl-2 md:text-[12px] text-[10px] font-overline leading-4 font-bold line-through text-primary">
+                    {chalet?.perNightCost} KD
+                  </span> */}
                 </>
               ) : (
                 <>
-                  <span className="sm:text-[18px] text-sm">{chalet?.perNightCost} KD</span>
-                  <span className="text-sm leading-4 font-normal text-[#484A4C]">
-                    /{chalet?.perNightCost}
-                  </span>
+                  <span className="sm:text-[18px] text-sm">{chalet?.perNightCost} KD </span>
+                  <span className="text-sm leading-4 font-normal text-[#484A4C]">/night</span>
                 </>
               )}
             </div>
