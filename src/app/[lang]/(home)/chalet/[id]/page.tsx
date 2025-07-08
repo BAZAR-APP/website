@@ -50,21 +50,13 @@ export async function generateMetadata({
       openGraph: {
         title: data.title || propertyData.title,
         description: data.description || propertyData.description,
-        images: data.images?.[0]
-          ? [{ url: data.images[0] }]
-          : propertyData.images?.[0]
-            ? [{ url: propertyData.images[0] }]
-            : [],
+        images: [{ url: data?.photoURL }],
       },
       twitter: {
         card: 'summary_large_image',
         title: data.title || propertyData.title,
         description: data.description || propertyData.description,
-        images: data.images?.[0]
-          ? [data.images[0]]
-          : propertyData.images?.[0]
-            ? [propertyData.images[0]]
-            : [],
+        images: [data?.photoURL],
       },
     }
   } catch (error) {
@@ -179,17 +171,17 @@ export default async function ChaletDetailsPage({
                 <h2 className="md:text-[25px] text-xl font-semibold leading-[32px] text-[#19191A] mt-7">
                   Where you'll sleep
                 </h2>
-              {data?.chaletRooms?.length === 0 ? (
-                <div className="text-center text-lg text-gray-500 py-10 w-full">
-                  No Rooms Available
-                </div>
-              ) : (
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-7 mb-10">
-                  {data?.chaletRooms?.map((room: ChaletBedroom, index) => (
-                    <BedroomCard key={index} room={room} />
-                  ))}
-                </div>
-              )}
+                {data?.chaletRooms?.length === 0 ? (
+                  <div className="text-center text-lg text-gray-500 py-10 w-full">
+                    No Rooms Available
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-7 mb-10">
+                    {data?.chaletRooms?.map((room: ChaletBedroom, index) => (
+                      <BedroomCard key={index} room={room} />
+                    ))}
+                  </div>
+                )}
               </div>
               <Calender />
             </div>
@@ -199,6 +191,7 @@ export default async function ChaletDetailsPage({
                 maxGuests={data?.maxNoOfGuests || ''}
                 bookingConfig={propertyData.bookingConfig}
                 guests={2}
+                chalet={data}
                 packageInfo={{
                   perHourCost: data?.perHourCost,
                   perNightCost: data?.perNightCost,

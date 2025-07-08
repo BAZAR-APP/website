@@ -20,7 +20,7 @@ import {
   endOfDay,
 } from 'date-fns'
 import { capitalizeWords } from '@/lib/utils'
-import { Bookings } from '../../types/chalets'
+import { Bookings, Chalet } from '../../types/chalets'
 
 interface PackageOption {
   id: string
@@ -66,6 +66,7 @@ interface BookingWidgetProps {
     fullMonthCost: number | undefined
   }
   bookings: Bookings
+  chalet: Chalet | null
 }
 
 // Package types enum for better type safety
@@ -134,6 +135,7 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
   packageInfo,
   maxGuests,
   bookings,
+  chalet,
 }) => {
   const checkInPopUp = useToggle()
   const checkOutPopUp = useToggle()
@@ -150,6 +152,7 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
     setTotalCostAgainstNights,
     setGuests,
     setDates,
+    setChaletDetails,
   } = useBookingStore()
 
   // Helper function to check if a date range overlaps with existing bookings
@@ -699,6 +702,7 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
               setNoOfNights(nights)
               setTotalCostAgainstNights(nights * (packageInfo?.perNightCost || 0))
             }
+            setChaletDetails(chalet)
             router.push(`/chalet/${id}/booking`)
           }}
         >
