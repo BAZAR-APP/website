@@ -79,14 +79,16 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ onClick, chalet, isMember =
           )}
         </div>
 
-        <div className="flex flex-wrap items-center text-sm text-[#8E8E93] gap-x-2">
+        <div className="flex flex-wrap items-center text-sm text-[#8E8E93] gap-0.5">
           <MapPin className="w-4 h-4" />
-          <span>{chalet?.city}</span>
+          <span className="max-w-[122px] truncate whitespace-nowrap overflow-hidden text-ellipsis">
+            {chalet?.city}
+          </span>
           {isMember && (
-            <div className="flex gap-1 items-center text-sm text-gray-700 ml-auto">
-              <span className="ml-2">{chalet?.rating ?? 0}</span>
+            <div className="flex gap-[5px] items-center text-sm text-gray-700 ml-auto">
+              <span>{chalet?.rating ?? 0}</span>
               <Image src={Star} alt="Star" width={16} height={16} />
-              <span className="text-[#484A4C] ml-1">({chalet?.noOfReviews ?? 0} reviews)</span>
+              <span className="text-[#484A4C]">({chalet?.noOfReviews ?? 0} reviews)</span>
             </div>
           )}
         </div>
