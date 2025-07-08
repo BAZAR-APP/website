@@ -1,7 +1,8 @@
 'use client'
 
-import { ReactNode } from 'react'
+import { ReactNode, useState } from 'react'
 import { Text, Flex } from '@radix-ui/themes'
+import { Eye, EyeOff } from 'lucide-react'
 
 type CommonInputProps = React.InputHTMLAttributes<HTMLInputElement> & {
   label?: string
@@ -9,19 +10,19 @@ type CommonInputProps = React.InputHTMLAttributes<HTMLInputElement> & {
   value?: string
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
   type?:
-  | 'number'
-  | 'search'
-  | 'time'
-  | 'text'
-  | 'hidden'
-  | 'date'
-  | 'datetime-local'
-  | 'email'
-  | 'month'
-  | 'password'
-  | 'tel'
-  | 'url'
-  | 'week'
+    | 'number'
+    | 'search'
+    | 'time'
+    | 'text'
+    | 'hidden'
+    | 'date'
+    | 'datetime-local'
+    | 'email'
+    | 'month'
+    | 'password'
+    | 'tel'
+    | 'url'
+    | 'week'
   name?: string
   autoComplete?: string
   className?: string
@@ -52,6 +53,10 @@ const CommonInput: React.FC<CommonInputProps> = ({
 }) => {
   const inputId = name || `input-${label?.toLowerCase().replace(/\s+/g, '-')}`
 
+  const [showPassword, setShowPassword] = useState(false)
+  const isPasswordType = type === 'password'
+  const actualType = isPasswordType ? (showPassword ? 'text' : 'password') : type
+
   return (
     <Flex direction="column" gap="2">
       {label && (
@@ -73,7 +78,7 @@ const CommonInput: React.FC<CommonInputProps> = ({
         <input
           id={inputId}
           name={name}
-          type={type}
+          type={actualType}
           value={value}
           onChange={onChange}
           placeholder={placeholder}
@@ -83,8 +88,20 @@ const CommonInput: React.FC<CommonInputProps> = ({
           autoComplete={autoComplete}
           {...rest}
         />
+
+        {isPasswordType && (
+          <button
+            type="button"
+            onClick={() => setShowPassword((prev) => !prev)}
+            className="text-gray-500 focus:outline-none cursor-pointer"
+          >
+            {showPassword ? <EyeOff size={19} /> : <Eye size={19} />}
+          </button>
+        )}
       </div>
-      {error && errorMessage && <p className="text-red-500 text-[12px] transition-all">{errorMessage}</p>}
+      {error && errorMessage && (
+        <p className="text-red-500 text-[12px] transition-all">{errorMessage}</p>
+      )}
     </Flex>
   )
 }
