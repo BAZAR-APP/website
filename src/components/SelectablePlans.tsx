@@ -6,7 +6,7 @@ import { ChaletSubscription } from '../../types/chalets'
 
 const SelectablePlans: FC<{ subscriptions: ChaletSubscription[] }> = ({ subscriptions = [] }) => {
   const { setPlan, selectedPlan } = useBookingStore()
-  const shouldUseLargeGap = subscriptions.length > 3
+  const shouldUseLargeGap = subscriptions.length >= 3
 
   if (subscriptions.length === 0) {
     return (
@@ -24,10 +24,7 @@ const SelectablePlans: FC<{ subscriptions: ChaletSubscription[] }> = ({ subscrip
       {subscriptions.map((plan) => (
         <PriceDetailCard
           key={plan.id}
-          title={plan.title}
-          subtitle={plan?.type}
-          price={plan.price + ' ' + plan?.priceUnit}
-          description={''}
+          subscription={plan}
           isSelected={selectedPlan?.id === plan.id}
           onClick={() => {
             if (plan?.id === selectedPlan?.id) {
@@ -36,7 +33,6 @@ const SelectablePlans: FC<{ subscriptions: ChaletSubscription[] }> = ({ subscrip
               setPlan(plan)
             }
           }}
-          isPopular={true}
         />
       ))}
     </div>

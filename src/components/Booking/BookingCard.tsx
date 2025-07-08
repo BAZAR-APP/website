@@ -60,7 +60,7 @@ const BookingCard: React.FC<BookingCardProps> = ({
           <Image
             src={booking?.chalet?.photoURL || 'https://picsum.photos/seed/lakeside/311/190'}
             alt={'alt'}
-            className="w-full h-full max-h-[216px] object-cover rounded-[12px]"
+            className="w-full h-full min-h-[240px] object-cover rounded-[12px]"
             width={305}
             height={216}
           />

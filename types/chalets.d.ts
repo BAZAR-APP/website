@@ -95,7 +95,7 @@ export interface ChaletSubscription {
   priceUnit: string
   minimumTime: string | null
   minimumTimeUnit: string | null
-  specialTags: string[] | null
+  specialTags: string | null
   forMembersOnly: boolean
   isSplitPaymentAvailable: boolean
   chaletId: string

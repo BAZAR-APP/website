@@ -31,7 +31,7 @@ const ThanksReviewDialog: React.FC<ThanksReviewDialogProps> = ({ isOpen, setIsOp
         </p>
         <div className="flex md:flex-row flex-col justify-between gap-4 pt-8">
           <Button
-            onClick={() => router.push('/explore/booking/')}
+            onClick={setIsOpen}
             intent="ghost"
             className="cursor-pointer bg-[#F3F4F6] text-[#19191A] py-2 rounded-lg text-[16px] font-medium w-full"
           >
