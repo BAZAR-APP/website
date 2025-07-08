@@ -27,11 +27,11 @@ const PriceDetailCard: React.FC<PriceDetailCardProps> = ({ isSelected, onClick, 
     <div onClick={onClick} className={containerClasses}>
       <div className="absolute -top-10.5 mt-[0.5px] left-1/2 -translate-x-1/2 transform">
         <span
-          className={`flex items-center justify-center gap-2 min-w-[121px] h-[41px] px-4 py-3 truncate 
+          className={`flex items-center justify-center gap-2 min-w-[121px] max-w-[175px] h-[41px] px-4 py-3
               text-sm font-medium rounded-t-xl rounded-b-none 
               ${isSelected ? 'bg-[#29397E] text-white' : 'bg-[#E1F3FF] text-[#19191A]'}`}
         >
-          {subscription?.title}
+          <span className='truncate'>{subscription?.title}</span>
         </span>
       </div>
 
