@@ -81,7 +81,13 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ onClick, chalet, isMember =
 
         <div className="flex flex-wrap items-center text-sm text-[#8E8E93] gap-0.5">
           <MapPin className="w-4 h-4" />
-          <span className="max-w-[122px] truncate whitespace-nowrap overflow-hidden text-ellipsis">
+          <span
+            className={
+              isMember
+                ? 'max-w-[122px] truncate whitespace-nowrap overflow-hidden text-ellipsis'
+                : ''
+            }
+          >
             {chalet?.city}
           </span>
           {isMember && (
