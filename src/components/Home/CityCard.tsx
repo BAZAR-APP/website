@@ -6,7 +6,6 @@ interface CityCardProps {
     cityName: string;
     altText?: string;
 }
-
 const CityCard: React.FC<CityCardProps> = ({
     imageUrl,
     cityName,
