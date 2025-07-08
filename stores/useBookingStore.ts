@@ -16,10 +16,12 @@ type BookingState = {
   noOfNights: number | null
   totalCostAgainstNights: number | null
   packageAmount: number | null
+  chaletDetails: Chalet | null
+  setChaletDetails: (chalet: Chalet | null) => void
 }
 
 import { persist } from 'zustand/middleware'
-import { ChaletBedroom, ChaletSubscription } from '../types/chalets'
+import { Chalet, ChaletBedroom, ChaletSubscription } from '../types/chalets'
 
 export const useBookingStore = create(
   persist<BookingState>(
@@ -29,9 +31,11 @@ export const useBookingStore = create(
       noOfNights: null,
       totalCostAgainstNights: null,
       packageAmount: null,
+      chaletDetails: null,
       selectedDates: { checkIn: new Date(), checkOut: new Date() },
       guests: 1,
       setPlan: (plan) => set({ selectedPlan: plan }),
+      setChaletDetails: (chalet) => set({ chaletDetails: chalet }),
       setRoom: (room) => set({ selectedRoom: room }),
       setDates: (checkIn, checkOut) => set({ selectedDates: { checkIn, checkOut } }),
       setGuests: (guests) => set({ guests }),
@@ -47,6 +51,7 @@ export const useBookingStore = create(
           packageAmount: null,
           selectedDates: { checkIn: new Date(), checkOut: new Date() },
           guests: 1,
+          chaletDetails: null,
         }),
     }),
     { name: 'booking-storage' },

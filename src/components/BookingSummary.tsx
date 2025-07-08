@@ -110,6 +110,7 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
     noOfNights,
     totalCostAgainstNights,
     resetBooking,
+    chaletDetails
   } = useBookingStore()
   const isSplitPayment = getValues()?.paymentOption === 'split'
   const grandTotal = (selectedAddonsTotal ?? 0) + Number(packageAmount) + (romanticWeekend ? 25 : 0)
@@ -192,11 +193,11 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
             {earnPoints && (
               <>
                 <div className="text-sm text-[#9EA0A2] mb-3">
-                  You&apos;ll earn 200 points with this booking!
+                  You&apos;ll earn {chaletDetails?.noOfLoyalityPoints} points with this booking!
                 </div>
                 <div className="flex bg-[#E1F3FF] items-center justify-between gap-1 rounded py-1 px-1.5 max-w-[111px]">
                   <Image src="/images/Points.svg" width={16} height={16} alt="Points" />
-                  <span className="text-[#29397E] text-sm">200 Points</span>
+                  <span className="text-[#29397E] text-sm">{chaletDetails?.noOfLoyalityPoints} Points</span>
                 </div>
               </>
             )}
