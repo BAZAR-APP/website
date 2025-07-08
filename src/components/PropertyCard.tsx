@@ -85,7 +85,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ onClick, chalet, isMember =
             {chalet?.city}
           </span>
           {isMember && (
-            <div className="flex gap-[5px] items-center text-sm text-gray-700 ml-auto">
+            <div className="flex gap-[3px] items-center text-sm text-gray-700 ml-auto">
               <span>{chalet?.rating ?? 0}</span>
               <Image src={Star} alt="Star" width={16} height={16} />
               <span className="text-[#484A4C]">({chalet?.noOfReviews ?? 0} reviews)</span>
