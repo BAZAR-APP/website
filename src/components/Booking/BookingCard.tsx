@@ -54,13 +54,13 @@ const BookingCard: React.FC<BookingCardProps> = ({
     <>
       <div
         onClick={onClick}
-        className="flex md:flex-row flex-col w-full max-w-[675px] 2xl:max-w-[800px] p-3 mt-12 gap-5 bg-[#F9FAFB] cursor-pointer rounded-[16px] hover:shadow-sm transition-shadow duration-300"
+        className="flex md:flex-row md:items-center flex-col w-full max-w-[675px] 2xl:max-w-[800px] p-3 mt-12 gap-5 bg-[#F9FAFB] cursor-pointer rounded-[16px] hover:shadow-sm transition-shadow duration-300"
       >
         <div className="w-full md:max-w-[311px] max-w-full flex-shrink-0">
           <Image
             src={booking?.chalet?.photoURL || 'https://picsum.photos/seed/lakeside/311/190'}
             alt={'alt'}
-            className="w-full h-full min-h-[240px] object-cover rounded-[12px]"
+            className="w-full h-full min-h-[230px] max-h-[235px] object-cover rounded-[12px]"
             width={305}
             height={216}
           />
@@ -72,7 +72,7 @@ const BookingCard: React.FC<BookingCardProps> = ({
             <h3 className="lg:text-xl text-lg font-normal text-[#484A4C] truncate">
               {booking?.chalet?.title}
             </h3>
-            <div className="lg:text-[18px] text-[16px] leading-[28px] font-medium text-[#484A4C]">
+            <div className="lg:text-[18px] text-[16px] leading-[18px] font-medium text-[#484A4C]">
               {booking?.grandTotal} KWD
             </div>
           </div>
