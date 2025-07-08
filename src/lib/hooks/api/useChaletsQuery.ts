@@ -4,6 +4,7 @@ import { useShallow } from 'zustand/react/shallow'
 import { useMemo } from 'react'
 import api from '@/lib/axios'
 import { ChaletResponse } from '../../../../types/chalets'
+import { useSession } from 'next-auth/react'
 
 const fetchChalets = async (filters: any): Promise<ChaletResponse> => {
   const searchParams = new URLSearchParams()
@@ -26,6 +27,7 @@ const fetchChalets = async (filters: any): Promise<ChaletResponse> => {
 }
 
 export const useChaletsQuery = (enabled = true) => {
+  const { data: session } = useSession()
   const filters = useChaletFiltersStore(
     useShallow((state) => ({
       page: state.page,
@@ -38,6 +40,7 @@ export const useChaletsQuery = (enabled = true) => {
       noOfGuests: state?.guests,
       checkIn: state?.checkin,
       checkOut: state?.checkout,
+      userId: session?.user?.id,
     })),
   )
 

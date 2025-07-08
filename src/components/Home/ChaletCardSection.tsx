@@ -9,6 +9,7 @@ import { Grid } from '@radix-ui/themes'
 import { PropertyCardSkeleton } from '../Skeletons/chaletsCardSkeleton'
 import { useRouter } from 'next/navigation'
 import { useBookingStore } from '../../../stores/useBookingStore'
+import { useSession } from 'next-auth/react'
 
 interface ChaletsCardProps {
   title: string
@@ -29,11 +30,14 @@ const ChaletsCard: React.FC<ChaletsCardProps> = ({ title, endpoint, queryKey }) 
 
   const [isScrollLoading, setIsScrollLoading] = useState(false)
   const router = useRouter()
+  const { data: session } = useSession()
+
   const fetchChalets = async ({ pageParam = 1 }): Promise<ChaletsResponse> => {
     const res = await api.get(endpoint, {
       params: {
         limit: 20,
         page: pageParam,
+        userId: session?.user?.id,
       },
     })
 
