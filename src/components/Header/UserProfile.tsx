@@ -37,7 +37,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ userName, avatarSrc = '' }) =
             <Avatar
               size="4"
               radius="full"
-              fallback={<User size={30} color="#333" />}
+              fallback={<User size={25} color="#333" />}
               src={avatarSrc}
             />
             <h2 className="text-[16px] font-[500] text-[#19191A] leading-6">

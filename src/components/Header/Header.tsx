@@ -76,7 +76,7 @@ const Header: React.FC<HeaderProps> = ({ className = '', isLoggedIn = true, dict
             <NotificationIcon />
             <UserProfile
               userName="Fahd Al-Mutiri"
-              avatarSrc={user?.user?.photoURL || '/images/Image.svg'}
+              avatarSrc={user?.user?.photoURL}
               onLogout={() => console.log('User logged out')}
             />
           </div>

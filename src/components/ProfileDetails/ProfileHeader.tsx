@@ -6,6 +6,7 @@ import api from '@/lib/axios'
 import { toast } from '@/lib/toast'
 import { extractErrorMessage } from '@/lib/utils'
 import { useRef, useState } from 'react'
+import { User } from 'lucide-react'
 
 const ProfileHeader = () => {
   const { isOpen, toggle } = useToggle()
@@ -91,14 +92,20 @@ const ProfileHeader = () => {
       <div className="flex flex-col md:flex-row items-center gap-8 mt-6">
         <div className="flex items-center justify-center w-[96px] h-[104px]">
           <div className="relative w-[96px] h-[96px] group">
-            <div
-              className={`rounded-full w-full h-full bg-cover bg-center transition-all duration-200 ${
-                isUploading ? 'opacity-70' : ''
-              }`}
-              style={{
-                backgroundImage: `url(${user?.user?.photoURL})`,
-              }}
-            />
+            {user?.user?.photoURL ? (
+              <div
+                className={`rounded-full w-full h-full bg-cover bg-center transition-all duration-200 ${
+                  isUploading ? 'opacity-70' : ''
+                }`}
+                style={{
+                  backgroundImage: `url(${user.user.photoURL})`,
+                }}
+              />
+            ) : (
+              <div className="rounded-full w-full h-full flex items-center justify-center bg-[#edf3f9]">
+                <User size={55} color="#333" />
+              </div>
+            )}
 
             <div
               className={`absolute w-[40%] h-[37%] rounded-full right-[-10px] bottom-0 

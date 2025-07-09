@@ -50,6 +50,7 @@ export interface Chalet {
   updatedAt: string // or Date
   host: {
     fullName: string
+    photoURL: string
   }
   subscriptions: ChaletSubscription[]
   chaletRooms: ChaletBedroom[]

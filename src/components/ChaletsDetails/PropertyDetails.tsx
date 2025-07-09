@@ -4,6 +4,7 @@ import { Avatar, Flex, Text } from '@radix-ui/themes'
 import DetailItem from './DetailItem'
 import { Badge, ViewType } from '../../../types/chalets'
 import { capitalizeWords } from '@/lib/utils'
+import { User } from 'lucide-react'
 
 interface PropertyDetailsProps {
   description: string
@@ -22,6 +23,7 @@ interface PropertyDetailsProps {
   host:
     | {
         fullName: String
+        photoURL: string
       }
     | undefined
 }
@@ -64,7 +66,12 @@ const PropertyDetails = ({
         )}
         <Flex align="center" gap="2" className="cursor-pointer sm:mt-0 mt-1">
           <Text className="text-sm leading-4 text-[#484A4C]">Hosted By</Text>
-          <Avatar size="2" radius="full" fallback="FA" src="/images/Image.svg" />
+          <Avatar
+            size="2"
+            radius="full"
+            fallback={<User size={18} color="#333" />}
+            src={host?.photoURL}
+          />
           <Text className="text-[16px] leading-6 font-medium text-[#19191A]">{host?.fullName}</Text>
         </Flex>
       </div>
