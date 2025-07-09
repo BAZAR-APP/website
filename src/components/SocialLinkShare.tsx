@@ -10,6 +10,7 @@ import { Separator } from 'radix-ui'
 import { copyToClipboard } from '@/lib/utils'
 import clsx from 'clsx'
 import { toast } from '@/lib/toast'
+import { useParams } from 'next/navigation'
 
 interface ShareModalProps {
   onClose: () => void
@@ -27,10 +28,12 @@ const SocialLinkShare: React.FC<ShareModalProps> = ({
   colRevers = false,
 }) => {
   const [shareUrl, setShareUrl] = useState('')
+  const params = useParams() as unknown as { id: string; lang: Locale }
+  const { id, lang } = params
 
   // Set the URL only after component mounts (client-side)
   useEffect(() => {
-    setShareUrl(window.location.href)
+    setShareUrl(`${window.location?.origin}/${lang}/chalet/${id}/`)
   }, [])
 
   const shareOptions = [
@@ -83,7 +86,12 @@ const SocialLinkShare: React.FC<ShareModalProps> = ({
   }
 
   return (
-    <ModalDialog isOpen={open} setIsOpen={onClose} title={title} titleClassName='!text-[16px] !font-[700]'>
+    <ModalDialog
+      isOpen={open}
+      setIsOpen={onClose}
+      title={title}
+      titleClassName="!text-[16px] !font-[700]"
+    >
       {children && children}
       <div
         className={clsx('flex flex-col', {

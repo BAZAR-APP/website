@@ -28,7 +28,7 @@ export const useUserStore = create<UserState>()(
       redeemedDiscounts: [],
       selectedDiscount: null,
       setUser: (user) => set({ user }),
-      clearUser: () => set({ user: null }),
+      clearUser: () => set({ user: null, redeemedDiscounts: [], selectedDiscount: null }),
       setredeemedDiscounts: (redeemedDiscounts: Discount[]) => set({ redeemedDiscounts }),
       setSelectedDiscount: (selectedDiscount: selectedDiscount | null) => set({ selectedDiscount }),
     }),

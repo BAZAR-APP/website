@@ -41,6 +41,7 @@ export const useChaletsQuery = (enabled = true) => {
       checkIn: state?.checkin,
       checkOut: state?.checkout,
       userId: session?.user?.id,
+      rating: state?.rating,
     })),
   )
 

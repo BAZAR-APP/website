@@ -9,9 +9,9 @@ export const getUserNameInitials = (name: string) =>
 
 export const navItems = [
   { label: 'Home', href: '/' },
-  { label: 'Explore', href: '/explore' },
+  { label: 'Explore', href: '/explore/' },
   { label: 'My Bookings', href: '/my-bookings/' },
-  { label: 'Loyalty Points', href: '/loyalty-points' },
+  { label: 'Loyalty Points', href: '/loyalty-points/' },
 ]
 
 export const fields = [

@@ -136,7 +136,7 @@ const FilterSidebar = () => {
           {[1, 2, 3, 4, 5].map((rating) => (
             <div
               key={rating}
-              // onClick={() => setFilters({ rating })}
+              onClick={() => setFilters({ rating })}
               className="cursor-pointer h-12 w-full flex items-center justify-center border-r border-[#F2F2F7] last:border-none"
             >
               <div className="flex items-center gap-1.5">

@@ -1,6 +1,7 @@
 'use client'
 import Image from 'next/image'
 import React from 'react'
+import clsx from 'clsx'
 import { ChaletBedroom } from '../../types/chalets'
 import { useBookingStore } from '../../stores/useBookingStore'
 
@@ -10,34 +11,61 @@ type BedroomCardProps = {
 }
 
 const BedroomCard: React.FC<BedroomCardProps> = ({ className = '', room }) => {
-  const { setRoom } = useBookingStore()
+  const { setRoom, selectedRoom } = useBookingStore()
+
+  const isSelected = selectedRoom?.id === room.id
 
   return (
     <>
       <div
-        className={`bg-white border border-[#E5E5EA] rounded-[20px] py-3 px-4 flex flex-col items-start space-y-2.5 hover:shadow-md transition-shadow cursor-pointer min-w-[120px] ${className}`}
+        className={clsx(
+          'rounded-[20px] py-3 px-4 flex flex-col items-start space-y-2.5 transition-all duration-200 cursor-pointer min-w-[120px]',
+          {
+            'bg-white border border-[#E5E5EA] hover:shadow-md': !isSelected,
+            'bg-white-50 border-2 border-[#29397e] shadow-md': isSelected,
+          },
+          className,
+        )}
         onClick={() => setRoom(room)}
       >
         <div className="flex items-center justify-center">
-          {true ? (
-            <Image src={'/images/Icon.svg'} alt="Bed icon" width={40} height={40} />
-          ) : (
-            <div className="w-8 h-8 bg-gray-200 rounded" />
-          )}
+          <Image src={'/images/Icon.svg'} alt="Bed icon" width={40} height={40} />
         </div>
-        <h3 className="text-[14px] font-medium leading-[17px] text-[#19191A]">{room?.title}</h3>
+        <h3
+          className={clsx('text-[14px] font-medium leading-[17px]', {
+            'text-[#19191A]': !isSelected,
+            'text-primary-blue font-medium': isSelected,
+          })}
+        >
+          {room?.title}
+        </h3>
         {room?.noOfKingBedrooms && (
-          <p className="text-[12px] font-normal leading-[15px] text-[#19191A]">
+          <p
+            className={clsx('text-[12px] font-normal leading-[15px]', {
+              'text-[#19191A]': !isSelected,
+              'text-primary-blue': isSelected,
+            })}
+          >
             {room?.noOfKingBedrooms} King Bed
           </p>
         )}
         {room?.noOfDoubleBedrooms && (
-          <p className="text-[12px] font-normal leading-[15px] text-[#19191A]">
+          <p
+            className={clsx('text-[12px] font-normal leading-[15px]', {
+              'text-[#19191A]': !isSelected,
+              'text-primary-blue': isSelected,
+            })}
+          >
             {room?.noOfDoubleBedrooms} Double Bed
           </p>
-        )}{' '}
+        )}
         {room?.noOfSingleBedrooms && (
-          <p className="text-[12px] font-normal leading-[15px] text-[#19191A]">
+          <p
+            className={clsx('text-[12px] font-normal leading-[15px]', {
+              'text-[#19191A]': !isSelected,
+              'text-primary-blue': isSelected,
+            })}
+          >
             {room?.noOfSingleBedrooms} Single Bed
           </p>
         )}

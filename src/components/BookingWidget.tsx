@@ -21,6 +21,7 @@ import {
 } from 'date-fns'
 import { capitalizeWords } from '@/lib/utils'
 import { Bookings, Chalet } from '../../types/chalets'
+import { toast } from '@/lib/toast'
 
 interface PackageOption {
   id: string
@@ -434,6 +435,31 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
       setDates(firstEnabledDate, suggestedCheckOut)
     }
   }, [firstEnabledDate])
+
+  const isDateDisabled = (date: Date, disabledDates: Date[]): boolean => {
+    const dateStr = date.toISOString().split('T')[0]
+    return disabledDates.some((disabledDate: Date) => {
+      const disabledStr = new Date(disabledDate).toISOString().split('T')[0]
+      return dateStr === disabledStr
+    })
+  }
+
+  const hasDisabledDatesInRange = (
+    startDate: Date,
+    endDate: Date,
+    disabledDates: Date[],
+  ): boolean => {
+    const current = new Date(startDate)
+    current.setDate(current.getDate() + 1)
+    while (current < endDate) {
+      if (isDateDisabled(current, disabledDates)) {
+        return true
+      }
+      current.setDate(current.getDate() + 1)
+    }
+    return false
+  }
+
   return (
     <div className="bg-[#F9FAFB] rounded-2xl">
       <div className="sm:p-5 p-4 !pb-4">
@@ -442,7 +468,7 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
         </h3>
         {selectedPackageType && (
           <h2 className="lg:text-[20px] md:text-[16px] text-sm leading-6 font-normal text-[#19191A] flex items-center">
-            {currentPrice + ' KWD'}
+            {selectedPlan?.id ? selectedPlan?.price : currentPrice + ' KWD'}
             <span className="text-[16px]">
               / {capitalizeWords(selectedPackageType?.split('_')?.join(' '))}
             </span>
@@ -580,27 +606,22 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
                   }
                 >
                   <SimpleCalender
-                    initialDate={selectedDates?.checkIn || new Date()}
+                    initialDate={
+                      selectedDates?.checkIn ? new Date(selectedDates.checkIn) : new Date()
+                    }
                     minDate={new Date()}
                     disabledDates={getNonPackageDisabledDates}
-                    onDateChange={(selectedDate: Date) => {
-                      // Calculate next day for checkout
-                      const nextDay = new Date(selectedDate)
-                      nextDay.setDate(nextDay.getDate() + 1)
-
-                      // If current checkout is before or equal to selected check-in, update it
-                      const currentCheckOut = selectedDates?.checkOut
-                        ? new Date(selectedDates.checkOut)
-                        : new Date()
-                      const checkOutDate =
-                        currentCheckOut <= selectedDate ? nextDay : currentCheckOut
-
-                      setDates(selectedDate, checkOutDate)
+                    isDateSelectable={(date: Date): boolean => {
+                      return !isDateDisabled(date, getNonPackageDisabledDates)
+                    }}
+                    onDateChange={(selectedDate: Date): void => {
+                      setDates(selectedDate, selectedDate)
                       checkInPopUp.toggle()
                     }}
                   />
                 </CustomPopOver>
               </div>
+
               <div className="p-3">
                 <CustomPopOver
                   isOpen={checkOutPopUp.isOpen}
@@ -616,12 +637,13 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
                 >
                   <SimpleCalender
                     initialDate={
-                      selectedDates?.checkOut ||
-                      (() => {
-                        const tomorrow = new Date()
-                        tomorrow.setDate(tomorrow.getDate() + 1)
-                        return tomorrow
-                      })()
+                      selectedDates?.checkOut
+                        ? new Date(selectedDates.checkOut)
+                        : (() => {
+                            const tomorrow = new Date()
+                            tomorrow.setDate(tomorrow.getDate() + 1)
+                            return tomorrow
+                          })()
                     }
                     minDate={(() => {
                       if (selectedDates?.checkIn) {
@@ -633,9 +655,41 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
                       tomorrow.setDate(tomorrow.getDate() + 1)
                       return tomorrow
                     })()}
-                    disabledDates={getCheckoutDisabledDates}
-                    onDateChange={(selectedDate: Date) => {
-                      const checkInDate = selectedDates?.checkIn || new Date()
+                    disabledDates={getNonPackageDisabledDates}
+                    isDateSelectable={(date: Date): boolean => {
+                      if (isDateDisabled(date, getNonPackageDisabledDates)) {
+                        return false
+                      }
+                      if (selectedDates?.checkIn) {
+                        const checkInDate = new Date(selectedDates.checkIn)
+                        return !hasDisabledDatesInRange(
+                          checkInDate,
+                          date,
+                          getNonPackageDisabledDates,
+                        )
+                      }
+
+                      return true
+                    }}
+                    onDateChange={(selectedDate: Date): void => {
+                      const checkInDate = selectedDates?.checkIn
+                        ? new Date(selectedDates.checkIn)
+                        : new Date()
+
+                      // Validate no disabled dates in range
+                      if (
+                        hasDisabledDatesInRange(
+                          checkInDate,
+                          selectedDate,
+                          getNonPackageDisabledDates,
+                        )
+                      ) {
+                        toast.info(
+                          'Selected dates include unavailable days. Please choose a consecutive range of available dates.',
+                        )
+                        return
+                      }
+
                       setDates(checkInDate, selectedDate)
                       checkOutPopUp.toggle()
                     }}
@@ -742,12 +796,14 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
             </span>
           </div>
         )}
-        {selectedPackageType && !selectedPlan?.id && (
+        {selectedPackageType && (
           <div className="flex justify-between items-center">
             <span className="text-[16px] font-normal text-[#19191A] flex items-center">
               {capitalizeWords(selectedPackageType?.split('_')?.join(' '))}
             </span>
-            <span className="font-normal text-[16px] text-[#19191A]">{currentPrice + ' KWD'}</span>
+            <span className="font-normal text-[16px] text-[#19191A]">
+              {(selectedPlan?.id ? selectedPlan?.price : currentPrice) + ' KWD'}
+            </span>
           </div>
         )}
         <div className="flex justify-between items-center">

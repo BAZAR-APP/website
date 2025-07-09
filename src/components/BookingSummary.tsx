@@ -93,12 +93,9 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
   const { id } = useParams()
   const { getValues, watch, setValue } = useFormContext()
   const { selectedDiscount, setSelectedDiscount } = useUserStore()
-  const [isDiscountApplied, setIsDiscountApplied] = React.useState(false)
-  const [discountedTotal, setDiscountedTotal] = React.useState<number | null>(null)
   const router = useRouter()
   const selectedAddons: Customization[] = watch('addons') || []
   const selectedAddonsTotal = watch('selectedAddonsTotal')
-  const redeemedCode = watch('redeemed_code')
   const romanticWeekend = watch('romanticWeekend')
   const [loading, setLoading] = useState(false)
   const {
@@ -109,13 +106,18 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
     packageAmount,
     noOfNights,
     totalCostAgainstNights,
+    isDiscountApplied,
+    discountedTotal,
+    setDiscountedTotal,
+    setIsDiscountApplied,
     resetBooking,
-    chaletDetails
+    chaletDetails,
   } = useBookingStore()
   const isSplitPayment = getValues()?.paymentOption === 'split'
   const grandTotal = (selectedAddonsTotal ?? 0) + Number(packageAmount) + (romanticWeekend ? 25 : 0)
   const handleApplyDiscount = () => {
     if (!selectedDiscount?.discountPercent || !grandTotal) return
+
     const discountAmount = (grandTotal * selectedDiscount?.discountPercent) / 100
     const finalTotal = grandTotal - discountAmount
     setDiscountedTotal(finalTotal)
@@ -197,7 +199,9 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
                 </div>
                 <div className="flex bg-[#E1F3FF] items-center justify-between gap-1 rounded py-1 px-1.5 max-w-[111px]">
                   <Image src="/images/Points.svg" width={16} height={16} alt="Points" />
-                  <span className="text-[#29397E] text-sm">{chaletDetails?.noOfLoyalityPoints} Points</span>
+                  <span className="text-[#29397E] text-sm">
+                    {chaletDetails?.noOfLoyalityPoints} Points
+                  </span>
                 </div>
               </>
             )}
@@ -269,7 +273,7 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
                   setDiscountedTotal(null)
                 }}
                 onApply={handleApplyDiscount}
-                isDisabled={!redeemedCode}
+                isDisabled={!selectedDiscount?.couponCode}
                 value={selectedDiscount?.couponCode}
               />
             )}

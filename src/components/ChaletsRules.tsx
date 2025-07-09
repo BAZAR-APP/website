@@ -1,3 +1,4 @@
+'use client'
 import React from 'react'
 import { ChevronRight, Shield } from 'lucide-react'
 import Image from 'next/image'
@@ -9,6 +10,7 @@ import CautionIcon from '../../public/images/caution.svg'
 import PoolIcon from '../../public/images/swimming-pool.svg'
 import { chaletRules } from '@/lib/constant'
 import { StaticImageData } from 'next/image'
+import { useRouter } from 'next/navigation'
 
 interface CheckInOut {
   checkIn: string
@@ -72,7 +74,7 @@ const InfoItem: React.FC<{ label: string; time: string }> = ({ label, time }) =>
 
 const ChaletRules: React.FC<Props> = ({ data = chaletRules as ChaletRulesData }) => {
   const { title, checkInOut, healthStandards, chaletStandards, cancellationPolicy } = data
-
+  const router = useRouter()
   return (
     <div>
       <h2 className="text-xl sm:text-[22px] md:text-[25px] md:leading-8 leading-6 font-semibold text-[#19191A] mb-4">
@@ -118,7 +120,10 @@ const ChaletRules: React.FC<Props> = ({ data = chaletRules as ChaletRulesData })
           {cancellationPolicy.refundTimeEstimate}
         </p>
 
-        <div className="pt-3.5 flex gap-2 items-center">
+        <div
+          className="pt-3.5 flex gap-2 items-center"
+          onClick={() => router.push('/cancellation-policy')}
+        >
           <button className="text-base font-medium leading-6 text-[#19191A] underline underline-offset-2 cursor-pointer">
             Show more
           </button>

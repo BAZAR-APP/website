@@ -16,7 +16,7 @@ import { useChaletFiltersStore } from '../../../../../stores/useChaletFiltersSto
 const ExploreChalets = () => {
   const router = useRouter()
   const [sortBy, setSortBy] = useState('recommended')
-  const { page, setFilters } = useChaletFiltersStore()
+  const { page, setFilters, city } = useChaletFiltersStore()
 
   const handlePageChange = (newPage: number) => {
     setFilters({ page: newPage })
@@ -36,7 +36,7 @@ const ExploreChalets = () => {
         <div className="full-width">
           <SearchHeader />
           <SearchResults
-            location="Al Khobar"
+            location={city || ''}
             totalResults={data?.data?.length || 0}
             sortBy={sortBy}
             onSortChange={setSortBy}

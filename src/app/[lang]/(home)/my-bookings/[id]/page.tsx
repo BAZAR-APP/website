@@ -125,10 +125,15 @@ const PropertyInfo: React.FC<{
   amenities: string[]
 }> = React.memo(function PropertyInfo({ guests, propertyType, beds, baths, amenities }) {
   const infoItems = useMemo(
-    () => [`${guests} guests`, propertyType, `${beds} beds`, `${baths} baths`, ...amenities],
+    () => [
+      `${guests} guest${Number(guests) > 1 ? 's' : ''}`,
+      propertyType,
+      `${beds} bed${beds > 1 ? 's' : ''}`,
+      `${baths} bath${baths > 1 ? 's' : ''}`,
+      ...amenities,
+    ],
     [guests, propertyType, beds, baths, amenities],
   )
-
   return (
     <div className="text-sm text-[#8E8E93] leading-5">
       {infoItems.map((item, index) => (
@@ -155,7 +160,7 @@ const DateSection: React.FC<{ dateRange: DateRange }> = React.memo(function Date
             CHECK-IN
           </label>
           <div className="text-[14px] leading-[17px] text-[#9EA0A2]">
-            {format(new Date(dateRange?.from), 'dd/MM/yyyy') || 'Not set'}
+            {dateRange?.from ? format(new Date(dateRange.from), 'dd/MM/yyyy') : 'Not set'}
           </div>
         </div>
         <div className="px-0.5">
@@ -163,7 +168,7 @@ const DateSection: React.FC<{ dateRange: DateRange }> = React.memo(function Date
             CHECKOUT
           </label>
           <div className="text-[14px] leading-[17px] text-[#9EA0A2]">
-            {format(new Date(dateRange?.to), 'dd/MM/yyyy') || 'Not set'}
+            {dateRange?.to ? format(new Date(dateRange.to), 'dd/MM/yyyy') : 'Not set'}
           </div>
         </div>
       </div>
@@ -306,8 +311,8 @@ export default function BookingDetailsPage() {
 
   const handleViewDetails = useCallback(() => {
     // Navigate to chalet details page
-    router.push(`/chalet/${bookingData?.id || 'some-default-chalet-id'}`)
-  }, [router, bookingData])
+    router.push(`/chalet/${bookingDetails?.chalet?.id || 'some-default-chalet-id'}`)
+  }, [router, bookingDetails?.chalet?.id])
 
   const handleViewLocation = useCallback(() => {
     // Implement logic to view location, maybe open a map or navigate to a map page
@@ -330,7 +335,7 @@ export default function BookingDetailsPage() {
     return <div className="p-10 text-center text-red-500">{error}</div>
   }
 
-  if (!bookingData) {
+  if (!bookingDetails?.id) {
     return <div className="p-10 text-center">Booking details not found.</div>
   }
 
@@ -349,8 +354,8 @@ export default function BookingDetailsPage() {
             <div className="bg-white rounded-lg">
               <div className="lg:w-[470px] w-full pt-3">
                 <Image
-                  src={bookingDetails?.chalet?.photoURL || bookingData.imageUrl}
-                  alt={bookingData.imageAlt}
+                  src={bookingDetails?.chalet?.photoURL}
+                  alt={bookingDetails?.chalet?.title}
                   width={500}
                   height={500}
                   className="w-full h-64 object-cover rounded-lg"
@@ -363,12 +368,12 @@ export default function BookingDetailsPage() {
                   <h3 className="text-[16px] font-medium text-[#19191A]">
                     {bookingDetails?.chalet?.title}
                   </h3>
-                  {bookingData.points > 0 && (
-                    <div className="flex bg-[#E1F3FF] items-center gap-1 rounded py-1 px-1.5 max-w-[110px]">
-                      <Image src="/images/Points.svg" width={16} height={16} alt="Points Icon" />
-                      <span className="text-[#29397E] text-sm">{bookingData.points} Points</span>
-                    </div>
-                  )}
+                  <div className="flex bg-[#E1F3FF] items-center gap-1 rounded py-1 px-1.5 max-w-[110px]">
+                    <Image src="/images/Points.svg" width={16} height={16} alt="Points Icon" />
+                    <span className="text-[#29397E] text-sm">
+                      {bookingDetails?.chalet?.noOfLoyalityPoints} Points
+                    </span>
+                  </div>
                 </div>
 
                 <Location
@@ -379,9 +384,9 @@ export default function BookingDetailsPage() {
 
                 <PropertyInfo
                   guests={String(bookingDetails?.noOfGuests)}
-                  propertyType={bookingData.propertyType}
-                  beds={bookingData.beds}
-                  baths={bookingData.baths}
+                  propertyType={bookingDetails?.chalet?.isEntireHomeAvailabe ? 'Entire Home' : ''}
+                  beds={Number(bookingDetails?.chalet?.noOfBedrooms)}
+                  baths={Number(bookingDetails?.chalet?.noOfBaths)}
                   amenities={bookingDetails?.chalet?.amenities?.map((item) => item?.title)}
                 />
 
@@ -415,13 +420,13 @@ export default function BookingDetailsPage() {
           </div>
 
           <PaymentSection
-            paymentStatus={bookingData.paymentStatus}
+            paymentStatus={'fully_paid'}
             totalAmount={bookingDetails?.grandTotal}
-            paidAmount={bookingData.paidAmount}
-            remainingAmount={bookingData.remainingAmount}
-            securityDeposit={bookingData.securityDeposit}
-            paymentDueDate={bookingData.paymentDueDate}
-            priceBreakdown={Array.from(bookingData.priceBreakdown)}
+            paidAmount={bookingDetails?.grandTotal}
+            remainingAmount={0}
+            securityDeposit={200}
+            paymentDueDate={new Date()?.toISOString()}
+            priceBreakdown={[]}
             onPayRemaining={handlePayRemaining}
             onCancelBooking={handleCancelBooking}
           />
@@ -456,7 +461,7 @@ export default function BookingDetailsPage() {
           </p>
           <div className="flex md:flex-row flex-col justify-between gap-4 pt-8">
             <Button
-              onClick={() => router.push('/explore/booking/')}
+              onClick={() => router.push('/my-bookings/')}
               intent="ghost"
               className="cursor-pointer bg-[#F3F4F6] text-[#19191A] rounded-lg text-[16px] font-medium w-full"
             >

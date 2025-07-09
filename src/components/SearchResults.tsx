@@ -6,7 +6,7 @@ import { ChevronDown, Check } from 'lucide-react'
 import { sortOptions } from '@/lib/constant'
 
 interface SearchResultsProps {
-  location: string
+  location: string[]
   totalResults: number
   sortBy: string
   onSortChange: (sort: string) => void
@@ -21,7 +21,8 @@ const SearchResults: React.FC<SearchResultsProps> = ({
   return (
     <div className="flex sm:flex-row flex-col items-center justify-between my-8 sm:mx-0 mx-1">
       <h2 className="md:text-[25px] sm:text-xl text-[16px] sm:leading-[30px] leading-4 font-normal text-[#19191A] pb-2 sm:pb-0 text-center">
-        {location}: {totalResults.toLocaleString()} search results found
+        {location?.length > 0 &&
+          location?.join?.(',') + ' : ' + totalResults.toLocaleString() + ' search results found'}
       </h2>
 
       <Select.Root value={sortBy} onValueChange={onSortChange}>

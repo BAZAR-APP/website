@@ -99,6 +99,7 @@ const AccountDetails = () => {
         callingCode: '+965',
         countryCode: 'KW',
         isUpdatingAddress: false,
+        email:data?.email
       }
       await api.patch('/users/updateProfile', body)
       await update()
@@ -156,7 +157,6 @@ const AccountDetails = () => {
               className={'bg-[#F9FAFB] text-[#484A4C] rounded-[8px] !max-w-[417px] !w-full'}
               error={!!errors?.email}
               errorMessage={errors?.email?.message}
-              readonly
             />
           </div>
           <div className="w-full box-border">

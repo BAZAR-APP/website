@@ -11,6 +11,7 @@ export type ChaletFilters = {
   guests: number
   checkin: string
   checkout: string
+  rating: number | null
   setFilters: (filters: Partial<ChaletFilters>) => void
   resetFilters: () => void
 }
@@ -26,6 +27,7 @@ export const useChaletFiltersStore = create<ChaletFilters>((set) => ({
   guests: 0,
   checkin: '',
   checkout: '',
+  rating: null,
   setFilters: (
     filters: Partial<ChaletFilters> | ((state: ChaletFilters) => Partial<ChaletFilters>),
   ) =>
@@ -45,5 +47,6 @@ export const useChaletFiltersStore = create<ChaletFilters>((set) => ({
       guests: 0,
       checkin: '',
       checkout: '',
+      rating: null,
     }),
 }))
