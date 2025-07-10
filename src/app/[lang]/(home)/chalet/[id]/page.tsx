@@ -206,7 +206,7 @@ export default async function ChaletDetailsPage({
           </div>
 
           <>
-            <ReviewsSection rating={data?.noOfReviews || 0} />
+            <ReviewsSection rating={data?.rating || 0} />
             <HotelMap
               center={{ lat: data?.latitude || hotel?.lat, lng: data?.longitude || hotel?.lng }}
               hotelInfo={{
