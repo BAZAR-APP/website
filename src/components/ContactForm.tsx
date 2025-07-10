@@ -51,7 +51,7 @@ const ContactForm: React.FC<ContactFormProps> = ({ onChange, formData }) => {
           placeholder=""
           type="tel"
           label="Phone"
-          value={formData?.email}
+          value={formData?.phone}
           className={'!bg-[#F9FAFB] !text-[#484A4C] !rounded-[8px] !border-none !h-[42px]'}
           onChange={(e) => handleInputChange('phone', e.target.value)}
         />

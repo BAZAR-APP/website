@@ -31,10 +31,10 @@ const UserInfo: React.FC<UserInfoProps> = ({ onNext }) => {
   })
 
   useEffect(() => {
-    if (user?.user?.email) {
+    if (user?.user?.id) {
       setFormData({
         fullName: user?.user?.fullName,
-        email: user?.user?.email,
+        email: user?.user?.email || '',
         phone: user?.user?.phoneNumber || '',
         address: user?.user?.city,
       })

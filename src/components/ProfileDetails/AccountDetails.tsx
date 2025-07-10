@@ -18,7 +18,7 @@ import PhoneOtpVerification from '../PhoneOtpVerification'
 import ReusableTextArea from '../CommonTextArea/TextArea'
 // import ProfileSuccessModal from "./ProfileSuccessModal"
 // import ProfileOTPModal from "./ProfileOTPModal"
-interface PhoneChangeEvent extends React.ChangeEvent<HTMLInputElement> { }
+interface PhoneChangeEvent extends React.ChangeEvent<HTMLInputElement> {}
 
 interface userFormData {
   phone?: string
@@ -57,9 +57,7 @@ export const profileUpdateSchema = z
 const AccountDetails = () => {
   const verifyPhoneModel = useToggle(false)
   const { data: user, update } = useSession()
-  const [address, setAddress] = useState(
-    'Sea Villa Retreat, Block 5, Street 12, Villa 27, Al Khiran, Ahmadi, Kuwait 64021'
-  );
+  const [address, setAddress] = useState('')
 
   const {
     handleSubmit,
@@ -88,7 +86,7 @@ const AccountDetails = () => {
   }
 
   const handleTextAreaChange = (e: React.ChangeEvent<HTMLTextAreaElement>): void => {
-    setAddress(e.target.value || '');
+    setAddress(e.target.value || '')
   }
 
   const onSubmit = async (data: userFormData) => {
@@ -99,7 +97,7 @@ const AccountDetails = () => {
         callingCode: '+965',
         countryCode: 'KW',
         isUpdatingAddress: false,
-        email:data?.email
+        email: data?.email,
       }
       await api.patch('/users/updateProfile', body)
       await update()
@@ -163,8 +161,11 @@ const AccountDetails = () => {
             <ReusableTextArea
               label={'Home or ID Address'}
               value={address}
-              onChange={(e) => { handleTextAreaChange(e) }}
-              row={2} />
+              onChange={(e) => {
+                handleTextAreaChange(e)
+              }}
+              row={2}
+            />
           </div>
           <div className="flex flex-col items-start self-stretch shrink-0 flex-nowrap relative z-[56]">
             <div className="flex pt-[8px] pr-0 pb-[8px] pl-0 gap-[12px] items-center self-stretch shrink-0 flex-nowrap relative z-[57]">
