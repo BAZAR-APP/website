@@ -33,8 +33,12 @@ const SocialLinkShare: React.FC<ShareModalProps> = ({
 
   // Set the URL only after component mounts (client-side)
   useEffect(() => {
-    setShareUrl(`${window.location?.origin}/${lang}/chalet/${id}/`)
-  }, [])
+    setShareUrl(
+      colRevers
+        ? `${window.location?.origin}/${lang}/`
+        : `${window.location?.origin}/${lang}/chalet/${id}/`,
+    )
+  }, [colRevers])
 
   const shareOptions = [
     {

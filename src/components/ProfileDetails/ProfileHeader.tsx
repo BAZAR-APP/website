@@ -2,18 +2,24 @@ import { useSession } from 'next-auth/react'
 import SocialLinkShare from '../SocialLinkShare'
 import Image from 'next/image'
 import useToggle from '@/lib/hooks/useToggle'
-import api from '@/lib/axios'
+import api, { useQueryBase } from '@/lib/axios'
 import { toast } from '@/lib/toast'
 import { extractErrorMessage } from '@/lib/utils'
 import { useRef, useState } from 'react'
 import { User } from 'lucide-react'
+import OverlayLoader from '../OverlayLoader'
 
 const ProfileHeader = () => {
   const { isOpen, toggle } = useToggle()
   const { data: user, update } = useSession()
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [isUploading, setIsUploading] = useState(false)
-
+  const { data, isLoading } = useQueryBase({
+    queryKey: ['earnedPoints'],
+    url: `/loyaltyPoints?language=${'en'}`,
+    cacheTime: 0,
+    staleTime: 0,
+  })
   const handleImageUpload = async (file: File) => {
     setIsUploading(true)
     try {
@@ -142,10 +148,12 @@ const ProfileHeader = () => {
             {user?.user?.fullName}
           </span>
 
-          <div className="flex items-center gap-2 bg-[#e1f2ff] px-2 py-1 rounded-md">
-            <div className="w-4 h-4 bg-[url('https://codia-f2c.s3.us-west-1.amazonaws.com/image/2025-06-11/MvZzetJcMk.png')] bg-cover bg-no-repeat" />
-            <span className="text-sm text-[#29397e]">200 Points</span>
-          </div>
+          {data?.data?.totalPoints && (
+            <div className="flex items-center gap-2 bg-[#e1f2ff] px-2 py-1 rounded-md">
+              <div className="w-4 h-4 bg-[url('https://codia-f2c.s3.us-west-1.amazonaws.com/image/2025-06-11/MvZzetJcMk.png')] bg-cover bg-no-repeat" />
+              <span className="text-sm text-[#29397e]">{data?.data?.totalPoints} Points</span>
+            </div>
+          )}
 
           <div
             className="flex items-center gap-2 mt-2 rounded-full py-2 cursor-pointer hover:bg-gray-50 px-2 -mx-2 transition-colors duration-200"
@@ -163,6 +171,7 @@ const ProfileHeader = () => {
           <Image src={'/images/gift.svg'} alt="gift" width={119} height={119} />
         </div>
       </SocialLinkShare>
+      {isLoading && <OverlayLoader open={isLoading} />}
     </>
   )
 }

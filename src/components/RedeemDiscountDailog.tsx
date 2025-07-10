@@ -6,7 +6,6 @@ import { copyToClipboard, extractErrorMessage } from '@/lib/utils'
 import { Text } from '@radix-ui/themes'
 import Image from 'next/image'
 import React, { useState } from 'react'
-import { useUserStore } from '../../stores/useUserStore'
 import api from '@/lib/axios'
 import { useSession } from 'next-auth/react'
 import { toast } from '@/lib/toast'
@@ -36,7 +35,6 @@ const RedeemDiscountDailog = ({
   step,
   setStep,
 }: RedeemDiscountDailogProps) => {
-  const { setSelectedDiscount } = useUserStore()
   const { data: user } = useSession()
   const [loading, setLoading] = useState(false)
   const queryClient = useQueryClient()
@@ -64,12 +62,6 @@ const RedeemDiscountDailog = ({
   }
 
   const handleCopy = () => {
-    if (selectedDiscount) {
-      setSelectedDiscount({
-        couponCode: selectedDiscount?.couponCode,
-        discountPercent: selectedDiscount?.discountPercent,
-      })
-    }
     copyToClipboard(selectedDiscount?.couponCode)
     onClose()
   }

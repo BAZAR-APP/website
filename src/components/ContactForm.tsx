@@ -4,41 +4,24 @@ import Image from 'next/image'
 import { useSession } from 'next-auth/react'
 
 interface ContactFormData {
-  fullName?: string
-  phone?: string
-  email?: string
-  address?: string
+  fullName: string
+  phone: string
+  email: string
+  address: string
 }
 
 interface ContactFormProps {
-  onSubmit?: (data: ContactFormData) => void
+  onChange: (field: keyof ContactFormData, value: string) => void
+  formData: ContactFormData
 }
 
-const ContactForm: React.FC<ContactFormProps> = ({ onSubmit }) => {
-  const { data: user } = useSession()
-
-  const [formData, setFormData] = useState<ContactFormData>({
-    fullName: '',
-    phone: '',
-    email: '',
-    address: '',
-  })
-
-  useEffect(() => {
-    if (user?.user) {
-      setFormData({
-        fullName: user?.user?.fullName,
-      })
-    }
-  }, [user])
-
+const ContactForm: React.FC<ContactFormProps> = ({ onChange, formData }) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    onSubmit?.(formData)
   }
 
   const handleInputChange = (field: keyof ContactFormData, value: string) => {
-    setFormData((prev) => ({ ...prev, [field]: value }))
+    onChange(field, value)
   }
 
   return (
@@ -68,6 +51,7 @@ const ContactForm: React.FC<ContactFormProps> = ({ onSubmit }) => {
           placeholder=""
           type="tel"
           label="Phone"
+          value={formData?.email}
           className={'!bg-[#F9FAFB] !text-[#484A4C] !rounded-[8px] !border-none !h-[42px]'}
           onChange={(e) => handleInputChange('phone', e.target.value)}
         />

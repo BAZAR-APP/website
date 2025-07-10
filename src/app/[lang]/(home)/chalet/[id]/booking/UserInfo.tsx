@@ -2,9 +2,13 @@ import BookingSummary from '@/components/BookingSummary'
 import Button from '@/components/Button/Button'
 import ContactForm from '@/components/ContactForm'
 import ModalDialog from '@/components/ModalDialog/Dialog'
+import api from '@/lib/axios'
 import useToggle from '@/lib/hooks/useToggle'
+import { toast } from '@/lib/toast'
+import { extractErrorMessage } from '@/lib/utils'
+import { useSession } from 'next-auth/react'
 import Image from 'next/image'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 type UserInfoProps = {
   onNext: () => void
@@ -17,8 +21,44 @@ interface ContactFormData {
 }
 const UserInfo: React.FC<UserInfoProps> = ({ onNext }) => {
   const { isOpen, toggle } = useToggle(false)
-  const handleFormSubmit = (data: ContactFormData) => {
-    console.log('Form submitted:', data)
+  const { data: user, update } = useSession()
+  const [loading, setLoading] = useState<boolean>(false)
+  const [formData, setFormData] = useState<ContactFormData>({
+    fullName: '',
+    phone: '',
+    email: '',
+    address: '',
+  })
+
+  useEffect(() => {
+    if (user?.user?.email) {
+      setFormData({
+        fullName: user?.user?.fullName,
+        email: user?.user?.email,
+        phone: user?.user?.phoneNumber || '',
+        address: user?.user?.city,
+      })
+    }
+  }, [user])
+  const handleFormSubmit = async () => {
+    setLoading(true)
+    try {
+      const body = {
+        fullName: formData?.fullName,
+        phoneNumber: formData?.phone,
+        callingCode: '+965',
+        countryCode: 'KW',
+        isUpdatingAddress: false,
+        email: formData?.email,
+      }
+      await api.patch('/users/updateProfile', body)
+      await update()
+      onNext()
+    } catch (error) {
+      toast.error(extractErrorMessage(error))
+    } finally {
+      setLoading(false)
+    }
   }
   return (
     <>
@@ -30,7 +70,12 @@ const UserInfo: React.FC<UserInfoProps> = ({ onNext }) => {
           Please provide your name and contact info to complete the booking.
         </p>
         <div className="flex justify-between flex-wrap md:gap-2 gap-10">
-          <ContactForm  />
+          <ContactForm
+            onChange={(field, value) => {
+              setFormData((prev) => ({ ...prev, [field]: value }))
+            }}
+            formData={formData}
+          />
 
           <div className="pb-7 md:px-3">
             <BookingSummary showRedeemeCodeSection />
@@ -70,7 +115,9 @@ const UserInfo: React.FC<UserInfoProps> = ({ onNext }) => {
             No, Just Continue
           </Button>
           <Button
-            onClick={() => onNext()}
+            onClick={() => handleFormSubmit()}
+            disabled={loading}
+            loading={loading}
             className="cursor-pointer bg-[#29397E] text-white py-2 rounded-lg text-sm font-medium !w-full"
           >
             Save & Continue

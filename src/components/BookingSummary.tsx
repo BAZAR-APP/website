@@ -15,6 +15,7 @@ import { toast } from '@/lib/toast'
 import { extractErrorMessage } from '@/lib/utils'
 import { useFormContext } from 'react-hook-form'
 import { useUserStore } from '../../stores/useUserStore'
+import OverlayLoader from './OverlayLoader'
 
 // Extracted common text styles
 const textStyles = {
@@ -91,7 +92,7 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
   finalPayment = false,
 }) => {
   const { id } = useParams()
-  const { getValues, watch, setValue } = useFormContext()
+  const { getValues, watch } = useFormContext()
   const { selectedDiscount, setSelectedDiscount } = useUserStore()
   const router = useRouter()
   const selectedAddons: Customization[] = watch('addons') || []
@@ -108,6 +109,8 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
     totalCostAgainstNights,
     isDiscountApplied,
     discountedTotal,
+    discountCode,
+    setDiscountCode,
     setDiscountedTotal,
     setIsDiscountApplied,
     resetBooking,
@@ -115,14 +118,20 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
   } = useBookingStore()
   const isSplitPayment = getValues()?.paymentOption === 'split'
   const grandTotal = (selectedAddonsTotal ?? 0) + Number(packageAmount) + (romanticWeekend ? 25 : 0)
-  const handleApplyDiscount = () => {
-    if (!selectedDiscount?.discountPercent || !grandTotal) return
-
-    const discountAmount = (grandTotal * selectedDiscount?.discountPercent) / 100
-    const finalTotal = grandTotal - discountAmount
-    setDiscountedTotal(finalTotal)
-    setIsDiscountApplied(true)
-    toast.success(`Discount of ${selectedDiscount?.discountPercent}% applied!`)
+  const handleApplyDiscount = async () => {
+    setLoading(true)
+    try {
+      const res = await api.get(`loyaltyRewards/readByCouponCode/${discountCode}`)
+      const discountAmount = (grandTotal * res?.data?.discountPercent) / 100
+      const finalTotal = grandTotal - discountAmount
+      setDiscountedTotal(finalTotal)
+      setIsDiscountApplied(true)
+      toast.success(`Discount of ${res?.data?.discountPercent}% applied!`)
+    } catch (error) {
+      toast.error(extractErrorMessage(error))
+    } finally {
+      setLoading(false)
+    }
   }
 
   const bookNow = async () => {
@@ -157,7 +166,7 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
       setLoading(false)
     }
   }
-
+  console.log(selectedDiscount)
   return (
     <>
       <div className="w-full md:max-w-sm rounded-lg bg-[#F9FAFB] sm:px-6 sm:py-5 p-3">
@@ -167,8 +176,8 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
         <div className="p-0">
           <div className="relative">
             <Image
-              src="https://picsum.photos/200/300"
-              alt="Luxury Lakeside Retreat"
+              src={chaletDetails?.photoURL || ''}
+              alt={chaletDetails?.title || ''}
               width={200}
               height={200}
               className="w-full h-46 object-cover rounded-[24px]"
@@ -178,11 +187,11 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
           <div className="py-3.5">
             <div className="flex items-start flex-wrap justify-between mb-3">
               <h3 className="text-[16px] leading-[24px] font-medium text-[#19191A] font-inter">
-                Luxury Lakeside Retreat
+                {chaletDetails?.title}
               </h3>
               <div className="flex items-center text-sm text-[#8E8E93] lg:mt-0 mt-1">
                 <MapPin size={16} className="mr-1" />
-                Al Khiran
+                {chaletDetails?.city}
               </div>
             </div>
 
@@ -268,13 +277,13 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
             {showRedeemeCodeSection && (
               <CouponSection
                 onChange={(value: string) => {
-                  setValue('redeemed_code', value)
+                  setDiscountCode(value)
                   setIsDiscountApplied(false)
                   setDiscountedTotal(null)
                 }}
                 onApply={handleApplyDiscount}
-                isDisabled={!selectedDiscount?.couponCode}
-                value={selectedDiscount?.couponCode}
+                isDisabled={!discountCode || isDiscountApplied}
+                value={discountCode}
               />
             )}
 
@@ -297,6 +306,7 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
           This is your final payment. Once completed, your booking will be fully secured.
         </p>
       )}
+      {loading && <OverlayLoader open={loading} />}
     </>
   )
 }

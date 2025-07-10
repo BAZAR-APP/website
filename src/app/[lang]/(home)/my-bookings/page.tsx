@@ -12,8 +12,8 @@ const Booking = () => {
   const router = useRouter()
   const [activeTab, setActiveTab] = React.useState<'current' | 'completed'>('current')
   const { data, isLoading } = useQueryBase({
-    queryKey: ['my-bookings'],
-    url: '/booking/me',
+    queryKey: ['my-bookings', activeTab],
+    url: `/booking/me?type=${activeTab}`,
     staleTime: 0,
     cacheTime: 0,
   })
@@ -65,16 +65,32 @@ const Booking = () => {
           ))}
         </div>
       ) : (
-        bookings?.map((booking: IBooking) => (
-          <BookingCard
-            key={booking.id}
-            onClick={() => router.push(`/my-bookings/${booking.id}`)}
-            onSeeDetails={handleSeeDetails}
-            onViewInvoice={handleViewInvoice}
-            showRating={true}
-            booking={booking}
-          />
-        ))
+        <>
+          {bookings?.length > 0 ? (
+            bookings?.map((booking: IBooking) => (
+              <BookingCard
+                key={booking.id}
+                onClick={() => router.push(`/my-bookings/${booking.id}`)}
+                onSeeDetails={handleSeeDetails}
+                onViewInvoice={handleViewInvoice}
+                showRating={true}
+                booking={booking}
+              />
+            ))
+          ) : (
+            <div className="text-center py-8">
+              <h3 className="text-[#19191A] text-[25px] leading-[32px] font-semibold text-center pt-6 pb-2.5">
+                No Bookings Yet
+              </h3>
+              <p className="font-normal text-[14px] leading-[17px] text-[#484A4C] text-center">
+                You haven’t made any {activeTab === 'completed' ? 'completed' : 'current'} bookings
+                yet.
+                <br />
+                Start exploring and plan your stay today!
+              </p>
+            </div>
+          )}
+        </>
       )}
     </div>
   )

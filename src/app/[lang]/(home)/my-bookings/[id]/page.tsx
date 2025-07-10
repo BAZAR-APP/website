@@ -385,7 +385,7 @@ export default function BookingDetailsPage() {
                 <PropertyInfo
                   guests={String(bookingDetails?.noOfGuests)}
                   propertyType={bookingDetails?.chalet?.isEntireHomeAvailabe ? 'Entire Home' : ''}
-                  beds={Number(bookingDetails?.chalet?.noOfBedrooms)}
+                  beds={Number(bookingDetails?.chalet?.maxNoOfBeds)}
                   baths={Number(bookingDetails?.chalet?.noOfBaths)}
                   amenities={bookingDetails?.chalet?.amenities?.map((item) => item?.title)}
                 />

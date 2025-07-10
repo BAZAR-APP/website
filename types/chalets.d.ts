@@ -18,7 +18,7 @@ export interface Chalet {
   isEntireHomeAvailabe: boolean
   isFreeParking?: boolean
   isFreeWifi?: boolean
-  rating?:number
+  rating?: number
   noOfReviews?: number
   perHourCost: number
   perNightCost: number
@@ -116,6 +116,36 @@ export interface ChaletBedroom {
 
 export type ChaletResponse = {
   data: Chalet[]
+  limit: number
+  page: number
+  total: number
+}
+export interface Review {
+  id: string
+  rating: string
+  reviewText: string | null
+  rewardPoints: number
+  isPublished: boolean
+  chaletId: string
+  userId: string
+  createdAt: string
+  updatedAt: string
+  user: {
+    id: string
+    fullName: string
+    role: string
+    phoneNumber: string
+    email: string
+    status: string
+    authProvider: string
+    photoId: string
+    createdAt: string
+    updatedAt: string
+    photoURL: string | null
+  }
+}
+export type ReviewsResponse = {
+  data: Review[]
   limit: number
   page: number
   total: number

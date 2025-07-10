@@ -10,6 +10,7 @@ type BookingState = {
   setDates: (checkIn: Date, checkOut: Date) => void
   setGuests: (guests: number) => void
   setIsDiscountApplied: (isDiscountApplied: boolean) => void
+  setDiscountCode: (discountCode: string | null) => void
   resetBooking: () => void
   setNoOfNights: (guests: number) => void
   setTotalCostAgainstNights: (guests: number) => void
@@ -22,6 +23,7 @@ type BookingState = {
   setChaletDetails: (chalet: Chalet | null) => void
   setDiscountedTotal: (discountedTotal: number | null) => void
   discountedTotal: number | null
+  discountCode: string | null
 }
 
 import { persist } from 'zustand/middleware'
@@ -40,7 +42,9 @@ export const useBookingStore = create(
       guests: 1,
       discountedTotal: null,
       isDiscountApplied: false,
+      discountCode: null,
       setIsDiscountApplied: (isDiscountApplied) => set({ isDiscountApplied: isDiscountApplied }),
+      setDiscountCode: (discountCode) => set({ discountCode: discountCode }),
       setDiscountedTotal: (discountedTotal) => set({ discountedTotal: discountedTotal }),
       setPlan: (plan) => set({ selectedPlan: plan }),
       setChaletDetails: (chalet) => set({ chaletDetails: chalet }),
@@ -62,6 +66,7 @@ export const useBookingStore = create(
           guests: 1,
           discountedTotal: null,
           isDiscountApplied: false,
+          discountCode: null,
         }),
     }),
     { name: 'booking-storage' },
