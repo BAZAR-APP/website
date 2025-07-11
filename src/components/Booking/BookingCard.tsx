@@ -12,6 +12,7 @@ import { format } from 'date-fns'
 import api from '@/lib/axios'
 import { toast } from '@/lib/toast'
 import { extractErrorMessage } from '@/lib/utils'
+import { useQueryClient } from '@tanstack/react-query'
 
 interface BookingCardProps {
   booking: IBooking
@@ -31,6 +32,8 @@ const BookingCard: React.FC<BookingCardProps> = ({
   const { isOpen: isReviewOpen, open: openReview, close: closeReview } = useToggle(false)
   const { isOpen: isThanksOpen, open: openThanks, close: closeThanks } = useToggle(false)
   const [loading, setIsLoading] = useState(false)
+  const queryClient = useQueryClient()
+
   const submitReview = async (data: { rating: number; text: string }) => {
     setIsLoading(true)
     try {
@@ -42,7 +45,7 @@ const BookingCard: React.FC<BookingCardProps> = ({
         chaletId: booking?.chaletId,
         bookingId: booking?.id,
       })
-      closeReview()
+      queryClient.invalidateQueries({ queryKey: ['my-bookings'] }), closeReview()
       openThanks()
     } catch (error) {
       toast.error(extractErrorMessage(error))
@@ -85,7 +88,9 @@ const BookingCard: React.FC<BookingCardProps> = ({
 
             <div className="flex bg-[#E1F3FF] items-center gap-1 rounded py-1 px-1.5 max-w-[110px]">
               <Image src="/images/Points.svg" width={16} height={16} alt="Points Icon" />
-              <span className="text-[#29397E] text-sm">{booking?.chalet?.noOfLoyalityPoints} Points</span>
+              <span className="text-[#29397E] text-sm">
+                {booking?.chalet?.noOfLoyalityPoints} Points
+              </span>
             </div>
           </div>
           <p className="text-sm w-full text-[#8E8E93] leading-5">
@@ -108,7 +113,8 @@ const BookingCard: React.FC<BookingCardProps> = ({
           <div className="flex sm:items-center items-start gap-1">
             <Image src="/images/date.svg" width={20} height={20} alt="Date icon" />
             <p className="text-sm leading-[17px] text-[#9EA0A2] pt-[1.5px]">
-              From {format(new Date(booking?.startDate), 'dd/MM/yyyy')} To {format(new Date(booking?.endDate), 'dd/MM/yyyy')}
+              From {format(new Date(booking?.startDate), 'dd/MM/yyyy')} To{' '}
+              {format(new Date(booking?.endDate), 'dd/MM/yyyy')}
             </p>
           </div>
           <button

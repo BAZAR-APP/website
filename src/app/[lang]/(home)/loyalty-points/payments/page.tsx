@@ -14,12 +14,8 @@ import { toast } from '@/lib/toast'
 const Payment = () => {
   const { selectedPackageLoyaltyPoints } = useBuyLoyltyPointsStore()
 
-  const { data: user } = useSession()
+  const { data: user, update } = useSession()
   const [loading, setLoading] = useState(false)
-  const { data } = useQueryBase({
-    queryKey: ['points'],
-    url: '/loyaltyPoints',
-  })
 
   const methods = useForm()
   const router = useRouter()
@@ -41,7 +37,7 @@ const Payment = () => {
           `/loyaltyPointsPackages/buy?userId=${user?.user?.id}&packageId=${selectedPackageLoyaltyPoints?.id}`,
         )
       }
-
+      await update()
       router.replace('/loyalty-points/payment-confirmed/')
     } catch (error) {
       toast.error(extractErrorMessage(error))

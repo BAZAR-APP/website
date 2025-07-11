@@ -11,6 +11,7 @@ import { useRouter } from 'next/navigation'
 import { signIn, useSession } from 'next-auth/react'
 import { toast } from '@/lib/toast'
 import { extractErrorMessage } from '@/lib/utils'
+
 interface LoginFormInputs {
   phone: string
   password: string
@@ -45,14 +46,28 @@ const Login = () => {
         password: data?.password,
         authProvider: 'phone',
       })
-
+      
       if (result?.ok) {
         router.replace(`/`)
       } else {
-        toast.error(result?.error ?? '')
+        // Handle specific role-based error messages
+        let errorMessage = result?.error ?? 'Login failed'
+        
+        if (errorMessage.includes('Only customers can login')) {
+          errorMessage = 'Access denied. This application is only available for customers.'
+        }
+        
+        toast.error(errorMessage)
       }
     } catch (error) {
-      extractErrorMessage(error)
+      const errorMessage = extractErrorMessage(error)
+      
+      // Check if it's a role-based error
+      if (errorMessage.includes('Only customers can login')) {
+        toast.error('Access denied. This application is only available for customers.')
+      } else {
+        toast.error(errorMessage)
+      }
     }
   }
 
@@ -67,6 +82,35 @@ const Login = () => {
 
   const handleRememberMeChange = (checked: boolean): void => {
     setValue('rememberMe', checked)
+  }
+
+  const handleGoogleSignIn = async () => {
+    try {
+      const result = await signIn('google', { 
+        callbackUrl: `${process.env.NEXT_PUBLIC_URL}/explore/`,
+        redirect: false
+      })
+      
+      if (result?.ok) {
+        router.replace('/explore/')
+      } else if (result?.error) {
+        let errorMessage = result.error
+        
+        if (errorMessage.includes('Only customers can login')) {
+          errorMessage = 'Access denied. This application is only available for customers.'
+        }
+        
+        toast.error(errorMessage)
+      }
+    } catch (error) {
+      const errorMessage = extractErrorMessage(error)
+      
+      if (errorMessage.includes('Only customers can login')) {
+        toast.error('Access denied. This application is only available for customers.')
+      } else {
+        toast.error(errorMessage)
+      }
+    }
   }
 
   return (
@@ -92,7 +136,7 @@ const Login = () => {
 
         <form
           onSubmit={handleSubmit(onSubmit)}
-          autoComplete='off'
+          autoComplete="off"
           className="flex flex-col min-[1440px]:gap-6 gap-[16px]"
         >
           <div>
@@ -107,7 +151,7 @@ const Login = () => {
               }
               type="text"
               label="Phone"
-              autoComplete='off'
+              autoComplete="off"
               value={watch('phone')}
               onChange={handlePhoneChange}
               maxLength={8}
@@ -120,7 +164,7 @@ const Login = () => {
             <CommonInput
               name="password"
               label="Password"
-              autoComplete='new-password'
+              autoComplete="new-password"
               className={'bg-[#F9FAFB]'}
               value={watch('password')}
               onChange={handlePasswordChange}
@@ -161,10 +205,9 @@ const Login = () => {
 
         <div className="flex justify-center items-center gap-6 w-full min-[1440px]:my-3">
           <button
-            onClick={() =>
-              signIn('google', { callbackUrl: `${process.env.NEXT_PUBLIC_URL}/explore/` })
-            }
+            onClick={handleGoogleSignIn}
             className="shrink-0"
+            type="button"
           >
             <Image src="/images/googleRounded.svg" alt="Login with Google" width={40} height={40} />
           </button>

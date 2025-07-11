@@ -11,6 +11,7 @@ declare module 'next-auth' {
       phoneNumber?: string
       name?: string
       userTierType?: string
+      role: string
       [key: string]: any
     }
   }
@@ -20,6 +21,7 @@ declare module 'next-auth' {
     accessToken?: string
     phoneNumber?: string
     provider?: string
+    role?: string
   }
 }
 

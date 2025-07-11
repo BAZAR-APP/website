@@ -35,7 +35,7 @@ const RedeemDiscountDailog = ({
   step,
   setStep,
 }: RedeemDiscountDailogProps) => {
-  const { data: user } = useSession()
+  const { data: user, update } = useSession()
   const [loading, setLoading] = useState(false)
   const queryClient = useQueryClient()
 
@@ -47,6 +47,7 @@ const RedeemDiscountDailog = ({
         rewardId: selectedDiscount?.id,
       })
       setStep('copy')
+      await update()
       await Promise.all(
         ['earnedPoints', 'loyaltyPoints', 'loyaltyRewards'].map((key) =>
           queryClient.invalidateQueries({ queryKey: [key] }),

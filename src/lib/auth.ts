@@ -26,6 +26,11 @@ async function validateCurrentUser(accessToken: string) {
   }
 }
 
+// Helper function to check if user role is customer
+function isCustomerRole(role: string): boolean {
+  return role?.toLowerCase() === 'customer'
+}
+
 export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
@@ -57,19 +62,26 @@ export const authOptions: NextAuthOptions = {
               throw new Error('User validation failed after login')
             }
 
+            // Check if user role is customer
+            const userRole = validation.userData?.role || user.role
+            if (!isCustomerRole(userRole)) {
+              throw new Error('Access denied. Only customers can login to this application.')
+            }
+
             return {
               id: user.userId.toString(),
               name: user.fullName,
               email: user.email || null,
               phoneNumber: user.phoneNumber,
               accessToken: user.accessToken,
+              role: userRole,
             }
           }
 
           return null
         } catch (error: any) {
           console.error('Phone auth error:', error.response?.data || error.message)
-          throw new Error(error.response?.data?.message || 'Login failed')
+          throw new Error(error.response?.data?.message || error.message || 'Login failed')
         }
       },
     }),
@@ -104,11 +116,19 @@ export const authOptions: NextAuthOptions = {
                 return false
               }
 
+              // Check if user role is customer
+              const userRole = validation.userData?.role || userData.user?.role || userData.role
+              if (!isCustomerRole(userRole)) {
+                console.error('Access denied for Google user. Only customers can login.')
+                return false
+              }
+
               user.id =
                 userData.user?.userId?.toString() || userData.userId?.toString() || profile?.sub
               user.accessToken = accessToken
               user.email = profile?.email
               user.name = profile?.name
+              user.role = userRole
 
               return true
             }
@@ -131,6 +151,7 @@ export const authOptions: NextAuthOptions = {
         token.accessToken = (user as any).accessToken
         token.phoneNumber = (user as any).phoneNumber
         token.email = user.email ?? undefined
+        token.role = (user as any).role
         token.provider = account.provider || ''
         token.lastValidated = Date.now()
         return token
@@ -154,12 +175,28 @@ export const authOptions: NextAuthOptions = {
             token.phoneNumber = undefined
             token.provider = undefined
             token.email = undefined
+            token.role = undefined
             token.isInvalid = true
             return token
           }
 
-          // Update last validated timestamp
+          // Re-check role on validation
+          const userRole = validation.userData?.role
+          if (!isCustomerRole(userRole)) {
+            // Role changed and no longer customer - invalidate session
+            token.id = undefined
+            token.accessToken = undefined
+            token.phoneNumber = undefined
+            token.provider = undefined
+            token.email = undefined
+            token.role = undefined
+            token.isInvalid = true
+            return token
+          }
+
+          // Update last validated timestamp and role
           token.lastValidated = now
+          token.role = userRole
         }
       }
 
@@ -177,6 +214,7 @@ export const authOptions: NextAuthOptions = {
             provider: undefined,
             email: undefined,
             phoneNumber: undefined,
+            role: undefined,
           },
           expires: new Date(0).toISOString(), // Expired session
         }
@@ -194,6 +232,24 @@ export const authOptions: NextAuthOptions = {
             provider: undefined,
             email: undefined,
             phoneNumber: undefined,
+            role: undefined,
+          },
+          expires: new Date(0).toISOString(), // Expired session
+        }
+      }
+
+      // Final role check during session creation
+      const userRole = validation.userData?.role
+      if (!isCustomerRole(userRole)) {
+        return {
+          ...session,
+          user: {
+            id: undefined,
+            accessToken: undefined,
+            provider: undefined,
+            email: undefined,
+            phoneNumber: undefined,
+            role: undefined,
           },
           expires: new Date(0).toISOString(), // Expired session
         }
@@ -206,6 +262,7 @@ export const authOptions: NextAuthOptions = {
         provider: token.provider as string,
         email: token.email as string,
         phoneNumber: token.phoneNumber as string,
+        role: userRole,
         ...validation.userData, // Include fresh user data from API
       }
 
