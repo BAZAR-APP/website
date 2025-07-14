@@ -15,6 +15,7 @@ import { authOptions } from '@/lib/auth'
 import toast from 'react-hot-toast'
 import { extractErrorMessage } from '@/lib/utils'
 import { Amenity, Chalet, ChaletBedroom } from '../../../../../../types/chalets'
+import HourlyBookingSummary from './booking/_components/HourlyBookingSummary'
 
 export async function generateMetadata({
   params,
@@ -187,7 +188,7 @@ export default async function ChaletDetailsPage({
             </div>
 
             <div className="lg:col-span-1">
-              <BookingWidget
+              {/* <BookingWidget
                 maxGuests={data?.maxNoOfGuests || ''}
                 bookingConfig={propertyData.bookingConfig}
                 guests={2}
@@ -199,6 +200,15 @@ export default async function ChaletDetailsPage({
                   weekDaysCost: data?.weekDaysCost,
                   fullWeekCost: data?.fullWeekCost,
                   fullMonthCost: data?.fullMonthCost,
+                }}
+                bookings={data?.bookings || []}
+              /> */}
+              <HourlyBookingSummary
+                maxGuests={data?.maxNoOfGuests || ''}
+                bookingConfig={propertyData.bookingConfig}
+                chalet={data}
+                packageInfo={{
+                  perHourCost: data?.perHourCost,
                 }}
                 bookings={data?.bookings || []}
               />
