@@ -115,7 +115,10 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
     setIsDiscountApplied,
     resetBooking,
     chaletDetails,
+    bookingType
   } = useBookingStore()
+  console.log(bookingType);
+  
   const isSplitPayment = getValues()?.paymentOption === 'split'
   const grandTotal = (selectedAddonsTotal ?? 0) + Number(packageAmount) + (romanticWeekend ? 25 : 0)
   const handleApplyDiscount = async () => {
@@ -166,7 +169,6 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
       setLoading(false)
     }
   }
-  console.log(selectedDiscount)
   return (
     <>
       <div className="w-full md:max-w-sm rounded-lg bg-[#F9FAFB] sm:px-6 sm:py-5 p-3">

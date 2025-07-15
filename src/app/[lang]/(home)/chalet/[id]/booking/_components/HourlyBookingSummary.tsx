@@ -21,6 +21,9 @@ import { useBookingStore } from '../../../../../../../../stores/useBookingStore'
 import SimpleCalendar from '@/components/Calender/SimpleCalender'
 import CustomPopOver from '@/components/CustomPopOver'
 import { Button } from '@/components'
+import AddGuests from './AddGuests'
+import RefundDepositRules from './RefundDepositRules'
+import PackagePricingSummary from './PackagePricingSummary'
 
 interface PackageOption {
   id: string
@@ -73,14 +76,6 @@ interface HourlyBookingSummaryProps {
   chalet: Chalet | null
 }
 
-// Package types enum for better type safety
-enum PackageType {
-  WEEKEND = 'weekend',
-  WEEKDAY = 'weekday',
-  FULL_WEEK = 'full_week',
-  FULL_MONTH = 'full_month',
-}
-
 const HourlyBookingSummary: React.FC<HourlyBookingSummaryProps> = ({
   bookingConfig = {
     refundableDeposit: 200,
@@ -96,29 +91,22 @@ const HourlyBookingSummary: React.FC<HourlyBookingSummaryProps> = ({
       currency: 'KWD',
     },
   },
-  packageInfo,
   maxGuests,
   bookings,
   chalet,
 }) => {
-  console.log(bookings)
-
   const checkInPopUp = useToggle()
   const checkOutPopUp = useToggle()
   const datePopUp = useToggle()
 
   const router = useRouter()
-  const [selectedPackageType, setSelectedPackageType] = useState<PackageType | null>(null)
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
   const [selectedCheckInTime, setSelectedCheckInTime] = useState<string | null>(null)
   const [selectedCheckOutTime, setSelectedCheckOutTime] = useState<string | null>(null)
 
-  const nights = 123
   const { id } = useParams()
-  const { selectedPlan, selectedDates, setPackageAmount, setDates, setChaletDetails } =
+  const { setPackageAmount, setDates, setChaletDetails, setBookingType, selectedDates } =
     useBookingStore()
-
-  const total = 0
 
   const generateTimeSlots = (): TimeSlot[] => {
     const slots: TimeSlot[] = []
@@ -218,6 +206,7 @@ const HourlyBookingSummary: React.FC<HourlyBookingSummaryProps> = ({
     setSelectedDate(date)
     setSelectedCheckInTime(null)
     setSelectedCheckOutTime(null)
+    datePopUp.toggle()
   }
 
   const handleCheckInTimeSelect = (timeSlot: TimeSlot) => {
@@ -241,7 +230,6 @@ const HourlyBookingSummary: React.FC<HourlyBookingSummaryProps> = ({
 
     checkInPopUp.toggle()
   }
-
   const handleCheckOutTimeSelect = (timeSlot: TimeSlot) => {
     setSelectedCheckOutTime(timeSlot.value)
     checkOutPopUp.toggle()
@@ -249,6 +237,7 @@ const HourlyBookingSummary: React.FC<HourlyBookingSummaryProps> = ({
 
   const availableTimeSlots = selectedDate ? getAvailableTimeSlots(selectedDate) : []
   const availableCheckOutTimes = getAvailableCheckOutTimes()
+  const total = (chalet?.perHourCost ?? 0) * 6 + 200
 
   return (
     <div className="bg-[#F9FAFB] rounded-2xl">
@@ -256,19 +245,15 @@ const HourlyBookingSummary: React.FC<HourlyBookingSummaryProps> = ({
         <h3 className="font-bold xl:text-[20px] md:text-lg text-[16px] leading-[24px] text-[#19191A] pb-3">
           Choose Your Package
         </h3>
-        {selectedPackageType && (
-          <h2 className="lg:text-[20px] md:text-[16px] text-sm leading-6 font-normal text-[#19191A] flex items-center">
-            {100 + ' KWD'}
-            <span className="text-[16px]">
-              / {capitalizeWords(selectedPackageType?.split('_')?.join(' '))}
-            </span>
-          </h2>
-        )}
+        <h2 className="lg:text-[20px] md:text-[16px] text-sm leading-6 font-normal text-[#19191A] flex items-center">
+          {chalet?.perHourCost + ' KWD'}
+          <span className="text-[16px]">/ hour</span>
+        </h2>
       </div>
 
       <div className="px-5 py-3">
         <div className="w-full rounded-xl border border-[#D1D5DB] overflow-hidden text-sm text-[#19191A]">
-          <div className="p-3">
+          <div className="p-3 border-[#D1D5DB] border-b-1">
             <CustomPopOver
               isOpen={datePopUp.isOpen}
               onClose={datePopUp.toggle}
@@ -290,30 +275,6 @@ const HourlyBookingSummary: React.FC<HourlyBookingSummaryProps> = ({
                   showMonthAndYearPickers={true}
                   showDateDisplay={true}
                 />
-
-                {/* Show disabled dates info */}
-                {disabledDates.length > 0 && (
-                  <div className="mt-4 pt-4 border-t">
-                    <h4 className="text-sm font-semibold mb-2 text-gray-700">
-                      Fully Booked Dates:
-                    </h4>
-                    <div className="grid grid-cols-3 gap-2 max-h-32 overflow-y-auto">
-                      {disabledDates.slice(0, 12).map((date, index) => (
-                        <div
-                          key={index}
-                          className="text-xs bg-red-50 text-red-600 px-2 py-1 rounded"
-                        >
-                          {format(date, 'MMM dd')}
-                        </div>
-                      ))}
-                      {disabledDates.length > 12 && (
-                        <div className="text-xs text-gray-500 px-2 py-1">
-                          +{disabledDates.length - 12} more
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                )}
               </div>
             </CustomPopOver>
           </div>
@@ -393,6 +354,7 @@ const HourlyBookingSummary: React.FC<HourlyBookingSummaryProps> = ({
               </CustomPopOver>
             </div>
           </div>
+          <AddGuests maxGuests={maxGuests || null} />
         </div>
       </div>
 
@@ -402,6 +364,7 @@ const HourlyBookingSummary: React.FC<HourlyBookingSummaryProps> = ({
           onClick={() => {
             setPackageAmount(total)
             setChaletDetails(chalet)
+            setBookingType('hourly')
             router.push(`/chalet/${id}/booking`)
           }}
           disabled={!selectedDate || !selectedCheckInTime || !selectedCheckOutTime}
@@ -409,6 +372,12 @@ const HourlyBookingSummary: React.FC<HourlyBookingSummaryProps> = ({
           Book Now
         </Button>
       </div>
+      <RefundDepositRules bookingConfig={bookingConfig} />
+      {selectedDates?.checkIn && (
+        <div className="px-5 pb-6 space-y-3">
+          <PackagePricingSummary bookingConfig={bookingConfig} total={total} />
+        </div>
+      )}
     </div>
   )
 }
