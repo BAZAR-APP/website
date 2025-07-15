@@ -5,13 +5,23 @@ import Deposit from '../../../../../../../../public/images/Deposit.svg'
 import { useParams, useRouter } from 'next/navigation'
 
 import useToggle from '@/lib/hooks/useToggle'
-import { format, addDays, isAfter, isBefore, isEqual } from 'date-fns'
+import {
+  format,
+  addDays,
+  isAfter,
+  isBefore,
+  isEqual,
+  startOfDay,
+  addHours,
+  isSameDay,
+} from 'date-fns'
 import { capitalizeWords } from '@/lib/utils'
 import { Bookings, Chalet } from '../../../../../../../../types/chalets'
 import { useBookingStore } from '../../../../../../../../stores/useBookingStore'
 import SimpleCalendar from '@/components/Calender/SimpleCalender'
 import CustomPopOver from '@/components/CustomPopOver'
 import { Button } from '@/components'
+
 interface PackageOption {
   id: string
   label: string
@@ -35,6 +45,15 @@ interface BookingConfig {
     refundTimeframe: number
     currency: string
   }
+}
+
+interface TimeSlot {
+  value: string
+  label: string
+  hour: number
+  isAvailable?: boolean // Make optional for initial generation
+  checkoutTime?: string // Make optional for initial generation
+  checkoutHour?: number // Make optional for initial generation
 }
 
 interface HourlyBookingSummaryProps {
@@ -82,67 +101,154 @@ const HourlyBookingSummary: React.FC<HourlyBookingSummaryProps> = ({
   bookings,
   chalet,
 }) => {
+  console.log(bookings)
+
   const checkInPopUp = useToggle()
   const checkOutPopUp = useToggle()
   const datePopUp = useToggle()
 
   const router = useRouter()
   const [selectedPackageType, setSelectedPackageType] = useState<PackageType | null>(null)
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null)
+  const [selectedCheckInTime, setSelectedCheckInTime] = useState<string | null>(null)
+  const [selectedCheckOutTime, setSelectedCheckOutTime] = useState<string | null>(null)
+
   const nights = 123
   const { id } = useParams()
-  const {
-    selectedPlan,
-    guests,
-    selectedDates,
-    setPackageAmount,
-    setGuests,
-    setDates,
-    setChaletDetails,
-  } = useBookingStore()
-
-  const handleQuantityChange = (newQuantity: number) => {
-    if (maxGuests && newQuantity > 0 && newQuantity <= +maxGuests) {
-      setGuests(newQuantity)
-    }
-  }
-  // Helper function to check if a date is within any booking period
-  const isDateBooked = (date: Date): boolean => {
-    return bookings.some((booking) => {
-      const bookingStart = new Date(booking.startDate)
-      const bookingEnd = new Date(booking.endDate)
-
-      return (
-        (isAfter(date, bookingStart) || isEqual(date, bookingStart)) && isBefore(date, bookingEnd)
-      )
-    })
-  }
-  // Enhanced date filtering for non-package bookings
-  const getNonPackageDisabledDates = useMemo(() => {
-    if (selectedPackageType || selectedPlan?.id) return []
-
-    const disabledDates: Date[] = []
-    const today = new Date()
-    const endDate = addDays(today, 365)
-
-    // Add all dates that are already booked
-    for (let date = new Date(today); date <= endDate; date = addDays(date, 1)) {
-      if (isDateBooked(date)) {
-        disabledDates.push(new Date(date))
-      }
-    }
-
-    return disabledDates
-  }, [bookings])
+  const { selectedPlan, selectedDates, setPackageAmount, setDates, setChaletDetails } =
+    useBookingStore()
 
   const total = 0
 
-  const isDateDisabled = (date: Date, disabledDates: Date[]): boolean => {
-    const dateStr = date.toISOString().split('T')[0]
-    return disabledDates.some((disabledDate: Date) => {
-      const disabledStr = new Date(disabledDate).toISOString().split('T')[0]
-      return dateStr === disabledStr
-    })
+  const generateTimeSlots = (): TimeSlot[] => {
+    const slots: TimeSlot[] = []
+    for (let hour = 0; hour < 24; hour++) {
+      slots.push({
+        value: hour.toString().padStart(2, '0') + ':00',
+        label: formatTime(hour, 0),
+        hour: hour,
+      })
+    }
+    return slots
   }
+
+  const formatTime = (hour: number, minute: number) => {
+    const period = hour >= 12 ? 'PM' : 'AM'
+    const displayHour = hour === 0 ? 12 : hour > 12 ? hour - 12 : hour
+    return `${displayHour}:${minute.toString().padStart(2, '0')} ${period}`
+  }
+
+  const getAvailableTimeSlots = (date: Date): TimeSlot[] => {
+    if (!date) return []
+
+    const allSlots = generateTimeSlots()
+
+    // Get all bookings that affect this date and potentially the next day (for overnight bookings)
+    const relevantBookings = bookings.filter((booking) => {
+      const bookingStart = new Date(booking.startDate)
+      const bookingEnd = new Date(booking.endDate)
+      const checkDate = startOfDay(date)
+      const nextDay = addDays(checkDate, 1)
+
+      // Check if the booking overlaps with this date or the next day (for overnight slots)
+      return bookingStart <= addDays(nextDay, 1) && bookingEnd >= checkDate
+    })
+
+    return allSlots
+      .filter((slot) => {
+        const slotStart = new Date(date)
+        slotStart.setHours(slot.hour, 0, 0, 0)
+        const slotEnd = addHours(slotStart, 6) // 6-hour minimum duration
+
+        // Check if this FULL 6-hour slot conflicts with any existing booking
+        const isSlotAvailable = !relevantBookings.some((booking) => {
+          const bookingStart = new Date(booking.startDate)
+          const bookingEnd = new Date(booking.endDate)
+
+          // Check for overlap: slot conflicts if it starts before booking ends and ends after booking starts
+          return slotStart < bookingEnd && slotEnd > bookingStart
+        })
+        return isSlotAvailable
+      })
+      .map((slot) => {
+        const checkoutHour = (slot.hour + 6) % 24
+        return {
+          ...slot,
+          isAvailable: true, // It's available because it passed the filter
+          checkoutTime: formatTime(checkoutHour, 0),
+          checkoutHour: checkoutHour,
+        }
+      })
+  }
+
+  const disabledDates = useMemo(() => {
+    const disabled: Date[] = []
+    const today = startOfDay(new Date())
+
+    // Check next 365 days
+    for (let i = 0; i < 365; i++) {
+      const checkDate = addDays(today, i)
+      const availableSlots = getAvailableTimeSlots(checkDate)
+
+      // If no available slots, disable this date
+      if (availableSlots.length === 0) {
+        disabled.push(checkDate)
+      }
+    }
+
+    return disabled
+  }, [bookings])
+
+  const getAvailableCheckOutTimes = (): TimeSlot[] => {
+    if (!selectedDate || !selectedCheckInTime) return []
+
+    const checkInHour = parseInt(selectedCheckInTime.split(':')[0])
+    const checkoutHour = (checkInHour + 6) % 24
+
+    return [
+      {
+        value: checkoutHour.toString().padStart(2, '0') + ':00',
+        label: formatTime(checkoutHour, 0),
+        hour: checkoutHour,
+      },
+    ]
+  }
+
+  const handleDateChange = (date: Date) => {
+    setSelectedDate(date)
+    setSelectedCheckInTime(null)
+    setSelectedCheckOutTime(null)
+  }
+
+  const handleCheckInTimeSelect = (timeSlot: TimeSlot) => {
+    setSelectedCheckInTime(timeSlot.value)
+    const checkOutTime = timeSlot.checkoutHour?.toString().padStart(2, '0') + ':00'
+    setSelectedCheckOutTime(checkOutTime)
+
+    if (selectedDate && timeSlot.checkoutHour !== undefined) {
+      const checkInDate = new Date(selectedDate)
+      checkInDate.setHours(timeSlot.hour, 0, 0, 0)
+
+      const checkOutDate = new Date(selectedDate)
+      checkOutDate.setHours(timeSlot.checkoutHour, 0, 0, 0)
+
+      if (timeSlot.checkoutHour < timeSlot.hour) {
+        checkOutDate.setDate(checkOutDate.getDate() + 1)
+      }
+
+      setDates(checkInDate, checkOutDate)
+    }
+
+    checkInPopUp.toggle()
+  }
+
+  const handleCheckOutTimeSelect = (timeSlot: TimeSlot) => {
+    setSelectedCheckOutTime(timeSlot.value)
+    checkOutPopUp.toggle()
+  }
+
+  const availableTimeSlots = selectedDate ? getAvailableTimeSlots(selectedDate) : []
+  const availableCheckOutTimes = getAvailableCheckOutTimes()
 
   return (
     <div className="bg-[#F9FAFB] rounded-2xl">
@@ -168,50 +274,47 @@ const HourlyBookingSummary: React.FC<HourlyBookingSummaryProps> = ({
               onClose={datePopUp.toggle}
               triggerChildren={
                 <span className="cursor-pointer">
-                  <span className="block text-[10px] font-semibold">CHECKOUT</span>
+                  <span className="block text-[10px] font-semibold">SELECT DATE</span>
                   <span className="block text-[14px] text-[#9EA0A2]">
-                    {format(new Date(selectedDates?.checkOut), 'dd/MM/yyyy')}
+                    {selectedDate ? format(selectedDate, 'dd/MM/yyyy') : 'Choose date'}
                   </span>
                 </span>
               }
             >
-              <SimpleCalendar
-                initialDate={
-                  selectedDates?.checkOut
-                    ? new Date(selectedDates.checkOut)
-                    : (() => {
-                        const tomorrow = new Date()
-                        tomorrow.setDate(tomorrow.getDate() + 1)
-                        return tomorrow
-                      })()
-                }
-                minDate={(() => {
-                  if (selectedDates?.checkIn) {
-                    const minCheckOut = new Date(selectedDates.checkIn)
-                    minCheckOut.setDate(minCheckOut.getDate() + 1)
-                    return minCheckOut
-                  }
-                  const tomorrow = new Date()
-                  tomorrow.setDate(tomorrow.getDate() + 1)
-                  return tomorrow
-                })()}
-                disabledDates={getNonPackageDisabledDates}
-                isDateSelectable={(date: Date): boolean => {
-                  if (isDateDisabled(date, getNonPackageDisabledDates)) {
-                    return false
-                  }
+              <div className="p-4 w-80">
+                <SimpleCalendar
+                  onDateChange={handleDateChange}
+                  initialDate={selectedDate || new Date()}
+                  minDate={new Date()}
+                  disabledDates={disabledDates}
+                  showMonthAndYearPickers={true}
+                  showDateDisplay={true}
+                />
 
-                  return true
-                }}
-                onDateChange={(selectedDate: Date): void => {
-                  const checkInDate = selectedDates?.checkIn
-                    ? new Date(selectedDates.checkIn)
-                    : new Date()
-
-                  setDates(checkInDate, selectedDate)
-                  datePopUp.toggle()
-                }}
-              />
+                {/* Show disabled dates info */}
+                {disabledDates.length > 0 && (
+                  <div className="mt-4 pt-4 border-t">
+                    <h4 className="text-sm font-semibold mb-2 text-gray-700">
+                      Fully Booked Dates:
+                    </h4>
+                    <div className="grid grid-cols-3 gap-2 max-h-32 overflow-y-auto">
+                      {disabledDates.slice(0, 12).map((date, index) => (
+                        <div
+                          key={index}
+                          className="text-xs bg-red-50 text-red-600 px-2 py-1 rounded"
+                        >
+                          {format(date, 'MMM dd')}
+                        </div>
+                      ))}
+                      {disabledDates.length > 12 && (
+                        <div className="text-xs text-gray-500 px-2 py-1">
+                          +{disabledDates.length - 12} more
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
             </CustomPopOver>
           </div>
           <div className="grid grid-cols-2 divide-x divide-[#D1D5DB]">
@@ -223,12 +326,35 @@ const HourlyBookingSummary: React.FC<HourlyBookingSummaryProps> = ({
                   <span className="cursor-pointer">
                     <span className="block text-[10px] font-semibold">CHECK-IN</span>
                     <span className="block text-[14px] text-[#9EA0A2]">
-                      {format(new Date(selectedDates?.checkIn), 'dd/MM/yyyy')}
+                      {selectedCheckInTime
+                        ? formatTime(parseInt(selectedCheckInTime.split(':')[0]), 0)
+                        : 'Select time'}
                     </span>
                   </span>
                 }
               >
-                <div>check in time picker here </div>
+                <div className="p-4 max-h-60 overflow-y-auto">
+                  {!selectedDate ? (
+                    <p className="text-sm text-gray-500">Please select a date first</p>
+                  ) : availableTimeSlots.length === 0 ? (
+                    <p className="text-sm text-gray-500">No available 6-hour slots for this date</p>
+                  ) : (
+                    <div className="space-y-2">
+                      {availableTimeSlots.map((slot) => (
+                        <button
+                          key={slot.value}
+                          onClick={() => handleCheckInTimeSelect(slot)}
+                          className="w-full text-left p-3 rounded hover:bg-gray-100 text-sm border border-gray-200"
+                        >
+                          <div className="font-medium">{slot.label}</div>
+                          <div className="text-xs text-gray-500 mt-1">
+                            Checkout: {slot.checkoutTime} (6 hours)
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
               </CustomPopOver>
             </div>
 
@@ -240,54 +366,31 @@ const HourlyBookingSummary: React.FC<HourlyBookingSummaryProps> = ({
                   <span className="cursor-pointer">
                     <span className="block text-[10px] font-semibold">CHECKOUT</span>
                     <span className="block text-[14px] text-[#9EA0A2]">
-                      {format(new Date(selectedDates?.checkOut), 'dd/MM/yyyy')}
+                      {selectedCheckOutTime
+                        ? formatTime(parseInt(selectedCheckOutTime.split(':')[0]), 0)
+                        : 'Auto-selected'}
                     </span>
                   </span>
                 }
               >
-                <div>check out time picker here </div>
+                <div className="p-4">
+                  {!selectedCheckInTime ? (
+                    <p className="text-sm text-gray-500">Please select check-in time first</p>
+                  ) : (
+                    <div className="space-y-2">
+                      {availableCheckOutTimes.map((slot) => (
+                        <button
+                          key={slot.value}
+                          onClick={() => handleCheckOutTimeSelect(slot)}
+                          className="w-full text-left p-2 rounded hover:bg-gray-100 text-sm"
+                        >
+                          {slot.label} (6 hours from check-in)
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
               </CustomPopOver>
-            </div>
-          </div>
-          <div className="border-t border-[#D1D5DB] px-3 py-2 flex items-center justify-between cursor-pointer">
-            <div>
-              <span className="block text-[10px] font-semibold">GUESTS</span>
-              {guests && <span className="block text-[14px] text-[#9EA0A2]">{guests} guests</span>}
-            </div>
-            <div className="flex items-center gap-2 relative">
-              <button
-                onClick={() => handleQuantityChange(guests - 1)}
-                className="flex cursor-pointer w-8 h-8 justify-center items-center relative p-[6.4px] rounded-[80px] border-[0.8px] border-solid border-[#E5E5EA]"
-                aria-label="Decrease quantity"
-                type="button"
-              >
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                  <path
-                    d="M14.7997 10H5.19971"
-                    stroke="#19191A"
-                    strokeWidth="1.6"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </button>
-              <span className="text-[#19191A] text-base font-medium leading-6">{guests}</span>
-              <button
-                onClick={() => handleQuantityChange(guests + 1)}
-                className="cursor-pointer flex w-8 h-8 justify-center items-center relative p-[6.4px] rounded-[80px] border-[0.8px] border-solid border-[#E5E5EA]"
-                aria-label="Increase quantity"
-                type="button"
-              >
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                  <path
-                    d="M10.0002 5.19995V9.99995M10.0002 9.99995V14.8M10.0002 9.99995H14.8002M10.0002 9.99995L5.2002 9.99995"
-                    stroke="#19191A"
-                    strokeWidth="1.6"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </button>
             </div>
           </div>
         </div>
@@ -298,77 +401,13 @@ const HourlyBookingSummary: React.FC<HourlyBookingSummaryProps> = ({
           className={'w-[100%] mb-5 text-white py-2 rounded-lg font-medium cursor-pointer'}
           onClick={() => {
             setPackageAmount(total)
-
             setChaletDetails(chalet)
             router.push(`/chalet/${id}/booking`)
           }}
+          disabled={!selectedDate || !selectedCheckInTime || !selectedCheckOutTime}
         >
           Book Now
         </Button>
-      </div>
-
-      {bookingConfig.paymentOptions.partialPayment && (
-        <div className="px-5 pb-4">
-          <p className="text-sm leading-4 font-normal text-[#9EA0A2]">
-            You can choose to pay {bookingConfig.paymentOptions.partialPercentage}% now and the
-            remaining 72 hours before check-in, or pay the full amount upfront.
-          </p>
-        </div>
-      )}
-
-      <div className="px-4.5 pb-6">
-        <div className="bg-[#FCE7F3] rounded-lg py-1 px-1.5">
-          <p className="text-[10px] text-[#EC4899] leading-relaxed">
-            A refundable security deposit of {bookingConfig.refundPolicy.depositAmount}{' '}
-            {bookingConfig.refundPolicy.currency} is required. This amount will be held and returned
-            within {bookingConfig.refundPolicy.refundTimeframe} hours after checkout if no damage is
-            reported.
-          </p>
-        </div>
-      </div>
-
-      <div className="px-5 pb-6 space-y-3">
-        {!selectedPackageType && !selectedPlan?.id && (
-          <div className="flex justify-between items-center">
-            <span className="text-[16px] font-normal text-[#19191A] flex items-center">
-              {bookingConfig.currency} × {nights} night
-              {nights > 1 ? 's' : ''}
-            </span>
-            <span className="font-normal text-[16px] text-[#19191A]">
-              {0 * nights} {bookingConfig.currency}
-            </span>
-          </div>
-        )}
-        {selectedPackageType && (
-          <div className="flex justify-between items-center">
-            <span className="text-[16px] font-normal text-[#19191A] flex items-center">
-              {capitalizeWords(selectedPackageType?.split('_')?.join(' '))}
-            </span>
-            <span className="font-normal text-[16px] text-[#19191A]">{100 + ' KWD'}</span>
-          </div>
-        )}
-        <div className="flex justify-between items-center">
-          <div className="flex items-center space-x-2">
-            <span className="text-[16px] font-normal text-[#19191A] flex items-center">
-              Refundable Deposit
-            </span>
-            <div className="w-4 h-4 bg-pink-100 rounded-full flex items-center justify-center">
-              <Image src={Deposit} width={15} height={15} alt="Deposit icon" />
-            </div>
-          </div>
-          <span className="font-normal text-[16px] text-[#19191A]">
-            {bookingConfig.refundableDeposit} {bookingConfig.currency}
-          </span>
-        </div>
-
-        <div className="border-t border-[#DEDEDF] pt-3">
-          <div className="flex justify-between items-center font-medium text-[16px] text-[#19191A]">
-            <span>Total</span>
-            <span>
-              {total} {bookingConfig.currency}
-            </span>
-          </div>
-        </div>
       </div>
     </div>
   )

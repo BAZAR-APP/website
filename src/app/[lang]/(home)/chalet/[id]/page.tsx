@@ -188,30 +188,33 @@ export default async function ChaletDetailsPage({
             </div>
 
             <div className="lg:col-span-1">
-              {/* <BookingWidget
-                maxGuests={data?.maxNoOfGuests || ''}
-                bookingConfig={propertyData.bookingConfig}
-                guests={2}
-                chalet={data}
-                packageInfo={{
-                  perHourCost: data?.perHourCost,
-                  perNightCost: data?.perNightCost,
-                  weekendCost: data?.weekendCost,
-                  weekDaysCost: data?.weekDaysCost,
-                  fullWeekCost: data?.fullWeekCost,
-                  fullMonthCost: data?.fullMonthCost,
-                }}
-                bookings={data?.bookings || []}
-              /> */}
-              <HourlyBookingSummary
-                maxGuests={data?.maxNoOfGuests || ''}
-                bookingConfig={propertyData.bookingConfig}
-                chalet={data}
-                packageInfo={{
-                  perHourCost: data?.perHourCost,
-                }}
-                bookings={data?.bookings || []}
-              />
+              {data?.perHourCost ? (
+                <HourlyBookingSummary
+                  maxGuests={data?.maxNoOfGuests || ''}
+                  bookingConfig={propertyData.bookingConfig}
+                  chalet={data}
+                  packageInfo={{
+                    perHourCost: data?.perHourCost,
+                  }}
+                  bookings={data?.bookings || []}
+                />
+              ) : (
+                <BookingWidget
+                  maxGuests={data?.maxNoOfGuests || ''}
+                  bookingConfig={propertyData.bookingConfig}
+                  guests={2}
+                  chalet={data}
+                  packageInfo={{
+                    perHourCost: data?.perHourCost,
+                    perNightCost: data?.perNightCost,
+                    weekendCost: data?.weekendCost,
+                    weekDaysCost: data?.weekDaysCost,
+                    fullWeekCost: data?.fullWeekCost,
+                    fullMonthCost: data?.fullMonthCost,
+                  }}
+                  bookings={data?.bookings || []}
+                />
+              )}
             </div>
           </div>
 
