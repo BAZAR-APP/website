@@ -7,6 +7,8 @@ import { Chalet } from '../../types/chalets'
 import api from '@/lib/axios'
 import { useQueryClient } from '@tanstack/react-query'
 import { useSession } from 'next-auth/react'
+import useToggle from '@/lib/hooks/useToggle'
+import ModalDialog from './ModalDialog/Dialog'
 
 interface PropertyCardProps {
   onClick?: () => void

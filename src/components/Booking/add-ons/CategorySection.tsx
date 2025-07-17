@@ -57,7 +57,7 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
                 <AddOnCard
                   icon={item?.iconPhotoUrl ?? ''}
                   label={item?.title}
-                  price={item?.costPerNight}
+                  price={item?.cost || 0}
                   is24HourNotice={item?.is24HourNotice}
                   quantity={item?.selectedQuantity}
                   onAdd={() => onItemAdd?.(index)}

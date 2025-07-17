@@ -7,6 +7,7 @@ import clsx from 'clsx'
 import { useFormContext } from 'react-hook-form'
 import Button from './Button/Button'
 import { Radio } from '@radix-ui/themes'
+import { useBookingStore } from '../../stores/useBookingStore'
 
 export type PaymentFormData = {
   paymentOption: 'full' | 'split'
@@ -47,6 +48,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
   addNowBooking = true,
 }) => {
   const { register, handleSubmit, watch, setValue } = useFormContext()
+  const { bookingType } = useBookingStore()
   const romanticWeekend = watch('romanticWeekend')
   const paymentOption = watch('paymentOption')
   const onFormSubmit = (data: any) => {
@@ -171,7 +173,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
           )}
         </div>
       </form>
-      {addNowBooking && (
+      {addNowBooking && bookingType !== 'hourly' && (
         <div
           className="flex flex-col my-5 py-6 items-start md:px-6 px-4 w-full lg:w-[528px] lg:h-[194px] h-auto isolate rounded-xl bg-[url('/images/FlowerImg.jpg')] bg-cover bg-center"
           style={{

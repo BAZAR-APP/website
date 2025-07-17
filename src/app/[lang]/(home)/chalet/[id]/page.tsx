@@ -188,7 +188,7 @@ export default async function ChaletDetailsPage({
             </div>
 
             <div className="lg:col-span-1">
-              {!data?.perHourCost ? (
+              {data?.perHourCost ? (
                 <HourlyBookingSummary
                   maxGuests={data?.maxNoOfGuests || ''}
                   bookingConfig={propertyData.bookingConfig}

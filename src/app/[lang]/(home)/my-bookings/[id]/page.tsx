@@ -1,7 +1,16 @@
 'use client'
 
 import React, { useMemo, useCallback, useEffect, useState } from 'react'
-import { MapPin, ChevronRight } from 'lucide-react'
+import {
+  MapPin,
+  ChevronRight,
+  Accessibility,
+  AccessibilityIcon,
+  LucideAccessibility,
+  FileWarning,
+  Shield,
+  ShieldOff,
+} from 'lucide-react'
 import { Button } from '@/components'
 import ChaletRules from '@/components/ChaletsRules'
 import Image from 'next/image'
@@ -284,6 +293,7 @@ const PaymentSection: React.FC<{
 export default function BookingDetailsPage() {
   const router = useRouter()
   const { id } = useParams() as { id: string }
+  const { isOpen, toggle } = useToggle()
 
   const [bookingData, setBookingData] = useState<BookingData | null>(DEFAULT_VALUES)
   const [error, setError] = useState<string | null>(null)
@@ -310,6 +320,7 @@ export default function BookingDetailsPage() {
   const { isOpen: isConfirmCancel, toggle: confirmCancelToggle } = useToggle(false)
 
   const handleViewDetails = useCallback(() => {
+    if (!bookingDetails?.chalet?.isDeleted) return toggle()
     // Navigate to chalet details page
     router.push(`/chalet/${bookingDetails?.chalet?.id || 'some-default-chalet-id'}`)
   }, [router, bookingDetails?.chalet?.id])
@@ -473,6 +484,23 @@ export default function BookingDetailsPage() {
             >
               Browse Chalets
             </Button>
+          </div>
+        </div>
+      </ModalDialog>
+      <ModalDialog
+        isOpen={isOpen}
+        setIsOpen={toggle}
+        className=" w-full max-h-[calc(100vh-101px)] overflow-y-auto m-4"
+      >
+        <div className=" flex items-center justify-center  px-4">
+          <div className="bg-white border border-yellow-400 text-yellow-700 p-6 rounded-lg shadow-md max-w-md text-center">
+            <div className="flex justify-center mb-4">
+              <ShieldOff />
+            </div>
+            <h2 className="text-lg font-semibold mb-2">Chalet Not Available</h2>
+            <p className="text-sm text-gray-700">
+              The chalet you're trying to see has been deleted or is no longer available.
+            </p>
           </div>
         </div>
       </ModalDialog>

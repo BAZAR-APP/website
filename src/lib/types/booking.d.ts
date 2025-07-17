@@ -24,6 +24,7 @@ export type Customization = {
     id: string
     title: string
   }
+  cost?: number
 }
 
 export type GroupedCustomization = {

@@ -15,6 +15,7 @@ export interface Chalet {
   maxNoOfGuests: string
   noOfLoyalityPoints?: number
   minNoOfGuests: string
+  isDeleted: Boolean
   isEntireHomeAvailabe: boolean
   isFreeParking?: boolean
   isFreeWifi?: boolean

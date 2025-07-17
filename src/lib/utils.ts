@@ -60,7 +60,7 @@ export function capitalizeWords(str: string): string {
     .join(' ')
 }
 
-interface TierInfo {
+type TierInfo = {
   name: string
   range: string
   title: string
@@ -69,20 +69,30 @@ interface TierInfo {
   iconURL?: string
 }
 
-export const getTierInfo = (tier: string, lang: 'en' | 'ar' = 'en'): TierInfo => {
+const tiers = [
+  { key: 'platinum', min: 0, max: 499 },
+  { key: 'gold', min: 500, max: 899 },
+  { key: 'diamond', min: 900, max: Infinity },
+]
+
+export const getTierInfo = (
+  tier: string,
+  lang: 'en' | 'ar' = 'en',
+  currentPoints?: number,
+): TierInfo => {
   const translations = {
     platinum: {
       en: {
         name: 'Platinum',
         range: '0 – 499 points',
         title: 'Platinum Tier: Keep Earning!',
-        message: 'Earn more points to reach Gold and unlock more perks.',
+        message: 'Earn {{morePoints}} more points to reach Gold and unlock more perks.',
       },
       ar: {
         name: 'بلاتين',
         range: '٠ - ٤٩٩ نقطة',
         title: 'الطبقة البلاتينية: استمر في الكسب!',
-        message: 'اكسب المزيد من النقاط للوصول إلى الذهبية والاستفادة من مزايا إضافية.',
+        message: 'اكسب {{morePoints}} نقطة إضافية للوصول إلى الذهبية والاستفادة من مزايا إضافية.',
       },
     },
     gold: {
@@ -91,25 +101,25 @@ export const getTierInfo = (tier: string, lang: 'en' | 'ar' = 'en'): TierInfo =>
         range: '500 – 899 points',
         title: 'Gold Tier: Unlock More Rewards!',
         message:
-          'Earn 200 more points to unlock a free booking and enjoy exclusive discounts on your next stay.',
+          'Earn {{morePoints}} more points to unlock Diamond tier and enjoy exclusive rewards.',
       },
       ar: {
         name: 'ذهبي',
         range: '٥٠٠ - ٨٩٩ نقطة',
         title: 'الطبقة الذهبية: اكشف المزيد من المكافآت!',
-        message: 'اكسب ٢٠٠ نقطة إضافية للحصول على حجز مجاني والاستفادة من خصومات حصرية.',
+        message: 'اكسب {{morePoints}} نقطة إضافية للوصول إلى الماسية والاستمتاع بمزايا مميزة.',
       },
     },
     diamond: {
       en: {
         name: 'Diamond',
-        range: '2000+ points',
+        range: '900+ points',
         title: 'Diamond Tier: You’ve Made It!',
         message: 'Enjoy premium benefits, free bookings, and VIP treatment.',
       },
       ar: {
         name: 'ماسي',
-        range: '٢٠٠٠+ نقطة',
+        range: '٩٠٠+ نقطة',
         title: 'الطبقة الماسية: لقد وصلت!',
         message: 'استمتع بالمزايا المميزة والحجوزات المجانية والمعاملة الخاصة.',
       },
@@ -132,9 +142,22 @@ export const getTierInfo = (tier: string, lang: 'en' | 'ar' = 'en'): TierInfo =>
 
   const key = tier?.toLowerCase() as keyof typeof translations
   const tierData = translations[key] || translations.unknown
+  const langData = tierData[lang]
+
+  let morePoints: number | null = null
+  const currentTierIndex = tiers.findIndex((t) => t.key === key)
+  if (currentPoints !== undefined && currentTierIndex > -1 && currentTierIndex < tiers.length - 1) {
+    const nextTier = tiers[currentTierIndex + 1]
+    morePoints = Math.max(nextTier.min - currentPoints, 0)
+  }
+  const message =
+    morePoints !== null
+      ? langData.message.replace('{{morePoints}}', morePoints.toString())
+      : langData.message
 
   return {
-    ...tierData[lang],
+    ...langData,
+    message,
     icon:
       key === 'platinum'
         ? '/images/platinumTier.svg'

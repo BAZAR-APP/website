@@ -117,7 +117,6 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
     chaletDetails,
     bookingType
   } = useBookingStore()
-  console.log(bookingType);
   
   const isSplitPayment = getValues()?.paymentOption === 'split'
   const grandTotal = (selectedAddonsTotal ?? 0) + Number(packageAmount) + (romanticWeekend ? 25 : 0)
