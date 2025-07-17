@@ -49,6 +49,7 @@ export interface IBooking {
   userId: string
   sleepingRoomId: string | null
   chaletSubscriptionId: string | null
+  paymentStatus: 'fullPaid' | 'halfPaid'
   bookingStatus: 'pending' | 'confirmed' | 'cancelled' | string // You can tighten this union if other statuses are known
   review: {
     rating: string

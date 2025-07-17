@@ -18,7 +18,6 @@ export const AddOns: React.FC = () => {
     gcTime: 10 * 60 * 1000,
   })
   if (isLoading) return
-  console.log(data)
 
   const groupedCustomization: GroupedCustomization[] = Object.values(
     (
