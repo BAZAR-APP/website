@@ -1,7 +1,16 @@
 'use client'
 
 import React, { useMemo, useCallback, useEffect, useState } from 'react'
-import { MapPin, ChevronRight } from 'lucide-react'
+import {
+  MapPin,
+  ChevronRight,
+  Accessibility,
+  AccessibilityIcon,
+  LucideAccessibility,
+  FileWarning,
+  Shield,
+  ShieldOff,
+} from 'lucide-react'
 import { Button } from '@/components'
 import ChaletRules from '@/components/ChaletsRules'
 import Image from 'next/image'
@@ -31,72 +40,19 @@ interface DateRange {
   to: string
 }
 
-type PaymentStatus = 'fully_paid' | 'partially_paid'
-
-// This interface is for the data that the component will *use*, not for the page props directly.
-// You might rename it to something like `BookingData` or `ChaletBookingDetails`
-interface BookingData {
-  id: string
-  title: string
-  location: string
-  points: number
-  guests: string
-  propertyType: string
-  beds: number
-  baths: number
-  amenities: string[]
-  dateRange: DateRange
-  imageUrl: string
-  imageAlt: string
-  paymentStatus: PaymentStatus
-  totalAmount: number
-  paidAmount: number
-  remainingAmount: number
-  securityDeposit: number
-  addOns: AddOn[]
-  paymentDueDate: string
-  priceBreakdown: PriceBreakdownItem[]
-}
-
-// Default values as you have them, which are useful for initial state or fallback
-const DEFAULT_VALUES: BookingData = {
-  id: '', // Add ID here if it's part of your default, or handle its absence
-  title: 'Luxury Lakeside Retreat',
-  location: 'Al Khiran',
-  points: 200,
-  guests: '5-7 guests',
-  propertyType: 'Entire Home',
-  beds: 5,
-  baths: 4,
-  amenities: ['Wifi', 'Free Parking'],
-  dateRange: { from: '20/3/2025', to: '24/3/2025' },
-  imageUrl: 'https://picsum.photos/seed/beach/311/190',
-  imageAlt: 'Property image',
-  paymentStatus: 'fully_paid',
-  totalAmount: 440,
-  paidAmount: 220,
-  remainingAmount: 220,
-  securityDeposit: 200,
-  addOns: [{ name: 'BBQ setup with private chef', price: 30 }],
-  paymentDueDate: '17/3/2025',
-  priceBreakdown: [
-    { description: 'Base Price x 4 nights', amount: 400 },
-    { description: 'Refundable Deposit', amount: 200 },
-    { description: 'Flower Arrangement', amount: 30 },
-  ],
-}
+type PaymentStatus = 'fullPaid' | 'halfPaid'
 
 // Helper components (no changes needed for these, just including for completeness)
 const PaymentStatusBadge: React.FC<{ status: PaymentStatus }> = React.memo(
   function PaymentStatusBadge({ status }) {
     const statusConfig = {
-      fully_paid: {
+      fullPaid: {
         bgColor: 'bg-[#D1FAE5]',
         textColor: 'text-[#10B981]',
         icon: '/images/paid.svg',
         text: 'Fully Paid',
       },
-      partially_paid: {
+      halfPaid: {
         bgColor: 'bg-[#FCE7F3]',
         textColor: 'text-[#EC4899]',
         icon: '/images/discount.svg',
@@ -104,7 +60,7 @@ const PaymentStatusBadge: React.FC<{ status: PaymentStatus }> = React.memo(
       },
     }
 
-    const config = statusConfig[status] || statusConfig.fully_paid
+    const config = statusConfig[status] || statusConfig.fullPaid
 
     return (
       <div
@@ -196,8 +152,6 @@ const AddOnsSection: React.FC<{ addOns: AddOn[] }> = React.memo(function AddOnsS
 const PaymentSection: React.FC<{
   paymentStatus: PaymentStatus
   totalAmount: number
-  paidAmount: number
-  remainingAmount: number
   securityDeposit: number
   paymentDueDate: string
   priceBreakdown: PriceBreakdownItem[]
@@ -206,8 +160,6 @@ const PaymentSection: React.FC<{
 }> = React.memo(function PaymentSection({
   paymentStatus,
   totalAmount,
-  paidAmount,
-  remainingAmount,
   securityDeposit,
   paymentDueDate,
   priceBreakdown,
@@ -224,10 +176,11 @@ const PaymentSection: React.FC<{
           <PaymentStatusBadge status={paymentStatus} />
         </div>
 
-        {paymentStatus === 'partially_paid' && (
+        {paymentStatus === 'halfPaid' && (
           <p className="text-sm leading-[17px] text-[#9EA0A2]">
-            You&apos;ve paid 50% of the total amount ({paidAmount} KWD). The remaining{' '}
-            {remainingAmount} KWD is due at least 72 hours before check-in by [{paymentDueDate}].
+            You&apos;ve paid 50% of the total amount ({totalAmount} KWD). The remaining{' '}
+            {Math.round(totalAmount / 2)} KWD is due at least 72 hours before check-in by [
+            {paymentDueDate}].
           </p>
         )}
 
@@ -262,13 +215,13 @@ const PaymentSection: React.FC<{
       </div>
 
       <div className="flex flex-col gap-4 min-h-[200px] pt-10">
-        {paymentStatus !== 'fully_paid' && (
+        {paymentStatus === 'halfPaid' && (
           <Button
             intent="primary"
             className="w-full !px-0 !text-sm !text-[#FFFFFF]"
             onClick={onPayRemaining}
           >
-            Pay Remaining Amount {remainingAmount} KD Now
+            Pay Remaining Amount {Math.round(totalAmount / 2)} KD Now
           </Button>
         )}
         <Button intent="danger" className="w-full !text-sm" onClick={onCancelBooking}>
@@ -284,9 +237,8 @@ const PaymentSection: React.FC<{
 export default function BookingDetailsPage() {
   const router = useRouter()
   const { id } = useParams() as { id: string }
+  const { isOpen, toggle } = useToggle()
 
-  const [bookingData, setBookingData] = useState<BookingData | null>(DEFAULT_VALUES)
-  const [error, setError] = useState<string | null>(null)
   const { data, isLoading } = useQueryBase({
     queryKey: ['bookingDetails', id],
     url: `/booking/readById/${id}`,
@@ -310,17 +262,18 @@ export default function BookingDetailsPage() {
   const { isOpen: isConfirmCancel, toggle: confirmCancelToggle } = useToggle(false)
 
   const handleViewDetails = useCallback(() => {
-    // Navigate to chalet details page
+    if (!bookingDetails?.chalet?.isDeleted) return toggle()
     router.push(`/chalet/${bookingDetails?.chalet?.id || 'some-default-chalet-id'}`)
   }, [router, bookingDetails?.chalet?.id])
 
   const handleViewLocation = useCallback(() => {
-    // Implement logic to view location, maybe open a map or navigate to a map page
-    console.log('View exact location')
+    const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${bookingDetails?.chalet?.latitude},${bookingDetails?.chalet?.longitude}`
+    window.open(googleMapsUrl, '_blank')
   }, [])
 
   const handlePayRemaining = () => {
-    router.push('/my-bookings/complete-payment/')
+    return
+    // router.push('/my-bookings/complete-payment/')
   }
 
   const handleCancelBooking = () => {
@@ -329,10 +282,6 @@ export default function BookingDetailsPage() {
 
   if (isLoading) {
     return <div className="p-10 text-center">Loading booking details...</div>
-  }
-
-  if (error) {
-    return <div className="p-10 text-center text-red-500">{error}</div>
   }
 
   if (!bookingDetails?.id) {
@@ -420,13 +369,16 @@ export default function BookingDetailsPage() {
           </div>
 
           <PaymentSection
-            paymentStatus={'fully_paid'}
+            paymentStatus={bookingDetails?.paymentStatus}
             totalAmount={bookingDetails?.grandTotal}
-            paidAmount={bookingDetails?.grandTotal}
-            remainingAmount={0}
             securityDeposit={200}
-            paymentDueDate={new Date()?.toISOString()}
-            priceBreakdown={[]}
+            paymentDueDate={format(new Date(bookingDetails?.startDate), 'dd/MM/yyyy')}
+            priceBreakdown={[
+              {
+                description: 'Refundable Deposit',
+                amount: 200,
+              },
+            ]}
             onPayRemaining={handlePayRemaining}
             onCancelBooking={handleCancelBooking}
           />
@@ -473,6 +425,23 @@ export default function BookingDetailsPage() {
             >
               Browse Chalets
             </Button>
+          </div>
+        </div>
+      </ModalDialog>
+      <ModalDialog
+        isOpen={isOpen}
+        setIsOpen={toggle}
+        className=" w-full max-h-[calc(100vh-101px)] overflow-y-auto m-4"
+      >
+        <div className=" flex items-center justify-center  px-4">
+          <div className="bg-white border border-yellow-400 text-yellow-700 p-6 rounded-lg shadow-md max-w-md text-center">
+            <div className="flex justify-center mb-4">
+              <ShieldOff />
+            </div>
+            <h2 className="text-lg font-semibold mb-2">Chalet Not Available</h2>
+            <p className="text-sm text-gray-700">
+              The chalet you're trying to see has been deleted or is no longer available.
+            </p>
           </div>
         </div>
       </ModalDialog>

@@ -5,6 +5,15 @@ type BookingState = {
   selectedRoom: ChaletBedroom | null
   selectedDates: { checkIn: Date; checkOut: Date }
   guests: number
+  noOfNights: number | null
+  totalCostAgainstNights: number | null
+  packageAmount: number | null
+  chaletDetails: Chalet | null
+  isDiscountApplied: boolean
+  discountedTotal: number | null
+  discountCode: string | null
+  bookingType: 'hourly' | 'night'
+  setBookingType: (type: 'hourly' | 'night') => void
   setPlan: (plan: ChaletSubscription | null) => void
   setRoom: (room: ChaletBedroom) => void
   setDates: (checkIn: Date, checkOut: Date) => void
@@ -15,15 +24,8 @@ type BookingState = {
   setNoOfNights: (guests: number) => void
   setTotalCostAgainstNights: (guests: number) => void
   setPackageAmount: (guests: number) => void
-  noOfNights: number | null
-  totalCostAgainstNights: number | null
-  packageAmount: number | null
-  chaletDetails: Chalet | null
-  isDiscountApplied: boolean
   setChaletDetails: (chalet: Chalet | null) => void
   setDiscountedTotal: (discountedTotal: number | null) => void
-  discountedTotal: number | null
-  discountCode: string | null
 }
 
 import { persist } from 'zustand/middleware'
@@ -43,10 +45,12 @@ export const useBookingStore = create(
       discountedTotal: null,
       isDiscountApplied: false,
       discountCode: null,
+      bookingType: 'night',
       setIsDiscountApplied: (isDiscountApplied) => set({ isDiscountApplied: isDiscountApplied }),
       setDiscountCode: (discountCode) => set({ discountCode: discountCode }),
       setDiscountedTotal: (discountedTotal) => set({ discountedTotal: discountedTotal }),
       setPlan: (plan) => set({ selectedPlan: plan }),
+      setBookingType: (type) => set({ bookingType: type }),
       setChaletDetails: (chalet) => set({ chaletDetails: chalet }),
       setRoom: (room) => set({ selectedRoom: room }),
       setDates: (checkIn, checkOut) => set({ selectedDates: { checkIn, checkOut } }),

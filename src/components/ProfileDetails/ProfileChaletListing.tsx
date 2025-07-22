@@ -9,7 +9,6 @@ const ProfileChaletListing = () => {
     queryKey: ['favouriteChalets'],
     url: '/favouriteChalets/me',
   })
-  console.log(res)
 
   const chalets = res?.data?.data as Chalet[]
 

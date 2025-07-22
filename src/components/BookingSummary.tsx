@@ -53,18 +53,18 @@ const CouponSection: React.FC<{
   </div>
 )
 
-const PaymentSplitSection: React.FC = () => (
+const PaymentSplitSection: React.FC<{ finalFullAmount: number }> = ({ finalFullAmount }) => (
   <>
     <hr className="my-4" />
     <PriceRowUI
       label="Amount Due Now"
-      amount="220 KWD"
+      amount={Math.round(finalFullAmount / 2)?.toString() + ' KWD'}
       color={textStyles.primaryBlue}
       labelFont="medium"
     />
     <PriceRowUI
       label="Remaining Balance"
-      amount="220 KWD"
+      amount={Math.round(finalFullAmount / 2)?.toString() + ' KWD'}
       color={textStyles.primaryBlue}
       labelFont="medium"
     />
@@ -93,7 +93,7 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
 }) => {
   const { id } = useParams()
   const { getValues, watch } = useFormContext()
-  const { selectedDiscount, setSelectedDiscount } = useUserStore()
+  const { setSelectedDiscount } = useUserStore()
   const router = useRouter()
   const selectedAddons: Customization[] = watch('addons') || []
   const selectedAddonsTotal = watch('selectedAddonsTotal')
@@ -116,6 +116,7 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
     resetBooking,
     chaletDetails,
   } = useBookingStore()
+
   const isSplitPayment = getValues()?.paymentOption === 'split'
   const grandTotal = (selectedAddonsTotal ?? 0) + Number(packageAmount) + (romanticWeekend ? 25 : 0)
   const handleApplyDiscount = async () => {
@@ -155,6 +156,8 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
         chaletSubscriptionId: selectedPlan?.id,
         customizations: customizations,
         isRomanticBookingSelected: !!romanticWeekend,
+        isPartialPayment: isSplitPayment,
+        ...(isDiscountApplied && { couponCode: discountCode }),
       }
       await api.post('/booking', body)
       setSelectedDiscount(null)
@@ -166,7 +169,6 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
       setLoading(false)
     }
   }
-  console.log(selectedDiscount)
   return (
     <>
       <div className="w-full md:max-w-sm rounded-lg bg-[#F9FAFB] sm:px-6 sm:py-5 p-3">
@@ -228,7 +230,7 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
                   key={index}
                   label={selectedAddon?.title}
                   amount={
-                    selectedAddon?.costPerNight * (Number(selectedAddon?.selectedQuantity) ?? 1) +
+                    (selectedAddon?.cost ?? 0) * (Number(selectedAddon?.selectedQuantity) ?? 1) +
                     ' KWD'
                   }
                 />
@@ -272,7 +274,11 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
               </div>
             )}
 
-            {isSplitPayment && <PaymentSplitSection />}
+            {isSplitPayment && (
+              <PaymentSplitSection
+                finalFullAmount={isDiscountApplied ? discountedTotal : grandTotal}
+              />
+            )}
 
             {showRedeemeCodeSection && (
               <CouponSection

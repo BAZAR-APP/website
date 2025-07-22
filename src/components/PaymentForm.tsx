@@ -1,12 +1,13 @@
 'use client'
 
-import React from 'react'
+import React, { useEffect } from 'react'
 import Image from 'next/image'
-import { Check, CheckCircle, Plus } from 'lucide-react'
+import { Check, CheckCircle, Info, InfoIcon, Plus } from 'lucide-react'
 import clsx from 'clsx'
 import { useFormContext } from 'react-hook-form'
 import Button from './Button/Button'
 import { Radio } from '@radix-ui/themes'
+import { useBookingStore } from '../../stores/useBookingStore'
 
 export type PaymentFormData = {
   paymentOption: 'full' | 'split'
@@ -22,51 +23,91 @@ type PaymentFormProps = {
   addNowBooking?: boolean
 }
 
-const paymentOptions = [
-  {
-    value: 'full',
-    title: 'Pay Full Amount Now',
-    description: '440 KWD — One-time payment to complete your booking.',
-  },
-  {
-    value: 'split',
-    title: 'Pay in Two Parts',
-    description: (
-      <>
-        Pay 220 KWD now (50%)
-        <br />
-        Pay remaining 220 KWD at least 72 hours before check-in.
-      </>
-    ),
-  },
-] as const
-
 const PaymentForm: React.FC<PaymentFormProps> = ({
   onSubmit,
   paymentDetail = true,
   addNowBooking = true,
 }) => {
   const { register, handleSubmit, watch, setValue } = useFormContext()
+  const { packageAmount, discountedTotal, bookingType, isDiscountApplied } = useBookingStore()
+  const selectedAddonsTotal = watch('selectedAddonsTotal')
   const romanticWeekend = watch('romanticWeekend')
   const paymentOption = watch('paymentOption')
+
+  // Calculate dynamic totals
+  const grandTotal = (selectedAddonsTotal ?? 0) + Number(packageAmount) + (romanticWeekend ? 25 : 0)
+  const finalFullAmount = isDiscountApplied ? discountedTotal : grandTotal
+  const splitAmount = Math.round(finalFullAmount / 2) // 50% of full amount
+  const minAmountForSplit = 400
+
+  // Dynamic payment options based on calculated amounts
+  const paymentOptions = [
+    {
+      value: 'full' as const,
+      title: 'Pay Full Amount Now',
+      description: `${finalFullAmount} KWD — One-time payment to complete your booking.`,
+    },
+    {
+      value: 'split' as const,
+      title: 'Pay in Two Parts',
+      description: (
+        <>
+          Pay {splitAmount} KWD now (50%)
+          <br />
+          Pay remaining {finalFullAmount - splitAmount} KWD at least 72 hours before check-in.
+        </>
+      ),
+    },
+  ]
+
+  useEffect(() => {
+    if (finalFullAmount < minAmountForSplit && paymentOption !== 'full') {
+      setValue('paymentOption', 'full')
+    } else if (!paymentOption) {
+      setValue('paymentOption', 'full')
+    }
+  }, [finalFullAmount, paymentOption, setValue, minAmountForSplit])
+
   const onFormSubmit = (data: any) => {
     onSubmit?.(data)
+  }
+
+  const handlePaymentOptionChange = (optionValue: 'full' | 'split') => {
+    const isSplitOption = optionValue === 'split'
+    const isDisabled = isSplitOption && finalFullAmount < minAmountForSplit
+
+    if (!isDisabled) {
+      setValue('paymentOption', optionValue)
+    }
   }
 
   return (
     <>
       <form onSubmit={handleSubmit(onFormSubmit)} className="lg:w-[480px] xl:w-[528px] w-full">
         <div className="space-y-7">
-          {paymentDetail && (
-            <div className="flex flex-col items-start p-4 gap-4 bg-[#FDFDFE] shadow-[0px_4px_16px_rgba(17,34,17,0.05)] rounded-[12px]">
-              <div className="space-y-4 w-full">
-                {paymentOptions.map((option) => (
+          <div className="flex flex-col items-start p-4 gap-4 bg-[#FDFDFE] shadow-[0px_4px_16px_rgba(17,34,17,0.05)] rounded-[12px]">
+            <div className="space-y-4 w-full">
+              {paymentOptions.map((option) => {
+                const isSplitOption = option.value === 'split'
+                const isDisabled = isSplitOption && finalFullAmount < minAmountForSplit
+
+                return (
                   <label
                     key={option.value}
                     className={clsx(
-                      'flex items-center justify-between p-4 gap-3 rounded-lg cursor-pointer transition-all',
+                      'flex items-center justify-between p-4 gap-3 rounded-lg transition-all',
                       paymentOption === option.value ? 'bg-[#F3F4F6]' : 'bg-transparent',
+                      isDisabled
+                        ? 'opacity-50 cursor-not-allowed'
+                        : 'cursor-pointer hover:bg-[#F9FAFB]',
                     )}
+                    onClick={(e) => {
+                      if (isDisabled) {
+                        e.preventDefault()
+                        return
+                      }
+                      handlePaymentOptionChange(option.value)
+                    }}
                   >
                     <div className="ml-2">
                       <div className="font-medium text-[16px] leading-[150%] text-[#19191A] pb-2">
@@ -77,22 +118,44 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
                     <Radio
                       name="paymentOption"
                       value={option.value}
-                      className="!cursor-pointer"
+                      className={clsx(
+                        isDisabled ? '!cursor-not-allowed opacity-50' : '!cursor-pointer',
+                      )}
                       checked={paymentOption === option.value}
-                      onChange={() => setValue('paymentOption', option.value)}
+                      onChange={() => {}} // Handled by label click
+                      disabled={isDisabled}
+                      onPointerDown={(e) => {
+                        if (isDisabled) {
+                          e.preventDefault()
+                          e.stopPropagation()
+                        }
+                      }}
+                      onClick={(e) => {
+                        if (isDisabled) {
+                          e.preventDefault()
+                          e.stopPropagation()
+                        }
+                      }}
                     />
                   </label>
-                ))}
+                )
+              })}
 
-                <p className="text-sm text-[#29397E] flex items-center gap-1">
-                  <span className="bg-[#29397E] rounded-full max-w-10">
-                    <Check className="text-white w-4 h-4 p-0.5" />
-                  </span>
-                  You can split your payment if your total is 400 KWD or higher.
-                </p>
-              </div>
+              <p className="text-sm text-[#29397E] flex items-center gap-1">
+                <span className=" rounded-full max-w-10">
+                  {finalFullAmount >= minAmountForSplit ? (
+                    <Check className="text-white w-4 h-4 p-0.5 bg-[#29397E]" />
+                  ) : (
+                    <InfoIcon fill="#29397E" color="white" />
+                  )}
+                </span>
+                {finalFullAmount >= minAmountForSplit
+                  ? `You can split your payment if your total is ${minAmountForSplit} KWD or higher.`
+                  : `Split payment isn't available for bookings under ${minAmountForSplit} KWD. Please proceed with full payment.`}
+              </p>
             </div>
-          )}
+          </div>
+
           <div className="bg-white p-6 rounded-xl shadow-[0px_4px_16px_rgba(17,34,17,0.05)]">
             <div className="mb-4">
               <label className="block text-sm font-medium text-[#19191A] mb-1">Card number</label>
@@ -153,6 +216,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
               </div>
             </div>
           </div>
+
           {addNowBooking && (
             <p className="text-sm text-[#000000] !pb-3.5 flex items-center">
               <span className="mr-2">
@@ -171,7 +235,8 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
           )}
         </div>
       </form>
-      {addNowBooking && (
+
+      {addNowBooking && bookingType !== 'hourly' && (
         <div
           className="flex flex-col my-5 py-6 items-start md:px-6 px-4 w-full lg:w-[528px] lg:h-[194px] h-auto isolate rounded-xl bg-[url('/images/FlowerImg.jpg')] bg-cover bg-center"
           style={{

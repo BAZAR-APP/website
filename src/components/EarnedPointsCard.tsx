@@ -15,7 +15,7 @@ export const EarnedPointsCard: React.FC<EarnedPointsCardProps> = ({
   tier = '',
   lang,
 }) => {
-  const { name, range, title, message, iconURL } = getTierInfo(tier, lang)
+  const { name, range, title, message, icon: iconURL } = getTierInfo(tier, lang, currentPoints)
 
   return (
     <section className="flex flex-col items-start p-4 gap-2 w-full lg:max-w-[351px] max-w-full bg-[#F9FAFB] rounded-[16px]">
@@ -28,7 +28,7 @@ export const EarnedPointsCard: React.FC<EarnedPointsCardProps> = ({
       </div>
 
       <div className="flex flex-col w-full gap-[16px]">
-        <AnimatedPointsProgress earnedPoints={currentPoints}  />
+        <AnimatedPointsProgress earnedPoints={currentPoints} />
 
         <div className="text-center">
           <div className="flex items-center gap-[4px] mb-[8px]">

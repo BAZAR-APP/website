@@ -13,7 +13,7 @@ export default function CustomizeStay({ onNext }: CustomizeStayProps) {
 
   const total = selectedAddons.reduce((acc, item) => {
     const qty = item.selectedQuantity ?? 0
-    return acc + item.costPerNight * +qty
+    return acc + (item?.cost ?? 0) * +qty
   }, 0)
 
   return (
@@ -52,7 +52,7 @@ export default function CustomizeStay({ onNext }: CustomizeStayProps) {
                   )}
                   <span>{item?.title}</span>
                 </div>
-                <span>{item?.costPerNight * (Number(item?.selectedQuantity) ?? 1)} KWD</span>
+                <span>{(item?.cost ?? 0) * (Number(item?.selectedQuantity) ?? 1)} KWD</span>
               </li>
             ))}
           </ul>

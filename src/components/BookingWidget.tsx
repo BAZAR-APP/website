@@ -1,8 +1,6 @@
 'use client'
 import React, { useState, useMemo, useEffect } from 'react'
 import { Radio } from '@radix-ui/themes'
-import Image from 'next/image'
-import Deposit from '../../public/images/Deposit.svg'
 import Button from './Button/Button'
 import { useParams, useRouter } from 'next/navigation'
 import { useBookingStore } from '../../stores/useBookingStore'
@@ -22,6 +20,9 @@ import {
 import { capitalizeWords } from '@/lib/utils'
 import { Bookings, Chalet } from '../../types/chalets'
 import { toast } from '@/lib/toast'
+import AddGuests from '@/app/[lang]/(home)/chalet/[id]/booking/_components/AddGuests'
+import RefundDepositRules from '@/app/[lang]/(home)/chalet/[id]/booking/_components/RefundDepositRules'
+import PackagePricingSummary from '@/app/[lang]/(home)/chalet/[id]/booking/_components/PackagePricingSummary'
 
 interface PackageOption {
   id: string
@@ -182,9 +183,9 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
     switch (packageType) {
       case PackageType.WEEKEND:
         if (checkInDay === 4) return addDays(checkInDate, 2) // Thursday to Sunday
-        if (checkInDay === 5) return addDays(checkInDate, 2) // Friday to Sunday
-        if (checkInDay === 6) return addDays(checkInDate, 1) // Saturday to Sunday
-        return addDays(checkInDate, 3) // Fallback
+        if (checkInDay === 5) return addDays(checkInDate, 1) // Friday to Sunday
+        if (checkInDay === 6) return addDays(checkInDate, 0) // Saturday to Sunday
+        return addDays(checkInDate, 2) // Fallback
       case PackageType.WEEKDAY:
         return addDays(checkInDate, 5) // Friday to Wednesday
       case PackageType.FULL_WEEK:
@@ -193,12 +194,6 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
         return addDays(checkInDate, 30)
       default:
         return addDays(checkInDate, 1)
-    }
-  }
-
-  const handleQuantityChange = (newQuantity: number) => {
-    if (maxGuests && newQuantity > 0 && newQuantity <= +maxGuests) {
-      setGuests(newQuantity)
     }
   }
 
@@ -698,47 +693,7 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
               </div>
             </div>
           )}
-          <div className="border-t border-[#D1D5DB] px-3 py-2 flex items-center justify-between cursor-pointer">
-            <div>
-              <span className="block text-[10px] font-semibold">GUESTS</span>
-              {guests && <span className="block text-[14px] text-[#9EA0A2]">{guests} guests</span>}
-            </div>
-            <div className="flex items-center gap-2 relative">
-              <button
-                onClick={() => handleQuantityChange(guests - 1)}
-                className="flex cursor-pointer w-8 h-8 justify-center items-center relative p-[6.4px] rounded-[80px] border-[0.8px] border-solid border-[#E5E5EA]"
-                aria-label="Decrease quantity"
-                type="button"
-              >
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                  <path
-                    d="M14.7997 10H5.19971"
-                    stroke="#19191A"
-                    strokeWidth="1.6"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </button>
-              <span className="text-[#19191A] text-base font-medium leading-6">{guests}</span>
-              <button
-                onClick={() => handleQuantityChange(guests + 1)}
-                className="cursor-pointer flex w-8 h-8 justify-center items-center relative p-[6.4px] rounded-[80px] border-[0.8px] border-solid border-[#E5E5EA]"
-                aria-label="Increase quantity"
-                type="button"
-              >
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                  <path
-                    d="M10.0002 5.19995V9.99995M10.0002 9.99995V14.8M10.0002 9.99995H14.8002M10.0002 9.99995L5.2002 9.99995"
-                    stroke="#19191A"
-                    strokeWidth="1.6"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </button>
-            </div>
-          </div>
+          <AddGuests maxGuests={maxGuests || null} />
         </div>
       </div>
 
@@ -763,26 +718,7 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
           Book Now
         </Button>
       </div>
-
-      {bookingConfig.paymentOptions.partialPayment && (
-        <div className="px-5 pb-4">
-          <p className="text-sm leading-4 font-normal text-[#9EA0A2]">
-            You can choose to pay {bookingConfig.paymentOptions.partialPercentage}% now and the
-            remaining 72 hours before check-in, or pay the full amount upfront.
-          </p>
-        </div>
-      )}
-
-      <div className="px-4.5 pb-6">
-        <div className="bg-[#FCE7F3] rounded-lg py-1 px-1.5">
-          <p className="text-[10px] text-[#EC4899] leading-relaxed">
-            A refundable security deposit of {bookingConfig.refundPolicy.depositAmount}{' '}
-            {bookingConfig.refundPolicy.currency} is required. This amount will be held and returned
-            within {bookingConfig.refundPolicy.refundTimeframe} hours after checkout if no damage is
-            reported.
-          </p>
-        </div>
-      </div>
+      <RefundDepositRules bookingConfig={bookingConfig} />
 
       <div className="px-5 pb-6 space-y-3">
         {!selectedPackageType && !selectedPlan?.id && (
@@ -806,28 +742,7 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
             </span>
           </div>
         )}
-        <div className="flex justify-between items-center">
-          <div className="flex items-center space-x-2">
-            <span className="text-[16px] font-normal text-[#19191A] flex items-center">
-              Refundable Deposit
-            </span>
-            <div className="w-4 h-4 bg-pink-100 rounded-full flex items-center justify-center">
-              <Image src={Deposit} width={15} height={15} alt="Deposit icon" />
-            </div>
-          </div>
-          <span className="font-normal text-[16px] text-[#19191A]">
-            {bookingConfig.refundableDeposit} {bookingConfig.currency}
-          </span>
-        </div>
-
-        <div className="border-t border-[#DEDEDF] pt-3">
-          <div className="flex justify-between items-center font-medium text-[16px] text-[#19191A]">
-            <span>Total</span>
-            <span>
-              {total} {bookingConfig.currency}
-            </span>
-          </div>
-        </div>
+        <PackagePricingSummary bookingConfig={bookingConfig} total={total} />
       </div>
     </div>
   )

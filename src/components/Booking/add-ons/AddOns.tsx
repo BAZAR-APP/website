@@ -4,36 +4,53 @@ import { CategorySection } from './CategorySection'
 import { Customization, GroupedCustomization } from '@/lib/types/booking'
 import { useQuery } from '@tanstack/react-query'
 import { fetcher } from '@/lib/axios'
+import { useParams } from 'next/navigation'
 
 export const AddOns: React.FC = () => {
+  const { id: chaletId } = useParams() as { id: string }
   const { getValues, setValue, watch } = useFormContext()
   const selectedAddons: Customization[] = watch('addons') || []
 
   const { data, isLoading } = useQuery({
     queryKey: ['customizations'],
-    queryFn: () => fetcher('/customizations'),
+    queryFn: () => fetcher(`/chaletCustomization/readByChaletId/${chaletId}`),
     staleTime: 5 * 60 * 1000,
     gcTime: 10 * 60 * 1000,
   })
   if (isLoading) return
 
   const groupedCustomization: GroupedCustomization[] = Object.values(
-    (data as Customization[]).reduce<Record<string, GroupedCustomization>>((acc, item) => {
-      const id = item.customizationCategoryId
+    (
+      data?.data as {
+        customization: Customization
+        cost: number
+        costUnit: string
+        is24HourNotice: boolean
+      }[]
+    ).reduce<Record<string, GroupedCustomization>>((acc, item) => {
+      const id = item.customization?.customizationCategoryId
 
       if (!acc[id]) {
         acc[id] = {
           customizationCategoryId: id,
-          customizationCategory: item.customizationCategory,
+          customizationCategory: {
+            id: item?.customization?.customizationCategoryId,
+            title: item?.customization?.customizationCategory?.title,
+          },
           customizations: [],
         }
       }
+      acc[id].customizations.push({
+        ...item?.customization,
+        cost: item?.cost,
+        is24HourNotice: item?.is24HourNotice,
+        costUnit: item?.costUnit,
+      })
 
-      acc[id].customizations.push(item)
       return acc
     }, {}),
   )
-  
+
   const handleAdd = (item: Customization) => {
     const current = getValues('addons') || []
     const exists = current.find((i: Customization) => i.id === item.id)
