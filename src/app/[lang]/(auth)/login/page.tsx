@@ -8,9 +8,10 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { loginSchema } from '@/lib/validationSchemas'
 import { useRouter } from 'next/navigation'
-import { signIn, useSession } from 'next-auth/react'
+import { signIn } from 'next-auth/react'
 import { toast } from '@/lib/toast'
 import { extractErrorMessage } from '@/lib/utils'
+import api from '@/lib/axios'
 
 interface LoginFormInputs {
   phone: string
@@ -46,23 +47,26 @@ const Login = () => {
         password: data?.password,
         authProvider: 'phone',
       })
-      
+
       if (result?.ok) {
         router.replace(`/`)
       } else {
-        // Handle specific role-based error messages
         let errorMessage = result?.error ?? 'Login failed'
-        
+        if (errorMessage?.includes('Phone number not verified')) {
+          const res = await api.post('/users/public/sendOTP', {
+            phoneNumber: data?.phone,
+            callingCode: '+965',
+          })
+          router.push(`/verify-account?userId=${res?.data?.id}&phone=${data?.phone}`)
+        }
         if (errorMessage.includes('Only customers can login')) {
           errorMessage = 'Access denied. This application is only available for customers.'
         }
-        
+
         toast.error(errorMessage)
       }
     } catch (error) {
       const errorMessage = extractErrorMessage(error)
-      
-      // Check if it's a role-based error
       if (errorMessage.includes('Only customers can login')) {
         toast.error('Access denied. This application is only available for customers.')
       } else {
@@ -86,25 +90,54 @@ const Login = () => {
 
   const handleGoogleSignIn = async () => {
     try {
-      const result = await signIn('google', { 
+      const result = await signIn('google', {
         callbackUrl: `${process.env.NEXT_PUBLIC_URL}/explore/`,
-        redirect: false
+        redirect: false,
       })
-      
+
       if (result?.ok) {
         router.replace('/explore/')
       } else if (result?.error) {
         let errorMessage = result.error
-        
+
         if (errorMessage.includes('Only customers can login')) {
           errorMessage = 'Access denied. This application is only available for customers.'
         }
-        
+
         toast.error(errorMessage)
       }
     } catch (error) {
       const errorMessage = extractErrorMessage(error)
-      
+
+      if (errorMessage.includes('Only customers can login')) {
+        toast.error('Access denied. This application is only available for customers.')
+      } else {
+        toast.error(errorMessage)
+      }
+    }
+  }
+
+  const handleAppleSignIn = async () => {
+    try {
+      const result = await signIn('apple', {
+        callbackUrl: `${process.env.NEXT_PUBLIC_URL}/explore/`,
+        redirect: false,
+      })
+
+      if (result?.ok) {
+        router.replace('/explore/')
+      } else if (result?.error) {
+        let errorMessage = result.error
+
+        if (errorMessage.includes('Only customers can login')) {
+          errorMessage = 'Access denied. This application is only available for customers.'
+        }
+
+        toast.error(errorMessage)
+      }
+    } catch (error) {
+      const errorMessage = extractErrorMessage(error)
+
       if (errorMessage.includes('Only customers can login')) {
         toast.error('Access denied. This application is only available for customers.')
       } else {
@@ -206,18 +239,20 @@ const Login = () => {
         <div className="flex justify-center items-center gap-6 w-full min-[1440px]:my-3">
           <button
             onClick={handleGoogleSignIn}
-            className="shrink-0"
+            className="shrink-0 hover:opacity-80 transition-opacity"
             type="button"
+            title="Sign in with Google"
           >
             <Image src="/images/googleRounded.svg" alt="Login with Google" width={40} height={40} />
           </button>
-          <Image
-            src="/images/appleRounded.svg"
-            alt="Apple"
-            width={40}
-            height={40}
-            className="shrink-0"
-          />
+          <button
+            onClick={handleAppleSignIn}
+            className="shrink-0 hover:opacity-80 transition-opacity"
+            type="button"
+            title="Sign in with Apple"
+          >
+            <Image src="/images/appleRounded.svg" alt="Login with Apple" width={40} height={40} />
+          </button>
         </div>
 
         <div className="flex items-center justify-start space-x-1 min-[1440px]:mt-4 text-[14px]">

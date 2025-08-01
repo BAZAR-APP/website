@@ -3,17 +3,23 @@ import ModalDialog from '../ModalDialog/Dialog'
 import Image from 'next/image'
 import Button from '../Button/Button'
 import { ChevronRight } from 'lucide-react'
-import { useParams, useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 
 interface CancelBookingProps {
   isOpen: boolean
   setIsOpen: () => void
   onCancel?: () => void
   onGoBack?: () => void
+  isCancelling: boolean
 }
-const CancelBooking: React.FC<CancelBookingProps> = ({ isOpen, setIsOpen, onCancel, onGoBack }) => {
+const CancelBooking: React.FC<CancelBookingProps> = ({
+  isOpen,
+  setIsOpen,
+  onCancel,
+  onGoBack,
+  isCancelling,
+}) => {
   const router = useRouter()
-  const params = useParams()
   return (
     <ModalDialog isOpen={isOpen} setIsOpen={setIsOpen} className="lg:min-w-[524px] min-w-[auto]">
       <Image
@@ -45,6 +51,7 @@ const CancelBooking: React.FC<CancelBookingProps> = ({ isOpen, setIsOpen, onCanc
             setIsOpen()
           }}
           intent="ghost"
+          disabled={isCancelling}
           className="cursor-pointer bg-[#F3F4F6] text-[#19191A] py-2 rounded-lg text-[16px] font-medium w-full"
         >
           Go Back
@@ -52,8 +59,9 @@ const CancelBooking: React.FC<CancelBookingProps> = ({ isOpen, setIsOpen, onCanc
         <Button
           onClick={() => {
             onCancel?.()
-            setIsOpen()
           }}
+          disabled={isCancelling}
+          loading={isCancelling}
           className="cursor-pointer bg-[#29397E] !text-[#FDFDFE] py-2 rounded-lg text-[16px] font-medium !w-full"
         >
           Yes , Cancel Booking

@@ -1,16 +1,7 @@
 'use client'
 
-import React, { useMemo, useCallback, useEffect, useState } from 'react'
-import {
-  MapPin,
-  ChevronRight,
-  Accessibility,
-  AccessibilityIcon,
-  LucideAccessibility,
-  FileWarning,
-  Shield,
-  ShieldOff,
-} from 'lucide-react'
+import React, { useMemo, useCallback, useState } from 'react'
+import { MapPin, ChevronRight, ShieldOff } from 'lucide-react'
 import { Button } from '@/components'
 import ChaletRules from '@/components/ChaletsRules'
 import Image from 'next/image'
@@ -19,11 +10,12 @@ import { useParams, useRouter } from 'next/navigation'
 import CancelBooking from '@/components/Booking/CancelBooking'
 import useToggle from '@/lib/hooks/useToggle'
 import ModalDialog from '@/components/ModalDialog/Dialog'
-import { useQueryBase } from '@/lib/axios'
+import api, { useQueryBase } from '@/lib/axios'
 import { IBooking } from '@/lib/types/booking'
 import { format } from 'date-fns'
+import { extractErrorMessage } from '@/lib/utils'
+import { toast } from '@/lib/toast'
 
-// Define the interfaces for your data structure (these are correct)
 interface AddOn {
   name: string
   price: number
@@ -41,8 +33,8 @@ interface DateRange {
 }
 
 type PaymentStatus = 'fullPaid' | 'halfPaid'
+type bookingStatus = 'pending' | 'confirmed' | 'cancelled' | string
 
-// Helper components (no changes needed for these, just including for completeness)
 const PaymentStatusBadge: React.FC<{ status: PaymentStatus }> = React.memo(
   function PaymentStatusBadge({ status }) {
     const statusConfig = {
@@ -155,6 +147,7 @@ const PaymentSection: React.FC<{
   securityDeposit: number
   paymentDueDate: string
   priceBreakdown: PriceBreakdownItem[]
+  bookingStatus: bookingStatus
   onPayRemaining?: () => void
   onCancelBooking?: () => void
 }> = React.memo(function PaymentSection({
@@ -163,6 +156,7 @@ const PaymentSection: React.FC<{
   securityDeposit,
   paymentDueDate,
   priceBreakdown,
+  bookingStatus,
   onPayRemaining,
   onCancelBooking,
 }) {
@@ -224,22 +218,26 @@ const PaymentSection: React.FC<{
             Pay Remaining Amount {Math.round(totalAmount / 2)} KD Now
           </Button>
         )}
-        <Button intent="danger" className="w-full !text-sm" onClick={onCancelBooking}>
-          Cancel Booking
+        <Button
+          intent="danger"
+          className="w-full !text-sm"
+          onClick={onCancelBooking}
+          disabled={bookingStatus === 'cancelled'}
+        >
+          {bookingStatus === 'cancelled' ? 'Booking Cancelled' : 'Cancel Booking'}
         </Button>
       </div>
     </div>
   )
 })
 
-// Define the props for your Next.js Page Component
 
 export default function BookingDetailsPage() {
   const router = useRouter()
   const { id } = useParams() as { id: string }
   const { isOpen, toggle } = useToggle()
-
-  const { data, isLoading } = useQueryBase({
+  const [isCancelling, setIsCancelling] = useState<boolean>(false)
+  const { data, isLoading, refetch } = useQueryBase({
     queryKey: ['bookingDetails', id],
     url: `/booking/readById/${id}`,
     staleTime: 0,
@@ -278,6 +276,21 @@ export default function BookingDetailsPage() {
 
   const handleCancelBooking = () => {
     toggleCancel()
+  }
+
+  const onBookingCancel = async () => {
+    try {
+      setIsCancelling(true)
+      await api.patch(`/booking/cancel/${id}`)
+      confirmCancelToggle()
+      toast.success('Booking Cancelled successfully')
+      toggleCancel()
+      refetch()
+    } catch (error) {
+      toast.error(extractErrorMessage(error))
+    } finally {
+      setIsCancelling(false)
+    }
   }
 
   if (isLoading) {
@@ -371,6 +384,7 @@ export default function BookingDetailsPage() {
           <PaymentSection
             paymentStatus={bookingDetails?.paymentStatus}
             totalAmount={bookingDetails?.grandTotal}
+            bookingStatus={bookingDetails?.bookingStatus}
             securityDeposit={200}
             paymentDueDate={format(new Date(bookingDetails?.startDate), 'dd/MM/yyyy')}
             priceBreakdown={[
@@ -387,9 +401,8 @@ export default function BookingDetailsPage() {
       <CancelBooking
         isOpen={isCancelOpen}
         setIsOpen={toggleCancel}
-        onCancel={() => {
-          confirmCancelToggle()
-        }}
+        onCancel={onBookingCancel}
+        isCancelling={isCancelling}
       />
       <ModalDialog
         isOpen={isConfirmCancel}

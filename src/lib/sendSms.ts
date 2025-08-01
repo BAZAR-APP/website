@@ -28,9 +28,7 @@ export class SMSService {
         `&defdate=&isblink=false&isflash=false`;
 
       const response = await axios.post(url);
-      console.log(`SMS sent to ${toPhoneNumber}, response:`, response.data);
     } catch (error) {
-      console.error(`Failed to send SMS to ${toPhoneNumber}:`, error);
       throw new Error('Failed to send SMS');
     }
   }
