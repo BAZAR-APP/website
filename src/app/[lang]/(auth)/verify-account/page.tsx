@@ -11,6 +11,15 @@ import toast from 'react-hot-toast'
 import { extractErrorMessage } from '@/lib/utils'
 
 const RESEND_INTERVAL = 60 // seconds
+export async function sendSMS({ phoneNumber, message }: { phoneNumber: string; message: string }) {
+  const res = await fetch('/api/send-sms', {
+    method: 'POST',
+    body: JSON.stringify({ phoneNumber, message }),
+    headers: { 'Content-Type': 'application/json' },
+  })
+
+  await res.json()
+}
 
 const VerifyAccount = () => {
   const [otp, setOtp] = useState('')
@@ -67,11 +76,13 @@ const VerifyAccount = () => {
   // RESEND OTP mutation
   const resendMutation = useMutation({
     mutationFn: async () =>
-      api.post('/auth/forgetPassword', {
+      api.post('/users/public/sendOTP', {
         phoneNumber: phone,
         callingCode: '+965',
       }),
-    onSuccess: () => {
+    onSuccess: async (res) => {
+      setUserId(res?.data?.id)
+      await sendSMS({ phoneNumber: ('+965' + phone) as string, message: res?.data?.otpCode })
       toast.success('OTP resent successfully')
       setTimer(RESEND_INTERVAL) // Restart timer
     },

@@ -1,6 +1,8 @@
 import { NextAuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import GoogleProvider from 'next-auth/providers/google'
+import AppleProvider from 'next-auth/providers/apple'
+
 import axios from 'axios'
 
 // Create axios instance for API calls
@@ -80,7 +82,6 @@ export const authOptions: NextAuthOptions = {
 
           return null
         } catch (error: any) {
-          console.error('Phone auth error:', error.response?.data || error.message)
           throw new Error(error.response?.data?.message || error.message || 'Login failed')
         }
       },
@@ -89,6 +90,17 @@ export const authOptions: NextAuthOptions = {
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+    }),
+
+    AppleProvider({
+      clientId: process.env.APPLE_ID!,
+      clientSecret: process.env.APPLE_SECRET!,
+      authorization: {
+        params: {
+          scope: 'name email',
+          response_mode: 'form_post',
+        },
+      },
     }),
   ],
 
@@ -112,14 +124,12 @@ export const authOptions: NextAuthOptions = {
               const validation = await validateCurrentUser(accessToken)
 
               if (!validation.isValid) {
-                console.error('Google user validation failed after signup')
                 return false
               }
 
               // Check if user role is customer
               const userRole = validation.userData?.role || userData.user?.role || userData.role
               if (!isCustomerRole(userRole)) {
-                console.error('Access denied for Google user. Only customers can login.')
                 return false
               }
 
@@ -136,7 +146,44 @@ export const authOptions: NextAuthOptions = {
 
           return false
         } catch (error: any) {
-          console.error('Google auth error:', error)
+          return false
+        }
+      }
+
+      if (account?.provider === 'apple') {
+        try {
+          const response = await apiClient.post('/auth/signUp', {
+            appleId: profile?.sub,
+            fullName: profile?.name || user.name,
+            email: profile?.email || user.email,
+            authProvider: 'apple',
+          })
+
+          if (response.status === 200 || response.status === 201) {
+            const userData = response.data
+            const accessToken = userData.accessToken || userData.user?.accessToken
+
+            if (accessToken) {
+              const validation = await validateCurrentUser(accessToken)
+              if (!validation.isValid) {
+                return false
+              }
+              const userRole = validation.userData?.role || userData.user?.role || userData.role
+              if (!isCustomerRole(userRole)) {
+                return false
+              }
+              user.id =
+                userData.user?.userId?.toString() || userData.userId?.toString() || profile?.sub
+              user.accessToken = accessToken
+              user.email = profile?.email || user.email
+              user.name = profile?.name || user.name
+              user.role = userRole
+              return true
+            }
+          }
+
+          return false
+        } catch (error: any) {
           return false
         }
       }
@@ -145,7 +192,6 @@ export const authOptions: NextAuthOptions = {
     },
 
     async jwt({ token, user, account, trigger }) {
-      // Initial sign in - store user data in token
       if (user && account) {
         token.id = user.id
         token.accessToken = (user as any).accessToken
