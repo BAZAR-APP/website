@@ -11,7 +11,7 @@ import toast from 'react-hot-toast'
 import { extractErrorMessage } from '@/lib/utils'
 
 const RESEND_INTERVAL = 60 // seconds
-async function sendSMS({ phoneNumber, message }: { phoneNumber: string; message: string }) {
+export async function sendSMS({ phoneNumber, message }: { phoneNumber: string; message: string }) {
   const res = await fetch('/api/send-sms', {
     method: 'POST',
     body: JSON.stringify({ phoneNumber, message }),
