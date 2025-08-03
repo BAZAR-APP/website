@@ -6,13 +6,12 @@ import { CommonInput, CheckBox } from '@/components'
 import CommonButton from '@/components/Button/Button'
 import Image from 'next/image'
 import Link from 'next/link'
-import { loginSchema, registerSchema } from '@/lib/validationSchemas'
-import api from '@/lib/axios'
+import { registerSchema } from '@/lib/validationSchemas'
+import api, { sendSMS } from '@/lib/axios'
 import { toast } from '@/lib/toast'
 import { extractErrorMessage } from '@/lib/utils'
 import { useRouter } from 'next/navigation'
 import { signIn } from 'next-auth/react'
-import { sendSMS } from '../verify-account/page'
 interface LoginFormInputs {
   phone: string
   password: string
@@ -47,8 +46,7 @@ const SignUp = () => {
         authProvider: 'phone',
       }
       const res = await api.post('/auth/signUp', body)
-      console.log(res);
-      
+
       await sendSMS({ phoneNumber: ('+965' + data?.phone) as string, message: res?.data?.otpCode })
       router.push(
         `/verify-account?userId=${encodeURIComponent(res?.data?.userId)}&phone=${data?.phone}`,

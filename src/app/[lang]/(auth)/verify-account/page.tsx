@@ -6,20 +6,12 @@ import OneTimePassword from '@/components/OTPInput'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useMutation } from '@tanstack/react-query'
-import api from '@/lib/axios'
+import api, { sendSMS } from '@/lib/axios'
 import toast from 'react-hot-toast'
 import { extractErrorMessage } from '@/lib/utils'
 
 const RESEND_INTERVAL = 60 // seconds
-export async function sendSMS({ phoneNumber, message }: { phoneNumber: string; message: string }) {
-  const res = await fetch('/api/send-sms', {
-    method: 'POST',
-    body: JSON.stringify({ phoneNumber, message }),
-    headers: { 'Content-Type': 'application/json' },
-  })
 
-  await res.json()
-}
 
 const VerifyAccount = () => {
   const [otp, setOtp] = useState('')

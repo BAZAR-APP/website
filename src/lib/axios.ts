@@ -82,3 +82,12 @@ export const useQueryBase = ({
     staleTime,
   })
 }
+export async function sendSMS({ phoneNumber, message }: { phoneNumber: string; message: string }) {
+  const res = await fetch('/api/send-sms', {
+    method: 'POST',
+    body: JSON.stringify({ phoneNumber, message }),
+    headers: { 'Content-Type': 'application/json' },
+  })
+
+  await res.json()
+}
