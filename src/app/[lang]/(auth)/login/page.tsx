@@ -91,7 +91,7 @@ const Login = () => {
   const handleGoogleSignIn = async () => {
     try {
       const result = await signIn('google', {
-        callbackUrl: `${process.env.NEXT_PUBLIC_URL}/explore/`,
+        callbackUrl: `${process.env.NEXT_PUBLIC_URL}explore/`,
         redirect: false,
       })
 
@@ -120,7 +120,7 @@ const Login = () => {
   const handleAppleSignIn = async () => {
     try {
       const result = await signIn('apple', {
-        callbackUrl: `${process.env.NEXT_PUBLIC_URL}/explore/`,
+        callbackUrl: `${process.env.NEXT_PUBLIC_URL}explore/`,
         redirect: false,
       })
 

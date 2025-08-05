@@ -151,6 +151,8 @@ export const authOptions: NextAuthOptions = {
       }
 
       if (account?.provider === 'apple') {
+        console.log('Apple sign-in attempt:', { profile, user, account })
+
         try {
           const response = await apiClient.post('/auth/signUp', {
             appleId: profile?.sub,
@@ -158,6 +160,8 @@ export const authOptions: NextAuthOptions = {
             email: profile?.email || user.email,
             authProvider: 'apple',
           })
+
+          console.log('API response:', response.data)
 
           if (response.status === 200 || response.status === 201) {
             const userData = response.data
@@ -184,6 +188,8 @@ export const authOptions: NextAuthOptions = {
 
           return false
         } catch (error: any) {
+          console.error('Apple sign-in error:', error.response?.data || error.message)
+
           return false
         }
       }
