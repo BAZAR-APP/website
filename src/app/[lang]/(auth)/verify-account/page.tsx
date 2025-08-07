@@ -74,7 +74,7 @@ const VerifyAccount = () => {
       }),
     onSuccess: async (res) => {
       setUserId(res?.data?.id)
-      await sendSMS({ phoneNumber: ('+965' + phone) as string, message: res?.data?.otpCode })
+      await sendSMS({ phoneNumber: ('965' + phone) as string, message: res?.data?.otpCode })
       toast.success('OTP resent successfully')
       setTimer(RESEND_INTERVAL) // Restart timer
     },

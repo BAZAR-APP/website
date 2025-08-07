@@ -47,7 +47,7 @@ const SignUp = () => {
       }
       const res = await api.post('/auth/signUp', body)
 
-      await sendSMS({ phoneNumber: ('+965' + data?.phone) as string, message: res?.data?.otpCode })
+      await sendSMS({ phoneNumber: ('965' + data?.phone) as string, message: res?.data?.otpCode })
       router.push(
         `/verify-account?userId=${encodeURIComponent(res?.data?.userId)}&phone=${data?.phone}`,
       )
