@@ -119,10 +119,7 @@ const Login = () => {
 
   const handleAppleSignIn = async () => {
     try {
-      const result = await signIn('apple', {
-        callbackUrl: `${process.env.NEXT_PUBLIC_URL}explore/`,
-        redirect: false,
-      })
+      const result = await signIn('apple')
 
       if (result?.ok) {
         router.replace('/explore/')
