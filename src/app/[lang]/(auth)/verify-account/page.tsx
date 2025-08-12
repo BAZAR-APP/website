@@ -101,7 +101,7 @@ const VerifyAccount = () => {
               <br /> Account
             </h2>
             <p className="!text-secondary font-600 text-[16px]">
-              Enter the 5-digit code sent to your phone to complete verification.
+              Enter the 6-digit code sent to your phone to complete verification.
             </p>
           </div>
 

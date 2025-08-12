@@ -2,7 +2,6 @@ import { NextAuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import GoogleProvider from 'next-auth/providers/google'
 import AppleProvider from 'next-auth/providers/apple'
-
 import axios from 'axios'
 
 // Create axios instance for API calls
@@ -13,6 +12,9 @@ const apiClient = axios.create({
     'Content-Type': 'application/json',
   },
 })
+
+const useSecureCookies = process.env.NEXTAUTH_URL?.startsWith("https://") ?? false
+const cookiePrefix = useSecureCookies ? "__Secure-" : ""
 
 // Helper function to validate current user
 async function validateCurrentUser(accessToken: string) {
@@ -97,15 +99,77 @@ export const authOptions: NextAuthOptions = {
       clientSecret: process.env.APPLE_SECRET!,
       authorization: {
         params: {
-          scope: 'name email',
-          response_mode: 'form_post',
-        },
+          scope: "name email",
+          response_mode: "form_post", // Apple requires form_post
+        }
       },
     }),
   ],
 
+  // Properly configure cookies for OAuth flows
+  cookies: {
+    sessionToken: {
+      name: `${cookiePrefix}next-auth.session-token`,
+      options: {
+        httpOnly: true,
+        sameSite: useSecureCookies ? 'none' : 'lax',
+        path: '/',
+        secure: useSecureCookies,
+      }
+    },
+    callbackUrl: {
+      name: `${cookiePrefix}next-auth.callback-url`,
+      options: {
+        httpOnly: true,
+        sameSite: useSecureCookies ? 'none' : 'lax',
+        path: '/',
+        secure: useSecureCookies,
+      }
+    },
+    csrfToken: {
+      name: `${cookiePrefix}next-auth.csrf-token`,
+      options: {
+        httpOnly: true,
+        sameSite: useSecureCookies ? 'none' : 'lax',
+        path: '/',
+        secure: useSecureCookies,
+      }
+    },
+    pkceCodeVerifier: {
+      name: `${cookiePrefix}next-auth.pkce.code_verifier`,
+      options: {
+        httpOnly: true,
+        sameSite: useSecureCookies ? 'none' : 'lax',
+        path: '/',
+        secure: useSecureCookies,
+        maxAge: 60 * 15 // 15 minutes
+      }
+    },
+    state: {
+      name: `${cookiePrefix}next-auth.state`,
+      options: {
+        httpOnly: true,
+        sameSite: useSecureCookies ? 'none' : 'lax',
+        path: '/',
+        secure: useSecureCookies,
+        maxAge: 60 * 15 // 15 minutes
+      }
+    },
+    nonce: {
+      name: `${cookiePrefix}next-auth.nonce`,
+      options: {
+        httpOnly: true,
+        sameSite: useSecureCookies ? 'none' : 'lax',
+        path: '/',
+        secure: useSecureCookies,
+      }
+    }
+  },
+
   callbacks: {
     async signIn({ user, account, profile }) {
+      console.log('SignIn callback:', { provider: account?.provider, user, profile })
+
       if (account?.provider === 'google') {
         try {
           const response = await apiClient.post('/auth/signUp', {
@@ -124,12 +188,14 @@ export const authOptions: NextAuthOptions = {
               const validation = await validateCurrentUser(accessToken)
 
               if (!validation.isValid) {
+                console.error('Google user validation failed')
                 return false
               }
 
               // Check if user role is customer
               const userRole = validation.userData?.role || userData.user?.role || userData.role
               if (!isCustomerRole(userRole)) {
+                console.error('Google user is not a customer')
                 return false
               }
 
@@ -146,6 +212,7 @@ export const authOptions: NextAuthOptions = {
 
           return false
         } catch (error: any) {
+          console.error('Google sign-in error:', error.response?.data || error.message)
           return false
         }
       }
@@ -161,7 +228,7 @@ export const authOptions: NextAuthOptions = {
             authProvider: 'apple',
           })
 
-          console.log('API response:', response.data)
+          console.log('Apple API response:', response.data)
 
           if (response.status === 200 || response.status === 201) {
             const userData = response.data
@@ -170,10 +237,12 @@ export const authOptions: NextAuthOptions = {
             if (accessToken) {
               const validation = await validateCurrentUser(accessToken)
               if (!validation.isValid) {
+                console.error('Apple user validation failed')
                 return false
               }
               const userRole = validation.userData?.role || userData.user?.role || userData.role
               if (!isCustomerRole(userRole)) {
+                console.error('Apple user is not a customer')
                 return false
               }
               user.id =
@@ -189,7 +258,6 @@ export const authOptions: NextAuthOptions = {
           return false
         } catch (error: any) {
           console.error('Apple sign-in error:', error.response?.data || error.message)
-
           return false
         }
       }
@@ -328,7 +396,12 @@ export const authOptions: NextAuthOptions = {
 
   session: {
     strategy: 'jwt',
+    maxAge: 24 * 60 * 60, // 24 hours
+    updateAge: 60 * 60, // 1 hour
   },
+
+  // Important: Use secure cookies in production
+  useSecureCookies,
 
   secret: process.env.NEXTAUTH_SECRET,
   debug: process.env.NODE_ENV === 'development',

@@ -21,7 +21,7 @@ const {
 
   private_key = process.env.APPLE_PRIVATE_KEY,
 
-  client_id = process.env.APPLE_CLIENT_ID,
+  client_id = process.env.APPLE_ID,
   sub = client_id,
 
   key_id = process.env.APPLE_KEY_ID,

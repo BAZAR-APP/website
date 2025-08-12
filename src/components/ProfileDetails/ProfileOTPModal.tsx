@@ -51,7 +51,7 @@ const ProfileOTPModal: FC<{ children: React.ReactNode }> = ({ children }) => {
               Verify Your New Phone Number
             </h2>
             <p className="self-stretch text-[#484A4C] text-base font-normal max-md:text-[15px] max-sm:text-sm">
-              Enter the 5-digit code sent to your phone to complete verification.
+              Enter the 6-digit code sent to your phone to complete verification.
             </p>
           </div>
         </header>

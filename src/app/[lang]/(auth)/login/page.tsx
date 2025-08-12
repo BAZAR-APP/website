@@ -181,7 +181,6 @@ const Login = () => {
               }
               type="text"
               label="Phone"
-              autoComplete="off"
               value={watch('phone')}
               onChange={handlePhoneChange}
               maxLength={8}
@@ -194,7 +193,6 @@ const Login = () => {
             <CommonInput
               name="password"
               label="Password"
-              autoComplete="new-password"
               className={'bg-[#F9FAFB]'}
               value={watch('password')}
               onChange={handlePasswordChange}
