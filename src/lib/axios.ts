@@ -98,12 +98,12 @@ export async function sendSMS({
   try {
     // Env values (with fallbacks)
     const username = process.env.NEXT_PUBLIC_SMSBOX_USERNAME || 'valueandgrowth'
-    const password = process.env.NEXT_PUBLIC_SMSBOX_PASSWORD || 'VGA112233'
+    const password = process.env.NEXT_PUBLIC_SMSBOX_PASSWORD || 'VGA112233@'
     const customerId = process.env.NEXT_PUBLIC_SMSBOX_CUSTOMER_ID || '3441'
     const senderText = process.env.NEXT_PUBLIC_SMSBOX_SENDER_TEXT || 'V G A'
 
     // Encode values
-    const encodedMessage = encodeURIComponent(message)
+    const encodedMessage = `Your verification code is: ${encodeURIComponent(message)}`
     const encodedSender = encodeURIComponent(senderText)
 
     // Build URL
@@ -117,17 +117,19 @@ export async function sendSMS({
       `&recipientnumbers=${phoneNumber}` +
       `&defdate=&isblink=false&isflash=false`
 
+      console.log(url);
+      
     const response = await axios.post(url)
 
     if (response.status === 200) {
       console.log('✅ SMS sent successfully')
       return { success: true }
     } else {
-      console.error('❌ Failed to send SMS', response.data)
+      console.log('❌ Failed to send SMS', response)
       return { success: false }
     }
   } catch (error) {
-    console.error('❌ SMS Error:', error)
+    console.log('❌ SMS Error:', error)
     return { success: false, error }
   }
 }
