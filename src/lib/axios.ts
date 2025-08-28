@@ -82,12 +82,52 @@ export const useQueryBase = ({
     staleTime,
   })
 }
-export async function sendSMS({ phoneNumber, message }: { phoneNumber: string; message: string }) {
-  const res = await fetch('/api/send-sms', {
-    method: 'POST',
-    body: JSON.stringify({ phoneNumber, message }),
-    headers: { 'Content-Type': 'application/json' },
-  })
+// export async function sendSMS({ phoneNumber, message }: { phoneNumber: string; message: string }) {
+//   const res = await fetch('/api/send-sms', {
+//     method: 'POST',
+//     body: JSON.stringify({ phoneNumber, message }),
+//     headers: { 'Content-Type': 'application/json' },
+//   })
 
-  await res.json()
+//   await res.json()
+// }
+export async function sendSMS({
+  phoneNumber,
+  message,
+}: { phoneNumber: string; message: string }) {
+  try {
+    // Env values (with fallbacks)
+    const username = process.env.NEXT_PUBLIC_SMSBOX_USERNAME || 'valueandgrowth'
+    const password = process.env.NEXT_PUBLIC_SMSBOX_PASSWORD || 'VGA112233'
+    const customerId = process.env.NEXT_PUBLIC_SMSBOX_CUSTOMER_ID || '3441'
+    const senderText = process.env.NEXT_PUBLIC_SMSBOX_SENDER_TEXT || 'V G A'
+
+    // Encode values
+    const encodedMessage = encodeURIComponent(message)
+    const encodedSender = encodeURIComponent(senderText)
+
+    // Build URL
+    const url =
+      `https://smsbox.com/smsgateway/services/messaging.asmx/Http_SendSMS` +
+      `?username=${username}` +
+      `&password=${password}` +
+      `&customerid=${customerId}` +
+      `&sendertext=${encodedSender}` +
+      `&messagebody=${encodedMessage}` +
+      `&recipientnumbers=${phoneNumber}` +
+      `&defdate=&isblink=false&isflash=false`
+
+    const response = await axios.post(url)
+
+    if (response.status === 200) {
+      console.log('✅ SMS sent successfully')
+      return { success: true }
+    } else {
+      console.error('❌ Failed to send SMS', response.data)
+      return { success: false }
+    }
+  } catch (error) {
+    console.error('❌ SMS Error:', error)
+    return { success: false, error }
+  }
 }
