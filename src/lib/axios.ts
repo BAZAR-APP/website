@@ -96,19 +96,16 @@ export async function sendSMS({
   message,
 }: { phoneNumber: string; message: string }) {
   try {
-    // Env values (with fallbacks)
     const username = process.env.NEXT_PUBLIC_SMSBOX_USERNAME || 'valueandgrowth'
     const password = process.env.NEXT_PUBLIC_SMSBOX_PASSWORD || 'VGA112233@'
     const customerId = process.env.NEXT_PUBLIC_SMSBOX_CUSTOMER_ID || '3441'
     const senderText = process.env.NEXT_PUBLIC_SMSBOX_SENDER_TEXT || 'V G A'
 
-    // Encode values
     const encodedMessage = `Your verification code is: ${encodeURIComponent(message)}`
     const encodedSender = encodeURIComponent(senderText)
 
-    // Build URL
     const url =
-      `https://smsbox.com/smsgateway/services/messaging.asmx/Http_SendSMS` +
+      `http://smsbox.com/smsgateway/services/messaging.asmx/Http_SendSMS` +
       `?username=${username}` +
       `&password=${password}` +
       `&customerid=${customerId}` +
@@ -117,19 +114,14 @@ export async function sendSMS({
       `&recipientnumbers=${phoneNumber}` +
       `&defdate=&isblink=false&isflash=false`
 
-      console.log(url);
-      
-    const response = await axios.post(url)
+    const response = await axios.get(url)
 
     if (response.status === 200) {
-      console.log('✅ SMS sent successfully')
       return { success: true }
     } else {
-      console.log('❌ Failed to send SMS', response)
       return { success: false }
     }
   } catch (error) {
-    console.log('❌ SMS Error:', error)
     return { success: false, error }
   }
 }
