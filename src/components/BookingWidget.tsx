@@ -199,7 +199,7 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
 
   const handlePackageSelect = (packageType: PackageType) => {
     setSelectedPackageType(packageType)
-    // Reset dates when package changes
+    useBookingStore.getState().setBookingType('night')
     setDates(new Date(), new Date())
   }
 
@@ -712,6 +712,7 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
               setTotalCostAgainstNights(nights * (packageInfo?.perNightCost || 0))
             }
             setChaletDetails(chalet)
+            useBookingStore.getState().setBookingType('night')
             router.push(`/chalet/${id}/booking`)
           }}
         >

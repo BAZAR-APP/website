@@ -137,8 +137,11 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
 
   const bookNow = async () => {
     const customizations = selectedAddons?.map((customization: Customization) => ({
-      id: customization?.id,
+      id: customization?.chaletCustomizationId,
       quantity: customization?.selectedQuantity,
+      ...(customization.selectedDate && {
+        selectedDate: customization.selectedDate,
+      }),
     }))
     try {
       setLoading(true)

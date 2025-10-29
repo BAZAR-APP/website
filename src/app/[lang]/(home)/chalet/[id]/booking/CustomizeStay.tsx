@@ -3,18 +3,52 @@ import Button from '@/components/Button/Button'
 import { Customization } from '@/lib/types/booking'
 import Image from 'next/image'
 import { useFormContext } from 'react-hook-form'
+import { useBookingStore } from '../../../../../../../stores/useBookingStore'
+import CustomPopOver from '@/components/CustomPopOver'
+import SimpleCalendar from '@/components/Calender/SimpleCalender'
+import { format, startOfDay } from 'date-fns'
 
 type CustomizeStayProps = {
   onNext: () => void
 }
+
 export default function CustomizeStay({ onNext }: CustomizeStayProps) {
   const { watch, setValue } = useFormContext()
+  const { bookingType, selectedDates } = useBookingStore()
+  const showWeekdayHeading = bookingType === 'night'
   const selectedAddons: Customization[] = watch('addons') || []
 
   const total = selectedAddons.reduce((acc, item) => {
     const qty = item.selectedQuantity ?? 0
     return acc + (item?.cost ?? 0) * +qty
   }, 0)
+
+  // Format single selected date (stored as ISO string)
+  const formatDateList = (dateString?: string): string => {
+    if (!dateString) return ''
+    const d = new Date(dateString)
+    if (isNaN(d.getTime())) return ''
+    return format(d, 'dd/MM/yyyy')
+  }
+
+  const handleDateSelect = (addonId: string, date: Date) => {
+    const normalizedDate = startOfDay(date)
+    const addon = selectedAddons.find((a) => a.id === addonId)
+    if (!addon) return
+
+    const dateIso = normalizedDate.toISOString()
+    const isSelected = addon.selectedDate === dateIso
+
+    const updatedAddons = selectedAddons.map((a) =>
+      a.id === addonId ? { ...a, selectedDate: isSelected ? undefined : dateIso } : a
+    )
+    setValue('addons', updatedAddons)
+  }
+
+  const minDate = selectedDates?.checkIn ? startOfDay(new Date(selectedDates.checkIn)) : new Date()
+  const maxDate = selectedDates?.checkOut
+    ? startOfDay(new Date(selectedDates.checkOut))
+    : new Date()
 
   return (
     <div className="max-w-[1800px] mx-auto lg:px-22 md:px-18 sm:px-12 px-8 py-10">
@@ -44,15 +78,51 @@ export default function CustomizeStay({ onNext }: CustomizeStayProps) {
             Selected add-ons will be added to your total booking payment.
           </p>
           <ul className="space-y-2 w-full text-sm">
-            {selectedAddons.map((item, index) => (
-              <li key={item?.title + index} className="flex justify-between items-center">
-                <div className="flex items-center gap-2">
-                  {item?.iconPhotoUrl && (
-                    <Image src={item?.iconPhotoUrl ?? ''} width={16} height={16} alt="icon" />
-                  )}
-                  <span>{item?.title}</span>
+            {selectedAddons.map((item) => (
+              <li key={item.id} className="flex flex-col">
+                <div className="flex justify-between items-center">
+                  <div className="flex items-center gap-2">
+                    {item?.iconPhotoUrl && (
+                      <Image src={item?.iconPhotoUrl ?? ''} width={16} height={16} alt="icon" />
+                    )}
+                    <span>{item?.title}</span>
+                  </div>
+                  <span>{(item?.cost ?? 0) * (Number(item?.selectedQuantity) ?? 1)} KWD</span>
                 </div>
-                <span>{(item?.cost ?? 0) * (Number(item?.selectedQuantity) ?? 1)} KWD</span>
+
+                {item.selectedDate && showWeekdayHeading && (
+                  <div className="mt-1 text-xs text-gray-600">
+                    Date: {formatDateList(item.selectedDate)}
+                  </div>
+                )}
+
+                {/* "Select dates" button with embedded popover */}
+                {item.selectedQuantity && showWeekdayHeading && (
+                <CustomPopOver
+                  triggerChildren={
+                    <button
+                      type="button"
+                      className="mt-1 text-xs text-blue-600 underline self-end"
+                    >
+                      {item.selectedDate ? 'Edit date' : 'Select date'}
+                    </button>
+                  }
+                >
+                  <div className="p-4 w-80">
+                    <h4 className="text-sm font-medium mb-2">Select dates for: {item.title}</h4>
+                    <SimpleCalendar
+                      initialDate={minDate}
+                      minDate={minDate}
+                      maxDate={maxDate}
+                      disabledDates={[]}
+                      onDateChange={(date) => handleDateSelect(item.id, date)}
+                    />
+                    <div className="mt-2 text-xs text-gray-500">
+                      Click a date to toggle selection.
+                    </div>
+                  </div>
+                </CustomPopOver>
+              )}
               </li>
             ))}
           </ul>
