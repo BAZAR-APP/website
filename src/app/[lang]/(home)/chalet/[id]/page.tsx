@@ -188,7 +188,7 @@ export default async function ChaletDetailsPage({
             </div>
 
             <div className="lg:col-span-1">
-              {data?.perHourCost ? (
+              {data?.perHourCost && Number(data?.perHourCost) > 0 ? (
                 <HourlyBookingSummary
                   maxGuests={data?.maxNoOfGuests || ''}
                   bookingConfig={propertyData.bookingConfig}
@@ -197,6 +197,7 @@ export default async function ChaletDetailsPage({
                     perHourCost: data?.perHourCost,
                   }}
                   bookings={data?.bookings || []}
+                  availabilities={data?.availabilities || []}
                 />
               ) : (
                 <BookingWidget
@@ -213,6 +214,7 @@ export default async function ChaletDetailsPage({
                     fullMonthCost: data?.fullMonthCost,
                   }}
                   bookings={data?.bookings || []}
+                  availabilities={data?.availabilities || []}
                 />
               )}
             </div>
