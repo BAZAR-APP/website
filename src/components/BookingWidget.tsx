@@ -10,14 +10,13 @@ import useToggle from '@/lib/hooks/useToggle'
 import {
   format,
   addDays,
-  isAfter,
   isBefore,
   isEqual,
   isSameDay,
   startOfDay,
   endOfDay,
 } from 'date-fns'
-import { capitalizeWords } from '@/lib/utils'
+import { capitalizeWords, expandDateRange } from '@/lib/utils'
 import { Bookings, Chalet } from '../../types/chalets'
 import { toast } from '@/lib/toast'
 import AddGuests from '@/app/[lang]/(home)/chalet/[id]/booking/_components/AddGuests'
@@ -69,6 +68,13 @@ interface BookingWidgetProps {
   }
   bookings: Bookings
   chalet: Chalet | null
+  availabilities: {
+    id: string
+    chaletId: string
+    startDate: string // e.g., "2025-11-01"
+    endDate: string
+    isAvailable: boolean
+  }[]
 }
 
 // Package types enum for better type safety
@@ -138,6 +144,7 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
   maxGuests,
   bookings,
   chalet,
+  availabilities,
 }) => {
   const checkInPopUp = useToggle()
   const checkOutPopUp = useToggle()
@@ -147,12 +154,10 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
   const { id } = useParams()
   const {
     selectedPlan,
-    guests,
     selectedDates,
     setNoOfNights,
     setPackageAmount,
     setTotalCostAgainstNights,
-    setGuests,
     setDates,
     setChaletDetails,
   } = useBookingStore()
@@ -199,7 +204,7 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
 
   const handlePackageSelect = (packageType: PackageType) => {
     setSelectedPackageType(packageType)
-    // Reset dates when package changes
+    useBookingStore.getState().setBookingType('night')
     setDates(new Date(), new Date())
   }
 
@@ -294,36 +299,45 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
     return null
   }, [selectedPackageType, getDisabledDatesArray, selectedPlan])
 
-  // Helper function to check if a date is within any booking period
-  const isDateBooked = (date: Date): boolean => {
-    return bookings.some((booking) => {
-      const bookingStart = new Date(booking.startDate)
-      const bookingEnd = new Date(booking.endDate)
+  // Check if a date is UNAVAILABLE (due to booking OR availability block)
+  const isDateUnavailable = (date: Date): boolean => {
+    const checkDate = startOfDay(date)
 
-      // Check if date is within booking period (inclusive of start, exclusive of end)
-      return (
-        (isAfter(date, bookingStart) || isEqual(date, bookingStart)) && isBefore(date, bookingEnd)
-      )
+    // 1. Check if date is in an existing booking
+    const isInBooking = bookings.some((booking) => {
+      const bookingStart = startOfDay(new Date(booking.startDate))
+      const bookingEnd = endOfDay(new Date(booking.endDate))
+      return checkDate >= bookingStart && checkDate <= bookingEnd
     })
+
+    // 2. Check if date is blocked in availabilities
+    const isInUnavailableBlock = availabilities.some((avail) => {
+      if (!avail.isAvailable) {
+        const rangeDates = expandDateRange(avail.startDate, avail.endDate)
+        return rangeDates.some((blockedDate) => isSameDay(blockedDate, checkDate))
+      }
+      return false
+    })
+
+    return isInBooking || isInUnavailableBlock
   }
 
   // Enhanced date filtering for non-package bookings
-  const getNonPackageDisabledDates = useMemo(() => {
-    if (selectedPackageType || selectedPlan?.id) return []
+const getNonPackageDisabledDates = useMemo(() => {
+  if (selectedPackageType || selectedPlan?.id) return []
 
-    const disabledDates: Date[] = []
-    const today = new Date()
-    const endDate = addDays(today, 365)
+  const disabledDates: Date[] = []
+  const today = startOfDay(new Date())
+  const endDate = addDays(today, 365)
 
-    // Add all dates that are already booked
-    for (let date = new Date(today); date <= endDate; date = addDays(date, 1)) {
-      if (isDateBooked(date)) {
-        disabledDates.push(new Date(date))
-      }
+  for (let date = new Date(today); date <= endDate; date = addDays(date, 1)) {
+    if (isDateUnavailable(date)) {
+      disabledDates.push(new Date(date))
     }
+  }
 
-    return disabledDates
-  }, [selectedPackageType, selectedPlan?.id, bookings])
+  return disabledDates
+}, [selectedPackageType, selectedPlan?.id, bookings, availabilities])
 
   // Get disabled dates for checkout calendar (non-package bookings)
   const getCheckoutDisabledDates = useMemo(() => {
@@ -712,6 +726,7 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
               setTotalCostAgainstNights(nights * (packageInfo?.perNightCost || 0))
             }
             setChaletDetails(chalet)
+            useBookingStore.getState().setBookingType('night')
             router.push(`/chalet/${id}/booking`)
           }}
         >

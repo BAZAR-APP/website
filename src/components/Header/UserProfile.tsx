@@ -20,6 +20,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ userName, avatarSrc = '' }) =
   const { clearUser } = useUserStore()
   const { resetPoints } = useBuyLoyltyPointsStore()
   const logOut = () => {
+    useUserStore.getState().clearUser()
     signOut()
     resetBooking()
     resetPoints()

@@ -12,6 +12,7 @@ import { signIn } from 'next-auth/react'
 import { toast } from '@/lib/toast'
 import { extractErrorMessage } from '@/lib/utils'
 import api from '@/lib/axios'
+import { useUserStore } from '../../../../../stores/useUserStore'
 
 interface LoginFormInputs {
   phone: string
@@ -49,6 +50,16 @@ const Login = () => {
       })
 
       if (result?.ok) {
+          const sessionRes = await fetch('/api/auth/session')
+          const sessionData = await sessionRes.json()
+
+          if (sessionData?.user?.id) {
+            useUserStore.getState().setUser({
+              id: sessionData.user.id,
+              name: sessionData.user.fullName || 'User',
+              email: sessionData.user.email || '',
+            })
+          }
         router.replace(`/`)
       } else {
         let errorMessage = result?.error ?? 'Login failed'
@@ -220,9 +231,10 @@ const Login = () => {
           <CommonButton
             type="submit"
             disabled={isSubmitting || !isValid}
-            children={isSubmitting ? 'Signing In...' : 'Sign In'}
             className="w-full h-[48px] bg-[#29397E] !text-[#FDFDFE] min-[1440px]:my-3 gap-2 pt-3 pr-5 pb-3 pl-5 rounded-lg text-base disabled:opacity-50"
-          />
+          >
+            {isSubmitting ? 'Signing In...' : 'Sign In'}
+          </CommonButton>
         </form>
 
         <div className="flex items-center min-[1440px]:mt-1">
@@ -251,7 +263,7 @@ const Login = () => {
         </div>
 
         <div className="flex items-center justify-start space-x-1 min-[1440px]:mt-4 text-[14px]">
-          <span className="text-[#484A4C]">Don't have an account?</span>
+          <span className="text-[#484A4C]">Don&apos;t have an account?</span>
           <Link href="/register" className="text-[#29397E] font-bold">
             Sign Up
           </Link>

@@ -4,8 +4,8 @@ import { Popover, Text, Box, Separator } from '@radix-ui/themes'
 const CustomPopOver: FC<{
   triggerChildren: React.ReactNode
   children: React.ReactNode
-  isOpen: boolean
-  onClose: () => void
+  isOpen?: boolean
+  onClose?: () => void
 }> = ({ children, triggerChildren, isOpen, onClose }) => {
   return (
     <Popover.Root open={isOpen} onOpenChange={onClose}>

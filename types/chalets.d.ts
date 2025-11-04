@@ -61,6 +61,13 @@ export interface Chalet {
   galleryPhotoURLs: string[]
   photoURL: string
   bookings: Bookings
+  availabilities: {
+    id: string
+    chaletId: string
+    startDate: string // e.g., "2025-11-01"
+    endDate: string
+    isAvailable: boolean
+  }[]
 }
 
 export interface Amenity {

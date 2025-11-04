@@ -220,3 +220,25 @@ export const formatRelativeTime = (dateString: string) => {
     return 'Invalid date'
   }
 }
+  const parseLocalDate = (dateStr: string): Date => {
+    const [year, month, day] = dateStr.split('-').map(Number)
+    return new Date(year, month - 1, day)
+  }
+// Helper to parse "2025-12-12" as LOCAL date (not UTC)
+  export const expandDateRange = (startStr: string, endStr: string): Date[] => {
+    const startDate = parseLocalDate(startStr)
+    const endDate = parseLocalDate(endStr)
+
+    const dates: Date[] = []
+    const current = new Date(startDate)
+    current.setHours(0, 0, 0, 0)
+    const end = new Date(endDate)
+    end.setHours(0, 0, 0, 0)
+
+    while (current <= end) {
+      dates.push(new Date(current))
+      current.setDate(current.getDate() + 1)
+    }
+
+    return dates
+  }

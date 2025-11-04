@@ -20,11 +20,13 @@ export type Customization = {
   createdAt: string
   updatedAt: string
   selectedQuantity?: string
+  selectedDate?: string
   customizationCategory: {
     id: string
     title: string
   }
   cost?: number
+  chaletCustomizationId?: string
 }
 
 export type GroupedCustomization = {

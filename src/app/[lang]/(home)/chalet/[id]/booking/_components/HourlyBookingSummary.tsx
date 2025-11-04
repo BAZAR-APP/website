@@ -1,21 +1,9 @@
 'use client'
 import React, { useState, useMemo } from 'react'
-import Image from 'next/image'
-import Deposit from '../../../../../../../../public/images/Deposit.svg'
 import { useParams, useRouter } from 'next/navigation'
 
 import useToggle from '@/lib/hooks/useToggle'
-import {
-  format,
-  addDays,
-  isAfter,
-  isBefore,
-  isEqual,
-  startOfDay,
-  addHours,
-  isSameDay,
-} from 'date-fns'
-import { capitalizeWords } from '@/lib/utils'
+import { format, addDays, startOfDay, addHours } from 'date-fns'
 import { Bookings, Chalet } from '../../../../../../../../types/chalets'
 import { useBookingStore } from '../../../../../../../../stores/useBookingStore'
 import SimpleCalendar from '@/components/Calender/SimpleCalender'
@@ -24,6 +12,7 @@ import { Button } from '@/components'
 import AddGuests from './AddGuests'
 import RefundDepositRules from './RefundDepositRules'
 import PackagePricingSummary from './PackagePricingSummary'
+import { expandDateRange } from '@/lib/utils'
 
 interface PackageOption {
   id: string
@@ -74,6 +63,13 @@ interface HourlyBookingSummaryProps {
   }
   bookings: Bookings
   chalet: Chalet | null
+  availabilities: {
+    id: string
+    chaletId: string
+    startDate: string // e.g., "2025-11-01"
+    endDate: string
+    isAvailable: boolean
+  }[]
 }
 
 const HourlyBookingSummary: React.FC<HourlyBookingSummaryProps> = ({
@@ -94,6 +90,7 @@ const HourlyBookingSummary: React.FC<HourlyBookingSummaryProps> = ({
   maxGuests,
   bookings,
   chalet,
+  availabilities,
 }) => {
   const checkInPopUp = useToggle()
   const checkOutPopUp = useToggle()
@@ -170,22 +167,33 @@ const HourlyBookingSummary: React.FC<HourlyBookingSummaryProps> = ({
   }
 
   const disabledDates = useMemo(() => {
-    const disabled: Date[] = []
+    const disabledSet = new Set<string>()
     const today = startOfDay(new Date())
 
-    // Check next 365 days
+    const todayPlus365 = addDays(today, 365)
     for (let i = 0; i < 365; i++) {
       const checkDate = addDays(today, i)
       const availableSlots = getAvailableTimeSlots(checkDate)
-
-      // If no available slots, disable this date
       if (availableSlots.length === 0) {
-        disabled.push(checkDate)
+        disabledSet.add(checkDate.toISOString().split('T')[0])
       }
     }
+    availabilities.forEach((avail) => {
+      if (!avail.isAvailable) {
+        const rangeDates = expandDateRange(avail.startDate, avail.endDate)
+        rangeDates.forEach((date) => {
+          if (date >= today && date <= todayPlus365) {
+            // Use consistent key: local date string or timestamp
+            const key = date.toDateString() 
+            disabledSet.add(key)
+          }
+        })
+      }
+    })
 
-    return disabled
-  }, [bookings])
+    // Convert back to Date[] for Calendar
+    return Array.from(disabledSet).map((dateStr) => new Date(dateStr))
+  }, [bookings, availabilities]) 
 
   const getAvailableCheckOutTimes = (): TimeSlot[] => {
     if (!selectedDate || !selectedCheckInTime) return []

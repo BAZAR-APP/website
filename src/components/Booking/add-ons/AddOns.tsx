@@ -22,6 +22,8 @@ export const AddOns: React.FC = () => {
   const groupedCustomization: GroupedCustomization[] = Object.values(
     (
       data?.data as {
+        id: string
+        chaletId: string
         customization: Customization
         cost: number
         costUnit: string
@@ -45,6 +47,7 @@ export const AddOns: React.FC = () => {
         cost: item?.cost,
         is24HourNotice: item?.is24HourNotice,
         costUnit: item?.costUnit,
+        chaletCustomizationId: item.id,
       })
 
       return acc
