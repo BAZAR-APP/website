@@ -2,7 +2,7 @@
 import React from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { CommonInput, CheckBox } from '@/components'
+import { CommonInput } from '@/components'
 import CommonButton from '@/components/Button/Button'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -10,7 +10,7 @@ import { registerSchema } from '@/lib/validationSchemas'
 import api, { sendSMS } from '@/lib/axios'
 import { toast } from '@/lib/toast'
 import { extractErrorMessage } from '@/lib/utils'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { signIn } from 'next-auth/react'
 interface LoginFormInputs {
   phone: string
@@ -21,6 +21,9 @@ interface PhoneChangeEvent extends React.ChangeEvent<HTMLInputElement> {}
 
 const SignUp = () => {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const ref = searchParams.get('ref')
+
   const {
     handleSubmit,
     formState: { isValid, errors, isSubmitting },
@@ -44,6 +47,7 @@ const SignUp = () => {
         countryCode: 'KW',
         password: data?.password,
         authProvider: 'phone',
+        referralId: typeof window !== 'undefined' ? localStorage.getItem('referralId') : null,
       }
       const res = await api.post('/auth/signUp', body)
 
@@ -64,6 +68,12 @@ const SignUp = () => {
   const handlePasswordChange = (e: { target: { value: string } }) => {
     setValue('password', e.target.value, { shouldValidate: true })
   }
+   // Store ref in localStorage so it survives page interactions
+  React.useEffect(() => {
+    if (ref) {
+      localStorage.setItem('referralId', ref)
+    }
+  }, [ref])
 
   return (
     <>
@@ -138,9 +148,10 @@ const SignUp = () => {
           <CommonButton
             type="submit"
             disabled={isSubmitting || !isValid}
-            children={isSubmitting ? 'Signing In...' : 'Sign Up'}
             className="w-full h-[48px] bg-[#29397E] text-white gap-2 pr-5 py-1 pl-1 min-[1440px]:my-3 rounded-lg text-base disabled:opacity-50"
-          />
+          >
+            {isSubmitting ? 'Signing In...' : 'Sign Up'}
+          </CommonButton>
         </form>
 
         <div className="flex items-center min-[1440px]:mt-1">

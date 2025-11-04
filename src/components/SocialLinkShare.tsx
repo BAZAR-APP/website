@@ -11,6 +11,7 @@ import { copyToClipboard } from '@/lib/utils'
 import clsx from 'clsx'
 import { toast } from '@/lib/toast'
 import { useParams } from 'next/navigation'
+import { useUserStore } from '../../stores/useUserStore'
 
 interface ShareModalProps {
   onClose: () => void
@@ -29,16 +30,18 @@ const SocialLinkShare: React.FC<ShareModalProps> = ({
 }) => {
   const [shareUrl, setShareUrl] = useState('')
   const params = useParams() as unknown as { id: string; lang: Locale }
-  const { id, lang } = params
+  const { lang } = params
+  const user = useUserStore((state) => state.user)
 
-  // Set the URL only after component mounts (client-side)
   useEffect(() => {
-    setShareUrl(
-      colRevers
-        ? `${window.location?.origin}/${lang}/`
-        : `${window.location?.origin}/${lang}/chalet/${id}/`,
-    )
-  }, [colRevers])
+    if (typeof window !== 'undefined') {
+      const baseUrl = `${window.location.origin}/${lang}/register`
+      const url = user?.id
+        ? `${baseUrl}?ref=${encodeURIComponent(user.id)}`
+        : baseUrl
+      setShareUrl(url)
+    }
+  }, [lang, user?.id])
 
   const shareOptions = [
     {
