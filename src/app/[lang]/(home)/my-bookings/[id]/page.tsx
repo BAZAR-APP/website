@@ -254,7 +254,7 @@ export default function BookingDetailsPage() {
   const bookingDetails = data?.data as IBooking
   const addOns = useMemo(() => {
     return (
-      bookingDetails?.bookingCustomizations?.map((item) => ({
+      bookingDetails?.bookingCustomizations?.map((item:any) => ({
         name: item.chaletCustomization?.customization?.title ?? 'Unnamed Add-On',
         price: item.totalCost ?? 0,
         icon: item.chaletCustomization?.customization?.iconPhotoUrl ?? '',
