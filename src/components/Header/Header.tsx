@@ -102,7 +102,7 @@ const Header: React.FC<HeaderProps> = ({ className = '', isLoggedIn = true, dict
           </div>
         )}
       </div>
-      <div className="hidden">
+      <div className="hidden lg:flex justify-end">
         <LanguageSwitcher
           lang={lang ?? 'en'}
           label={dictionary?.footer?.language || ''}

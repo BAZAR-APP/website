@@ -1,6 +1,35 @@
+'use client'
 import { Header, SearchHeader } from '@/components'
 
-const BannerSection = () => {
+interface BannerSectionProps {
+  lang: string
+  messages: {
+    banner: {
+      banner_title: string
+    }
+    searchHeader: {
+      location: string
+      check_in: string
+      check_out: string
+      guests: string
+      placeholder_location: string
+      placeholder_check_in: string
+      placeholder_check_out: string
+      placeholder_guests: string
+      locations: {
+        al_khobar: string
+        brasiler: string
+        al_jubail: string
+        zour: string
+        fahaheel: string
+        abu_al_hasaniya: string
+        al_mangaf: string
+      }
+    }
+  }
+}
+
+const BannerSection = ({ messages, lang }: BannerSectionProps) => {
   return (
     <div
       style={{
@@ -13,7 +42,7 @@ const BannerSection = () => {
         paddingBottom: '32px',
       }}
     >
-      <Header isLoggedIn={false} className='bg-transparent' />
+      <Header isLoggedIn={false} className="bg-transparent" />
       <div
         style={{
           backgroundImage: "url('/images/ImageBannerCard.svg')",
@@ -27,11 +56,11 @@ const BannerSection = () => {
       >
         <div className="max-w-[80%] flex flex-col gap-[80px]">
           <div className="text-2xl min-[1279px]:text-[48px] text-white font-[500] text-center pt-4 md:pt-0 max-w-[800px]">
-            Where Will Your Next Adventure Take You?
+            {messages.banner.banner_title}
           </div>
         </div>
-        <div className='py-[32px] min-[1440px]:py-[64px] max-w-[95%] mx-2 lg:max-w-[848px] w-full'>
-          <SearchHeader />
+        <div className="py-[32px] min-[1440px]:py-[64px] max-w-[95%] mx-2 lg:max-w-[848px] w-full">
+          <SearchHeader messages={messages.searchHeader} lang={lang} />
         </div>
       </div>
     </div>

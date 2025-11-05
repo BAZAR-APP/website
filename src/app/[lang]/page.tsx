@@ -1,4 +1,4 @@
-"use client"
+// "use client"
 import {
   BannerSection,
   ChaletsCard,
@@ -10,11 +10,17 @@ import {
   RewardsSection,
   WhyBookSection,
 } from '@/components'
+import { getMessages } from '@/lib/i18n'
+import { Locale } from '../../../i18n.config'
 
-export default function Home() {
+export default async function Home({ params }: { params: { lang: string } }) {
+
+  const { lang } = await params;
+  const messages = getMessages(lang as Locale);
+
   return (
     <div className="max-w-xxl mx-auto">
-      <BannerSection />
+      <BannerSection messages={messages} lang={lang} />
       <LuxuryExperience
         title="Escape to luxury and comfort at Bazar"
         thumbnails={[
