@@ -7,7 +7,7 @@ import Logo from '../Logo'
 import NotificationIcon from '../Notification/NotificationIcon'
 import SideNav from '../SideNav'
 import Button from '../Button/Button'
-import { useParams, useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { LanguageSwitcher } from './LanguageSwitcher'
 import { i18n, Locale } from '../../../i18n.config'
 import { useSession } from 'next-auth/react'
@@ -16,6 +16,7 @@ interface HeaderProps {
   className?: string
   isAuthHeader?: boolean
   isLoggedIn?: boolean
+  lang: Locale
   dictionary?: {
     navigation: {
       home: string
@@ -26,12 +27,9 @@ interface HeaderProps {
       language: string
     }
   }
-  lang?: Locale
 }
 
-const Header: React.FC<HeaderProps> = ({ className = '', isLoggedIn = true, dictionary }) => {
-  const params = useParams() as { lang?: Locale } | null
-  const lang = params?.lang ?? 'en'
+const Header: React.FC<HeaderProps> = ({ className = '', lang }) => {
   const { data: user } = useSession()
 
   const [isSideNavOpen, setIsSideNavOpen] = useState(false)
@@ -43,7 +41,7 @@ const Header: React.FC<HeaderProps> = ({ className = '', isLoggedIn = true, dict
     'flex relative flex-col gap-16 justify-center items-center self-stretch lg:px-16 px-12 py-8 max-md:px-8 max-md:py-6 max-sm:px-5 max-sm:py-4'
 
   const baseInnerClasses =
-    'bg-[#F9FAFB] backdrop-blur-[12px] shadow-sm rounded-full flex-none order-0 self-stretch'
+    'bg-[#F9FAFB] backdrop-blur-[12px] shadow-sm rounded-full flex-none order-0 self-stretch z-10'
 
   const maxWidthContainer = 'mx-auto px-8 max-md:px-4 max-sm:px-2'
 
@@ -83,29 +81,30 @@ const Header: React.FC<HeaderProps> = ({ className = '', isLoggedIn = true, dict
         ) : (
           <div className="flex items-center space-x-4">
             <Button
-              onClick={() => router.push('/en/login')}
+              onClick={() => router.push(`/${lang}/login`)}
               type="button"
               size="md"
               intent="ghost"
-              className="!text-[#484A4C]"
+              className="!text-[#484A4C] w-[max-content] text-nowrap"
             >
-              Sign In
+             {lang === 'ar' ? 'تسجيل الدخول' : 'Log In'}
             </Button>
-            <Button
-              onClick={() => router.push('/en/register')}
-              type="button"
-              size="md"
-              className="text-nowrap "
-            >
-              Sign Up
+            {/* <Button onClick={() => router.push('/en/register')} */}
+            <Button onClick={() => router.push(`/${lang}/register`)} size="md" className="text-nowrap">
+              {lang === 'ar' ? 'إنشاء حساب' : 'Sign Up'}
             </Button>
           </div>
         )}
       </div>
-      <div className="hidden">
-        <LanguageSwitcher
+      <div className="hidden lg:flex justify-end">
+        {/* <LanguageSwitcher
           lang={lang ?? 'en'}
           label={dictionary?.footer?.language || ''}
+          availableLocales={[...i18n.locales]}
+        /> */}
+        <LanguageSwitcher
+          lang={lang}
+          label=""
           availableLocales={[...i18n.locales]}
         />
       </div>
@@ -133,13 +132,14 @@ const Header: React.FC<HeaderProps> = ({ className = '', isLoggedIn = true, dict
         avatarSrc=""
         onLogout={() => console.log('User logged out')}
         isLoggedIn={!!user?.user?.accessToken}
-        LanguageSwitcher={
-          <LanguageSwitcher
-            lang={lang ?? 'en'}
-            label={dictionary?.footer?.language || ''}
-            availableLocales={[...i18n.locales]}
-          />
-        }
+        // LanguageSwitcher={
+        //   <LanguageSwitcher
+        //     lang={lang ?? 'en'}
+        //     label={dictionary?.footer?.language || ''}
+        //     availableLocales={[...i18n.locales]}
+        //   />
+        // }
+        LanguageSwitcher={<LanguageSwitcher lang={lang} label="" availableLocales={[...i18n.locales]} />}
       />
     </>
   )

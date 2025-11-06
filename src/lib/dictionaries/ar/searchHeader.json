@@ -1,0 +1,19 @@
+{
+  "location": "الموقع",
+  "check_in": "تاريخ الوصول",
+  "check_out": "تاريخ المغادرة",
+  "guests": "الضيوف",
+  "placeholder_location": "إلى أين أنت ذاهب؟",
+  "placeholder_check_in": "أضف التواريخ",
+  "placeholder_check_out": "أضف التواريخ",
+  "placeholder_guests": "أضف الضيوف",
+  "locations": {
+    "al_khobar": "الخبر",
+    "brasiler": "برازيلير",
+    "al_jubail": "الجبيل",
+    "zour": "الزور",
+    "fahaheel": "الفحيحيل",
+    "abu_al_hasaniya": "أبو الحصانية",
+    "al_mangaf": "المنقف"
+  }
+}

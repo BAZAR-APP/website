@@ -1,0 +1,10 @@
+{
+  "filter_by": "تصفية حسب",
+  "reset": "إعادة تعيين",
+  "sections": {
+    "location": "الموقع",
+    "price": "السعر",
+    "amenities": "المرافق",
+    "rating": "التقييم"
+  }
+}

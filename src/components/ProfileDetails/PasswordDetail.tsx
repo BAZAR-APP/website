@@ -14,7 +14,17 @@ interface PasswordFormData {
   confirmNewPassword: string
 }
 
-const PasswordDetail = () => {
+interface PasswordDetailProps {
+  messages: {
+    old_password_label: string;
+    new_password_label: string;
+    confirm_new_password_label: string;
+    forget_password_button: string;
+    save_password_button: string;
+  };
+}
+
+const PasswordDetail: React.FC<PasswordDetailProps> = ({ messages }) => {
   const router = useRouter()
 
   const {
@@ -62,7 +72,7 @@ const PasswordDetail = () => {
         <div>
           <CommonInput
             name="currentPassword"
-            label="Old Password"
+            label={messages.old_password_label}
             className={'bg-[#F9FAFB]'}
             value={watch('currentPassword')}
             onChange={handlePasswordChange}
@@ -73,7 +83,7 @@ const PasswordDetail = () => {
         <div>
           <CommonInput
             name="newPassword"
-            label="New Password"
+            label={messages.new_password_label}
             className={'bg-[#F9FAFB]'}
             value={watch('newPassword')}
             onChange={handlePasswordChange}
@@ -84,7 +94,7 @@ const PasswordDetail = () => {
         <div>
           <CommonInput
             name="confirmNewPassword"
-            label="Confirm New Password"
+            label={messages.confirm_new_password_label}
             className={'bg-[#F9FAFB]'}
             value={watch('confirmNewPassword')}
             onChange={handlePasswordChange}
@@ -97,14 +107,14 @@ const PasswordDetail = () => {
             className="w-full h-[48px] !bg-[#F3F4F6] !text-[#1F2A37] gap-2 pt-3 pr-5 pb-3 pl-5 rounded-lg text-base disabled:opacity-50 whitespace-nowrap"
             onClick={() => router.push('/reset-password')}
           >
-            Forget Password
+            {messages.forget_password_button}
           </Button>
           <Button
             type="submit"
             disabled={!isValid}
             className="w-full h-[48px] bg-[#29397E] text-white gap-2 pt-3 pr-5 pb-3 pl-5 rounded-lg text-base disabled:opacity-50"
           >
-            Save Password
+            {messages.save_password_button}
           </Button>
         </div>
       </form>

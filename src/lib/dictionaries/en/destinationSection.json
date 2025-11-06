@@ -1,0 +1,12 @@
+{
+  "heading": "Discover Your Next Destination",
+  "destinations": [
+    { "id": "1", "cityName": "Al Khairan" },
+    { "id": "2", "cityName": "Zour" },
+    { "id": "3", "cityName": "Al Mangaf" },
+    { "id": "4", "cityName": "Bnaider" },
+    { "id": "5", "cityName": "Abu Al Hasaniya" },
+    { "id": "6", "cityName": "Al Julai'a" },
+    { "id": "7", "cityName": "Fahaheel" }
+  ]
+}

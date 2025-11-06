@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from 'react'
 import { Search } from 'lucide-react'
 import { Popover } from '@radix-ui/themes'
-import { fields } from '@/lib/constant'
 import { Button } from '@/components'
 import SimpleCalender from './Calender/SimpleCalender'
 import Checkbox from './CheckBox/CheckBox'
@@ -10,21 +9,33 @@ import { useChaletFiltersStore } from '../../stores/useChaletFiltersStore'
 import { usePathname, useRouter } from 'next/navigation'
 import { format } from 'date-fns'
 
-const locations = [
-  'Al Khobar',
-  'Brasiler',
-  'Al Jubail',
-  'Zour',
-  'Fahaheel',
-  'Abu Al Hasaniya',
-  'Al Mangaf',
-]
-
 const CalendarMock = ({ onDateChange }: { onDateChange: (date: Date) => void }) => (
   <SimpleCalender initialDate={new Date()} minDate={new Date()} onDateChange={onDateChange} />
 )
 
-const SearchHeader = () => {
+interface SearchHeaderProps {
+  lang: string
+  messages: {
+    location: string
+    check_in: string
+    check_out: string
+    guests: string
+    placeholder_location: string
+    placeholder_check_in: string
+    placeholder_check_out: string
+    placeholder_guests: string
+    locations: {
+      al_khobar: string
+      brasiler: string
+      al_jubail: string
+      zour: string
+      fahaheel: string
+      abu_al_hasaniya: string
+      al_mangaf: string
+    }
+  }
+}
+const SearchHeader = ({ messages, lang }: SearchHeaderProps) => {
   const path = usePathname()
   const router = useRouter()
   const {
@@ -34,6 +45,9 @@ const SearchHeader = () => {
     guests: storeGuests,
     setFilters,
   } = useChaletFiltersStore()
+  const locationKeys = messages?.locations
+  ? Object.keys(messages.locations)
+  : [];
 
   const [localCity, setLocalCity] = useState<string[]>(storeCity)
   const [guests, setGuests] = useState(storeGuests || 0)
@@ -71,21 +85,33 @@ const SearchHeader = () => {
     }
   }
 
-  const getDisplayValue = (field: any) => {
-    switch (field.label) {
-      case 'Location':
-        return localCity.length ? localCity.join(', ') : field.placeholder
-      case 'Check in':
-        return checkin ? format(checkin, 'dd/MM/yyyy') : field.placeholder
-      case 'Check out':
-        return checkout ? format(checkout, 'dd/MM/yyyy') : field.placeholder
-      case 'Guests':
-        return guests > 0 ? `${guests} Guest${guests > 1 ? 's' : ''}` : field.placeholder
-      default:
-        return field.placeholder
+  const fields = [
+    { label: messages?.location, placeholder: messages?.placeholder_location },
+    { label: messages?.check_in, placeholder: messages?.placeholder_check_in },
+    { label: messages?.check_out, placeholder: messages?.placeholder_check_out },
+    { label: messages?.guests, placeholder: messages?.placeholder_guests },
+  ]
+
+  const getDisplayValue = (field: { label: string; placeholder: string }) => {
+    if (field.label === messages?.location) {
+      if (localCity.length === 0) return field.placeholder
+      return localCity
+        .map((key) => {
+          return (messages?.locations as Record<string, string>)[key] || key
+        })
+        .join(', ')
+    } else if (field.label === messages?.check_in) {
+      return checkin ? format(checkin, 'dd/MM/yyyy') : field.placeholder
+    } else if (field.label === messages?.check_out) {
+      return checkout ? format(checkout, 'dd/MM/yyyy') : field.placeholder
+    } else if (field.label === messages?.guests) {
+      return guests > 0
+        ? `${guests} ${guests > 1 ? (lang === 'ar' ? 'ضيوف' : 'Guests') : lang === 'ar' ? 'ضيف' : 'Guest'}`
+        : field.placeholder
     }
+    return field.placeholder
   }
-  
+
   useEffect(() => {
     setLocalCity(storeCity)
     setGuests(storeGuests || 0)
@@ -114,27 +140,30 @@ const SearchHeader = () => {
               align="start"
               className="bg-white p-4 rounded-lg shadow-lg border border-gray-200 z-50"
             >
-              {field.label === 'Location' ? (
+              {field.label === messages?.location ? (
                 <div className="flex flex-col gap-1.5">
-                  {locations.map((location) => (
+                  {locationKeys.map((key) => (
                     <Checkbox
-                      key={location}
-                      label={location}
+                      key={key}
+                      label={(messages?.locations as Record<string, string>)[key]}
                       className="text-sm text-gray-700 !cursor-pointer"
-                      checked={localCity.includes(location)}
-                      onChange={(checked) => toggleCity(location, checked)}
+                      checked={localCity.includes(key)}
+                      onChange={(checked) => toggleCity(key, checked)}
                     />
                   ))}
                 </div>
-              ) : field.label === 'Check in' ? (
+              ) : field.label === messages.check_in ? (
                 <CalendarMock onDateChange={(date) => handleDateSelect('checkin', date)} />
-              ) : field.label === 'Check out' ? (
+              ) : field.label === messages.check_out ? (
                 <CalendarMock onDateChange={(date) => handleDateSelect('checkout', date)} />
               ) : (
                 <div className="flex items-center gap-2 relative">
                   <div>
-                    <div className="font-medium">Guests</div>
-                    <div className="text-sm text-gray-500">Adults and children</div>
+                    <div className="font-medium">{lang === 'ar' ? 'الضيوف' : 'Guests'}</div>
+                    <div className="text-sm text-gray-500">
+                      {' '}
+                      {lang === 'ar' ? 'الكبار والأطفال' : 'Adults and children'}
+                    </div>
                   </div>
                   <div className="flex items-center gap-3">
                     <button

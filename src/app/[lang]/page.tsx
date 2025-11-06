@@ -1,4 +1,4 @@
-"use client"
+// "use client"
 import {
   BannerSection,
   ChaletsCard,
@@ -10,13 +10,19 @@ import {
   RewardsSection,
   WhyBookSection,
 } from '@/components'
+import { getMessages } from '@/lib/i18n'
+import { Locale } from '../../../i18n.config'
 
-export default function Home() {
+export default async function Home({ params }: { params: Promise<{ lang: Locale }> }) {
+
+  const { lang } = await params;
+  const messages = getMessages(lang);
+
   return (
     <div className="max-w-xxl mx-auto">
-      <BannerSection />
+      <BannerSection messages={messages} lang={lang} />
       <LuxuryExperience
-        title="Escape to luxury and comfort at Bazar"
+        title={messages?.luxuryExperience.title}
         thumbnails={[
           '/images/LuxuryImage1.jpg',
           '/images/LuxuryImage2.jpg',
@@ -24,19 +30,25 @@ export default function Home() {
           '/images/LuxuryImage4.jpg',
           '/images/LuxuryImage5.jpg',
         ]}
-        description={`where breathtaking views meet world-class hospitality. Whether you're seeking a relaxing retreat or an adventure by the sea, our chalets offer the perfect getaway.`}
-        buttonText={'More About Us'}
+        description={messages?.luxuryExperience.description}
+        buttonText={messages?.luxuryExperience.button_text}
+        testimonial={messages?.luxuryExperience.testimonial}
+        full_testimonial={messages?.luxuryExperience.full_testimonial}
       />
-      <WhyBookSection />
-      <DestinationSection />
+      <WhyBookSection messages={messages?.whyBookSection} />
+      <DestinationSection messages={messages?.destinationSection} />
       <div className="flex flex-col gap-[100px] md:px-16 max-md:px-5">
-        <ChaletsCard title={'Most Booked'} queryKey={'most-booked'} endpoint={'/chalets/mostBooked'}/>
-        <ChaletsCard title={'Close to the Beach'} queryKey={'sea-views'} endpoint={'/chalets/viewType'}/>
+        <ChaletsCard title={messages?.chaletsCard.most_booked} queryKey={'most-booked'} endpoint={'/chalets/mostBooked'}/>
+        <ChaletsCard title={messages?.chaletsCard.close_to_beach} queryKey={'sea-views'} endpoint={'/chalets/viewType'}/>
       </div>
-      <RewardsSection />
-      <ChatHero />
-      <DownloadApp />
-      <Footer />
+      <RewardsSection
+        title={messages?.rewardsSection.title}
+        description={messages?.rewardsSection.description}
+        buttonText={messages?.rewardsSection.button_text}
+      />
+      <ChatHero messages={messages?.chatHero} />
+      <DownloadApp messages={messages?.downloadApp} />
+      <Footer messages={messages?.footer} />
     </div>
   )
 }

@@ -1,0 +1,10 @@
+{
+  "filter_by": "Filter By",
+  "reset": "Reset",
+  "sections": {
+    "location": "Location",
+    "price": "Price",
+    "amenities": "Amenities",
+    "rating": "Rating"
+  }
+}

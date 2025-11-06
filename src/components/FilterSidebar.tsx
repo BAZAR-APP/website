@@ -6,16 +6,33 @@ import Like from '../../public/images/Like.svg'
 import Checkbox from './CheckBox/CheckBox'
 import { Slider } from 'radix-ui'
 
-import { locations } from '@/lib/constant'
 import { useChaletFiltersStore } from '../../stores/useChaletFiltersStore'
 import { useQueryBase } from '@/lib/axios'
 import { Amenity } from '../../types/chalets'
+import { Locale } from '../../i18n.config'
 
-const FilterSidebar = () => {
+interface FilterSidebarProps {
+  lang: Locale;
+  messages: {
+    filter_by: string;
+    reset: string;
+    sections: {
+      location: string;
+      price: string;
+      amenities: string;
+      rating: string;
+    };
+  };
+  searchHeaderMessages: {
+    locations: Record<string, string>; 
+  };
+}
+
+const FilterSidebar: React.FC<FilterSidebarProps> = ({ messages, lang, searchHeaderMessages }) => {
   const { setFilters, city, amenities, resetFilters, minPrice, maxPrice } = useChaletFiltersStore()
   const { data } = useQueryBase({
     queryKey: ['amenities', 1],
-    url: `/amenity?language=en&limit=10&page=1`,
+    url: `/amenity?language=${lang}&limit=10&page=1`,
     cacheTime: 0,
     staleTime: 0,
   })
@@ -27,6 +44,7 @@ const FilterSidebar = () => {
     : []
 
   const [currentRange, setCurrentRange] = useState([minPrice, maxPrice])
+  const locationKeys = Object.keys(searchHeaderMessages.locations);
 
   useEffect(() => {
     setCurrentRange([minPrice, maxPrice])
@@ -65,16 +83,18 @@ const FilterSidebar = () => {
         </button>
       </div>
 
-      <FilterSection title="Location">
+      <FilterSection title={messages.sections.location}>
         <div className="flex flex-col gap-1.5">
-          {locations.map((location) => (
+          {locationKeys.map((key) => (
             <Checkbox
-              key={location}
-              label={location}
+              key={key}
+              label={searchHeaderMessages.locations[key]} 
               className="text-sm text-gray-700 !cursor-pointer"
-              checked={city.includes(location)}
+              checked={city.includes(key)} 
               onChange={(checked) => {
-                const updated = checked ? [...city, location] : city.filter((c) => c !== location)
+                const updated = checked
+                  ? [...city, key]
+                  : city.filter((c) => c !== key)
                 setFilters({ city: updated })
               }}
             />
@@ -82,7 +102,8 @@ const FilterSidebar = () => {
         </div>
       </FilterSection>
 
-      <FilterSection title="Price">
+
+      <FilterSection title={messages.sections.price}>
         <div className="mt-5 w-full">
           <Slider.Root
             className="relative flex items-center select-none touch-none w-full h-5"
@@ -111,7 +132,7 @@ const FilterSidebar = () => {
         </div>
       </FilterSection>
 
-      <FilterSection title="Amenities">
+      <FilterSection title={messages.sections.amenities}>
         <div className="flex flex-col gap-1.5">
           {amenitiesList?.map((amenity: { label: string; value: string }) => (
             <Checkbox
@@ -131,7 +152,7 @@ const FilterSidebar = () => {
         </div>
       </FilterSection>
 
-      <FilterSection title="Rating">
+      <FilterSection title={messages.sections.rating}>
         <div className="flex items-center justify-between rounded-[8px] px-0.5 bg-[#F9FAFB]">
           {[1, 2, 3, 4, 5].map((rating) => (
             <div

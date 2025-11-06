@@ -1,0 +1,19 @@
+{
+  "location": "Location",
+  "check_in": "Check in",
+  "check_out": "Check out",
+  "guests": "Guests",
+  "placeholder_location": "Where are you going?",
+  "placeholder_check_in": "Add dates",
+  "placeholder_check_out": "Add dates",
+  "placeholder_guests": "Add guests",
+  "locations": {
+    "al_khobar": "Al Khobar",
+    "brasiler": "Brasiler",
+    "al_jubail": "Al Jubail",
+    "zour": "Zour",
+    "fahaheel": "Fahaheel",
+    "abu_al_hasaniya": "Abu Al Hasaniya",
+    "al_mangaf": "Al Mangaf"
+  }
+}

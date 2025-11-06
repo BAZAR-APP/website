@@ -95,12 +95,18 @@ const billingItems = [
     }
 ];
 
-const ProfileBilling = () => {
+interface ProfileBillingProps {
+  messages: {
+    pick_billing_period: string;
+  };
+}
+
+const ProfileBilling: React.FC<ProfileBillingProps> = ({ messages }) => {
     return (
         <>
             <div className="flex gap-[32px] md:gap-[141px] flex-col md:flex-row md:items-center self-stretch shrink-0 flex-nowrap relative z-[38]  mb-[20px] md:mb-[40px]">
                 <span className="h-[32px] shrink-0 basis-auto text-[25px] font-semibold leading-[32px] text-[#19191a] relative text-left whitespace-nowrap z-[39]">
-                    Pick Billing Period
+                    {messages.pick_billing_period}
                 </span>
                 <div className="flex max-w-[255px] flex-col gap-[8px] items-start shrink-0 flex-nowrap relative z-40">
                     <DatePicker />

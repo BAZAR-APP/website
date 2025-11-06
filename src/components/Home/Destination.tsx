@@ -4,57 +4,48 @@ import { CityCard } from "@/components"
 
 interface Destination {
     id: string;
-    imageUrl: string;
     cityName: string;
-    altText?: string;
 }
 
-const destinations: Destination[] = [
-    {
-        id: '1',
-        imageUrl: 'https://cdn.builder.io/api/v1/image/assets/TEMP/9802943a6c0a7834af4dad71295eb697e86dc233?placeholderIfAbsent=true',
-        cityName: 'Al Khairan',
-        altText: 'Al Khairan destination'
-    },
-    {
-        id: '2',
-        imageUrl: 'https://cdn.builder.io/api/v1/image/assets/TEMP/1f3d39cca11ea1939f2adb1272c7819fa4e34bc6?placeholderIfAbsent=true',
-        cityName: 'Zour',
-        altText: 'Zour destination'
-    },
-    {
-        id: '3',
-        imageUrl: 'https://cdn.builder.io/api/v1/image/assets/TEMP/366610ec614c98bf841302435dc8d7ff563ae9f4?placeholderIfAbsent=true',
-        cityName: 'Al Mangaf',
-        altText: 'Al Mangaf destination'
-    },
-    {
-        id: '4',
-        imageUrl: 'https://cdn.builder.io/api/v1/image/assets/TEMP/49e1efacf649633663a89bfaa682d7b3beab8417?placeholderIfAbsent=true',
-        cityName: 'Bnaider',
-        altText: 'Bnaider destination'
-    },
-    {
-        id: '5',
-        imageUrl: 'https://cdn.builder.io/api/v1/image/assets/TEMP/4d7c4889e01801d9506a2ce19cda7ee99bd8b2e0?placeholderIfAbsent=true',
-        cityName: 'Abu Al Hasaniya',
-        altText: 'Abu Al Hasaniya destination'
-    },
-    {
-        id: '6',
-        imageUrl: 'https://cdn.builder.io/api/v1/image/assets/TEMP/43c8d9e6828d62cd64f8358ec694db1c37733465?placeholderIfAbsent=true',
-        cityName: 'Al Julai\'a',
-        altText: 'Al Julai\'a destination'
-    },
-    {
-        id: '7',
-        imageUrl: 'https://cdn.builder.io/api/v1/image/assets/TEMP/6a9da7e884ace2e248e66a27d509dca0631564e2?placeholderIfAbsent=true',
-        cityName: 'Fahaheel',
-        altText: 'Fahaheel destination'
-    }
-];
+interface DestinationSectionProps {
+  messages: {
+    heading: string;
+    destinations: Destination[];
+  };
+}
 
-const DestinationSection: React.FC = () => {
+const destinationAssets: Record<string, { imageUrl: string; altText: string }> = {
+  "1": {
+    imageUrl: "https://cdn.builder.io/api/v1/image/assets/TEMP/9802943a6c0a7834af4dad71295eb697e86dc233?placeholderIfAbsent=true",
+    altText: "Al Khairan destination"
+  },
+  "2": {
+    imageUrl: "https://cdn.builder.io/api/v1/image/assets/TEMP/1f3d39cca11ea1939f2adb1272c7819fa4e34bc6?placeholderIfAbsent=true",
+    altText: "Zour destination"
+  },
+  "3": {
+    imageUrl: "https://cdn.builder.io/api/v1/image/assets/TEMP/366610ec614c98bf841302435dc8d7ff563ae9f4?placeholderIfAbsent=true",
+    altText: "Al Mangaf destination"
+  },
+  "4": {
+    imageUrl: "https://cdn.builder.io/api/v1/image/assets/TEMP/49e1efacf649633663a89bfaa682d7b3beab8417?placeholderIfAbsent=true",
+    altText: "Bnaider destination"
+  },
+  "5": {
+    imageUrl: "https://cdn.builder.io/api/v1/image/assets/TEMP/4d7c4889e01801d9506a2ce19cda7ee99bd8b2e0?placeholderIfAbsent=true",
+    altText: "Abu Al Hasaniya destination"
+  },
+  "6": {
+    imageUrl: "https://cdn.builder.io/api/v1/image/assets/TEMP/43c8d9e6828d62cd64f8358ec694db1c37733465?placeholderIfAbsent=true",
+    altText: "Al Julai'a destination"
+  },
+  "7": {
+    imageUrl: "https://cdn.builder.io/api/v1/image/assets/TEMP/6a9da7e884ace2e248e66a27d509dca0631564e2?placeholderIfAbsent=true",
+    altText: "Fahaheel destination"
+  }
+};
+
+const DestinationSection: React.FC<DestinationSectionProps> = ({ messages }) => {
     return (
         <>
             <section
@@ -66,22 +57,25 @@ const DestinationSection: React.FC = () => {
                         id="destinations-heading"
                         className="w-full text-black text-[32px] md:text-[39px] font-semibold"
                     >
-                        Discover Your Next Destination
+                       {messages.heading}
                     </h1>
                     <div
                         className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 w-full max-md:grid-cols-2 max-sm:grid-cols-1"
                         role="list"
                         aria-label="Available destinations"
                     >
-                        {destinations.map((destination) => (
-                            <div key={destination.id} role="listitem">
+                        {messages.destinations.map((dest) => {
+                            const asset = destinationAssets[dest.id];
+                            return (
+                            <div key={dest.id} role="listitem">
                                 <CityCard
-                                    imageUrl={destination.imageUrl}
-                                    cityName={destination.cityName}
-                                    altText={destination.altText}
+                                imageUrl={asset.imageUrl}
+                                cityName={dest.cityName} 
+                                altText={asset.altText}
                                 />
                             </div>
-                        ))}
+                            );
+                        })}
                     </div>
                 </div>
             </section>

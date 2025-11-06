@@ -54,7 +54,19 @@ export const profileUpdateSchema = z
     }
   })
 
-const AccountDetails = () => {
+  interface AccountDetailsProps {
+  messages: {
+    full_name_label: string;
+    phone_label: string;
+    email_label: string;
+    address_label: string;
+    save_changes_button: string;
+    saving_button: string;
+    modal_title: string;
+  };
+}
+
+const AccountDetails: React.FC<AccountDetailsProps> = ({ messages }) => {
   const verifyPhoneModel = useToggle(false)
   const { data: user, update } = useSession()
   const [address, setAddress] = useState('')
@@ -120,7 +132,7 @@ const AccountDetails = () => {
               placeholder=""
               value={watch('fullName')}
               onChange={(e) => setValue('fullName', e.target.value, { shouldValidate: true })}
-              label="Full Name"
+              label={messages.full_name_label}
               className={'bg-[#F9FAFB] text-[#484A4C] rounded-[8px] !max-w-[417px] !w-full '}
               error={!!errors?.fullName}
               errorMessage={errors?.fullName?.message}
@@ -137,7 +149,7 @@ const AccountDetails = () => {
                 '!bg-[#F9FAFB] !text-[#484A4C] !rounded-[8px] !border-none !h-[42px] text-sm sm:text-base !max-w-[417px] !w-full'
               }
               type="text"
-              label="Phone"
+              label={messages.phone_label}
               value={watch('phone')}
               onChange={handlePhoneChange}
               maxLength={8}
@@ -151,7 +163,7 @@ const AccountDetails = () => {
               placeholder=""
               value={watch('email')}
               onChange={(e) => setValue('email', e.target.value, { shouldValidate: true })}
-              label="Email"
+              label={messages.email_label}
               className={'bg-[#F9FAFB] text-[#484A4C] rounded-[8px] !max-w-[417px] !w-full'}
               error={!!errors?.email}
               errorMessage={errors?.email?.message}
@@ -159,7 +171,7 @@ const AccountDetails = () => {
           </div>
           <div className="w-full box-border">
             <ReusableTextArea
-              label={'Home or ID Address'}
+              label={messages.address_label}
               value={address}
               onChange={(e) => {
                 handleTextAreaChange(e)
@@ -175,7 +187,7 @@ const AccountDetails = () => {
                   className="h-[24px] text-[16px] font-medium  !text-[#fff] hover:!text-[#fff]"
                   type="submit"
                 >
-                  {isSubmitting ? 'Saving...' : 'Save Changes'}
+                  {isSubmitting ? messages.saving_button : messages.save_changes_button}
                 </Button>
               </div>
             </div>
