@@ -1,7 +1,14 @@
 import Image from "next/image";
 import React from "react";
 
-const DownloadApp: React.FC = () => {
+interface DownloadAppProps {
+  messages: {
+    heading: string;
+    description: string;
+  };
+}
+
+const DownloadApp: React.FC<DownloadAppProps> = ({ messages }) => {
     return (
         <div className="flex flex-col md:flex-row items-center gap-8 px-4 py-12 md:py-0 md:px-16 md:pt-16 relative bg-[#29397EE0] rounded-[20px] md:rounded-[50px] mx-4 md:mx-[64px] overflow-hidden"
             style={{
@@ -16,12 +23,11 @@ const DownloadApp: React.FC = () => {
                 <div className="flex flex-col items-start gap-6 justify-center flex-1">
                     <div className="flex flex-col max-w-[420px] items-start gap-4 w-full">
                         <h2 className="text-[32px] md:text-[39px] font-semibold text-white">
-                            Download the App
+                            {messages.heading}
                         </h2>
 
                         <p className="font-normal text-white text-[20px]">
-                            Book chalets, manage your stays, and redeem rewards — all from your
-                            phone. Anytime, anywhere.
+                            {messages.description}
                         </p>
                     </div>
 

@@ -1,0 +1,13 @@
+{
+  "profile_title": "Your Profile",
+  "profile_subtitle": "View and manage your personal details and loyalty points.",
+  "refer_friend": "Refer A Friend",
+  "points_label": "Points",
+  "refer_modal_title": "Refers A Friend",
+  "tabs": {
+    "account": "Account Details",
+    "save": "Save List",
+    "password": "Password",
+    "billing": "Billing"
+  }
+}

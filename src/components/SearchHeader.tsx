@@ -45,7 +45,9 @@ const SearchHeader = ({ messages, lang }: SearchHeaderProps) => {
     guests: storeGuests,
     setFilters,
   } = useChaletFiltersStore()
-  const locationKeys = Object.keys(messages.locations)
+  const locationKeys = messages?.locations
+  ? Object.keys(messages.locations)
+  : [];
 
   const [localCity, setLocalCity] = useState<string[]>(storeCity)
   const [guests, setGuests] = useState(storeGuests || 0)
@@ -84,25 +86,25 @@ const SearchHeader = ({ messages, lang }: SearchHeaderProps) => {
   }
 
   const fields = [
-    { label: messages.location, placeholder: messages.placeholder_location },
-    { label: messages.check_in, placeholder: messages.placeholder_check_in },
-    { label: messages.check_out, placeholder: messages.placeholder_check_out },
-    { label: messages.guests, placeholder: messages.placeholder_guests },
+    { label: messages?.location, placeholder: messages?.placeholder_location },
+    { label: messages?.check_in, placeholder: messages?.placeholder_check_in },
+    { label: messages?.check_out, placeholder: messages?.placeholder_check_out },
+    { label: messages?.guests, placeholder: messages?.placeholder_guests },
   ]
 
   const getDisplayValue = (field: { label: string; placeholder: string }) => {
-    if (field.label === messages.location) {
+    if (field.label === messages?.location) {
       if (localCity.length === 0) return field.placeholder
       return localCity
         .map((key) => {
-          return (messages.locations as Record<string, string>)[key] || key
+          return (messages?.locations as Record<string, string>)[key] || key
         })
         .join(', ')
-    } else if (field.label === messages.check_in) {
+    } else if (field.label === messages?.check_in) {
       return checkin ? format(checkin, 'dd/MM/yyyy') : field.placeholder
-    } else if (field.label === messages.check_out) {
+    } else if (field.label === messages?.check_out) {
       return checkout ? format(checkout, 'dd/MM/yyyy') : field.placeholder
-    } else if (field.label === messages.guests) {
+    } else if (field.label === messages?.guests) {
       return guests > 0
         ? `${guests} ${guests > 1 ? (lang === 'ar' ? 'ضيوف' : 'Guests') : lang === 'ar' ? 'ضيف' : 'Guest'}`
         : field.placeholder
@@ -138,12 +140,12 @@ const SearchHeader = ({ messages, lang }: SearchHeaderProps) => {
               align="start"
               className="bg-white p-4 rounded-lg shadow-lg border border-gray-200 z-50"
             >
-              {field.label === messages.location ? (
+              {field.label === messages?.location ? (
                 <div className="flex flex-col gap-1.5">
                   {locationKeys.map((key) => (
                     <Checkbox
                       key={key}
-                      label={messages.locations[key]}
+                      label={(messages?.locations as Record<string, string>)[key]}
                       className="text-sm text-gray-700 !cursor-pointer"
                       checked={localCity.includes(key)}
                       onChange={(checked) => toggleCity(key, checked)}

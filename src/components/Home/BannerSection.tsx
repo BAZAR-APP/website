@@ -1,8 +1,9 @@
 'use client'
 import { Header, SearchHeader } from '@/components'
+import { Locale } from '../../../i18n.config'
 
 interface BannerSectionProps {
-  lang: string
+  lang: Locale
   messages: {
     banner: {
       banner_title: string
@@ -42,7 +43,7 @@ const BannerSection = ({ messages, lang }: BannerSectionProps) => {
         paddingBottom: '32px',
       }}
     >
-      <Header isLoggedIn={false} className="bg-transparent" />
+      <Header isLoggedIn={false} lang={lang} className="bg-transparent" />
       <div
         style={{
           backgroundImage: "url('/images/ImageBannerCard.svg')",

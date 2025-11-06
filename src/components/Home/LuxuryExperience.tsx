@@ -7,6 +7,8 @@ interface LuxuryExperienceProps {
     description: string;
     thumbnails: string[];
     buttonText: string;
+    testimonial: string;
+    full_testimonial: string;
 
 }
 
@@ -15,6 +17,8 @@ const LuxuryExperience: React.FC<LuxuryExperienceProps> = ({
     description,
     thumbnails,
     buttonText,
+    testimonial,
+    full_testimonial
 
 }) => {
     const [isHovered, setIsHovered] = useState(false);
@@ -136,7 +140,7 @@ const LuxuryExperience: React.FC<LuxuryExperienceProps> = ({
                     <div className="flex max-w-[1440px] flex-col items-start gap-5 self-stretch relative">
                         <div className="flex max-w-[976px] flex-col items-start gap-[-54px] relative max-md:w-full">
                             <blockquote className="self-stretch text-[#101828] font-normal  text-4xl leading-[55px] tracking-[-0.72px] px-[11px] py-0 max-md:text-[28px] mt-4 md:mt-8 max-md:leading-10 max-sm:text-2xl max-sm:leading-8">
-                                Bazar offers a luxurious escape with stunning sea views and premium amenities. Our chalets provide the perfect
+                                “{full_testimonial}”
                             </blockquote>
                             <div className="flex flex-col items-center gap-2 relative pl-0 pr-2 py-2 max-sm:items-start">
                                 <span className="flex justify-center items-center gap-2">
@@ -155,7 +159,7 @@ const LuxuryExperience: React.FC<LuxuryExperienceProps> = ({
                                             height={53}
                                             width={53}
                                         />
-                                        blend of comfort and elegance, ensuring a memorable stay. Whether for relaxation or adventure, experience hospitality at its finest.
+                                        {testimonial}
                                     </span>
                                 </span>
                             </div>

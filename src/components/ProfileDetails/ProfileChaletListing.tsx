@@ -4,7 +4,14 @@ import PropertyCard from '../PropertyCard'
 import { Grid } from '@radix-ui/themes'
 import { PropertyCardSkeleton } from '../Skeletons/chaletsCardSkeleton'
 
-const ProfileChaletListing = () => {
+interface ProfileChaletListingProps {
+  messages: {
+    no_chalets_found: string;
+    try_adjusting_filters: string;
+  };
+}
+
+const ProfileChaletListing: React.FC<ProfileChaletListingProps> = ({ messages }) => {
   const { data: res, isLoading } = useQueryBase({
     queryKey: ['favouriteChalets'],
     url: '/favouriteChalets/me',
@@ -30,8 +37,8 @@ const ProfileChaletListing = () => {
             </Grid>
           ) : (
             <div className="text-center py-16">
-              <h3 className="text-2xl font-semibold text-gray-700">No chalets found</h3>
-              <p className="text-gray-500 mt-2">Try adjusting your filters or search criteria.</p>
+              <h3 className="text-2xl font-semibold text-gray-700">{messages.no_chalets_found}</h3>
+              <p className="text-gray-500 mt-2">{messages.try_adjusting_filters}</p>
             </div>
           )}
         </>

@@ -1,6 +1,14 @@
 import { Button } from "@/components";
 
-const ChatHero: React.FC = () => {
+interface ChatHeroProps {
+  messages: {
+    heading: string;
+    description: string;
+    button_text: string;
+  };
+}
+
+const ChatHero: React.FC<ChatHeroProps> = ({ messages }) => {
 
     return (
         <section
@@ -15,11 +23,10 @@ const ChatHero: React.FC = () => {
                 />
                 <section className="relative  ">
                     <h1 className="text-[32px] md:text-[39px] font-semibold max-md:max-w-full">
-                        Need help? Chat with us!
+                        {messages.heading}
                     </h1>
                     <p className="text-xl font-normal mt-4 max-md:max-w-full">
-                        Instant answers, booking help, and more — just type your question
-                        below.
+                        {messages.description}
                     </p>
 
                     <div className="relative mt-4">
@@ -27,7 +34,7 @@ const ChatHero: React.FC = () => {
                             className="rounded-[8px] text-base font-medium bg-[#29397E] text-white  px-5 py-3 w-[196px] max-w-full"
                             aria-label="Start chat with customer support"
                         >
-                            Chat with Us
+                            {messages.button_text}
                         </Button>
                     </div>
                 </section>

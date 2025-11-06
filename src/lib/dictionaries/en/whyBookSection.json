@@ -1,0 +1,30 @@
+{
+  "heading": "Why book with us?",
+  "subtitle": "Experience comfort, trust, and flexibility—every stay, every time.",
+  "features": [
+    {
+      "title": "Local Experts, Just for You",
+      "description": "Personalized host concierge or local tour guide"
+    },
+    {
+      "title": "Memory Maker Bundle",
+      "description": "Memory Maker Bundle for unforgettable stays"
+    },
+    {
+      "title": "Verified & Transparent",
+      "description": "Verified guest badges and transparency scores based on reviews and cleanliness"
+    },
+    {
+      "title": "Loyalty That Rewards You",
+      "description": "Seasonal loyalty challenges—stay 2 nights, get 1 free"
+    },
+    {
+      "title": "Only the Best Hosts",
+      "description": "Trusted hosts, handpicked by Bazar"
+    },
+    {
+      "title": "Stay Your Way",
+      "description": "Flexible bookings: from a few hours to full-month stays"
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "full_name_label": "الاسم الكامل",
+  "phone_label": "الهاتف",
+  "email_label": "البريد الإلكتروني",
+  "address_label": "عنوان المنزل أو الهوية",
+  "save_changes_button": "حفظ التغييرات",
+  "saving_button": "جاري الحفظ...",
+  "modal_title": "أحيل صديق"
+}

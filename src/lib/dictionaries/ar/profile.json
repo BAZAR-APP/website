@@ -1,0 +1,13 @@
+{
+  "profile_title": "ملفك الشخصي",
+  "profile_subtitle": "عرض وإدارة تفاصيلك الشخصية ونقاط الولاء.",
+  "refer_friend": "أحيل صديق",
+  "points_label": "نقاط",
+  "refer_modal_title": "أحيل صديق",
+  "tabs": {
+    "account": "تفاصيل الحساب",
+    "save": "قائمة الحفظ",
+    "password": "كلمة المرور",
+    "billing": "الفواتير"
+  }
+}

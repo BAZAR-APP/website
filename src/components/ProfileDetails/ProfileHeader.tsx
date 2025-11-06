@@ -8,15 +8,27 @@ import { extractErrorMessage } from '@/lib/utils'
 import { useRef, useState } from 'react'
 import { User } from 'lucide-react'
 import OverlayLoader from '../OverlayLoader'
+import { Locale } from '../../../i18n.config'
 
-const ProfileHeader = () => {
+interface ProfileHeaderProps {
+  lang: Locale;
+  messages: {
+    profile_title: string;
+    profile_subtitle: string;
+    refer_friend: string;
+    points_label: string;
+    refer_modal_title: string;
+  };
+}
+
+const ProfileHeader: React.FC<ProfileHeaderProps> = ({lang, messages}) => {
   const { isOpen, toggle } = useToggle()
   const { data: user, update } = useSession()
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [isUploading, setIsUploading] = useState(false)
   const { data, isLoading } = useQueryBase({
     queryKey: ['earnedPoints'],
-    url: `/loyaltyPoints?language=${'en'}`,
+    url: `/loyaltyPoints?language=${lang}`,
     cacheTime: 0,
     staleTime: 0,
   })
@@ -88,10 +100,10 @@ const ProfileHeader = () => {
     <>
       <div className="flex flex-col gap-4 items-start self-stretch">
         <span className="text-[28px] md:text-[39px] font-semibold leading-[1.2] text-[#19191a]">
-          Your Profile
+          {messages.profile_title}
         </span>
         <span className="text-[16px] md:text-[20px] text-[#484a4c]">
-          View and manage your personal details and loyalty points.
+          {messages.profile_subtitle}
         </span>
       </div>
 
@@ -151,7 +163,7 @@ const ProfileHeader = () => {
           {data?.data?.totalPoints && (
             <div className="flex items-center gap-2 bg-[#e1f2ff] px-2 py-1 rounded-md">
               <div className="w-4 h-4 bg-[url('https://codia-f2c.s3.us-west-1.amazonaws.com/image/2025-06-11/MvZzetJcMk.png')] bg-cover bg-no-repeat" />
-              <span className="text-sm text-[#29397e]">{data?.data?.totalPoints} Points</span>
+              <span className="text-sm text-[#29397e]">{data?.data?.totalPoints} {messages.points_label}</span>
             </div>
           )}
 
@@ -160,7 +172,7 @@ const ProfileHeader = () => {
             onClick={toggle}
           >
             <div className="w-4 h-4 bg-[url('https://codia-f2c.s3.us-west-1.amazonaws.com/image/2025-06-11/jPFatpV24M.png')] bg-cover bg-no-repeat" />
-            <span className="text-sm text-[#29397e] font-medium">Refer A Friend</span>
+            <span className="text-sm text-[#29397e] font-medium">{messages.refer_friend}</span>
             <div className="w-3 h-3 bg-[url('https://codia-f2c.s3.us-west-1.amazonaws.com/image/2025-06-11/X9WMXVLgQH.png')] bg-cover bg-no-repeat" />
           </div>
         </div>
