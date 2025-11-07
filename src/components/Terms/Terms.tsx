@@ -1,8 +1,13 @@
 import { useCmsContentQuery } from '@/lib/hooks/useCmsContentQuery'
-import React from 'react'
+import React from 'react' 
+import { Locale } from '../../../i18n.config';
 
-const Terms: React.FC = () => {
-  const { data } = useCmsContentQuery('TermsAndConditions')
+interface TermsProps {
+  lang: Locale; 
+}
+
+const Terms: React.FC<TermsProps> = ({ lang }) => { 
+const { data } = useCmsContentQuery('TermsAndConditions', lang); 
 
   return (
     <main className="flex flex-col justify-center items-start gap-10 bg-white px-6 py-12 md:px-16 md:py-16 sm:gap-8 sm:px-4 sm:py-6">

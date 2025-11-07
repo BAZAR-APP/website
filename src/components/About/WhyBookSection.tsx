@@ -29,13 +29,13 @@ const WhyBookSection: React.FC<WhyBookSectionProps> = ({ messages }) => {
             }}>
             <div className="flex flex-col items-start gap-8 self-stretch relative w-full mx-auto my-0 py-[32px] md:py-[64px] max-md:max-w-[991px] md:px-16 max-md:px-5">
                 <div className="flex flex-col gap-4">
-                    <h2 className="font-inter text-[32px] md:text-[39px] font-semibold text-white text-left">{messages.heading}</h2>
+                    <h2 className="font-inter text-[32px] md:text-[39px] font-semibold text-white text-left">{messages?.heading}</h2>
                     <p className="w-full md:w-[506px] font-inter text-[16px] md:text-[20px] text-white text-left">
-                        {messages.subtitle}
+                        {messages?.subtitle}
                     </p>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full lg:w-[80%] md:w-[100%]">
-                    {messages.features.map((feature, index) => (
+                    {messages?.features.map((feature, index) => (
                         <div key={index} className="bg-[rgba(249,250,251,0.3)] rounded-[20px] p-4 md:p-6 flex flex-col gap-4">
                             <div className="flex w-[60px] h-[60px] md:w-[80px] md:h-[80px] justify-center items-center bg-[#29397e] rounded-full shadow-md">
                                 <div className="w-[36.923px] h-[36.923px] bg-cover" style={{ backgroundImage: `url(${featureIcons[index]})` }} />

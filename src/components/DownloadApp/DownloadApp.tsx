@@ -23,11 +23,11 @@ const DownloadApp: React.FC<DownloadAppProps> = ({ messages }) => {
                 <div className="flex flex-col items-start gap-6 justify-center flex-1">
                     <div className="flex flex-col max-w-[420px] items-start gap-4 w-full">
                         <h2 className="text-[32px] md:text-[39px] font-semibold text-white">
-                            {messages.heading}
+                            {messages?.heading}
                         </h2>
 
                         <p className="font-normal text-white text-[20px]">
-                            {messages.description}
+                            {messages?.description}
                         </p>
                     </div>
 

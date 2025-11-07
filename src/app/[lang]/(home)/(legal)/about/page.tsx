@@ -1,16 +1,18 @@
 import { AboutBanner, DownloadApp, OurStatistics, TestimonialsSection, WhyBookSection } from "@/components"
+import { getMessages } from "@/lib/i18n";
+import { Locale } from "../../../../../../i18n.config";
 
-const AboutPage = () => {
+export default async function AboutPage({ params }: { params: Promise<{ lang: Locale }> }) {
+     const { lang } = await params;
+  const messages = getMessages(lang);
     return (
         <>
             <AboutBanner />
             <OurStatistics />
-            <WhyBookSection />
+            <WhyBookSection messages={messages.whyBookSection} />
             <TestimonialsSection />
-            <DownloadApp />
+            <DownloadApp messages={messages.downloadApp} />
         </>
     )
 
 }
-
-export default AboutPage

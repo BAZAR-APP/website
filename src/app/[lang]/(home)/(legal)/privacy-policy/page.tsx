@@ -1,14 +1,12 @@
+import { getMessages } from '@/lib/i18n';
+import { Locale } from '../../../../../../i18n.config';
+import PrivacyPolicyPageClient from './PrivacyPolicyPageClient';
 
-"use client"
-import { DownloadApp, Privacy } from '@/components';
+const PrivacyPolicyPageServer = async ({ params }: { params: Promise<{ lang: Locale }> }) => {
+  const { lang } = await params; 
+  const messages = getMessages(lang); 
 
-const PrivacyPolicyPage: React.FC = () => {
-    return (
-        <>
-            <Privacy />
-            <DownloadApp />
-        </>
-    );
+  return <PrivacyPolicyPageClient lang={lang} downloadAppMessages={messages.downloadApp} />;
 };
 
-export default PrivacyPolicyPage;
+export default PrivacyPolicyPageServer;
