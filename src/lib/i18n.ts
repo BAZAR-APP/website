@@ -12,7 +12,7 @@ export const getMessages = (locale: Locale) => {
     common: load('common'),
     banner: load('banner'),
     searchHeader: load('searchHeader'),
-    loyaltyPoints: load('loyalty-Points'),
+    loyaltyPoints: load('loyalty-points'),
     luxuryExperience: load('luxuryExperience'),
     whyBookSection: load('whyBookSection'),
     destinationSection: load('destinationSection'),
