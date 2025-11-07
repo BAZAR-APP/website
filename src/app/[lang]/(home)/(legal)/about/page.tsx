@@ -7,7 +7,7 @@ export default async function AboutPage({ params }: { params: Promise<{ lang: Lo
   const messages = getMessages(lang);
     return (
         <>
-            <AboutBanner />
+            <AboutBanner lang={lang} />
             <OurStatistics />
             <WhyBookSection messages={messages.whyBookSection} />
             <TestimonialsSection />
