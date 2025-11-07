@@ -1,10 +1,15 @@
 'use client'
 
 import { useCmsContentQuery } from '@/lib/hooks/useCmsContentQuery'
-import React from 'react'
+import { Locale } from '../../../i18n.config';
 
-const AboutBanner = () => {
-  const { data } = useCmsContentQuery('aboutUs')
+interface AboutBannerProps {
+  lang: Locale; 
+}
+
+// Make AboutBanner accept props
+const AboutBanner: React.FC<AboutBannerProps> = ({ lang }) => { 
+  const { data } = useCmsContentQuery('aboutUs', lang);
 
   return (
     <>
