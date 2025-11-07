@@ -8,9 +8,46 @@ import ProfileTabs from '@/components/ProfileDetails/ProfileTab'
 import { useState } from 'react'
 import { Locale } from '../../../../../i18n.config'
 
+// interface ProfileClientProps {
+//   lang: Locale
+//   messages: {
+//     profile: {
+//       profile_title: string
+//       profile_subtitle: string
+//       refer_friend: string
+//       points_label: string
+//       refer_modal_title: string
+//       tabs: {
+//         account: string
+//         save: string
+//         password: string
+//         billing: string
+//       }
+//       accountDetails: {
+//         full_name_label: string
+//         phone_label: string
+//         email_label: string
+//         address_label: string
+//         save_changes_button: string
+//         saving_button: string
+//         modal_title: string
+//       }
+//     }
+//     passwordDetail: {
+//       old_password_label: string
+//       new_password_label: string
+//       confirm_new_password_label: string
+//       forget_password_button: string
+//       save_password_button: string
+//     }
+//     profileBilling: {
+//       pick_billing_period: string
+//     }
+//   }
+// }
 interface ProfileClientProps {
   lang: Locale
-  messages: {
+  messages: { 
     profile: {
       profile_title: string
       profile_subtitle: string
@@ -23,23 +60,27 @@ interface ProfileClientProps {
         password: string
         billing: string
       }
-      accountDetails: {
-        full_name_label: string
-        phone_label: string
-        email_label: string
-        address_label: string
-        save_changes_button: string
-        saving_button: string
-        modal_title: string
-      }
-    }
+    },
+    accountDetails: {
+      full_name_label: string
+      phone_label: string
+      email_label: string
+      address_label: string
+      save_changes_button: string
+      saving_button: string
+      modal_title: string
+    },
+    profileChaletListing: {
+      no_chalets_found: string;
+      try_adjusting_filters: string;
+    },
     passwordDetail: {
       old_password_label: string
       new_password_label: string
       confirm_new_password_label: string
       forget_password_button: string
       save_password_button: string
-    }
+    },
     profileBilling: {
       pick_billing_period: string
     }
@@ -65,23 +106,22 @@ const ProfileClient: React.FC<ProfileClientProps> = ({ lang, messages }) => {
         <div className="mt-6">
           {activeTab === 'account' && (
             <div>
-              {' '}
-              <AccountDetails messages={messages.accountDetails} />
+              <AccountDetails messages={messages?.accountDetails} />
             </div>
           )}
           {activeTab === 'save' && (
             <div>
-              <ProfileChaletListing messages={messages.profileChaletListing} />
+              <ProfileChaletListing messages={messages?.profileChaletListing} />
             </div>
           )}
           {activeTab === 'password' && (
             <div>
-              <PasswordDetail messages={messages.passwordDetail} />
+              <PasswordDetail messages={messages?.passwordDetail} />
             </div>
           )}
           {activeTab === 'billing' && (
             <div>
-              <ProfileBilling messages={messages.profileBilling} />
+              <ProfileBilling messages={messages?.profileBilling} />
             </div>
           )}
         </div>
