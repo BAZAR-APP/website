@@ -1,7 +1,11 @@
 import { useCmsContentQuery } from '@/lib/hooks/useCmsContentQuery'
 
-const Privacy = () => {
-  const { data } = useCmsContentQuery('privacyPolicy')
+interface PrivacyProps {
+  lang: string;
+}
+
+const Privacy = ({ lang }: PrivacyProps) => {
+  const { data } = useCmsContentQuery('privacyPolicy', lang)
   return (
     <div className="flex flex-col gap-10 items-start bg-white relative overflow-hidden mx-auto px-6 py-12 md:px-16 md:py-16 sm:gap-8 sm:px-4 sm:py-6">
       <div className="flex flex-col gap-4 items-start w-full max-w-full sm:max-w-[921px]">
