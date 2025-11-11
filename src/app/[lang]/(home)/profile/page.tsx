@@ -41,7 +41,6 @@
 // }
 
 // export default Profile
-// src/app/[lang]/(home)/profile/page.tsx
 import { Locale } from '../../../../../i18n.config'
 import { getMessages } from '@/lib/i18n'
 import ProfileClient from './ProfileClient'

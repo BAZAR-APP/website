@@ -1,7 +1,6 @@
 import React, { FC } from 'react'
 import { Locale } from '../../../../../../../../i18n.config'
 interface BookingConfig {
-  lang: Locale
   refundableDeposit: number
   currency: string
   paymentOptions: {
@@ -15,7 +14,7 @@ interface BookingConfig {
     currency: string
   }
 }
-const RefundDepositRules: FC<{ bookingConfig: BookingConfig }> = ({ bookingConfig, lang }) => {
+const RefundDepositRules: FC<{ bookingConfig: BookingConfig; lang: Locale }> = ({ bookingConfig, lang }) => {
   return (
     <>
       {bookingConfig?.paymentOptions.partialPayment && (
