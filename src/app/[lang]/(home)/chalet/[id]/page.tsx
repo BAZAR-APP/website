@@ -16,6 +16,8 @@ import toast from 'react-hot-toast'
 import { extractErrorMessage } from '@/lib/utils'
 import { Amenity, Chalet, ChaletBedroom } from '../../../../../../types/chalets'
 import HourlyBookingSummary from './booking/_components/HourlyBookingSummary'
+import { getMessages } from '@/lib/i18n'
+import { Locale } from '../../../../../../i18n.config'
 
 export async function generateMetadata({
   params,
@@ -90,9 +92,11 @@ const hotel = {
 export default async function ChaletDetailsPage({
   params,
 }: {
-  params: Promise<{ id: string; lang: string }>
+  params: Promise<{ id: string; lang: Locale }>
 }) {
   const { id, lang } = await params
+  
+  const messages = getMessages(lang);
 
   let data: Chalet | null = null
   let allAmenities: Amenity[] = []
@@ -163,18 +167,21 @@ export default async function ChaletDetailsPage({
                 area={data?.area + ' ' + data?.areaUnit}
                 host={data?.host}
               />
-              <SelectablePlans subscriptions={data?.subscriptions || []} />
+              <SelectablePlans subscriptions={data?.subscriptions || []} lang={lang} />
               <div className="border-b border-[#E5E7EB]">
                 <AmenitiesList
                   amenities={(allAmenities || []).slice(0, 10)}
                   allAmenities={allAmenities}
+                  lang={lang}
                 />
                 <h2 className="md:text-[25px] text-xl font-semibold leading-[32px] text-[#19191A] mt-7">
-                  Where you'll sleep
+                {lang === 'en' ? `Where you'll sleep` : 'أين ستنام'}  
                 </h2>
                 {data?.chaletRooms?.length === 0 ? (
                   <div className="text-center text-lg text-gray-500 py-10 w-full">
-                    No Rooms Available
+                    {
+                      lang === 'en' ? 'No Rooms Available' : 'لا توجد غرف متاحة'
+                    }
                   </div>
                 ) : (
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-7 mb-10">
@@ -184,7 +191,7 @@ export default async function ChaletDetailsPage({
                   </div>
                 )}
               </div>
-              <Calender />
+              <Calender lang={lang} />
             </div>
 
             <div className="lg:col-span-1">
@@ -215,14 +222,16 @@ export default async function ChaletDetailsPage({
                   }}
                   bookings={data?.bookings || []}
                   availabilities={data?.availabilities || []}
+                  lang={lang}
                 />
               )}
             </div>
           </div>
 
           <>
-            <ReviewsSection rating={data?.rating || 0} />
+            <ReviewsSection rating={data?.rating || 0} lang={lang} />
             <HotelMap
+            lang={lang}
               center={{ lat: data?.latitude || hotel?.lat, lng: data?.longitude || hotel?.lng }}
               hotelInfo={{
                 name:
@@ -232,7 +241,7 @@ export default async function ChaletDetailsPage({
               }}
             />
             <div className="py-8 mt-3">
-              <ChaletsRules />
+              <ChaletsRules lang={lang} messages={messages.common.chalet_rules} />
             </div>
           </>
         </div>

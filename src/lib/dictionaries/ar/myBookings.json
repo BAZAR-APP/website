@@ -1,0 +1,17 @@
+{
+  "page_title": "حجوزاتي",
+  "page_description": "تتبع إقاماتك، وتفاصيل تسجيل الوصول، وحالة الحجز هنا.",
+  "tab_current": "الحالية",
+  "tab_completed": "المكتملة",
+  "no_bookings_title": "لا توجد حجوزات بعد",
+  "no_bookings_message_part1": "لم تقم بحجز أي",
+  "no_bookings_message_part2": "حتى الآن.",
+  "no_bookings_message_cta": "ابدأ بالاستكشاف وخطّط لإقامتك اليوم!",
+  "booking_card": {
+    "guests_label": "ضيوف",
+    "beds_label": "أسرّة",
+    "baths_label": "حمامات",
+    "see_details_button": "عرض التفاصيل",
+    "view_invoice_button": "عرض الفاتورة أو العقد"
+  }
+}

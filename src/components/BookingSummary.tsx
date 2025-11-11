@@ -16,6 +16,7 @@ import { extractErrorMessage } from '@/lib/utils'
 import { useFormContext } from 'react-hook-form'
 import { useUserStore } from '../../stores/useUserStore'
 import OverlayLoader from './OverlayLoader'
+import { Locale } from '../../i18n.config'
 
 // Extracted common text styles
 const textStyles = {
@@ -81,6 +82,7 @@ type BookingSummaryProps = {
   remaingAmount?: boolean
   earnPoints?: boolean
   finalPayment?: boolean
+  lang: Locale
 }
 
 const BookingSummary: React.FC<BookingSummaryProps> = ({
@@ -90,6 +92,7 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
   remaingAmount = false,
   earnPoints = true,
   finalPayment = false,
+  lang
 }) => {
   const { id } = useParams()
   const { getValues, watch } = useFormContext()
@@ -175,9 +178,9 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
   return (
     <>
       <div className="w-full md:max-w-sm rounded-lg bg-[#F9FAFB] sm:px-6 sm:py-5 p-3">
-        <h3 className="xl:text-[25px] text-lg font-semibold text-[#19191A] mb-3">
-          Booking Summary
-        </h3>
+       <h3 className="xl:text-[25px] text-lg font-semibold text-[#19191A] mb-3">
+        {lang === 'en' ? 'Booking Summary' : 'ملخص الحجز'}
+      </h3>
         <div className="p-0">
           <div className="relative">
             <Image
@@ -221,10 +224,11 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
             )}
 
             <div className="bg-[#FCE7F3] rounded-lg py-1 px-1.5 my-3">
-              <p className="text-[10px] text-[#EC4899] leading-relaxed">
-                A refundable security deposit of 200 KWD is required. This amount will be held and
-                returned within 72 hours after checkout if no damage is reported.
-              </p>
+             <p className="text-[10px] text-[#EC4899] leading-relaxed">
+              {lang === 'en'
+                ? 'A refundable security deposit of 200 KWD is required. This amount will be held and returned within 72 hours after checkout if no damage is reported.'
+                : 'مطلوب وديعة تأمين قابلة للاسترداد بقيمة 200 د.ك. سيتم الاحتفاظ بالمبلغ وإرجاعه خلال 72 ساعة بعد تسجيل الخروج إذا لم يتم الإبلاغ عن أي أضرار.'}
+            </p>
             </div>
 
             <div className="space-y-3 text-sm pt-2 !text-[#19191A]">
@@ -260,20 +264,22 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
             </div>
 
             <p className={`flex items-center mb-2 mt-4 ${textStyles.body} self-stretch`}>
-              Deposit will be returned after your stay, subject to property condition.
+              {lang === 'en'
+                ? 'Deposit will be returned after your stay, subject to property condition.'
+                : 'سيتم إرجاع الوديعة بعد إقامتك، حسب حالة العقار.'}
             </p>
 
             {paidAmount && (
               <div className="font-medium text-base leading-[150%] flex items-center justify-between gap-2 py-2 text-[#29397E]">
-                <span>Paid Amount</span>
-                <span>220 KWD</span>
+                <span>{lang === 'en' ? 'Paid Amount' : 'المبلغ المدفوع'}</span>
+                <span>{paidAmount} KWD</span>
               </div>
             )}
 
             {remaingAmount && (
               <div className="font-medium text-base leading-[150%] flex items-center justify-between gap-2 py-2 text-[#29397E]">
-                <span>Remaining Balance</span>
-                <span>220 KWD</span>
+                <span>{lang === 'en' ? 'Remaining Balance' : 'الرصيد المتبقي'}</span>
+                <span>{remaingAmount} KWD</span>
               </div>
             )}
 
@@ -303,7 +309,13 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
                 loading={loading}
                 disabled={loading}
               >
-                {isSplitPayment ? 'Book Now with 50% Payment' : 'Book Now'}
+              {isSplitPayment
+                ? lang === 'en'
+                  ? 'Book Now with 50% Payment'
+                  : 'احجز الآن مع 50٪ دفعة'
+                : lang === 'en'
+                ? 'Book Now'
+                : 'احجز الآن'}
               </Button>
             )}
           </div>
@@ -311,9 +323,11 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
       </div>
 
       {finalPayment && (
-        <p className="italic font-normal text-base leading-[19px] text-[#9EA0A2] w-full max-w-[390px] py-4">
-          This is your final payment. Once completed, your booking will be fully secured.
-        </p>
+     <p className="italic font-normal text-base leading-[19px] text-[#9EA0A2] w-full max-w-[390px] py-4">
+      {lang === 'en'
+        ? 'This is your final payment. Once completed, your booking will be fully secured.'
+        : 'هذه هي الدفعة النهائية الخاصة بك. بمجرد إكمالها، سيتم تأمين حجزك بالكامل.'}
+    </p>
       )}
       {loading && <OverlayLoader open={loading} />}
     </>

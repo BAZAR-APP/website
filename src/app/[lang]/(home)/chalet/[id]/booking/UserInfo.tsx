@@ -9,9 +9,11 @@ import { extractErrorMessage } from '@/lib/utils'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import React, { useEffect, useState } from 'react'
+import { Locale } from '../../../../../../../i18n.config'
 
 type UserInfoProps = {
   onNext: () => void
+  lang : Locale
 }
 interface ContactFormData {
   fullName: string
@@ -19,7 +21,7 @@ interface ContactFormData {
   email: string
   address: string
 }
-const UserInfo: React.FC<UserInfoProps> = ({ onNext }) => {
+const UserInfo: React.FC<UserInfoProps> = ({ onNext, lang }) => {
   const { isOpen, toggle } = useToggle(false)
   const { data: user, update } = useSession()
   const [loading, setLoading] = useState<boolean>(false)
@@ -64,10 +66,14 @@ const UserInfo: React.FC<UserInfoProps> = ({ onNext }) => {
     <>
       <div className="max-w-[1800px] mx-auto lg:px-24 md:px-18 px-10 py-9">
         <h2 className="lg:text-[39px] md:text-2xl text-xl font-semibold text-[#19191A] mb-2">
-          Your Details
+          {
+            lang==='en' ? 'Your Details' : 'التفاصيل الخاصة بك'
+          }
         </h2>
         <p className="text-[#484A4C] sm:text-lg text-sm mb-8">
-          Please provide your name and contact info to complete the booking.
+          {
+            lang==='en' ? 'Please provide your name and contact info to complete the booking.' : 'يرجى تقديم اسمك ومعلومات الاتصال الخاصة بك لإكمال الحجز.'
+          }
         </p>
         <div className="flex justify-between flex-wrap md:gap-2 gap-10">
           <ContactForm
@@ -75,6 +81,7 @@ const UserInfo: React.FC<UserInfoProps> = ({ onNext }) => {
               setFormData((prev) => ({ ...prev, [field]: value }))
             }}
             formData={formData}
+            lang={lang}
           />
 
           <div className="pb-7 md:px-3">
@@ -88,7 +95,9 @@ const UserInfo: React.FC<UserInfoProps> = ({ onNext }) => {
             size="responsive"
             className="cursor-pointer text-white py-3 font-medium w-[200px]"
           >
-            Confirm Contact Info
+            {
+              lang==='en' ? 'Confirm Contact Info' : 'تأكيد معلومات الاتصال'
+            }
           </Button>
         </div>
       </div>
@@ -101,10 +110,14 @@ const UserInfo: React.FC<UserInfoProps> = ({ onNext }) => {
           alt="Save icon"
         />
         <h3 className="lg:text-[25px] text-xl text-[16px] lg:leading-9 leading-6 font-semibold text-center text-[#19191A]">
-          Would you like to save these details for faster booking next time?
+          {
+            lang ==='en' ? 'Would you like to save these details for faster booking next time?' : 'هل ترغب في حفظ هذه التفاصيل لتتمكن من الحجز بشكل أسرع في المرة القادمة؟'
+          }
         </h3>
         <p className="md:text-xl text-[14px] leading-[24px] md:py-4 py-2 text-center text-[#484A4C]">
-          You can manage saved info anytime from your profile settings.
+          {
+            lang==='en' ? 'You can manage saved info anytime from your profile settings.' : 'يمكنك إدارة المعلومات المحفوظة في أي وقت من إعدادات ملفك الشخصي.'
+          }
         </p>
         <div className="flex md:flex-row flex-col justify-between gap-4 py-3">
           <Button
@@ -112,7 +125,9 @@ const UserInfo: React.FC<UserInfoProps> = ({ onNext }) => {
             intent="ghost"
             className="cursor-pointer bg-[#F3F4F6] text-[#19191A] py-2 rounded-lg text-sm font-medium w-full"
           >
-            No, Just Continue
+            {
+              lang==='en'? 'No, Just Continue' : 'لا، فقط استمر'
+            }
           </Button>
           <Button
             onClick={() => handleFormSubmit()}
@@ -120,7 +135,9 @@ const UserInfo: React.FC<UserInfoProps> = ({ onNext }) => {
             loading={loading}
             className="cursor-pointer bg-[#29397E] text-white py-2 rounded-lg text-sm font-medium !w-full"
           >
-            Save & Continue
+            {
+              lang==='en' ? 'Save & Continue' :'حفظ ومتابعة'
+            }
           </Button>
         </div>
       </ModalDialog>

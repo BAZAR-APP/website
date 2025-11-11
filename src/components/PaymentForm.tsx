@@ -2,12 +2,13 @@
 
 import React, { useEffect } from 'react'
 import Image from 'next/image'
-import { Check, CheckCircle, Info, InfoIcon, Plus } from 'lucide-react'
+import { Check, CheckCircle, InfoIcon, Plus } from 'lucide-react'
 import clsx from 'clsx'
 import { useFormContext } from 'react-hook-form'
 import Button from './Button/Button'
 import { Radio } from '@radix-ui/themes'
 import { useBookingStore } from '../../stores/useBookingStore'
+import { Locale } from '../../i18n.config'
 
 export type PaymentFormData = {
   paymentOption: 'full' | 'split'
@@ -21,12 +22,13 @@ type PaymentFormProps = {
   onSubmit?: (data: PaymentFormData) => void
   paymentDetail?: boolean
   addNowBooking?: boolean
+  lang: Locale
 }
 
 const PaymentForm: React.FC<PaymentFormProps> = ({
   onSubmit,
-  paymentDetail = true,
   addNowBooking = true,
+  lang
 }) => {
   const { register, handleSubmit, watch, setValue } = useFormContext()
   const { packageAmount, discountedTotal, bookingType, isDiscountApplied } = useBookingStore()
@@ -40,25 +42,34 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
   const splitAmount = Math.round(finalFullAmount / 2) // 50% of full amount
   const minAmountForSplit = 400
 
-  // Dynamic payment options based on calculated amounts
   const paymentOptions = [
-    {
-      value: 'full' as const,
-      title: 'Pay Full Amount Now',
-      description: `${finalFullAmount} KWD — One-time payment to complete your booking.`,
-    },
-    {
-      value: 'split' as const,
-      title: 'Pay in Two Parts',
-      description: (
-        <>
-          Pay {splitAmount} KWD now (50%)
-          <br />
-          Pay remaining {finalFullAmount - splitAmount} KWD at least 72 hours before check-in.
-        </>
-      ),
-    },
-  ]
+  {
+    value: 'full' as const,
+    title: lang === 'en' ? 'Pay Full Amount Now' : 'ادفع المبلغ كاملاً الآن',
+    description:
+      lang === 'en'
+        ? `${finalFullAmount} KWD — One-time payment to complete your booking.`
+        : `${finalFullAmount} د.ك — دفع مرة واحدة لإكمال الحجز.`,
+  },
+  {
+    value: 'split' as const,
+    title: lang === 'en' ? 'Pay in Two Parts' : 'ادفع على دفعتين',
+    description: lang === 'en' ? (
+      <>
+        Pay {splitAmount} KWD now (50%)
+        <br />
+        Pay remaining {finalFullAmount - splitAmount} KWD at least 72 hours before check-in.
+      </>
+    ) : (
+      <>
+        ادفع {splitAmount} د.ك الآن (50%)
+        <br />
+        ادفع الباقي {finalFullAmount - splitAmount} د.ك قبل 72 ساعة على الأقل من تسجيل الوصول.
+      </>
+    ),
+  },
+]
+
 
   useEffect(() => {
     if (finalFullAmount < minAmountForSplit && paymentOption !== 'full') {
@@ -150,8 +161,13 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
                   )}
                 </span>
                 {finalFullAmount >= minAmountForSplit
-                  ? `You can split your payment if your total is ${minAmountForSplit} KWD or higher.`
-                  : `Split payment isn't available for bookings under ${minAmountForSplit} KWD. Please proceed with full payment.`}
+                  ? lang === 'en'
+                    ? `You can split your payment if your total is ${minAmountForSplit} KWD or higher.`
+                    : `يمكنك تقسيم الدفع إذا كان المجموع ${minAmountForSplit} د.ك أو أكثر.`
+                  : lang === 'en'
+                    ? `Split payment isn't available for bookings under ${minAmountForSplit} KWD. Please proceed with full payment.`
+                    : `لا يتوفر الدفع المقسّم للحجوزات أقل من ${minAmountForSplit} د.ك. يرجى متابعة الدفع الكامل.`
+                }
               </p>
             </div>
           </div>
@@ -222,7 +238,11 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
               <span className="mr-2">
                 <Image src={'/images/protection.svg'} alt="Secure" width={24} height={24} />
               </span>
-              All payments processed securely via KNET
+              {
+                lang === 'en' 
+                ? 'All payments processed securely via KNET' 
+                : 'جميع المدفوعات تتم بأمان عبر KNET'
+              }
               <Image
                 src={'/images/Knet.svg'}
                 alt="Secure"
@@ -244,13 +264,17 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
             backgroundColor: 'rgba(0, 0, 0, 0.5)',
           }}
         >
-          <h2 className="text-[#FDFDFE] md:text-xl sm:text-lg text-[16px] font-bold">
-            Make your weekend unforgettable Just 25 KWD
-          </h2>
-          <p className="text-[#FDFDFE] text-sm md:mt-4 mt-2">
-            Add the Romantic Weekend upgrade for only 25 KWD and enjoy late check-out, welcome gift,
-            and a private Romantic Setup.
-          </p>
+        <h2 className="text-[#FDFDFE] md:text-xl sm:text-lg text-[16px] font-bold">
+          {lang === 'en'
+            ? 'Make your weekend unforgettable — Just 25 KWD'
+            : 'اجعل عطلة نهاية الأسبوع الخاصة بك لا تُنسى — فقط 25 د.ك'}
+        </h2>
+        <p className="text-[#FDFDFE] text-sm md:mt-4 mt-2">
+          {lang === 'en'
+            ? 'Add the Romantic Weekend upgrade for only 25 KWD and enjoy late check-out, welcome gift, and a private Romantic Setup.'
+            : 'أضف باقة عطلة نهاية الأسبوع الرومانسية مقابل 25 د.ك فقط واستمتع بتسجيل خروج متأخر، هدية ترحيبية، وترتيب رومانسي خاص.'}
+        </p>
+
           <Button
             intent="transperent"
             size={romanticWeekend ? 'sm' : 'md'}
@@ -260,15 +284,15 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
             onClick={() => setValue('romanticWeekend', !romanticWeekend)}
             type="button"
           >
-            {romanticWeekend ? (
-              <>
-                Added <CheckCircle className="w-4 h-4" />
-              </>
-            ) : (
-              <>
-                Add Now To Your Booking <Plus className="w-4 h-4" />
-              </>
-            )}
+           {romanticWeekend ? (
+            <>
+              {lang === 'en' ? 'Added' : 'تمت الإضافة'} <CheckCircle className="w-4 h-4" />
+            </>
+          ) : (
+            <>
+              {lang === 'en' ? 'Add Now To Your Booking' : 'أضف الآن إلى الحجز'} <Plus className="w-4 h-4" />
+            </>
+          )}
           </Button>
         </div>
       )}

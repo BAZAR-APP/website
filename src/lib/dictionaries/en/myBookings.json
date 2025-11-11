@@ -1,0 +1,17 @@
+{
+  "page_title": "My Bookings",
+  "page_description": "Track your stays, check-in details, and booking status here.",
+  "tab_current": "Current",
+  "tab_completed": "Completed",
+  "no_bookings_title": "No Bookings Yet",
+  "no_bookings_message_part1": "You haven’t made any",
+  "no_bookings_message_part2": "bookings yet.",
+  "no_bookings_message_cta": "Start exploring and plan your stay today!",
+  "booking_card": {
+    "guests_label": "guests",
+    "beds_label": "beds",
+    "baths_label": "baths",
+    "see_details_button": "See Details",
+    "view_invoice_button": "View Invoice or Contract"
+  }
+}

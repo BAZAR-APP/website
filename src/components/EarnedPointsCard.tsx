@@ -2,12 +2,13 @@ import React from 'react'
 import Image from 'next/image'
 import { AnimatedPointsProgress } from './AnimatedPointsProgress '
 import { getTierInfo } from '@/lib/utils'
+import { Locale } from '../../i18n.config'
 
 interface EarnedPointsCardProps {
   currentPoints: number
   page: any
   tier: string
-  lang: 'en' | 'ar'
+  lang: Locale
 }
 
 export const EarnedPointsCard: React.FC<EarnedPointsCardProps> = ({
@@ -28,7 +29,7 @@ export const EarnedPointsCard: React.FC<EarnedPointsCardProps> = ({
       </div>
 
       <div className="flex flex-col w-full gap-[16px]">
-        <AnimatedPointsProgress earnedPoints={currentPoints} />
+        <AnimatedPointsProgress earnedPoints={currentPoints} lang={lang} />
 
         <div className="text-center">
           <div className="flex items-center gap-[4px] mb-[8px]">

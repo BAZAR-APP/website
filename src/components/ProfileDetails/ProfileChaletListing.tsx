@@ -31,7 +31,7 @@ const ProfileChaletListing: React.FC<ProfileChaletListingProps> = ({ messages })
         <>
           {chalets && chalets?.length > 0 ? (
             <Grid columns={{ initial: '1', sm: '2', lg: '3', xl: '4' }} gap="4" width="100%">
-              {chalets?.map((chalet: Chalet, index: number) => (
+              {chalets?.map((chalet: Chalet,) => (
                 <PropertyCard chalet={chalet} key={chalet?.id} />
               ))}
             </Grid>

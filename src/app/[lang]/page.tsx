@@ -38,8 +38,8 @@ export default async function Home({ params }: { params: Promise<{ lang: Locale 
       <WhyBookSection messages={messages?.whyBookSection} />
       <DestinationSection messages={messages?.destinationSection} />
       <div className="flex flex-col gap-[100px] md:px-16 max-md:px-5">
-        <ChaletsCard title={messages?.chaletsCard.most_booked} queryKey={'most-booked'} endpoint={'/chalets/mostBooked'}/>
-        <ChaletsCard title={messages?.chaletsCard.close_to_beach} queryKey={'sea-views'} endpoint={'/chalets/viewType'}/>
+        <ChaletsCard title={messages?.chaletsCard.most_booked} queryKey={'most-booked'} endpoint={'/chalets/mostBooked'} lang={lang} />
+        <ChaletsCard title={messages?.chaletsCard.close_to_beach} queryKey={'sea-views'} endpoint={'/chalets/viewType'} lang={lang} />
       </div>
       <RewardsSection
         title={messages?.rewardsSection.title}

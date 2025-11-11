@@ -6,7 +6,7 @@ import SearchHeader from '@/components/SearchHeader'
 import SearchResults from '@/components/SearchResults'
 import { Grid } from '@radix-ui/themes'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useChaletsQuery } from '@/lib/hooks/api/useChaletsQuery'
 import { PropertyCardSkeleton } from '@/components/Skeletons/chaletsCardSkeleton'
 import { Chalet } from '../../../../../types/chalets'
@@ -60,13 +60,17 @@ export default function ExploreChaletsClient({ lang, messages }: ExploreChaletsC
     setFilters({ page: newPage })
   }
 
-  const { data, isLoading } = useChaletsQuery()
+  const { data, isLoading } = useChaletsQuery(true, lang)
   const totalPages = Math.ceil((data?.total || 0) / (data?.limit || 0))
+
+  useEffect(() => {
+  setFilters({ language: lang })
+}, [lang])
 
   return (
     <div className="min-h-screen lg:px-14 md:px-12 px-10 xxl-p mx-auto">
       <h2 className="font-semibold md:text-[39px] sm:text-2xl text-xl leading-11 text-[#19191A] pt-5">
-        Explore Chalets
+        {lang === 'en' ? 'Explore Chalets' : 'استكشف الشاليهات'}
       </h2>
 
       <div className="flex lg:flex-row flex-col py-6 gap-1 xxl-gap">
@@ -78,6 +82,7 @@ export default function ExploreChaletsClient({ lang, messages }: ExploreChaletsC
             totalResults={data?.data?.length || 0}
             sortBy={sortBy}
             onSortChange={setSortBy}
+            lang={lang}
           />
 
           {isLoading ? (
@@ -98,6 +103,7 @@ export default function ExploreChaletsClient({ lang, messages }: ExploreChaletsC
                         router.push(`/chalet/${chalet?.id}`)
                       }}
                       key={index}
+                      lang={lang}
                     />
                   ))}
                 </Grid>
