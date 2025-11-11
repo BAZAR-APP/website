@@ -7,6 +7,14 @@ import Button from './Button/Button'
 import { useParams, useRouter } from 'next/navigation'
 import { Locale } from '../../i18n.config'
 
+
+interface NavigationMessages {
+  home: string;
+  explore: string;
+  my_bookings: string;
+  loyalty_points: string;
+  // Add other expected keys if Navigation uses them directly
+}
 interface SideNavProps {
   isOpen: boolean
   onClose: () => void
@@ -15,6 +23,7 @@ interface SideNavProps {
   onLogout?: () => void
   isLoggedIn?: boolean
   LanguageSwitcher?: React.ReactNode
+  messages: NavigationMessages;
 }
 
 const SideNav: React.FC<SideNavProps> = ({
@@ -25,6 +34,7 @@ const SideNav: React.FC<SideNavProps> = ({
   onLogout = () => console.log('User logged out'),
   isLoggedIn,
   LanguageSwitcher,
+  messages
 }) => {
   const router = useRouter()
   const { lang } = useParams() as { lang: Locale }
@@ -69,7 +79,7 @@ const SideNav: React.FC<SideNavProps> = ({
 
           <div className="flex-1 px-4 py-4">
             <div className="flex flex-col space-y-6">
-              <Navigation />
+              <Navigation messages={messages} />
             </div>
             <div className='px-4 py-2'>{LanguageSwitcher}</div>
 

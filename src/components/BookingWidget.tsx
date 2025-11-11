@@ -22,6 +22,7 @@ import { toast } from '@/lib/toast'
 import AddGuests from '@/app/[lang]/(home)/chalet/[id]/booking/_components/AddGuests'
 import RefundDepositRules from '@/app/[lang]/(home)/chalet/[id]/booking/_components/RefundDepositRules'
 import PackagePricingSummary from '@/app/[lang]/(home)/chalet/[id]/booking/_components/PackagePricingSummary'
+import { Locale } from '../../i18n.config'
 
 interface PackageOption {
   id: string
@@ -75,6 +76,7 @@ interface BookingWidgetProps {
     endDate: string
     isAvailable: boolean
   }[]
+  lang: Locale
 }
 
 // Package types enum for better type safety
@@ -145,6 +147,7 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
   bookings,
   chalet,
   availabilities,
+  lang
 }) => {
   const checkInPopUp = useToggle()
   const checkOutPopUp = useToggle()
@@ -473,7 +476,9 @@ const getNonPackageDisabledDates = useMemo(() => {
     <div className="bg-[#F9FAFB] rounded-2xl">
       <div className="sm:p-5 p-4 !pb-4">
         <h3 className="font-bold xl:text-[20px] md:text-lg text-[16px] leading-[24px] text-[#19191A] pb-3">
-          Choose Your Package
+          {
+            lang === 'en' ? 'Choose Your Package' : 'اختر الحزمة الخاصة بك'
+          }
         </h3>
         {selectedPackageType && (
           <h2 className="lg:text-[20px] md:text-[16px] text-sm leading-6 font-normal text-[#19191A] flex items-center">
@@ -489,8 +494,8 @@ const getNonPackageDisabledDates = useMemo(() => {
         {packageInfo && (
           <>
             <PricingRow
-              title="Weekend"
-              subtitle="Thursday to Saturday"
+              title= {lang === 'en' ? 'Weekend' : 'عطلة نهاية الأسبوع'}
+              subtitle= {lang==='en' ? 'Thursday to Saturday' : 'الخميس إلى السبت'}
               price={packageInfo.weekendCost}
               currency={bookingConfig.currency}
               checked={!selectedPlan?.id && selectedPackageType === PackageType.WEEKEND}
@@ -499,8 +504,8 @@ const getNonPackageDisabledDates = useMemo(() => {
               packageType={PackageType.WEEKEND}
             />
             <PricingRow
-              title="Weekday"
-              subtitle="Friday to Wednesday"
+              title= {lang==='en' ? 'Weekday' : 'أيام الأسبوع'}
+              subtitle= {lang==='en' ? 'Friday to Wednesday' : 'الجمعة إلى الأربعاء'}
               price={packageInfo.weekDaysCost}
               currency={bookingConfig.currency}
               checked={!selectedPlan?.id && selectedPackageType === PackageType.WEEKDAY}
@@ -509,8 +514,8 @@ const getNonPackageDisabledDates = useMemo(() => {
               packageType={PackageType.WEEKDAY}
             />
             <PricingRow
-              title="Full Week"
-              subtitle="7 consecutive nights"
+              title= {lang==='en' ? 'Full Week' : 'أسبوع كامل'}
+              subtitle= {lang==='en' ? '7 consecutive nights' : '7 ليال متتالية'}
               price={packageInfo.fullWeekCost}
               currency={bookingConfig.currency}
               checked={!selectedPlan?.id && selectedPackageType === PackageType.FULL_WEEK}
@@ -519,8 +524,8 @@ const getNonPackageDisabledDates = useMemo(() => {
               packageType={PackageType.FULL_WEEK}
             />
             <PricingRow
-              title="Full Month"
-              subtitle="30 consecutive nights"
+              title= {lang==='en' ? 'Full Month' : 'شهر كامل'}
+              subtitle= {lang==='en' ? '30 consecutive nights' : '30 ليلة متتالية'}
               price={packageInfo.fullMonthCost}
               currency={bookingConfig.currency}
               checked={!selectedPlan?.id && selectedPackageType === PackageType.FULL_MONTH}
@@ -733,7 +738,7 @@ const getNonPackageDisabledDates = useMemo(() => {
           Book Now
         </Button>
       </div>
-      <RefundDepositRules bookingConfig={bookingConfig} />
+      <RefundDepositRules bookingConfig={bookingConfig} lang={lang} />
 
       <div className="px-5 pb-6 space-y-3">
         {!selectedPackageType && !selectedPlan?.id && (

@@ -17,19 +17,16 @@ interface HeaderProps {
   isAuthHeader?: boolean
   isLoggedIn?: boolean
   lang: Locale
-  dictionary?: {
-    navigation: {
-      home: string
-      about: string
-      contact: string
-    }
-    footer: {
-      language: string
-    }
+   messages: { 
+      home: string;
+      explore: string;
+      my_bookings: string;
+      loyalty_points: string;
   }
+
 }
 
-const Header: React.FC<HeaderProps> = ({ className = '', lang }) => {
+const Header: React.FC<HeaderProps> = ({ className = '', lang, messages }) => {
   const { data: user } = useSession()
 
   const [isSideNavOpen, setIsSideNavOpen] = useState(false)
@@ -68,7 +65,7 @@ const Header: React.FC<HeaderProps> = ({ className = '', lang }) => {
 
       <div className="hidden lg:flex items-center justify-between w-full">
         <Logo />
-        <Navigation />
+        <Navigation messages={messages} />
         {user?.user?.accessToken ? (
           <div className="flex items-center space-x-4 gap-5">
             <NotificationIcon />
@@ -139,6 +136,7 @@ const Header: React.FC<HeaderProps> = ({ className = '', lang }) => {
         //     availableLocales={[...i18n.locales]}
         //   />
         // }
+        messages={messages}
         LanguageSwitcher={<LanguageSwitcher lang={lang} label="" availableLocales={[...i18n.locales]} />}
       />
     </>

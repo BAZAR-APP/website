@@ -10,11 +10,13 @@ import { PropertyCardSkeleton } from '../Skeletons/chaletsCardSkeleton'
 import { useRouter } from 'next/navigation'
 import { useBookingStore } from '../../../stores/useBookingStore'
 import { useSession } from 'next-auth/react'
+import { Locale } from '../../../i18n.config'
 
 interface ChaletsCardProps {
   title: string
   endpoint: string
   queryKey: string
+  lang: Locale
 }
 
 interface ChaletsResponse {
@@ -24,7 +26,7 @@ interface ChaletsResponse {
   hasMore: boolean
 }
 
-const ChaletsCard: React.FC<ChaletsCardProps> = ({ title, endpoint, queryKey }) => {
+const ChaletsCard: React.FC<ChaletsCardProps> = ({ title, endpoint, queryKey, lang }) => {
   const scrollRef = useRef<HTMLDivElement>(null)
   const { resetBooking } = useBookingStore()
 
@@ -38,6 +40,7 @@ const ChaletsCard: React.FC<ChaletsCardProps> = ({ title, endpoint, queryKey }) 
         limit: 20,
         page: pageParam,
         userId: session?.user?.id,
+        language: lang
       },
     })
 

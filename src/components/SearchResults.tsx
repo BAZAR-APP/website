@@ -3,13 +3,14 @@
 import React from 'react'
 import * as Select from '@radix-ui/react-select'
 import { ChevronDown, Check } from 'lucide-react'
-import { sortOptions } from '@/lib/constant'
+import { Locale } from '../../i18n.config'
 
 interface SearchResultsProps {
   location: string[]
   totalResults: number
   sortBy: string
   onSortChange: (sort: string) => void
+  lang: Locale
 }
 
 const SearchResults: React.FC<SearchResultsProps> = ({
@@ -17,7 +18,17 @@ const SearchResults: React.FC<SearchResultsProps> = ({
   totalResults,
   sortBy,
   onSortChange,
+  lang
 }) => {
+
+  const sortOptions = [
+  { value: 'recommended', label: lang === "en" ? "Recommended" : "موصى به" },
+  { value: 'price_low', label: lang === "en" ? "Low to High" : "من الأقل إلى الأعلى" },
+  { value: 'price_high', label: lang === "en" ? "High to Low" : "من الأعلى إلى الأقل" },
+  { value: 'rating', label: lang === "en" ? "Highest Rated" : "الأعلى تقييماً" },
+  { value: 'newest', label: lang === "en" ? "Newest" : "الأحدث" },
+]
+
   return (
     <div className="flex sm:flex-row flex-col items-center justify-between my-8 sm:mx-0 mx-1">
       <h2 className="md:text-[25px] sm:text-xl text-[16px] sm:leading-[30px] leading-4 font-normal text-[#19191A] pb-2 sm:pb-0 text-center">
@@ -29,7 +40,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({
         <Select.Trigger className="sm:w-[200px] w-full inline-flex items-center justify-between bg-[#F9FAFB] cursor-pointer rounded-lg px-3 py-2 text-sm font-medium text-gray-700 focus:outline-none focus:border-none">
           <div className="flex flex-col items-start gap-1">
             <span className="text-[12px] leading-3 font-normal text-[#9EA0A2] flex-none">
-              Sort by
+              {lang === "en" ? "Sort by" : "ترتيب حسب"}
             </span>
 
             <Select.Value className="text-3 leading-3 font-normal text-[#19191A] flex-none order-1" />

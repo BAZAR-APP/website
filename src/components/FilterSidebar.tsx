@@ -74,12 +74,12 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ messages, lang, searchHea
   return (
     <div className="lg:w-80 w-full py-5 h-full overflow-y-auto w-500px-1440 xl:mr-3 mr-0">
       <div className="flex items-center justify-between mb-6">
-        <h3 className="sm:text-[25px] text-lg leading-8 font-semibold text-[#1F2937]">Filter By</h3>
+        <h3 className="sm:text-[25px] text-lg leading-8 font-semibold text-[#1F2937]"> {lang === "en" ? "Filter By" : "تصفية حسب"} </h3>
         <button
           className="text-[#29397E] text-base leading-6 font-normal cursor-pointer"
           onClick={resetFilters}
         >
-          Reset
+          {lang === "en" ? "Reset" : "إعادة ضبط"}
         </button>
       </div>
 

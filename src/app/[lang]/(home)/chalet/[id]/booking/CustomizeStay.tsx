@@ -7,12 +7,14 @@ import { useBookingStore } from '../../../../../../../stores/useBookingStore'
 import CustomPopOver from '@/components/CustomPopOver'
 import SimpleCalendar from '@/components/Calender/SimpleCalender'
 import { format, startOfDay } from 'date-fns'
+import { Locale } from '../../../../../../../i18n.config'
 
 type CustomizeStayProps = {
   onNext: () => void
+  lang: Locale
 }
 
-export default function CustomizeStay({ onNext }: CustomizeStayProps) {
+export default function CustomizeStay({ onNext, lang }: CustomizeStayProps) {
   const { watch, setValue } = useFormContext()
   const { bookingType, selectedDates } = useBookingStore()
   const showWeekdayHeading = bookingType === 'night'
@@ -53,11 +55,15 @@ export default function CustomizeStay({ onNext }: CustomizeStayProps) {
   return (
     <div className="max-w-[1800px] mx-auto lg:px-22 md:px-18 sm:px-12 px-8 py-10">
       <h2 className="lg:text-[39px] md:text-2xl text-xl lg:leading-[47px] leading-7 font-semibold text-[#19191A] flex items-center">
-        Customize Your Stay
+        {
+          lang === 'en' ? 'Customize Your Stay' : 'خصص إقامتك'
+        }
       </h2>
 
       <p className="lg:text-[20px] text-lg py-4 lg:leading-6 leading-4 font-normal text-[#484A4C] flex items-center">
-        Add optional services or extras to make your experience more special.
+        {
+          lang==='en' ? 'Add optional services or extras to make your experience more special.' : 'أضف خدمات أو إضافات اختيارية لجعل تجربتك أكثر تميزًا.'
+        }
       </p>
 
       <div className="flex flex-col lg:flex-row gap-10 justify-between">
@@ -72,10 +78,14 @@ export default function CustomizeStay({ onNext }: CustomizeStayProps) {
 
         <div className="flex flex-col items-start gap-[24px] lg:w-[370px] w-full h-fit bg-[#F9FAFB] p-6 rounded">
           <h3 className="text-[25px] leading-8 font-semibold text-[#19191A] flex items-center">
-            Add-Ons
+               {
+                  lang === 'en' ? 'Add-Ons' : 'الإضافات'
+               }
           </h3>
           <p className="text-sm leading-4 font-normal text-[#9EA0A2]">
-            Selected add-ons will be added to your total booking payment.
+                {
+                  lang === 'en' ? ' Selected add-ons will be added to your total booking payment.' : 'سيتم إضافة الإضافات المحددة إلى إجمالي دفعة الحجز الخاصة بك.'
+                }
           </p>
           <ul className="space-y-2 w-full text-sm">
             {selectedAddons.map((item) => (
@@ -109,7 +119,7 @@ export default function CustomizeStay({ onNext }: CustomizeStayProps) {
                   }
                 >
                   <div className="p-4 w-80">
-                    <h4 className="text-sm font-medium mb-2">Select dates for: {item.title}</h4>
+                    <h4 className="text-sm font-medium mb-2"> {lang==='en' ? 'Select dates for:' : 'حدد التواريخ لـ:'} {item.title}</h4>
                     <SimpleCalendar
                       initialDate={minDate}
                       minDate={minDate}
@@ -118,7 +128,9 @@ export default function CustomizeStay({ onNext }: CustomizeStayProps) {
                       onDateChange={(date) => handleDateSelect(item.id, date)}
                     />
                     <div className="mt-2 text-xs text-gray-500">
-                      Click a date to toggle selection.
+                          {
+                            lang === 'en' ? 'Click a date to toggle selection.' : 'انقر على تاريخ لتبديل الاختيار.'
+                          }
                     </div>
                   </div>
                 </CustomPopOver>
@@ -127,7 +139,7 @@ export default function CustomizeStay({ onNext }: CustomizeStayProps) {
             ))}
           </ul>
           <div className="border-t w-full pt-4 mt-2 flex justify-between font-medium text-sm sm:text-[16px]">
-            <span>Total</span>
+            <span>{lang==='en' ? 'Total' : 'المجموع'}</span>
             <span>{total} KWD</span>
           </div>
         </div>
@@ -138,7 +150,9 @@ export default function CustomizeStay({ onNext }: CustomizeStayProps) {
           className="text-[#19191A] py-2 rounded-lg text-sm font-medium w-[150px]"
           onClick={onNext}
         >
-          Skip For Now
+          {
+            lang ==='en' ? 'Skip For Now' : 'تخطي الآن'
+          }
         </Button>
         <Button
           onClick={() => {
@@ -148,7 +162,9 @@ export default function CustomizeStay({ onNext }: CustomizeStayProps) {
           disabled={selectedAddons?.length === 0}
           className="cursor-pointer bg-[#29397E] text-white py-2 rounded-lg text-sm font-medium w-[170px]"
         >
-          Add For Booking
+          {
+            lang ==='en' ? 'Add For Booking' : 'أضف للحجز'
+          }
         </Button>
       </div>
     </div>

@@ -27,5 +27,7 @@ export const getMessages = (locale: Locale) => {
     profileChaletListing: load('profileChaletListing'),
     passwordDetail: load('passwordDetail'),
     profileBilling: load('profileBilling'),
+    navigation: load('navigation'),
+    myBookings: load('myBookings')
   };
 };

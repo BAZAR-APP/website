@@ -2,32 +2,42 @@
 import { Header, SearchHeader } from '@/components'
 import { Locale } from '../../../i18n.config'
 
-interface BannerSectionProps {
-  lang: Locale
-  messages: {
-    banner: {
-      banner_title: string
-    }
-    searchHeader: {
-      location: string
-      check_in: string
-      check_out: string
-      guests: string
-      placeholder_location: string
-      placeholder_check_in: string
-      placeholder_check_out: string
-      placeholder_guests: string
-      locations: {
-        al_khobar: string
-        brasiler: string
-        al_jubail: string
-        zour: string
-        fahaheel: string
-        abu_al_hasaniya: string
-        al_mangaf: string
-      }
+interface BannerSectionMessages {
+  banner: {
+    banner_title: string
+  },
+  searchHeader: {
+    location: string
+    check_in: string
+    check_out: string
+    guests: string
+    placeholder_location: string
+    placeholder_check_in: string
+    placeholder_check_out: string
+    placeholder_guests: string
+    locations: {
+      al_khobar: string
+      brasiler: string
+      al_jubail: string
+      zour: string
+      fahaheel: string
+      abu_al_hasaniya: string
+      al_mangaf: string
     }
   }
+  // Add the navigation type here
+  navigation: {
+    home: string;
+    explore: string;
+    my_bookings: string;
+    loyalty_points: string;
+  }
+  // Add other expected message types if BannerSection itself needs them
+}
+
+interface BannerSectionProps {
+  lang: Locale
+  messages: BannerSectionMessages // Use the updated type
 }
 
 const BannerSection = ({ messages, lang }: BannerSectionProps) => {
@@ -43,7 +53,7 @@ const BannerSection = ({ messages, lang }: BannerSectionProps) => {
         paddingBottom: '32px',
       }}
     >
-      <Header isLoggedIn={false} lang={lang} className="bg-transparent" />
+      <Header isLoggedIn={false} lang={lang} messages={messages.navigation} className="bg-transparent" />
       <div
         style={{
           backgroundImage: "url('/images/ImageBannerCard.svg')",

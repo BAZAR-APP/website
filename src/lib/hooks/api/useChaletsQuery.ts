@@ -5,6 +5,7 @@ import { useMemo } from 'react'
 import api from '@/lib/axios'
 import { ChaletResponse } from '../../../../types/chalets'
 import { useSession } from 'next-auth/react'
+import { Locale } from '../../../../i18n.config'
 
 const fetchChalets = async (filters: any): Promise<ChaletResponse> => {
   const searchParams = new URLSearchParams()
@@ -26,13 +27,13 @@ const fetchChalets = async (filters: any): Promise<ChaletResponse> => {
   return res.data
 }
 
-export const useChaletsQuery = (enabled = true) => {
+export const useChaletsQuery = (enabled = true, lang?: Locale) => {
   const { data: session } = useSession()
   const filters = useChaletFiltersStore(
     useShallow((state) => ({
       page: state.page,
       limit: state.limit,
-      language: state.language,
+      language: lang || state.language,
       city: state.city,
       minPrice: state.minPrice,
       maxPrice: state.maxPrice,

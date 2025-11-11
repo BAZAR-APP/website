@@ -7,16 +7,16 @@ import { Chalet } from '../../types/chalets'
 import api from '@/lib/axios'
 import { useQueryClient } from '@tanstack/react-query'
 import { useSession } from 'next-auth/react'
-import useToggle from '@/lib/hooks/useToggle'
-import ModalDialog from './ModalDialog/Dialog'
+import { Locale } from '../../i18n.config'
 
 interface PropertyCardProps {
   onClick?: () => void
   chalet: Chalet
   isMember?: boolean
+  lang: Locale
 }
 
-const PropertyCard: React.FC<PropertyCardProps> = ({ onClick, chalet, isMember = false }) => {
+const PropertyCard: React.FC<PropertyCardProps> = ({ onClick, chalet, isMember = false, lang }) => {
   const queryClient = useQueryClient()
   const [isFavourite, setIsFavourite] = useState(chalet?.isFavourite || false)
   const { data: session } = useSession()
@@ -102,24 +102,24 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ onClick, chalet, isMember =
         </div>
 
         <div className="text-sm text-[#8E8E93] leading-5 truncate">
-          {chalet?.minNoOfGuests ?? 0}-{chalet?.maxNoOfGuests ?? 0} guests{' '}
+          {chalet?.minNoOfGuests ?? 0}-{chalet?.maxNoOfGuests ?? 0} { lang === 'en' ? 'guests' : 'الضيوف' }
           <span className="text-[#9EA0A2] font-normal text-[9px] pr-1">&bull;</span>
           {chalet?.isEntireHomeAvailabe && (
             <>
-              Entire Home <span className="text-[#9EA0A2] font-normal text-[9px] pr-1">&bull;</span>
+              { lang === 'en' ? 'Entire Home' : 'المنزل بأكمله' } <span className="text-[#9EA0A2] font-normal text-[9px] pr-1">&bull;</span>
             </>
           )}
-          {chalet?.maxNoOfBeds} beds{' '}
+          {chalet?.maxNoOfBeds} { lang === 'en' ? 'beds' : 'أسرة' }
           <span className="text-[#9EA0A2] font-normal text-[9px] pr-1">&bull;</span>
-          {chalet?.noOfBaths} baths
+          {chalet?.noOfBaths} { lang === 'en' ? 'baths' : 'الحمامات' }
           <br />
           {chalet?.isFreeWifi && (
-            <span className="text-sm text-[#8E8E93] leading-5">Wifi</span>
+            <span className="text-sm text-[#8E8E93] leading-5"> { lang === 'en' ? 'Wifi' : 'واي فاي' } </span>
           )}{' '}
           {chalet?.isFreeParking && (
             <>
               <span className="text-[#9EA0A2] font-normal text-[9px] pr-1">&bull;</span>
-              <span className="text-sm text-[#8E8E93] leading-5">Free Parking</span>
+              <span className="text-sm text-[#8E8E93] leading-5"> { lang === 'en' ? 'Free Parking' : 'مواقف مجانية للسيارات' } </span>
             </>
           )}
         </div>
@@ -128,7 +128,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ onClick, chalet, isMember =
             <div className="flex items-center sm:flex-nowrap flex-wrap text-sm text-gray-700">
               <span className="mr-1">{chalet?.rating ?? 0}</span>
               <Image src={Star} alt="Star" width={16} height={16} />
-              <span className="text-gray-500 sm:ml-1">({chalet?.noOfReviews ?? 0} reviews)</span>
+              <span className="text-gray-500 sm:ml-1">({chalet?.noOfReviews ?? 0}  {lang === 'en' ? 'reviews' : 'الحمامات'} )</span>
             </div>
           )}
           <div className="flex items-center justify-between ">
@@ -147,8 +147,8 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ onClick, chalet, isMember =
                 </>
               ) : (
                 <>
-                  <span className="sm:text-[18px] text-sm">{chalet?.perNightCost} KD </span>
-                  <span className="text-sm leading-4 font-normal text-[#484A4C]">/night</span>
+                  <span className="sm:text-[18px] text-sm">{chalet?.perNightCost} {lang === 'en' ? 'KD' : 'دينار كويتي'} </span>
+                  <span className="text-sm leading-4 font-normal text-[#484A4C]">/{lang === 'en' ? 'night' : 'ليلة'}</span>
                 </>
               )}
             </div>

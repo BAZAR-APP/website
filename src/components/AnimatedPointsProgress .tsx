@@ -1,7 +1,14 @@
 import { Progress } from '@radix-ui/themes'
 import React, { useState, useEffect } from 'react'
+import { Locale } from '../../i18n.config'
 
-export const AnimatedPointsProgress = ({ earnedPoints = 255, animationDuration = 2000 }) => {
+interface pointsProps {
+  lang: Locale
+  earnedPoints:number
+  animationDuration:number
+}
+
+export const AnimatedPointsProgress:React.FC<pointsProps> = ({ earnedPoints = 255, animationDuration = 2000, lang }) => {
   const maxPoints = 2000
   const [animatedPoints, setAnimatedPoints] = useState(0)
   const [animatedProgress, setAnimatedProgress] = useState(0)
@@ -83,7 +90,7 @@ export const AnimatedPointsProgress = ({ earnedPoints = 255, animationDuration =
 
         {/* Center Content */}
         <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-          <p className="text-[#475467] text-[12px] font-medium mb-1.5">Earned Points</p>
+          <p className="text-[#475467] text-[12px] font-medium mb-1.5"> {lang === 'en' ? 'Earned Points' : 'النقاط المكتسبة'} </p>
           <p className="text-2xl font-semibold !text-[#101828]">{Math.round(animatedPoints)}</p>
         </div>
       </div>

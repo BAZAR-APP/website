@@ -45,6 +45,26 @@ import { Locale } from '../../../../../i18n.config'
 //     }
 //   }
 // }
+
+interface BillingItem {
+  id: string;
+  imageUrl: string;
+  title: string;
+  location: string;
+  locationIconUrl: string;
+  dateRange: string;
+  dateIconUrl: string;
+  paymentDate: string;
+  paymentIconUrl: string;
+  amount: string;
+  paymentStatus: {
+    text: string;
+    color: 'pink' | 'emerald';
+    iconUrl: string;
+  };
+  detailsLinkIconUrl: string;
+}
+
 interface ProfileClientProps {
   lang: Locale
   messages: { 
@@ -83,6 +103,7 @@ interface ProfileClientProps {
     },
     profileBilling: {
       pick_billing_period: string
+      billing_items: BillingItem[];
     }
   }
 }

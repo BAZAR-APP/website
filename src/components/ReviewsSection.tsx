@@ -10,12 +10,14 @@ import { useParams } from 'next/navigation'
 import { Review, ReviewsResponse } from '../../types/chalets'
 import { format } from 'date-fns'
 import { useEffect, useState } from 'react'
+import { Locale } from '../../i18n.config'
 
 interface ReviewsSectionProps {
   rating: number
+  lang:Locale
 }
 
-const ReviewsSection = ({ rating }: ReviewsSectionProps) => {
+const ReviewsSection = ({ rating, lang }: ReviewsSectionProps) => {
   const { id } = useParams() as { id: string }
   const [allReviews, setAllReviews] = useState<Review[]>([])
   const [page, setPage] = useState(1)
@@ -50,7 +52,7 @@ const ReviewsSection = ({ rating }: ReviewsSectionProps) => {
         <span className="font-semibold text-[#19191A]">{rating}</span>
         <Image src={LikeStar} width={23} height={23} alt="Like Star" />
         <span className="font-semibold">·</span>
-        <span className="font-semibold">{total} reviews</span>
+        <span className="font-semibold">{total} {lang==='en' ? 'reviews' : 'المراجعات'} </span>
       </div>
 
       <div className="flex flex-col gap-5">
@@ -106,7 +108,7 @@ const ReviewsSection = ({ rating }: ReviewsSectionProps) => {
             </div>
           ))
         ) : (
-          <Text className="text-gray-500 italic">No reviews found.</Text>
+          <Text className="text-gray-500 italic">{lang==='en' ? 'No reviews found.' : 'لم يتم العثور على تعليقات.'}</Text>
         )}
 
         {page < totalPages && (
@@ -116,7 +118,9 @@ const ReviewsSection = ({ rating }: ReviewsSectionProps) => {
             size="sm"
             className="cursor-pointer border border-[#19191A] text-sm font-medium sm:max-w-[170px] w-full"
           >
-            Show more
+            {
+              lang==='en' ? 'Show more' : 'عرض المزيد'
+            }
           </Button>
         )}
 

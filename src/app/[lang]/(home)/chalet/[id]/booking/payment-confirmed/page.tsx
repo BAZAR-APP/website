@@ -1,5 +1,5 @@
 'use client'
-import React, { FC, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
@@ -8,7 +8,7 @@ import { ChevronRight, CircleDollarSign, Clock, Download, MapPin, PartyPopper } 
 import toast from 'react-hot-toast'
 import { extractErrorMessage } from '@/lib/utils'
 import { Chalet } from '../../../../../../../../types/chalets'
-import { SocialLinkShare, SocialShareWrapper } from '@/components'
+import { SocialLinkShare } from '@/components'
 
 const PaymentConfirmed = () => {
   const bookingConfirmed = false
@@ -77,7 +77,7 @@ const PaymentConfirmed = () => {
         />
 
         <h3 className="lg:text-[39px] md:text-3xl sm:text-2xl text-xl font-semibold py-1 leading-[47px] text-[#19191A] text-center md:pt-6 pt-3 w-full">
-          Payment Confirmed
+           {lang === 'en' ? 'Payment Confirmed' : 'تم تأكيد الدفع'}
         </h3>
 
         <div className="lg:text-[20px] md:text-[16px] text-sm md:leading-[28px] lg:leading-[34px] leading-5 py-1 text-[#484A4C] text-center">
@@ -85,9 +85,17 @@ const PaymentConfirmed = () => {
             'Your booking is complete. Thank you for choosing us!'
           ) : (
             <>
-              <p> Your booking is complete. Thank you for choosing us!</p>
-              You earned {points} points. Track and redeem them in your profile anytime!
-            </>
+            <p>
+              {lang === 'en'
+                ? 'Your booking is complete. Thank you for choosing us!'
+                : 'تم اكتمال حجزك. شكرًا لاختيارك لنا!'}
+            </p>
+            <p>
+              {lang === 'en'
+                ? `You earned ${points} points. Track and redeem them in your profile anytime!`
+                : `لقد حصلت على ${points} نقطة. يمكنك تتبعها واستردادها في ملفك الشخصي في أي وقت!`}
+            </p>
+          </>
           )}
         </div>
 

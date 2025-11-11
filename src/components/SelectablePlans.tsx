@@ -3,15 +3,23 @@ import PriceDetailCard from './PriceDetailCard'
 import { useBookingStore } from '../../stores/useBookingStore'
 import { FC } from 'react'
 import { ChaletSubscription } from '../../types/chalets'
+import { Locale } from '../../i18n.config';
 
-const SelectablePlans: FC<{ subscriptions: ChaletSubscription[] }> = ({ subscriptions = [] }) => {
+interface SelectablePlansProps {
+  subscriptions: ChaletSubscription[]
+  lang: Locale
+}
+
+const SelectablePlans: FC<SelectablePlansProps> = ({ subscriptions = [], lang }) => {
   const { setPlan, selectedPlan } = useBookingStore()
   const shouldUseLargeGap = subscriptions.length >= 3
 
   if (subscriptions.length === 0) {
     return (
       <div className="text-center text-lg text-gray-500 pt-8 pb-14 w-full border-b border-[#E5E7EB]">
-        No Subscription Plans Available
+       {
+        lang === 'en' ? 'No Subscription Plans Available' : 'لا توجد خطط اشتراك متاحة'
+       } 
       </div>
     )
   }

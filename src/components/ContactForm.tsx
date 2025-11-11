@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react'
 import CommonInput from './CommonInput/Input'
 import Image from 'next/image'
-import { useSession } from 'next-auth/react'
+import { Locale } from '../../i18n.config'
 
 interface ContactFormData {
   fullName: string
@@ -13,9 +12,10 @@ interface ContactFormData {
 interface ContactFormProps {
   onChange: (field: keyof ContactFormData, value: string) => void
   formData: ContactFormData
+  lang: Locale
 }
 
-const ContactForm: React.FC<ContactFormProps> = ({ onChange, formData }) => {
+const ContactForm: React.FC<ContactFormProps> = ({ onChange, formData, lang }) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
   }
@@ -28,7 +28,7 @@ const ContactForm: React.FC<ContactFormProps> = ({ onChange, formData }) => {
     <>
       <form onSubmit={handleSubmit} className="space-y-4 md:w-[330px] w-full">
         <CommonInput
-          label="Full Name"
+          label= {lang==='en'? 'Full Name' : 'الاسم الكامل'}
           name="fullName"
           type="text"
           value={formData.fullName}
@@ -50,14 +50,14 @@ const ContactForm: React.FC<ContactFormProps> = ({ onChange, formData }) => {
           name="phone"
           placeholder=""
           type="tel"
-          label="Phone"
+          label={lang==='en'? 'Phone' : 'هاتف'}
           value={formData?.phone}
           className={'!bg-[#F9FAFB] !text-[#484A4C] !rounded-[8px] !border-none !h-[42px]'}
           onChange={(e) => handleInputChange('phone', e.target.value)}
         />
 
         <CommonInput
-          label="E-mail"
+          label={lang==='en'? 'E-mail' : 'بريد إلكتروني'}
           name="email"
           type="email"
           value={formData.email}
@@ -67,7 +67,7 @@ const ContactForm: React.FC<ContactFormProps> = ({ onChange, formData }) => {
         />
 
         <CommonInput
-          label="Home or IP Address"
+          label={lang==='en'? 'Home or IP Address' : 'عنوان المنزل أو IP'}
           name="address"
           type="text"
           value={formData.address}
