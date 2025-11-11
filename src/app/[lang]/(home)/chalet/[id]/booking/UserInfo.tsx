@@ -85,7 +85,7 @@ const UserInfo: React.FC<UserInfoProps> = ({ onNext, lang }) => {
           />
 
           <div className="pb-7 md:px-3">
-            <BookingSummary showRedeemeCodeSection />
+            <BookingSummary showRedeemeCodeSection lang={lang} />
           </div>
         </div>
         <div className=" border-t border-[#E5E7EB] pt-7">
