@@ -126,6 +126,7 @@ const ChaletsCard: React.FC<ChaletsCardProps> = ({ title, endpoint, queryKey, la
               }}
               key={chalet.id || `${queryKey}-${index}`}
               isMember={true}
+              lang={lang}
             />
           ))}
 
