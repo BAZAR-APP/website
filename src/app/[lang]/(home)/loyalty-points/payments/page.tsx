@@ -2,14 +2,15 @@
 import { Button } from '@/components'
 import PaymentForm from '@/components/PaymentForm'
 import Image from 'next/image'
-import { useRouter } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { useBuyLoyltyPointsStore } from '../../../../../../stores/useBuyLoyltyPoints'
-import api, { useQueryBase } from '@/lib/axios'
+import api from '@/lib/axios'
 import { useSession } from 'next-auth/react'
 import { extractErrorMessage } from '@/lib/utils'
 import { toast } from '@/lib/toast'
+import { Locale } from '../../../../../../i18n.config'
 
 const Payment = () => {
   const { selectedPackageLoyaltyPoints } = useBuyLoyltyPointsStore()
@@ -19,6 +20,8 @@ const Payment = () => {
 
   const methods = useForm()
   const router = useRouter()
+  const params = useParams() as { lang: Locale }
+  const { lang } = params
   const taxesAmount = 0
   const totalAmount = (selectedPackageLoyaltyPoints?.price ?? 0) + taxesAmount
 
@@ -58,7 +61,7 @@ const Payment = () => {
 
         <div className="flex flex-col lg:flex-row gap-4 border-b border-[#E5E7EB] pb-12">
           <div className="flex-1">
-            <PaymentForm paymentDetail={false} addNowBooking={false} />
+            <PaymentForm paymentDetail={false} addNowBooking={false} lang={lang} />
           </div>
 
           <div className="w-full xl:w-1/3 pb-7 sm:px-3">
