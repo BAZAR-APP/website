@@ -132,7 +132,7 @@ const ProfileClient: React.FC<ProfileClientProps> = ({ lang, messages }) => {
           )}
           {activeTab === 'save' && (
             <div>
-              <ProfileChaletListing messages={messages?.profileChaletListing} />
+              <ProfileChaletListing messages={messages?.profileChaletListing} lang={lang} />
             </div>
           )}
           {activeTab === 'password' && (

@@ -3,15 +3,17 @@ import { Chalet } from '../../../types/chalets'
 import PropertyCard from '../PropertyCard'
 import { Grid } from '@radix-ui/themes'
 import { PropertyCardSkeleton } from '../Skeletons/chaletsCardSkeleton'
+import { Locale } from '../../../i18n.config'
 
 interface ProfileChaletListingProps {
+  lang: Locale
   messages: {
     no_chalets_found: string;
     try_adjusting_filters: string;
   };
 }
 
-const ProfileChaletListing: React.FC<ProfileChaletListingProps> = ({ messages }) => {
+const ProfileChaletListing: React.FC<ProfileChaletListingProps> = ({ messages, lang }) => {
   const { data: res, isLoading } = useQueryBase({
     queryKey: ['favouriteChalets'],
     url: '/favouriteChalets/me',
@@ -32,7 +34,7 @@ const ProfileChaletListing: React.FC<ProfileChaletListingProps> = ({ messages })
           {chalets && chalets?.length > 0 ? (
             <Grid columns={{ initial: '1', sm: '2', lg: '3', xl: '4' }} gap="4" width="100%">
               {chalets?.map((chalet: Chalet,) => (
-                <PropertyCard chalet={chalet} key={chalet?.id} />
+                <PropertyCard chalet={chalet} key={chalet?.id} lang={lang} />
               ))}
             </Grid>
           ) : (
