@@ -5,7 +5,7 @@ import { Locale } from '../../i18n.config'
 interface pointsProps {
   lang: Locale
   earnedPoints:number
-  animationDuration:number
+  animationDuration?:number
 }
 
 export const AnimatedPointsProgress:React.FC<pointsProps> = ({ earnedPoints = 255, animationDuration = 2000, lang }) => {
