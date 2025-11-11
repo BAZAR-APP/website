@@ -13,6 +13,7 @@ import AddGuests from './AddGuests'
 import RefundDepositRules from './RefundDepositRules'
 import PackagePricingSummary from './PackagePricingSummary'
 import { expandDateRange } from '@/lib/utils'
+import { Locale } from '../../../../../../../../i18n.config'
 
 interface PackageOption {
   id: string
@@ -70,6 +71,7 @@ interface HourlyBookingSummaryProps {
     endDate: string
     isAvailable: boolean
   }[]
+  lang: Locale
 }
 
 const HourlyBookingSummary: React.FC<HourlyBookingSummaryProps> = ({
@@ -91,6 +93,7 @@ const HourlyBookingSummary: React.FC<HourlyBookingSummaryProps> = ({
   bookings,
   chalet,
   availabilities,
+  lang
 }) => {
   const checkInPopUp = useToggle()
   const checkOutPopUp = useToggle()
@@ -380,7 +383,7 @@ const HourlyBookingSummary: React.FC<HourlyBookingSummaryProps> = ({
           Book Now
         </Button>
       </div>
-      <RefundDepositRules bookingConfig={bookingConfig} />
+      <RefundDepositRules bookingConfig={bookingConfig} lang={lang} />
       {selectedDates?.checkIn && (
         <div className="px-5 pb-6 space-y-3">
           <PackagePricingSummary bookingConfig={bookingConfig} total={total} />

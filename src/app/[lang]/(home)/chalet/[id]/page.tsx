@@ -205,6 +205,7 @@ export default async function ChaletDetailsPage({
                   }}
                   bookings={data?.bookings || []}
                   availabilities={data?.availabilities || []}
+                  lang={lang}
                 />
               ) : (
                 <BookingWidget
