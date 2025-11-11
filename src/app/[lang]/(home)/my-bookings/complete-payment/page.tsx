@@ -1,10 +1,14 @@
 'use client'
 import BookingSummary from '@/components/BookingSummary'
 import PaymentForm from '@/components/PaymentForm'
+import { useParams } from 'next/navigation'
 import React from 'react'
 import { useForm, FormProvider } from 'react-hook-form'
+import { Locale } from '../../../../../../i18n.config'
 
 const CompletePayment: React.FC = () => {
+  const params = useParams() as { lang: Locale }
+    const { lang } = params
   const methods = useForm()
   return (
     <FormProvider {...methods}>
@@ -17,7 +21,7 @@ const CompletePayment: React.FC = () => {
         </p>
         <div className="flex flex-col lg:flex-row gap-4 border-b border-[#E5E7EB] pb-3">
           <div className="flex-1">
-            <PaymentForm paymentDetail={false} />
+            <PaymentForm paymentDetail={false} lang={lang} />
           </div>
 
           <div className="w-full xl:w-1/3 pb-7 sm:px-3">
@@ -29,7 +33,7 @@ const CompletePayment: React.FC = () => {
                 remaingAmount={true}
                 earnPoints={false}
                 finalPayment={true}
-
+                lang={lang}
               />
             </div>
           </div>
