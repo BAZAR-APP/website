@@ -218,42 +218,55 @@ yPosition -= 30;
     /* ---------- date & reference (right) ---------- */
     const dateText =
       lang === 'ar' ? `التاريخ : ${formattedBookingDate}` : `Date: ${formattedBookingDate}`;
-    const refText =
-      lang === 'ar' ? `رقم العقد : ${referenceNumber}` : `Contract No: ${referenceNumber}`;
     const dateRefX = pageWidth - margin - 100;
 
     if (lang === 'ar') {
-      drawArabicText(page, dateText, dateRefX, yPosition, arabicFont, fontSize, rgb(0, 0, 0));
+      drawArabicText(page, dateText, dateRefX - 24, yPosition, arabicFont, fontSize, rgb(0, 0, 0));
       yPosition -= 15;
-      drawArabicText(page, refText, dateRefX - 43, yPosition, arabicFont, fontSize, rgb(0, 0, 0));
+      
+      // Draw Arabic label on first line
+      const arabicRefLabel = 'رقم العقد :';
+      drawArabicText(page, arabicRefLabel, dateRefX -24 , yPosition, arabicFont, fontSize, rgb(0, 0, 0));
+      
+      yPosition -= 12;
+      page.drawText(referenceNumber, {
+        x: dateRefX - 24,
+        y: yPosition,
+        size: fontSize,
+        font: helveticaFont,
+        color: rgb(0, 0, 0),
+      });
     } else {
       page.drawText(dateText, { x: dateRefX - 434, y: yPosition, size: fontSize, font, color: rgb(0, 0, 0) });
       yPosition -= 15;
-      page.drawText(refText, { x: dateRefX - 434, y: yPosition, size: fontSize, font, color: rgb(0, 0, 0) });
+      
+      // Draw label on first line
+      page.drawText('Contract No:', { x: dateRefX - 434, y: yPosition, size: fontSize, font, color: rgb(0, 0, 0) });
+      
+      // Draw reference number on new line below
+      yPosition -= 12;
+      page.drawText(referenceNumber, { x: dateRefX - 434, y: yPosition, size: fontSize, font, color: rgb(0, 0, 0) });
     }
     yPosition -= 15;
 
 //     /* ---------- beneficiary ---------- */
 
 const beneficiaryY = yPosition;
-const beneficiaryX = pageWidth - margin - 120; // same as company info alignment
+const beneficiaryX = pageWidth - margin - 120; 
 
-const rawGuestText = guestName; // e.g., "Rao Sarim Ali"
-const referenceNumberText = referenceNumber; // e.g., "RE/25/11/20/e8a"
+const rawGuestText = guestName; 
+const referenceNumberText = referenceNumber; 
 const pobText = 'P.O.B. (232100400383)';
 
 
 if (lang === 'ar') {
-  const arabicLabel = 'ةدﺎﺴﻟا ﻰﻟإ اﻮﻌﻓدأ';
-  const spacing = 5; 
+  const arabicLabel = 'أدفعوا إلى السادة';
 
-  const arabicWidth = arabicFont.widthOfTextAtSize(arabicLabel, fontSize);
-
-  drawArabicText(page, arabicLabel, beneficiaryX + 10, beneficiaryY, arabicFont, fontSize, rgb(0, 0, 0));
+  drawArabicText(page, arabicLabel, beneficiaryX, beneficiaryY, arabicFont, fontSize, rgb(0, 0, 0));
 
   page.drawText(referenceNumberText, {
-    x: beneficiaryX - arabicWidth - spacing,
-    y: beneficiaryY,
+    x: beneficiaryX,
+    y: beneficiaryY - 12,
     size: fontSize,
     font: helveticaFont,
     color: rgb(0, 0, 0),
@@ -262,16 +275,17 @@ if (lang === 'ar') {
   // P.O.B.
   page.drawText(pobText, {
     x: beneficiaryX,
-    y: beneficiaryY - 12,
+    y: beneficiaryY - 24,
     size: fontSize,
     font: helveticaFont,
     color: rgb(0, 0, 0),
   });
+  
 
   // Guest name
   page.drawText(rawGuestText, {
     x: beneficiaryX,
-    y: beneficiaryY - 24,
+    y: beneficiaryY - 36,
     size: fontSize,
     font: helveticaFont,
     color: rgb(0, 0, 0),
@@ -281,7 +295,7 @@ if (lang === 'ar') {
   // English
   const englishLabel = 'For the benefit of:';
   page.drawText(englishLabel, {
-    x: beneficiaryX,
+    x: beneficiaryX - 413,
     y: beneficiaryY,
     size: fontSize,
     font: helveticaFont,
@@ -289,7 +303,7 @@ if (lang === 'ar') {
   });
 
   page.drawText(referenceNumberText, {
-    x: beneficiaryX,
+    x: beneficiaryX - 413,
     y: beneficiaryY - 12,
     size: fontSize,
     font: helveticaFont,
@@ -297,7 +311,7 @@ if (lang === 'ar') {
   });
 
   page.drawText(rawGuestText, {
-    x: beneficiaryX,
+    x: beneficiaryX - 413,
     y: beneficiaryY - 24,
     size: fontSize,
     font: helveticaFont,
@@ -305,7 +319,7 @@ if (lang === 'ar') {
   });
 
   page.drawText(pobText, {
-    x: beneficiaryX,
+    x: beneficiaryX - 413,
     y: beneficiaryY - 36,
     size: fontSize,
     font: helveticaFont,
