@@ -43,7 +43,7 @@ const PaymentConfirmed = () => {
         startDate: bookingStore.selectedDates.checkIn,
         endDate: bookingStore.selectedDates.checkOut,
         refundableAmount: '200',
-        totalAmount: Number(bookingStore.packageAmount) || 'NA', 
+        totalAmount: Number(bookingStore.packageAmount) || 0, 
         chaletTitle: data.title || 'N/A',
         hostName: data.host?.fullName || 'N/A',
         guestName: userStore.user?.name || 'Guest Name',
