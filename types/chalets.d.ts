@@ -8,6 +8,7 @@ export type Bookings = Booking[]
 export interface Chalet {
   id: string
   title: string
+  refundableSecurityDeposit?: number;
   description: string
   noOfBedrooms: string
   maxNoOfBeds: string

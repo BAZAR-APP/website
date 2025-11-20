@@ -9,6 +9,9 @@ import toast from 'react-hot-toast'
 import { extractErrorMessage } from '@/lib/utils'
 import { Chalet } from '../../../../../../../../types/chalets'
 import { SocialLinkShare } from '@/components'
+import { useUserStore } from '../../../../../../../../stores/useUserStore'
+import { useBookingStore } from '../../../../../../../../stores/useBookingStore'
+import { generateBookingInvoicePDF } from '@/lib/generateInvoicePDF'
 
 const PaymentConfirmed = () => {
   const bookingConfirmed = false
@@ -17,6 +20,45 @@ const PaymentConfirmed = () => {
   const [data, setData] = useState<Chalet | null>(null)
   const [loading, setLoading] = useState(true)
   const [isOpen, setIsOpen] = useState(false)
+  const bookingStore = useBookingStore();
+  const userStore = useUserStore();
+
+  const handleDownloadInvoice = async () => {
+    try {
+      if (!data) {
+        console.error("❌ Chalet data is missing!");
+        toast.error("Chalet data not loaded.");
+        return;
+      }
+
+
+      const actualBookingId = id;
+      if (!actualBookingId || typeof actualBookingId !== 'string') {
+        toast.error("Invalid Booking ID.");
+        return;
+      }
+
+      const invoiceData = {
+        bookingId: actualBookingId,
+        startDate: bookingStore.selectedDates.checkIn,
+        endDate: bookingStore.selectedDates.checkOut,
+        refundableAmount: '200',
+        totalAmount: Number(bookingStore.packageAmount) || 'NA', 
+        chaletTitle: data.title || 'N/A',
+        hostName: data.host?.fullName || 'N/A',
+        guestName: userStore.user?.name || 'Guest Name',
+        guestPhone: userStore.user?.phone || '+96512341234',
+        guestEmail: userStore.user?.email || 'guest@example.com',
+        createdAt: new Date().toISOString(),
+      };
+
+      await generateBookingInvoicePDF(invoiceData, lang);
+      toast.success('Invoice downloaded successfully!');
+    } catch (error) {
+      console.error('Error downloading invoice:', error);
+      toast.error('Failed to download invoice.');
+    }
+  };
 
   useEffect(() => {
     if (!id || !lang) return
@@ -174,11 +216,15 @@ const PaymentConfirmed = () => {
               </span>
               <ChevronRight className="w-3 h-3 text-[#29397E]" strokeWidth={3} />{' '}
             </button>
-            <ActionLink
-              label="Download Invoice"
-              href=""
-              trailingIcon={<Download className="w-4 h-4 text-[#29397E]" />}
-            />
+            <button
+              onClick={handleDownloadInvoice}
+              className="flex gap-1 items-center cursor-pointer" 
+            >
+              <Download className="w-4 h-4 text-[#29397E]" />
+              <span className="text-sm text-[#29397E] font-medium underline underline-offset-2">
+                Download Invoice
+              </span>
+            </button>
           </div>
         </div>
       </div>

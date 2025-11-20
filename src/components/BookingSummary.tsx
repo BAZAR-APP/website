@@ -167,7 +167,7 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
       }
       await api.post('/booking', body)
       setSelectedDiscount(null)
-      resetBooking()
+      // resetBooking()
       router.replace(`/chalet/${id}/booking/payment-confirmed`)
     } catch (error) {
       toast.error(extractErrorMessage(error))
