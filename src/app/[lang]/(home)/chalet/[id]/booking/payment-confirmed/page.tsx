@@ -6,7 +6,7 @@ import { useParams } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import { ChevronRight, CircleDollarSign, Clock, Download, MapPin, PartyPopper } from 'lucide-react'
 import toast from 'react-hot-toast'
-import { extractErrorMessage } from '@/lib/utils'
+import { extractErrorMessage, calculateLoyaltyPoints } from '@/lib/utils'
 import { Chalet } from '../../../../../../../../types/chalets'
 import { SocialLinkShare } from '@/components'
 import { useUserStore } from '../../../../../../../../stores/useUserStore'
@@ -91,7 +91,19 @@ const PaymentConfirmed = () => {
     return <div className="flex justify-center items-center h-screen">Loading...</div>
   }
 
-  const points = data.noOfLoyalityPoints || 0
+  // Calculate nights from dates if not available in store
+  const calculateNightsFromDates = () => {
+    if (bookingStore.selectedDates?.checkIn && bookingStore.selectedDates?.checkOut) {
+      const checkIn = new Date(bookingStore.selectedDates.checkIn)
+      const checkOut = new Date(bookingStore.selectedDates.checkOut)
+      const diffTime = checkOut.getTime() - checkIn.getTime()
+      return Math.ceil(diffTime / (1000 * 3600 * 24))
+    }
+    return bookingStore.noOfNights ?? 0
+  }
+
+  const numberOfNights = calculateNightsFromDates()
+  const points = calculateLoyaltyPoints(data?.noOfLoyalityPoints, numberOfNights, bookingStore.bookingType === 'hourly')
   const fullLocation = `${data.street1}, ${data.street2}, ${data.city}, ${data.state}, ${data.country}`
   const details = `${data.maxNoOfGuests || 'N/A'} guests · ${
     data.isEntireHomeAvailabe ? 'Entire Home' : 'Private Room'

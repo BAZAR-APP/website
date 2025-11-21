@@ -192,6 +192,31 @@ export default function calculateCustomLoyltyPointsPrice(
   const price = pointsToBuy / rate
   return Number(price)
 }
+  /**
+   * Calculates loyalty points for a booking based on number of nights
+   * Formula: Base points (from chalet) + (number of nights × 100)
+   * For hourly bookings, only base points are awarded (no per-night bonus)
+   * @param basePoints - Base points from the chalet (chalet.noOfLoyalityPoints)
+   * @param numberOfNights - The number of nights for the stay
+   * @param isHourly - Whether this is an hourly booking (default: false)
+   * @returns Total loyalty points earned
+   */
+  export function calculateLoyaltyPoints(
+    basePoints: number | null | undefined,
+    numberOfNights: number | null | undefined,
+    isHourly: boolean = false,
+  ): number {
+    const pointsPerNight = 100
+    const base = basePoints ?? 0
+    
+    // Hourly bookings only get base points, no per-night bonus
+    if (isHourly) {
+      return base
+    }
+    
+    const nights = numberOfNights ?? 0
+    return base + (nights * pointsPerNight)
+  }
 export const formatRelativeTime = (dateString: string) => {
   try {
     const date = parseISO(dateString)

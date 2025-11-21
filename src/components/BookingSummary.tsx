@@ -12,7 +12,7 @@ import { format } from 'date-fns'
 import { Customization } from '@/lib/types/booking'
 import api from '@/lib/axios'
 import { toast } from '@/lib/toast'
-import { extractErrorMessage } from '@/lib/utils'
+import { extractErrorMessage, calculateLoyaltyPoints } from '@/lib/utils'
 import { useFormContext } from 'react-hook-form'
 import { useUserStore } from '../../stores/useUserStore'
 import OverlayLoader from './OverlayLoader'
@@ -118,10 +118,12 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
     setIsDiscountApplied,
     resetBooking,
     chaletDetails,
+    bookingType,
   } = useBookingStore()
 
   const isSplitPayment = getValues()?.paymentOption === 'split'
   const grandTotal = (selectedAddonsTotal ?? 0) + Number(packageAmount) + (romanticWeekend ? 25 : 0)
+  const calculatedPoints = earnPoints ? calculateLoyaltyPoints(chaletDetails?.noOfLoyalityPoints, noOfNights, bookingType === 'hourly') : 0
   const handleApplyDiscount = async () => {
     setLoading(true)
     try {
@@ -212,12 +214,12 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
             {earnPoints && (
               <>
                 <div className="text-sm text-[#9EA0A2] mb-3">
-                  You&apos;ll earn {chaletDetails?.noOfLoyalityPoints} points with this booking!
+                  You&apos;ll earn {calculatedPoints} points with this booking!
                 </div>
                 <div className="flex bg-[#E1F3FF] items-center justify-between gap-1 rounded py-1 px-1.5 max-w-[111px]">
                   <Image src="/images/Points.svg" width={16} height={16} alt="Points" />
                   <span className="text-[#29397E] text-sm">
-                    {chaletDetails?.noOfLoyalityPoints} Points
+                    {calculatedPoints} Points
                   </span>
                 </div>
               </>
