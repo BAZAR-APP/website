@@ -16,6 +16,7 @@ import { format } from 'date-fns'
 import { extractErrorMessage, calculateLoyaltyPoints } from '@/lib/utils'
 import { toast } from '@/lib/toast'
 import { Locale } from '../../../../../../i18n.config'
+import { useBookingStore } from '../../../../../../stores/useBookingStore'
 
 interface AddOn {
   name: string
@@ -158,7 +159,9 @@ const PaymentSection: React.FC<{
   bookingStatus: bookingStatus
   onPayRemaining?: () => void
   onCancelBooking?: () => void
+  onRefundFullAmount?: () => void
   lang: Locale
+  isRefunded?: boolean
 }> = React.memo(function PaymentSection({
   paymentStatus,
   totalAmount,
@@ -168,7 +171,9 @@ const PaymentSection: React.FC<{
   bookingStatus,
   onPayRemaining,
   onCancelBooking,
+  onRefundFullAmount,
   lang,
+  isRefunded = false,
 }) {
   return (
     <div className="w-full lg:max-w-[430px] max-w-full">
@@ -232,19 +237,35 @@ const PaymentSection: React.FC<{
           </Button>
         )}
         <Button
-          intent="danger"
+          intent="primary"
           className="w-full !text-sm"
-          onClick={onCancelBooking}
-          disabled={bookingStatus === 'cancelled'}
+          onClick={onRefundFullAmount}
+          disabled={bookingStatus === 'cancelled' || isRefunded}
         >
-          {bookingStatus === 'cancelled'
+          {isRefunded
             ? lang === 'en'
-                ? 'Booking Cancelled'
-                : 'تم إلغاء الحجز'
+              ? 'This booking refunded'
+              : 'تم استرداد هذا الحجز'
             : lang === 'en'
-                ? 'Cancel Booking'
-                : 'إلغاء الحجز'}
+            ? 'Cancel and refund amount'
+            : 'إلغاء الحجز واسترداد المبلغ'}
         </Button>
+        {!isRefunded && (
+          <Button
+            intent="danger"
+            className="w-full !text-sm"
+            onClick={onCancelBooking}
+            disabled={bookingStatus === 'cancelled'}
+          >
+            {bookingStatus === 'cancelled'
+              ? lang === 'en'
+                  ? 'Booking Cancelled'
+                  : 'تم إلغاء الحجز'
+              : lang === 'en'
+                  ? 'Cancel Booking'
+                  : 'إلغاء الحجز'}
+          </Button>
+        )}
       </div>
     </div>
   )
@@ -325,6 +346,25 @@ export const BookingDetailsPageClient: React.FC<BookingDetailsPageClientProps> =
   })
 
   const bookingDetails = data?.data as IBooking
+
+  // Get refund status from booking store
+  const { addRefundedBooking, refundedBookings } = useBookingStore()
+  
+  const isRefunded = useMemo(() => {
+    if (refundedBookings.includes(id)) {
+      return true
+    }
+
+    if (bookingDetails) {
+      const hasRefunds = (bookingDetails as any)?.refunds?.length > 0 || 
+                        (bookingDetails as any)?.paymentRefunds?.length > 0
+      if (hasRefunds) {
+        return true
+      }
+    }
+
+    return false
+  }, [id, bookingDetails, refundedBookings])
   const addOns = useMemo(() => {
     return (
       bookingDetails?.bookingCustomizations?.map((item:any) => ({
@@ -338,6 +378,24 @@ export const BookingDetailsPageClient: React.FC<BookingDetailsPageClientProps> =
 
   const { isOpen: isCancelOpen, toggle: toggleCancel } = useToggle(false)
   const { isOpen: isConfirmCancel, toggle: confirmCancelToggle } = useToggle(false)
+
+  const refundAmount = useMemo(() => {
+    if (!bookingDetails) return 0
+    
+    const securityDeposit = bookingDetails.refundableDepositAmount || 200
+    let paidAmount = 0
+    
+    if (bookingDetails.paymentStatus === 'halfPaid') {
+      // User paid 50% of grandTotal
+      paidAmount = bookingDetails.grandTotal / 2
+    } else if (bookingDetails.paymentStatus === 'fullPaid') {
+      // User paid 100% of grandTotal
+      paidAmount = bookingDetails.grandTotal
+    }
+    
+    // Refund includes the paid amount plus the security deposit (if applicable)
+    return paidAmount + securityDeposit
+  }, [bookingDetails])
 
   const handleViewDetails = useCallback(() => {
     if (!bookingDetails?.chalet?.isDeleted) return toggle()
@@ -356,6 +414,40 @@ export const BookingDetailsPageClient: React.FC<BookingDetailsPageClientProps> =
 
   const handleCancelBooking = () => {
     toggleCancel()
+  }
+
+  const handleRefundFullAmount = async () => {
+    try {
+      if (!bookingDetails) {
+        toast.error('Booking details not available')
+        return
+      }
+
+      const payment = bookingDetails.payments?.find((p) => p.type === 'booking')
+      const paymentId = payment?.id 
+      
+      if (!paymentId) {
+        toast.error('Payment information not found')
+        return
+      }
+
+      setIsCancelling(true)
+      await api.post(`/paymentRefund/customer`, {
+        refundedAmount: bookingDetails?.grandTotal,
+        type: 'booking', 
+        paymentId: paymentId,
+      })
+      toast.success('Refund full amount successfully')
+      
+      // Store refund status in booking store to persist across refreshes
+      addRefundedBooking(id)
+      
+      refetch()
+    } catch (error) {
+      toast.error(extractErrorMessage(error))
+    } finally {
+      setIsCancelling(false)
+    }
   }
 
   const onBookingCancel = async () => {
@@ -471,13 +563,19 @@ export const BookingDetailsPageClient: React.FC<BookingDetailsPageClientProps> =
             paymentDueDate={format(new Date(bookingDetails?.startDate), 'dd/MM/yyyy')}
             priceBreakdown={[
               {
-                description: lang === 'en' ? 'Refundable Deposit' : 'وديعة قابلة للاسترداد',
-                amount: 200,
-              },
+                  description: lang === 'en' ? 'Refundable Deposit' : 'وديعة قابلة للاسترداد',
+                  amount: bookingDetails?.refundableDepositAmount,
+                },
+              {
+                  description: lang === 'en' ? 'Additional Fee for Full Refund' : 'رسوم إضافية للاسترداد الكامل',
+                  amount: bookingDetails?.chalet?.additionFeeForFullRefund || 0,
+                },
             ]}
             onPayRemaining={handlePayRemaining}
             onCancelBooking={handleCancelBooking}
+            onRefundFullAmount={handleRefundFullAmount}
             lang={lang}
+            isRefunded={isRefunded}
           />
         </div>
       </div>
@@ -486,6 +584,8 @@ export const BookingDetailsPageClient: React.FC<BookingDetailsPageClientProps> =
         setIsOpen={toggleCancel}
         onCancel={onBookingCancel}
         isCancelling={isCancelling}
+        refundAmount={refundAmount}
+        lang={lang}
       />
       <ModalDialog
         isOpen={isConfirmCancel}

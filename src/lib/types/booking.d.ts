@@ -46,12 +46,28 @@ export interface IBooking {
   noOfGuests: number
   totalCostAgainstNights: number
   refundableDepositAmount: number
+  additionalFeeForFullRefund?: number
   grandTotal: number
   chaletId: string
   userId: string
   sleepingRoomId: string | null
   chaletSubscriptionId: string | null
   paymentStatus: 'fullPaid' | 'halfPaid'
+  paymentId?: string // UUID of the payment record
+  payment?: {
+    id: string
+  }
+  payments?: Array<{
+    id: string
+    bookingTotalAmount: number
+    totalPaidAmount: number
+    type: string
+    status: string
+    bookingId: string
+    trackingId?: number
+    createdAt: string
+    updatedAt: string
+  }>
   bookingStatus: 'pending' | 'confirmed' | 'cancelled' | string // You can tighten this union if other statuses are known
   review: {
     rating: string
