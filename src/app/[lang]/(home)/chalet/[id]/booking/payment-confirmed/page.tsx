@@ -96,8 +96,12 @@ const PaymentConfirmed = () => {
     if (bookingStore.selectedDates?.checkIn && bookingStore.selectedDates?.checkOut) {
       const checkIn = new Date(bookingStore.selectedDates.checkIn)
       const checkOut = new Date(bookingStore.selectedDates.checkOut)
+      // Reset time to midnight to avoid time component issues
+      checkIn.setHours(0, 0, 0, 0)
+      checkOut.setHours(0, 0, 0, 0)
       const diffTime = checkOut.getTime() - checkIn.getTime()
-      return Math.ceil(diffTime / (1000 * 3600 * 24))
+      // Use Math.floor to get exact number of nights (not Math.ceil which adds extra night)
+      return Math.floor(diffTime / (1000 * 3600 * 24))
     }
     return bookingStore.noOfNights ?? 0
   }

@@ -130,6 +130,10 @@ const HourlyBookingSummary: React.FC<HourlyBookingSummaryProps> = ({
     if (!date) return []
 
     const allSlots = generateTimeSlots()
+    const now = new Date()
+    const today = startOfDay(now)
+    const selectedDay = startOfDay(date)
+    const isToday = selectedDay.getTime() === today.getTime()
 
     // Get all bookings that affect this date and potentially the next day (for overnight bookings)
     const relevantBookings = bookings.filter((booking) => {
@@ -146,6 +150,11 @@ const HourlyBookingSummary: React.FC<HourlyBookingSummaryProps> = ({
       .filter((slot) => {
         const slotStart = new Date(date)
         slotStart.setHours(slot.hour, 0, 0, 0)
+        
+        if (isToday && slotStart <= now) {
+          return false
+        }
+
         const slotEnd = addHours(slotStart, 6) // 6-hour minimum duration
 
         // Check if this FULL 6-hour slot conflicts with any existing booking
@@ -248,7 +257,7 @@ const HourlyBookingSummary: React.FC<HourlyBookingSummaryProps> = ({
 
   const availableTimeSlots = selectedDate ? getAvailableTimeSlots(selectedDate) : []
   const availableCheckOutTimes = getAvailableCheckOutTimes()
-  const total = (chalet?.perHourCost ?? 0) * 6 + 200
+  const total = (chalet?.perHourCost ?? 0) * 6 + 200 + (chalet?.additionFeeForFullRefund || 0)
 
   return (
     <div className="bg-[#F9FAFB] rounded-2xl">
@@ -386,7 +395,15 @@ const HourlyBookingSummary: React.FC<HourlyBookingSummaryProps> = ({
       <RefundDepositRules bookingConfig={bookingConfig} lang={lang} />
       {selectedDates?.checkIn && (
         <div className="px-5 pb-6 space-y-3">
-          <PackagePricingSummary bookingConfig={bookingConfig} total={total} />
+          <div className="flex justify-between items-center">
+            <span className="text-[16px] font-normal text-[#19191A] flex items-center">
+              {chalet?.perHourCost} {bookingConfig.currency} × 6 hours
+            </span>
+            <span className="font-normal text-[16px] text-[#19191A]">
+              {(chalet?.perHourCost ?? 0) * 6} {bookingConfig.currency}
+            </span>
+          </div>
+          <PackagePricingSummary bookingConfig={bookingConfig} total={total} additionFeeForFullRefund={chalet?.additionFeeForFullRefund} />
         </div>
       )}
     </div>

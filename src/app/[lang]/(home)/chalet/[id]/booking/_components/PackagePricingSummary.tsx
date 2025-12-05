@@ -14,9 +14,10 @@ interface BookingConfig {
     currency: string
   }
 }
-const PackagePricingSummary: FC<{ bookingConfig: BookingConfig; total: number }> = ({
+const PackagePricingSummary: FC<{ bookingConfig: BookingConfig; total: number; additionFeeForFullRefund?: number }> = ({
   bookingConfig,
   total,
+  additionFeeForFullRefund,
 }) => {
   return (
     <>
@@ -33,6 +34,17 @@ const PackagePricingSummary: FC<{ bookingConfig: BookingConfig; total: number }>
           {bookingConfig.refundableDeposit} {bookingConfig.currency}
         </span>
       </div>
+
+      {additionFeeForFullRefund !== undefined && additionFeeForFullRefund > 0 && (
+        <div className="flex justify-between items-center">
+          <span className="text-[16px] font-normal text-[#19191A] flex items-center">
+            Cancelation fee
+          </span>
+          <span className="font-normal text-[16px] text-[#19191A]">
+            {additionFeeForFullRefund} {bookingConfig.currency}
+          </span>
+        </div>
+      )}
 
       <div className="border-t border-[#DEDEDF] pt-3">
         <div className="flex justify-between items-center font-medium text-[16px] text-[#19191A]">
