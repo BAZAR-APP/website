@@ -13,6 +13,7 @@ type BookingState = {
   discountedTotal: number | null
   discountCode: string | null
   bookingType: 'hourly' | 'night'
+  refundedBookings: string[]
   setBookingType: (type: 'hourly' | 'night') => void
   setPlan: (plan: ChaletSubscription | null) => void
   setRoom: (room: ChaletBedroom) => void
@@ -26,6 +27,8 @@ type BookingState = {
   setPackageAmount: (guests: number) => void
   setChaletDetails: (chalet: Chalet | null) => void
   setDiscountedTotal: (discountedTotal: number | null) => void
+  addRefundedBooking: (bookingId: string) => void
+  isBookingRefunded: (bookingId: string) => boolean
 }
 
 import { persist } from 'zustand/middleware'
@@ -33,7 +36,7 @@ import { Chalet, ChaletBedroom, ChaletSubscription } from '../types/chalets'
 
 export const useBookingStore = create(
   persist<BookingState>(
-    (set) => ({
+    (set, get) => ({
       selectedPlan: null,
       selectedRoom: null,
       noOfNights: null,
@@ -46,6 +49,7 @@ export const useBookingStore = create(
       isDiscountApplied: false,
       discountCode: null,
       bookingType: 'night',
+      refundedBookings: [],
       setIsDiscountApplied: (isDiscountApplied) => set({ isDiscountApplied: isDiscountApplied }),
       setDiscountCode: (discountCode) => set({ discountCode: discountCode }),
       setDiscountedTotal: (discountedTotal) => set({ discountedTotal: discountedTotal }),
@@ -58,6 +62,16 @@ export const useBookingStore = create(
       setNoOfNights: (noOfNights) => set({ noOfNights }),
       setPackageAmount: (packageAmount) => set({ packageAmount }),
       setTotalCostAgainstNights: (totalCostAgainstNights) => set({ totalCostAgainstNights }),
+      addRefundedBooking: (bookingId) =>
+        set((state) => {
+          if (!state.refundedBookings.includes(bookingId)) {
+            return { refundedBookings: [...state.refundedBookings, bookingId] }
+          }
+          return state
+        }),
+      isBookingRefunded: (bookingId) => {
+        return get().refundedBookings.includes(bookingId)
+      },
       resetBooking: () =>
         set({
           selectedPlan: null,

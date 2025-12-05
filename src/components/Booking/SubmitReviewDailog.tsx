@@ -6,6 +6,7 @@ import { ChevronRight, Download, MapPin } from 'lucide-react'
 import Location from '../Location'
 import { IBooking } from '@/lib/types/booking'
 import StarRating from '../About/StarRating'
+import { calculateLoyaltyPoints } from '@/lib/utils'
 
 interface SubmitReviewDialogProps {
   isOpen: boolean
@@ -35,7 +36,7 @@ const SubmitReviewDialog: React.FC<SubmitReviewDialogProps> = ({
   const amenities = data?.chalet?.amenities?.map((a) => a.title) || []
   const imageUrl = data?.chalet?.photoURL || '/images/fallback.jpg'
   const imageAlt = propertyTitle
-  const points = (data?.chalet?.noOfLoyalityPoints as number) || 0
+  const points = calculateLoyaltyPoints(data?.chalet?.noOfLoyalityPoints, data?.noOfNights, data?.noOfNights === 0)
 
   const fullAddress = [
     data?.chalet?.pinTitle,

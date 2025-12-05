@@ -11,7 +11,7 @@ import { IBooking } from '@/lib/types/booking'
 import { format } from 'date-fns'
 import api from '@/lib/axios'
 import { toast } from '@/lib/toast'
-import { extractErrorMessage } from '@/lib/utils'
+import { extractErrorMessage, calculateLoyaltyPoints } from '@/lib/utils'
 import { useQueryClient } from '@tanstack/react-query'
 
 interface BookingCardProps {
@@ -89,7 +89,7 @@ const BookingCard: React.FC<BookingCardProps> = ({
             <div className="flex bg-[#E1F3FF] items-center gap-1 rounded py-1 px-1.5 max-w-[110px]">
               <Image src="/images/Points.svg" width={16} height={16} alt="Points Icon" />
               <span className="text-[#29397E] text-sm">
-                {booking?.chalet?.noOfLoyalityPoints} Points
+                {calculateLoyaltyPoints(booking?.chalet?.noOfLoyalityPoints, booking?.noOfNights, booking?.noOfNights === 0)} Points
               </span>
             </div>
           </div>

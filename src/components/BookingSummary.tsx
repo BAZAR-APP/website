@@ -12,7 +12,7 @@ import { format } from 'date-fns'
 import { Customization } from '@/lib/types/booking'
 import api from '@/lib/axios'
 import { toast } from '@/lib/toast'
-import { extractErrorMessage } from '@/lib/utils'
+import { extractErrorMessage, calculateLoyaltyPoints } from '@/lib/utils'
 import { useFormContext } from 'react-hook-form'
 import { useUserStore } from '../../stores/useUserStore'
 import OverlayLoader from './OverlayLoader'
@@ -118,10 +118,29 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
     setIsDiscountApplied,
     resetBooking,
     chaletDetails,
+    bookingType,
   } = useBookingStore()
 
   const isSplitPayment = getValues()?.paymentOption === 'split'
-  const grandTotal = (selectedAddonsTotal ?? 0) + Number(packageAmount) + (romanticWeekend ? 25 : 0)
+  const grandTotal = (selectedAddonsTotal ?? 0) + Number(packageAmount) + (romanticWeekend ? 25 : 0) + (chaletDetails?.additionFeeForFullRefund || 0)
+  
+  // Calculate nights from dates if not available in store (with correct calculation)
+  const calculateNightsFromDates = () => {
+    if (selectedDates?.checkIn && selectedDates?.checkOut) {
+      const checkIn = new Date(selectedDates.checkIn)
+      const checkOut = new Date(selectedDates.checkOut)
+      // Reset time to midnight to avoid time component issues
+      checkIn.setHours(0, 0, 0, 0)
+      checkOut.setHours(0, 0, 0, 0)
+      const diffTime = checkOut.getTime() - checkIn.getTime()
+      // Use Math.floor to get exact number of nights (not Math.ceil which adds extra night)
+      return Math.floor(diffTime / (1000 * 3600 * 24))
+    }
+    return noOfNights ?? 0
+  }
+  
+  const numberOfNights = calculateNightsFromDates()
+  const calculatedPoints = earnPoints ? calculateLoyaltyPoints(chaletDetails?.noOfLoyalityPoints, numberOfNights, bookingType === 'hourly') : 0
   const handleApplyDiscount = async () => {
     setLoading(true)
     try {
@@ -212,12 +231,12 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
             {earnPoints && (
               <>
                 <div className="text-sm text-[#9EA0A2] mb-3">
-                  You&apos;ll earn {chaletDetails?.noOfLoyalityPoints} points with this booking!
+                  You&apos;ll earn {calculatedPoints} points with this booking!
                 </div>
                 <div className="flex bg-[#E1F3FF] items-center justify-between gap-1 rounded py-1 px-1.5 max-w-[111px]">
                   <Image src="/images/Points.svg" width={16} height={16} alt="Points" />
                   <span className="text-[#29397E] text-sm">
-                    {chaletDetails?.noOfLoyalityPoints} Points
+                    {calculatedPoints} Points
                   </span>
                 </div>
               </>
@@ -244,11 +263,32 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
               ))}
               {/* <PriceRowUI label="Refundable Deposit" amount="200 KWD" /> */}
               {romanticWeekend && <PriceRowUI label="Romantic Weekend" amount="25 KWD" />}
-              <PriceRowUI
-                label={'Package Amount'}
-                amount={`${Number(packageAmount)} KWD`}
-                labelFont="medium"
-              />
+              {/* Package Amount Breakdown */}
+              {packageAmount && Number(packageAmount) > 0 && (
+                <>
+                  <div className="space-y-2 border-[#E5E7EB]">
+                    <PriceRowUI
+                      label={lang === 'en' ? 'Package Price' : 'مبلغ الحزمة'}
+                      amount={`${Math.max(0, Number(packageAmount) - 200)} KWD`}
+                    />
+                    <PriceRowUI
+                      label={lang === 'en' ? 'Refundable Deposit' : 'الوديعة القابلة للاسترداد'}
+                      amount="200 KWD"
+                    />
+                    <PriceRowUI
+                      label={lang === 'en' ? 'Cancelation fee' : 'رسوم الإلغاء'}
+                      amount={`${chaletDetails?.additionFeeForFullRefund || 0} KWD`}
+                    />
+                  </div>
+                </>
+              )}
+              {(!packageAmount || Number(packageAmount) <= 0) && (
+                <PriceRowUI
+                  label={lang === 'en' ? 'Package Amount' : 'مبلغ الحزمة'}
+                  amount={`${Number(packageAmount || 0)} KWD`}
+                  labelFont="medium"
+                />
+              )}
               <hr className="my-4" />
               {isDiscountApplied && (
                 <div className="flex justify-between items-center text-sm text-[#9EA0A2] line-through">

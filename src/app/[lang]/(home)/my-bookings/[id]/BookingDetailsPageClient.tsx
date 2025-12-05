@@ -13,9 +13,10 @@ import ModalDialog from '@/components/ModalDialog/Dialog'
 import api, { useQueryBase } from '@/lib/axios'
 import { IBooking } from '@/lib/types/booking'
 import { format } from 'date-fns'
-import { extractErrorMessage } from '@/lib/utils'
+import { extractErrorMessage, calculateLoyaltyPoints } from '@/lib/utils'
 import { toast } from '@/lib/toast'
 import { Locale } from '../../../../../../i18n.config'
+import { useBookingStore } from '../../../../../../stores/useBookingStore'
 
 interface AddOn {
   name: string
@@ -158,7 +159,10 @@ const PaymentSection: React.FC<{
   bookingStatus: bookingStatus
   onPayRemaining?: () => void
   onCancelBooking?: () => void
+  onRefundFullAmount?: () => void
   lang: Locale
+  isRefunded?: boolean
+  isPaying?: boolean
 }> = React.memo(function PaymentSection({
   paymentStatus,
   totalAmount,
@@ -168,7 +172,10 @@ const PaymentSection: React.FC<{
   bookingStatus,
   onPayRemaining,
   onCancelBooking,
+  onRefundFullAmount,
   lang,
+  isRefunded = false,
+  isPaying = false,
 }) {
   return (
     <div className="w-full lg:max-w-[430px] max-w-full">
@@ -205,7 +212,7 @@ const PaymentSection: React.FC<{
             <div key={`${item.description}-${index}`} className="flex justify-between items-center">
               <span className="flex items-center gap-1">
                 {item.description}
-                {item.description === 'Refundable Deposit' && (
+                {(item.description === 'Refundable Deposit' || item.description === 'الوديعة القابلة للاسترداد') && (
                   <Image src="/images/Deposit.svg" width={15} height={15} alt="Deposit icon" />
                 )}
               </span>
@@ -216,7 +223,9 @@ const PaymentSection: React.FC<{
           <hr />
           <div className="flex justify-between items-center font-medium text-[#19191A] text-[16px]">
             <span> {lang === 'en' ? 'Total' : 'المجموع'} </span>
-            <span>{totalAmount} {lang === 'en' ? 'KWD' : 'دينار كويتي'}</span>
+            <span>
+              {priceBreakdown.reduce((sum, item) => sum + (item.amount || 0), 0)} {lang === 'en' ? 'KWD' : 'دينار كويتي'}
+            </span>
           </div>
         </div>
       </div>
@@ -227,24 +236,46 @@ const PaymentSection: React.FC<{
             intent="primary"
             className="w-full !px-0 !text-sm !text-[#FFFFFF]"
             onClick={onPayRemaining}
+            disabled={isPaying}
           >
-            {lang=== 'en' ? ' Pay Remaining Amount' : 'دفع المبلغ المتبقي'} {Math.round(totalAmount / 2)} KD Now
+            {isPaying 
+              ? (lang === 'en' ? 'Processing...' : 'جاري المعالجة...')
+              : `${lang === 'en' ? 'Pay Remaining Amount' : 'دفع المبلغ المتبقي'} ${Math.round(totalAmount / 2)} KD Now`
+            }
           </Button>
         )}
-        <Button
-          intent="danger"
-          className="w-full !text-sm"
-          onClick={onCancelBooking}
-          disabled={bookingStatus === 'cancelled'}
-        >
-          {bookingStatus === 'cancelled'
-            ? lang === 'en'
-                ? 'Booking Cancelled'
-                : 'تم إلغاء الحجز'
-            : lang === 'en'
-                ? 'Cancel Booking'
-                : 'إلغاء الحجز'}
-        </Button>
+        {paymentStatus !== 'fullPaid' && (
+          <Button
+            intent="primary"
+            className="w-full !text-sm"
+            onClick={onRefundFullAmount}
+            disabled={bookingStatus === 'cancelled' || isRefunded}
+          >
+            {isRefunded
+              ? lang === 'en'
+                ? 'This booking refunded'
+                : 'تم استرداد هذا الحجز'
+              : lang === 'en'
+              ? 'Cancel and refund amount'
+              : 'إلغاء الحجز واسترداد المبلغ'}
+          </Button>
+        )}
+        {!isRefunded && paymentStatus !== 'fullPaid' && (
+          <Button
+            intent="danger"
+            className="w-full !text-sm"
+            onClick={onCancelBooking}
+            disabled={bookingStatus === 'cancelled'}
+          >
+            {bookingStatus === 'cancelled'
+              ? lang === 'en'
+                  ? 'Booking Cancelled'
+                  : 'تم إلغاء الحجز'
+              : lang === 'en'
+                  ? 'Cancel Booking'
+                  : 'إلغاء الحجز'}
+          </Button>
+        )}
       </div>
     </div>
   )
@@ -316,6 +347,7 @@ export const BookingDetailsPageClient: React.FC<BookingDetailsPageClientProps> =
   const { id } = useParams() as { id: string, lang:Locale }
   const { isOpen, toggle } = useToggle()
   const [isCancelling, setIsCancelling] = useState<boolean>(false)
+  const [isPaying, setIsPaying] = useState<boolean>(false)
   const { data, isLoading, refetch } = useQueryBase({
     queryKey: ['bookingDetails', id, lang],
     url: `/booking/readById/${id}?language=${lang}`,
@@ -325,6 +357,25 @@ export const BookingDetailsPageClient: React.FC<BookingDetailsPageClientProps> =
   })
 
   const bookingDetails = data?.data as IBooking
+
+  // Get refund status from booking store
+  const { addRefundedBooking, refundedBookings } = useBookingStore()
+  
+  const isRefunded = useMemo(() => {
+    if (refundedBookings.includes(id)) {
+      return true
+    }
+
+    if (bookingDetails) {
+      const hasRefunds = (bookingDetails as any)?.refunds?.length > 0 || 
+                        (bookingDetails as any)?.paymentRefunds?.length > 0
+      if (hasRefunds) {
+        return true
+      }
+    }
+
+    return false
+  }, [id, bookingDetails, refundedBookings])
   const addOns = useMemo(() => {
     return (
       bookingDetails?.bookingCustomizations?.map((item:any) => ({
@@ -336,8 +387,111 @@ export const BookingDetailsPageClient: React.FC<BookingDetailsPageClientProps> =
     )
   }, [bookingDetails])
 
+  const priceBreakdown = useMemo(() => {
+    if (!bookingDetails) return []
+    
+    const breakdown: PriceBreakdownItem[] = []
+    
+    // Calculate components that make up grandTotal
+    // grandTotal = addonsTotal + packageAmount + romanticWeekend(25) + cancellationFee
+    // where packageAmount = baseCost + deposit (200)
+    
+    // Individual add-ons (each one separately, matching BookingSummary)
+    const addonsTotal = bookingDetails.bookingCustomizations?.reduce(
+      (sum: number, item: any) => sum + (item.totalCost || 0),
+      0
+    ) || 0
+    
+    bookingDetails.bookingCustomizations?.forEach((item: any) => {
+      const addonCost = item.totalCost || 0
+      if (addonCost > 0) {
+        const addonTitle = item.chaletCustomization?.customization?.title || 
+                          item.customization?.title || 
+                          'Unnamed Add-On'
+        breakdown.push({
+          description: addonTitle,
+          amount: addonCost,
+        })
+      }
+    })
+    
+    // Romantic Weekend (if applicable) - 25 KWD
+    const isRomanticBooking = (bookingDetails as any)?.isRomanticBookingSelected || false
+    if (isRomanticBooking) {
+      breakdown.push({
+        description: lang === 'en' ? 'Romantic Weekend' : 'عطلة نهاية الأسبوع الرومانسية',
+        amount: 25,
+      })
+    }
+    
+    // Package Amount Breakdown (matching BookingSummary structure)
+    // In BookingSummary: grandTotal = addonsTotal + packageAmount + romanticWeekend(25) + cancellationFee
+    // packageAmount = baseCost + deposit (200)
+    // Package Price = packageAmount - 200 = baseCost
+    const deposit = bookingDetails.refundableDepositAmount || 200
+    const cancellationFee = bookingDetails.chalet?.additionFeeForFullRefund || 0
+    const romanticWeekendAmount = isRomanticBooking ? 25 : 0
+    
+    // Calculate what packageAmount would be
+    // packageAmount = grandTotal - addonsTotal - romanticWeekend - cancellationFee
+    const calculatedPackageAmount = bookingDetails.grandTotal - addonsTotal - romanticWeekendAmount - cancellationFee
+    
+    // Package Price = packageAmount - deposit (matching BookingSummary: packageAmount - 200)
+    const packagePrice = Math.max(0, calculatedPackageAmount - deposit)
+    
+    // Show Package Price (matching BookingSummary structure)
+    if (calculatedPackageAmount > 0) {
+      breakdown.push({
+        description: lang === 'en' ? 'Package Price' : 'مبلغ الحزمة',
+        amount: packagePrice,
+      })
+      
+      // Refundable Deposit (200) - shown in breakdown
+      if (deposit > 0) {
+        breakdown.push({
+          description: lang === 'en' ? 'Refundable Deposit' : 'الوديعة القابلة للاسترداد',
+          amount: deposit,
+        })
+      }
+      
+      // Cancelation fee - added separately to grandTotal
+      if (cancellationFee > 0) {
+        breakdown.push({
+          description: lang === 'en' ? 'Cancelation fee' : 'رسوم الإلغاء',
+          amount: cancellationFee,
+        })
+      }
+    } else {
+      // If no package amount, show Package Amount as 0 (matching BookingSummary fallback)
+      breakdown.push({
+        description: lang === 'en' ? 'Package Amount' : 'مبلغ الحزمة',
+        amount: 0,
+      })
+    }
+    
+    return breakdown
+  }, [bookingDetails, lang])
+
   const { isOpen: isCancelOpen, toggle: toggleCancel } = useToggle(false)
   const { isOpen: isConfirmCancel, toggle: confirmCancelToggle } = useToggle(false)
+
+  const refundAmount = useMemo(() => {
+    if (!bookingDetails) return 0
+    
+    const securityDeposit = bookingDetails.refundableDepositAmount || 200
+    let paidAmount = 0
+    
+    if (bookingDetails.paymentStatus === 'halfPaid') {
+      // User paid 50% of grandTotal
+      paidAmount = bookingDetails.grandTotal / 2
+    } else if (bookingDetails.paymentStatus === 'fullPaid') {
+      // User paid 100% of grandTotal
+      paidAmount = bookingDetails.grandTotal
+    }
+    
+    // Refund includes the paid amount plus the security deposit (if applicable)
+    return paidAmount + securityDeposit
+  }, [bookingDetails])
 
   const handleViewDetails = useCallback(() => {
     if (!bookingDetails?.chalet?.isDeleted) return toggle()
@@ -349,13 +503,71 @@ export const BookingDetailsPageClient: React.FC<BookingDetailsPageClientProps> =
     window.open(googleMapsUrl, '_blank')
   }, [])
 
-  const handlePayRemaining = () => {
-    return
-    // router.push('/my-bookings/complete-payment/')
+  const handlePayRemaining = async () => {
+    try {
+      if (!bookingDetails) {
+        toast.error(lang === 'en' ? 'Booking details not available' : 'تفاصيل الحجز غير متاحة')
+        return
+      }
+
+      const remainingAmount = Math.round(bookingDetails.grandTotal / 2)
+      
+      if (remainingAmount <= 0) {
+        toast.error(lang === 'en' ? 'Invalid amount to pay' : 'مبلغ غير صالح للدفع')
+        return
+      }
+
+      setIsPaying(true)
+      await api.patch('/booking/customer/payRemainingAmount', {
+        bookingId: bookingDetails.id,
+        amount: remainingAmount,
+      })
+      
+      toast.success(lang === 'en' ? 'Payment processed successfully' : 'تم معالجة الدفع بنجاح')
+      refetch()
+    } catch (error) {
+      toast.error(extractErrorMessage(error))
+    } finally {
+      setIsPaying(false)
+    }
   }
 
   const handleCancelBooking = () => {
     toggleCancel()
+  }
+
+  const handleRefundFullAmount = async () => {
+    try {
+      if (!bookingDetails) {
+        toast.error('Booking details not available')
+        return
+      }
+
+      const payment = bookingDetails.payments?.find((p) => p.type === 'booking')
+      const paymentId = payment?.id 
+      
+      if (!paymentId) {
+        toast.error('Payment information not found')
+        return
+      }
+
+      setIsCancelling(true)
+      await api.post(`/paymentRefund/customer`, {
+        refundedAmount: bookingDetails?.grandTotal,
+        type: 'booking', 
+        paymentId: paymentId,
+      })
+      toast.success('Refund full amount successfully')
+      
+      // Store refund status in booking store to persist across refreshes
+      addRefundedBooking(id)
+      
+      refetch()
+    } catch (error) {
+      toast.error(extractErrorMessage(error))
+    } finally {
+      setIsCancelling(false)
+    }
   }
 
   const onBookingCancel = async () => {
@@ -415,7 +627,7 @@ export const BookingDetailsPageClient: React.FC<BookingDetailsPageClientProps> =
                   <div className="flex bg-[#E1F3FF] items-center gap-1 rounded py-1 px-1.5 max-w-[110px]">
                     <Image src="/images/Points.svg" width={16} height={16} alt="Points Icon" />
                     <span className="text-[#29397E] text-sm">
-                      {bookingDetails?.chalet?.noOfLoyalityPoints} Points
+                      {calculateLoyaltyPoints(bookingDetails?.chalet?.noOfLoyalityPoints, bookingDetails?.noOfNights, bookingDetails?.noOfNights === 0)} Points
                     </span>
                   </div>
                 </div>
@@ -467,17 +679,15 @@ export const BookingDetailsPageClient: React.FC<BookingDetailsPageClientProps> =
             paymentStatus={bookingDetails?.paymentStatus}
             totalAmount={bookingDetails?.grandTotal}
             bookingStatus={bookingDetails?.bookingStatus}
-            securityDeposit={200}
+            securityDeposit={bookingDetails?.refundableDepositAmount || 200}
             paymentDueDate={format(new Date(bookingDetails?.startDate), 'dd/MM/yyyy')}
-            priceBreakdown={[
-              {
-                description: lang === 'en' ? 'Refundable Deposit' : 'وديعة قابلة للاسترداد',
-                amount: 200,
-              },
-            ]}
+            priceBreakdown={priceBreakdown}
             onPayRemaining={handlePayRemaining}
             onCancelBooking={handleCancelBooking}
+            onRefundFullAmount={handleRefundFullAmount}
             lang={lang}
+            isRefunded={isRefunded}
+            isPaying={isPaying}
           />
         </div>
       </div>
@@ -486,6 +696,13 @@ export const BookingDetailsPageClient: React.FC<BookingDetailsPageClientProps> =
         setIsOpen={toggleCancel}
         onCancel={onBookingCancel}
         isCancelling={isCancelling}
+        refundAmount={refundAmount}
+        lang={lang}
+        priceBreakdown={priceBreakdown}
+        paymentStatus={bookingDetails?.paymentStatus}
+        totalAmount={bookingDetails?.grandTotal}
+        cancellationFee={-(bookingDetails?.chalet?.additionFeeForFullRefund || 0)}
+        calculatedRefundAmount={(bookingDetails?.grandTotal || 0) - (bookingDetails?.chalet?.additionFeeForFullRefund || 0)}
       />
       <ModalDialog
         isOpen={isConfirmCancel}

@@ -28,6 +28,7 @@ export interface Chalet {
   weekDaysCost: number
   fullWeekCost: number
   fullMonthCost: number
+  additionFeeForFullRefund?: number
   status: string
   photoId: string
   galleryPhotoIds: string[]

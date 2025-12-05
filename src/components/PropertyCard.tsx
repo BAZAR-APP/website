@@ -136,10 +136,10 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ onClick, chalet, isMember =
               {isMember ? (
                 <>
                   <span className="md:text-[14px] text-[12px] font-bold text-primary">
-                    {chalet?.perNightCost} KD
+                    {chalet?.perHourCost && Number(chalet?.perHourCost) > 0 ? chalet?.perHourCost : chalet?.perNightCost} KD
                   </span>
                   <span className="md:text-[12px] text-[10px] leading-4 font-normal text-primary">
-                    /night
+                    /{chalet?.perHourCost && Number(chalet?.perHourCost) > 0 ? 'hour' : 'night'}
                   </span>
                   {/* <span className="pl-2 md:text-[12px] text-[10px] font-overline leading-4 font-bold line-through text-primary">
                     {chalet?.perNightCost} KD
@@ -147,8 +147,8 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ onClick, chalet, isMember =
                 </>
               ) : (
                 <>
-                  <span className="sm:text-[18px] text-sm">{chalet?.perNightCost} {lang === 'en' ? 'KD' : 'دينار كويتي'} </span>
-                  <span className="text-sm leading-4 font-normal text-[#484A4C]">/{lang === 'en' ? 'night' : 'ليلة'}</span>
+                  <span className="sm:text-[18px] text-sm">{chalet?.perHourCost && Number(chalet?.perHourCost) > 0 ? chalet?.perHourCost : chalet?.perNightCost} {lang === 'en' ? 'KD' : 'دينار كويتي'} </span>
+                  <span className="text-sm leading-4 font-normal text-[#484A4C]">/{chalet?.perHourCost && Number(chalet?.perHourCost) > 0 ? (lang === 'en' ? 'hour' : 'ساعة') : (lang === 'en' ? 'night' : 'ليلة')}</span>
                 </>
               )}
             </div>

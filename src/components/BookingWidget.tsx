@@ -372,8 +372,12 @@ const getNonPackageDisabledDates = useMemo(() => {
     if (selectedDates?.checkIn && selectedDates?.checkOut) {
       const checkInDate = new Date(selectedDates.checkIn)
       const checkOutDate = new Date(selectedDates.checkOut)
+      // Reset time to midnight to avoid time component issues
+      checkInDate.setHours(0, 0, 0, 0)
+      checkOutDate.setHours(0, 0, 0, 0)
       const diffTime = checkOutDate.getTime() - checkInDate.getTime()
-      return Math.ceil(diffTime / (1000 * 3600 * 24))
+      // Use Math.floor to get exact number of nights (not Math.ceil which adds extra night)
+      return Math.floor(diffTime / (1000 * 3600 * 24))
     }
     return getDefaultNights()
   }
@@ -430,7 +434,7 @@ const getNonPackageDisabledDates = useMemo(() => {
       ? Number(selectedPlan?.price)
       : selectedPackageType
         ? currentPrice
-        : nights * (packageInfo?.perNightCost || 0)) + bookingConfig.refundableDeposit
+        : nights * (packageInfo?.perNightCost || 0)) + bookingConfig.refundableDeposit + (chalet?.additionFeeForFullRefund || 0)
 
   useEffect(() => {
     if (selectedPlan?.id) {
@@ -762,7 +766,7 @@ const getNonPackageDisabledDates = useMemo(() => {
             </span>
           </div>
         )}
-        <PackagePricingSummary bookingConfig={bookingConfig} total={total} />
+        <PackagePricingSummary bookingConfig={bookingConfig} total={total} additionFeeForFullRefund={chalet?.additionFeeForFullRefund} />
       </div>
     </div>
   )
