@@ -11,7 +11,7 @@ import { Chalet } from '../../../../../../../../types/chalets'
 import { SocialLinkShare } from '@/components'
 import { useUserStore } from '../../../../../../../../stores/useUserStore'
 import { useBookingStore } from '../../../../../../../../stores/useBookingStore'
-import { generateBookingInvoicePDF } from '@/lib/generateInvoicePDF'
+import { generateBookingInvoicePDF, InvoiceData } from '@/lib/generateInvoicePDF'
 import api, { useQueryBase } from '@/lib/axios'
 import { IBooking } from '@/lib/types/booking'
 
@@ -71,7 +71,7 @@ const PaymentConfirmed = () => {
         remainingAmount = split.secondPayment
       }
 
-      const invoiceData = {
+      const invoiceData: InvoiceData = {
         bookingId: actualBookingId,
         startDate: bookingDetails?.startDate || bookingStore.selectedDates.checkIn,
         endDate: bookingDetails?.endDate || bookingStore.selectedDates.checkOut,
@@ -83,7 +83,7 @@ const PaymentConfirmed = () => {
         guestPhone: userStore.user?.phone || '+96512341234',
         guestEmail: userStore.user?.email || 'guest@example.com',
         createdAt: bookingDetails?.createdAt || new Date().toISOString(),
-        paymentStatus: bookingDetails?.paymentStatus || 'fullPaid',
+        paymentStatus: (bookingDetails?.paymentStatus || 'fullPaid') as 'fullPaid' | 'halfPaid',
         paidAmount: paidAmount,
         remainingAmount: remainingAmount,
       };
@@ -106,7 +106,7 @@ const PaymentConfirmed = () => {
           const paidAmount = split.firstPayment
           const remainingAmount = split.secondPayment
 
-          const invoiceData = {
+          const invoiceData: InvoiceData = {
             bookingId: bookingDetails.id,
             startDate: bookingDetails.startDate,
             endDate: bookingDetails.endDate,
