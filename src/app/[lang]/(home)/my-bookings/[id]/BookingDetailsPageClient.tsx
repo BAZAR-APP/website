@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useMemo, useCallback, useState } from 'react'
-import { MapPin, ChevronRight, ShieldOff } from 'lucide-react'
+import { MapPin, ChevronRight, ShieldOff, Download } from 'lucide-react'
 import { Button } from '@/components'
 import ChaletRules from '@/components/ChaletsRules'
 import Image from 'next/image'
@@ -13,10 +13,12 @@ import ModalDialog from '@/components/ModalDialog/Dialog'
 import api, { useQueryBase } from '@/lib/axios'
 import { IBooking } from '@/lib/types/booking'
 import { format } from 'date-fns'
-import { extractErrorMessage, calculateLoyaltyPoints } from '@/lib/utils'
+import { extractErrorMessage, calculateLoyaltyPoints, calculateSplitPayment } from '@/lib/utils'
 import { toast } from '@/lib/toast'
 import { Locale } from '../../../../../../i18n.config'
 import { useBookingStore } from '../../../../../../stores/useBookingStore'
+import { generateBookingInvoicePDF } from '@/lib/generateInvoicePDF'
+import { useUserStore } from '../../../../../../stores/useUserStore'
 
 interface AddOn {
   name: string
@@ -160,6 +162,7 @@ const PaymentSection: React.FC<{
   onPayRemaining?: () => void
   onCancelBooking?: () => void
   onRefundFullAmount?: () => void
+  onDownloadInvoice?: () => void
   lang: Locale
   isRefunded?: boolean
   isPaying?: boolean
@@ -173,6 +176,7 @@ const PaymentSection: React.FC<{
   onPayRemaining,
   onCancelBooking,
   onRefundFullAmount,
+  onDownloadInvoice,
   lang,
   isRefunded = false,
   isPaying = false,
@@ -189,9 +193,10 @@ const PaymentSection: React.FC<{
 
         {paymentStatus === 'halfPaid' && (
           <p className="text-sm leading-[17px] text-[#9EA0A2]">
-            You&apos;ve paid 50% of the total amount ({totalAmount} KWD). The remaining
-            {Math.round(totalAmount / 2)} KWD is due at least 72 hours before check-in by [
-            {paymentDueDate}].
+            {(() => {
+              const split = calculateSplitPayment(totalAmount)
+              return `You've paid 50% of the total amount (${totalAmount} KWD). The remaining ${split.secondPayment} KWD is due at least 72 hours before check-in by [${paymentDueDate}].`
+            })()}
           </p>
         )}
 
@@ -231,6 +236,15 @@ const PaymentSection: React.FC<{
       </div>
 
       <div className="flex flex-col gap-4 min-h-[200px] pt-10">
+        {onDownloadInvoice && (
+          <Button
+            intent="transperent"
+            className="w-full !text-sm !border !border-[#29397E] !text-[#29397E]"
+            onClick={onDownloadInvoice}
+          >
+            {lang === 'en' ? 'Download Invoice' : 'تنزيل الفاتورة'}
+          </Button>
+        )}
         {paymentStatus === 'halfPaid' && (
           <Button
             intent="primary"
@@ -238,10 +252,12 @@ const PaymentSection: React.FC<{
             onClick={onPayRemaining}
             disabled={isPaying}
           >
-            {isPaying 
-              ? (lang === 'en' ? 'Processing...' : 'جاري المعالجة...')
-              : `${lang === 'en' ? 'Pay Remaining Amount' : 'دفع المبلغ المتبقي'} ${Math.round(totalAmount / 2)} KD Now`
-            }
+            {(() => {
+              const split = calculateSplitPayment(totalAmount)
+              return isPaying 
+                ? (lang === 'en' ? 'Processing...' : 'جاري المعالجة...')
+                : `${lang === 'en' ? 'Pay Remaining Amount' : 'دفع المبلغ المتبقي'} ${split.secondPayment} KD Now`
+            })()}
           </Button>
         )}
         {paymentStatus !== 'fullPaid' && (
@@ -360,6 +376,7 @@ export const BookingDetailsPageClient: React.FC<BookingDetailsPageClientProps> =
 
   // Get refund status from booking store
   const { addRefundedBooking, refundedBookings } = useBookingStore()
+  const userStore = useUserStore()
   
   const isRefunded = useMemo(() => {
     if (refundedBookings.includes(id)) {
@@ -510,7 +527,8 @@ export const BookingDetailsPageClient: React.FC<BookingDetailsPageClientProps> =
         return
       }
 
-      const remainingAmount = Math.round(bookingDetails.grandTotal / 2)
+      const split = calculateSplitPayment(bookingDetails.grandTotal)
+      const remainingAmount = split.secondPayment
       
       if (remainingAmount <= 0) {
         toast.error(lang === 'en' ? 'Invalid amount to pay' : 'مبلغ غير صالح للدفع')
@@ -582,6 +600,49 @@ export const BookingDetailsPageClient: React.FC<BookingDetailsPageClientProps> =
       toast.error(extractErrorMessage(error))
     } finally {
       setIsCancelling(false)
+    }
+  }
+
+  const handleDownloadInvoice = async () => {
+    try {
+      if (!bookingDetails) {
+        toast.error(lang === 'en' ? 'Booking details not available' : 'تفاصيل الحجز غير متاحة')
+        return
+      }
+
+      const grandTotal = bookingDetails.grandTotal || 0
+      const isHalfPaid = bookingDetails.paymentStatus === 'halfPaid'
+      let paidAmount = grandTotal
+      let remainingAmount = 0
+      
+      if (isHalfPaid) {
+        const split = calculateSplitPayment(grandTotal)
+        paidAmount = split.firstPayment
+        remainingAmount = split.secondPayment
+      }
+
+      const invoiceData = {
+        bookingId: bookingDetails.id,
+        startDate: bookingDetails.startDate,
+        endDate: bookingDetails.endDate,
+        refundableAmount: String(bookingDetails.refundableDepositAmount || 200),
+        totalAmount: grandTotal,
+        chaletTitle: bookingDetails.chalet?.title || 'N/A',
+        hostName: bookingDetails.chalet?.host?.fullName || 'N/A',
+        guestName: userStore.user?.name || 'Guest Name',
+        guestPhone: userStore.user?.phone || '+96512341234',
+        guestEmail: userStore.user?.email || 'guest@example.com',
+        createdAt: bookingDetails.createdAt || new Date().toISOString(),
+        paymentStatus: bookingDetails.paymentStatus,
+        paidAmount: paidAmount,
+        remainingAmount: remainingAmount,
+      }
+
+      await generateBookingInvoicePDF(invoiceData, lang)
+      toast.success(lang === 'en' ? 'Invoice downloaded successfully!' : 'تم تنزيل الفاتورة بنجاح!')
+    } catch (error) {
+      console.error('Error downloading invoice:', error)
+      toast.error(lang === 'en' ? 'Failed to download invoice.' : 'فشل تنزيل الفاتورة.')
     }
   }
 
@@ -685,6 +746,7 @@ export const BookingDetailsPageClient: React.FC<BookingDetailsPageClientProps> =
             onPayRemaining={handlePayRemaining}
             onCancelBooking={handleCancelBooking}
             onRefundFullAmount={handleRefundFullAmount}
+            onDownloadInvoice={handleDownloadInvoice}
             lang={lang}
             isRefunded={isRefunded}
             isPaying={isPaying}

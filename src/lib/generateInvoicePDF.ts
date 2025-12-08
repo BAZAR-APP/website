@@ -60,6 +60,9 @@ export const generateBookingInvoicePDF = async (
       refundableAmount,
       guestName,
       createdAt,
+      paymentStatus,
+      paidAmount,
+      remainingAmount,
     } = invoiceData;
 
 
@@ -361,26 +364,19 @@ yPosition = beneficiaryY - 50;
     });
 
 
-/* ---------- row 1 : Insurance Refund ---------- */
+/* ---------- Calculate display amount based on payment status ---------- */
+const isHalfPaid = paymentStatus === 'halfPaid';
+const displayAmount = isHalfPaid && paidAmount !== undefined ? paidAmount : totalAmount;
+
+/* ---------- row 1 : Paid Amount ---------- */
 const row1Y = tableTopY - 25;
 
 if (lang === 'ar') {
-  // Description: Arabic + English reference
-  const arabicDesc = 'دفعه استرداد التأمين حسب العقد رقم ';
-  const englishRef = referenceNumber;
+  const paidDesc = 'المبلغ المدفوع';
+  const paidValue = `KWD ${displayAmount}`;
 
-  drawArabicText(page, arabicDesc, middleX + 5, row1Y, arabicFont, fontSize, rgb(0, 0, 0));
-  page.drawText(englishRef, {
-    x: middleX + 5 + arabicFont.widthOfTextAtSize(arabicDesc, fontSize),
-    y: row1Y,
-    size: fontSize,
-    font: helveticaFont,
-    color: rgb(0, 0, 0),
-  });
-
-  // Value: KWD
-  const kwdText = `KWD ${refundableAmount}`;
-  page.drawText(kwdText, {
+  drawArabicText(page, paidDesc, middleX + 5, row1Y, arabicFont, fontSize, rgb(0, 0, 0));
+  page.drawText(paidValue, {
     x: tableLeftX + 5,
     y: row1Y,
     size: fontSize,
@@ -388,11 +384,11 @@ if (lang === 'ar') {
     color: rgb(0, 0, 0),
   });
 } else {
-  // English mode: same as before
-  const row1Description = `Insurance Refund Payment per Contract No. ${referenceNumber}`;
-  const row1Value = `KWD ${refundableAmount}`;
-  page.drawText(row1Value, { x: middleX + 160, y: row1Y, size: fontSize, font, color: rgb(0, 0, 0) });
-  page.drawText(row1Description, { x: tableLeftX + 5, y: row1Y, size: fontSize, font, color: rgb(0, 0, 0) });
+  const paidDescription = 'Paid Amount';
+  const paidValue = `KWD ${displayAmount}`;
+
+  page.drawText(paidValue, { x: middleX + 160, y: row1Y, size: fontSize, font, color: rgb(0, 0, 0) });
+  page.drawText(paidDescription, { x: tableLeftX + 5, y: row1Y, size: fontSize, font, color: rgb(0, 0, 0) });
 }
 
 page.drawLine({
@@ -407,7 +403,7 @@ const row2Y = row1Y - 15;
 
 if (lang === 'ar') {
   const totalDesc = 'المجموع';
-  const totalValue = `KWD ${totalAmount}`;
+  const totalValue = `KWD ${displayAmount}`;
 
   drawArabicText(page, totalDesc, middleX + 5, row2Y, arabicFont, fontSize, rgb(0, 0, 0));
   page.drawText(totalValue, {
@@ -418,11 +414,11 @@ if (lang === 'ar') {
     color: rgb(0, 0, 0),
   });
 } else {
-  const row2Description = 'Total';
-  const row2Value = `KWD ${totalAmount}`;
+  const totalDescription = 'Total';
+  const totalValue = `KWD ${displayAmount}`;
 
-  page.drawText(row2Value, { x: middleX + 160, y: row2Y, size: fontSize, font, color: rgb(0, 0, 0) });
-  page.drawText(row2Description, { x: tableLeftX + 5, y: row2Y, size: fontSize, font, color: rgb(0, 0, 0) });
+  page.drawText(totalValue, { x: middleX + 160, y: row2Y, size: fontSize, font, color: rgb(0, 0, 0) });
+  page.drawText(totalDescription, { x: tableLeftX + 5, y: row2Y, size: fontSize, font, color: rgb(0, 0, 0) });
 }
 
 yPosition = row2Y - 15;
@@ -474,4 +470,7 @@ export interface InvoiceData {
   guestPhone: string;
   guestEmail: string;
   createdAt?: Date | string;
+  paymentStatus?: 'fullPaid' | 'halfPaid';
+  paidAmount?: number;
+  remainingAmount?: number;
 }

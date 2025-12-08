@@ -201,7 +201,20 @@ export default function calculateCustomLoyltyPointsPrice(
    * @param isHourly - Whether this is an hourly booking (default: false)
    * @returns Total loyalty points earned
    */
-  export function calculateLoyaltyPoints(
+  /**
+ * Calculate split payment amounts that always sum to the exact total
+ * @param totalAmount - The total amount to split
+ * @returns Object with firstPayment and secondPayment that sum to totalAmount
+ */
+export function calculateSplitPayment(totalAmount: number): { firstPayment: number; secondPayment: number } {
+  // Use Math.floor for first payment to ensure we don't exceed total
+  const firstPayment = Math.floor(totalAmount / 2)
+  // Second payment is the remainder to ensure exact total
+  const secondPayment = totalAmount - firstPayment
+  return { firstPayment, secondPayment }
+}
+
+export function calculateLoyaltyPoints(
     basePoints: number | null | undefined,
     numberOfNights: number | null | undefined,
     isHourly: boolean = false,

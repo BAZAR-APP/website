@@ -12,7 +12,7 @@ import { format } from 'date-fns'
 import { Customization } from '@/lib/types/booking'
 import api from '@/lib/axios'
 import { toast } from '@/lib/toast'
-import { extractErrorMessage, calculateLoyaltyPoints } from '@/lib/utils'
+import { extractErrorMessage, calculateLoyaltyPoints, calculateSplitPayment } from '@/lib/utils'
 import { useFormContext } from 'react-hook-form'
 import { useUserStore } from '../../stores/useUserStore'
 import OverlayLoader from './OverlayLoader'
@@ -54,26 +54,29 @@ const CouponSection: React.FC<{
   </div>
 )
 
-const PaymentSplitSection: React.FC<{ finalFullAmount: number }> = ({ finalFullAmount }) => (
-  <>
-    <hr className="my-4" />
-    <PriceRowUI
-      label="Amount Due Now"
-      amount={Math.round(finalFullAmount / 2)?.toString() + ' KWD'}
-      color={textStyles.primaryBlue}
-      labelFont="medium"
-    />
-    <PriceRowUI
-      label="Remaining Balance"
-      amount={Math.round(finalFullAmount / 2)?.toString() + ' KWD'}
-      color={textStyles.primaryBlue}
-      labelFont="medium"
-    />
-    <p className={`flex items-center mb-2 mt-4 ${textStyles.body} self-stretch`}>
-      Due at least 72 hours before check-in
-    </p>
-  </>
-)
+const PaymentSplitSection: React.FC<{ finalFullAmount: number }> = ({ finalFullAmount }) => {
+  const split = calculateSplitPayment(finalFullAmount)
+  return (
+    <>
+      <hr className="my-4" />
+      <PriceRowUI
+        label="Amount Due Now"
+        amount={split.first?.toString() + ' KWD'}
+        color={textStyles.primaryBlue}
+        labelFont="medium"
+      />
+      <PriceRowUI
+        label="Remaining Balance"
+        amount={split.second?.toString() + ' KWD'}
+        color={textStyles.primaryBlue}
+        labelFont="medium"
+      />
+      <p className={`flex items-center mb-2 mt-4 ${textStyles.body} self-stretch`}>
+        Due at least 72 hours before check-in
+      </p>
+    </>
+  )
+}
 
 type BookingSummaryProps = {
   showBookButton?: boolean
