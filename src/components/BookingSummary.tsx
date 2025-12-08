@@ -61,13 +61,13 @@ const PaymentSplitSection: React.FC<{ finalFullAmount: number }> = ({ finalFullA
       <hr className="my-4" />
       <PriceRowUI
         label="Amount Due Now"
-        amount={split.first?.toString() + ' KWD'}
+        amount={split.firstPayment?.toString() + ' KWD'}
         color={textStyles.primaryBlue}
         labelFont="medium"
       />
       <PriceRowUI
         label="Remaining Balance"
-        amount={split.second?.toString() + ' KWD'}
+        amount={split.secondPayment?.toString() + ' KWD'}
         color={textStyles.primaryBlue}
         labelFont="medium"
       />
