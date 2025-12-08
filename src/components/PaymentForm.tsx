@@ -9,6 +9,7 @@ import Button from './Button/Button'
 import { Radio } from '@radix-ui/themes'
 import { useBookingStore } from '../../stores/useBookingStore'
 import { Locale } from '../../i18n.config'
+import { calculateSplitPayment } from '@/lib/utils'
 
 export type PaymentFormData = {
   paymentOption: 'full' | 'split'
@@ -39,7 +40,12 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
   // Calculate dynamic totals
   const grandTotal = (selectedAddonsTotal ?? 0) + Number(packageAmount) + (romanticWeekend ? 25 : 0)
   const finalFullAmount = isDiscountApplied ? discountedTotal : grandTotal
-  const splitAmount = Math.round(finalFullAmount / 2) // 50% of full amount
+  // Calculate split payment correctly to ensure exact total
+  const splitPayment = finalFullAmount > 0 ? (() => {
+    const first = Math.floor(finalFullAmount / 2)
+    return { first, second: finalFullAmount - first }
+  })() : { first: 0, second: 0 }
+  const splitAmount = splitPayment.first
   const minAmountForSplit = 400
 
   const paymentOptions = [
@@ -58,13 +64,13 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
       <>
         Pay {splitAmount} KWD now (50%)
         <br />
-        Pay remaining {finalFullAmount - splitAmount} KWD at least 72 hours before check-in.
+        Pay remaining {splitPayment.second} KWD at least 72 hours before check-in.
       </>
     ) : (
       <>
         ادفع {splitAmount} د.ك الآن (50%)
         <br />
-        ادفع الباقي {finalFullAmount - splitAmount} د.ك قبل 72 ساعة على الأقل من تسجيل الوصول.
+        ادفع الباقي {splitPayment.second} د.ك قبل 72 ساعة على الأقل من تسجيل الوصول.
       </>
     ),
   },

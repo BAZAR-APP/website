@@ -6,12 +6,14 @@ import { useParams } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import { ChevronRight, CircleDollarSign, Clock, Download, MapPin, PartyPopper } from 'lucide-react'
 import toast from 'react-hot-toast'
-import { extractErrorMessage, calculateLoyaltyPoints } from '@/lib/utils'
+import { extractErrorMessage, calculateLoyaltyPoints, calculateSplitPayment } from '@/lib/utils'
 import { Chalet } from '../../../../../../../../types/chalets'
 import { SocialLinkShare } from '@/components'
 import { useUserStore } from '../../../../../../../../stores/useUserStore'
 import { useBookingStore } from '../../../../../../../../stores/useBookingStore'
 import { generateBookingInvoicePDF } from '@/lib/generateInvoicePDF'
+import api, { useQueryBase } from '@/lib/axios'
+import { IBooking } from '@/lib/types/booking'
 
 const PaymentConfirmed = () => {
   const bookingConfirmed = false
@@ -20,8 +22,27 @@ const PaymentConfirmed = () => {
   const [data, setData] = useState<Chalet | null>(null)
   const [loading, setLoading] = useState(true)
   const [isOpen, setIsOpen] = useState(false)
+  const [invoiceGenerated, setInvoiceGenerated] = useState(false)
   const bookingStore = useBookingStore();
   const userStore = useUserStore();
+
+  // Fetch user's current bookings to get the latest booking for this chalet
+  // Note: id here is the chalet ID, not booking ID
+  const { data: bookingData } = useQueryBase({
+    queryKey: ['userBookings', 'current', lang],
+    url: `/booking/me?type=current&language=${lang}`,
+    staleTime: 0,
+    cacheTime: 0,
+    enabled: !!session?.user?.accessToken && !!lang,
+  })
+
+  // Get the most recent booking for this chalet from user's bookings
+  const bookings = bookingData?.data?.bookings as IBooking[] | undefined
+  const bookingDetails = bookings && Array.isArray(bookings) && bookings.length > 0 
+    ? bookings
+        .filter((b) => b.chaletId === id)
+        .sort((a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime())[0]
+    : undefined
 
   const handleDownloadInvoice = async () => {
     try {
@@ -31,34 +52,88 @@ const PaymentConfirmed = () => {
         return;
       }
 
-
-      const actualBookingId = id;
-      if (!actualBookingId || typeof actualBookingId !== 'string') {
-        toast.error("Invalid Booking ID.");
+      // Use booking ID from bookingDetails if available, otherwise use a generated ID
+      const actualBookingId = bookingDetails?.id || `temp-${id}-${Date.now()}`;
+      if (!actualBookingId) {
+        toast.error(lang === 'en' ? "Invalid Booking ID." : "معرف الحجز غير صالح.");
         return;
+      }
+
+      // Calculate amounts based on payment status
+      const grandTotal = bookingDetails?.grandTotal || Number(bookingStore.packageAmount) || 0
+      const isHalfPaid = bookingDetails?.paymentStatus === 'halfPaid'
+      let paidAmount = grandTotal
+      let remainingAmount = 0
+      
+      if (isHalfPaid) {
+        const split = calculateSplitPayment(grandTotal)
+        paidAmount = split.firstPayment
+        remainingAmount = split.secondPayment
       }
 
       const invoiceData = {
         bookingId: actualBookingId,
-        startDate: bookingStore.selectedDates.checkIn,
-        endDate: bookingStore.selectedDates.checkOut,
+        startDate: bookingDetails?.startDate || bookingStore.selectedDates.checkIn,
+        endDate: bookingDetails?.endDate || bookingStore.selectedDates.checkOut,
         refundableAmount: '200',
-        totalAmount: Number(bookingStore.packageAmount) || 0, 
+        totalAmount: grandTotal,
         chaletTitle: data.title || 'N/A',
         hostName: data.host?.fullName || 'N/A',
         guestName: userStore.user?.name || 'Guest Name',
         guestPhone: userStore.user?.phone || '+96512341234',
         guestEmail: userStore.user?.email || 'guest@example.com',
-        createdAt: new Date().toISOString(),
+        createdAt: bookingDetails?.createdAt || new Date().toISOString(),
+        paymentStatus: bookingDetails?.paymentStatus || 'fullPaid',
+        paidAmount: paidAmount,
+        remainingAmount: remainingAmount,
       };
 
       await generateBookingInvoicePDF(invoiceData, lang);
-      toast.success('Invoice downloaded successfully!');
+      toast.success(lang === 'en' ? 'Invoice downloaded successfully!' : 'تم تنزيل الفاتورة بنجاح!');
     } catch (error) {
       console.error('Error downloading invoice:', error);
-      toast.error('Failed to download invoice.');
+      toast.error(lang === 'en' ? 'Failed to download invoice.' : 'فشل تنزيل الفاتورة.');
     }
   };
+
+  // Auto-generate invoice for half-paid bookings
+  useEffect(() => {
+    if (bookingDetails && data && !invoiceGenerated && bookingDetails.paymentStatus === 'halfPaid') {
+      const generateInvoice = async () => {
+        try {
+          const grandTotal = bookingDetails.grandTotal || 0
+          const split = calculateSplitPayment(grandTotal)
+          const paidAmount = split.firstPayment
+          const remainingAmount = split.secondPayment
+
+          const invoiceData = {
+            bookingId: bookingDetails.id,
+            startDate: bookingDetails.startDate,
+            endDate: bookingDetails.endDate,
+            refundableAmount: '200',
+            totalAmount: grandTotal,
+            chaletTitle: data.title || 'N/A',
+            hostName: data.host?.fullName || 'N/A',
+            guestName: userStore.user?.name || 'Guest Name',
+            guestPhone: userStore.user?.phone || '+96512341234',
+            guestEmail: userStore.user?.email || 'guest@example.com',
+            createdAt: bookingDetails.createdAt || new Date().toISOString(),
+            paymentStatus: 'halfPaid',
+            paidAmount: paidAmount,
+            remainingAmount: remainingAmount,
+          };
+
+          await generateBookingInvoicePDF(invoiceData, lang);
+          setInvoiceGenerated(true);
+        } catch (error) {
+          console.error('Error auto-generating invoice:', error);
+          // Don't show error toast for auto-generation, just log it
+        }
+      };
+
+      generateInvoice();
+    }
+  }, [bookingDetails, data, invoiceGenerated, lang, userStore.user, id]);
 
   useEffect(() => {
     if (!id || !lang) return
