@@ -54,6 +54,8 @@ export interface IBooking {
   chaletSubscriptionId: string | null
   paymentStatus: 'fullPaid' | 'halfPaid'
   paymentId?: string // UUID of the payment record
+  createdAt?: string // ISO date string
+  updatedAt?: string // ISO date string
   payment?: {
     id: string
   }
