@@ -24,7 +24,6 @@ interface CancelBookingProps {
   priceBreakdown?: PriceBreakdownItem[]
   paymentStatus?: PaymentStatus
   totalAmount?: number
-  cancellationFee?: number
   calculatedRefundAmount?: number
 }
 const CancelBooking: React.FC<CancelBookingProps> = ({
@@ -38,7 +37,6 @@ const CancelBooking: React.FC<CancelBookingProps> = ({
   priceBreakdown = [],
   paymentStatus,
   totalAmount,
-  cancellationFee = 0,
   calculatedRefundAmount,
 }) => {
   const router = useRouter()
@@ -116,14 +114,6 @@ const CancelBooking: React.FC<CancelBookingProps> = ({
                 {totalBreakdown} {lang === 'en' ? 'KWD' : 'دينار كويتي'}
               </span>
             </div>
-            {cancellationFee !== 0 && (
-              <div className="flex justify-between items-center text-sm text-[#9EA0A2] mt-2">
-                <span>{lang === 'en' ? 'Cancellation Fee' : 'رسوم الإلغاء'}</span>
-                <span>
-                  {cancellationFee} {lang === 'en' ? 'KWD' : 'دينار كويتي'}
-                </span>
-              </div>
-            )}
             {calculatedRefundAmount !== undefined && calculatedRefundAmount > 0 && (
               <div className="flex justify-between items-center text-sm font-medium text-[#10B981] mt-2">
                 <span>{lang === 'en' ? 'Refund Amount' : 'مبلغ الاسترداد'}</span>

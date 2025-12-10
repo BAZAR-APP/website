@@ -263,7 +263,7 @@ const PaymentSection: React.FC<{
             })()}
           </Button>
         )}
-        {!hasBookingStarted && (
+        {/* {!hasBookingStarted && (
           <Button
             intent="primary"
             className="w-full !text-sm"
@@ -278,8 +278,8 @@ const PaymentSection: React.FC<{
                 ? 'Cancel and refund amount'
                 : 'إلغاء الحجز واسترداد المبلغ'}
           </Button>
-        )}
-        {/* {!hasBookingStarted && (
+        )} */}
+        {!hasBookingStarted && (
           <Button
             intent="danger"
             className="w-full !text-sm"
@@ -294,7 +294,7 @@ const PaymentSection: React.FC<{
                 ? 'Cancel Booking'
                 : 'إلغاء الحجز'}
           </Button>
-        )} */}
+        )}
       </div>
     </div>
   )
@@ -808,7 +808,6 @@ export const BookingDetailsPageClient: React.FC<BookingDetailsPageClientProps> =
         priceBreakdown={priceBreakdown}
         paymentStatus={bookingDetails?.paymentStatus}
         totalAmount={bookingDetails?.grandTotal}
-        cancellationFee={-(bookingDetails?.chalet?.additionFeeForFullRefund || 0)}
         calculatedRefundAmount={(bookingDetails?.grandTotal || 0) - (bookingDetails?.chalet?.additionFeeForFullRefund || 0)}
       />
       <PayRemainingModal
