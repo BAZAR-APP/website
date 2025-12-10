@@ -6,20 +6,49 @@ import { i18n } from '../i18n.config'
 
 const PROTECTED_PATHS = ['/profile', '/notifications', '/loyalty-points', '/my-bookings']
 
+function isValidLocale(locale: string): locale is (typeof i18n.locales)[number] {
+  return i18n.locales.includes(locale as (typeof i18n.locales)[number])
+}
+
 function getLocale(request: NextRequest): string {
-  const negotiatorHeaders: Record<string, string> = {}
-  request.headers.forEach((value, key) => (negotiatorHeaders[key] = value))
-  const languages = new Negotiator({ headers: negotiatorHeaders }).languages()
   const locales = i18n.locales
   const pathname = request.nextUrl.pathname
+  
+  // Check pathname first
   const pathnameLocale = locales.find(
     (locale) => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`,
   )
-  if (pathnameLocale) return pathnameLocale
+  if (pathnameLocale && isValidLocale(pathnameLocale)) return pathnameLocale
+  
+  // Check cookie
   const cookieLocale = request.cookies.get('NEXT_LOCALE')?.value
-  if (cookieLocale && locales.includes(cookieLocale as (typeof i18n.locales)[number]))
-    return cookieLocale as (typeof i18n.locales)[number]
-  return match(languages, locales, i18n.defaultLocale)
+  if (cookieLocale && isValidLocale(cookieLocale)) return cookieLocale
+  
+  // Try to get locale from Accept-Language header
+  try {
+    const negotiatorHeaders: Record<string, string> = {}
+    request.headers.forEach((value, key) => (negotiatorHeaders[key] = value))
+    const languages = new Negotiator({ headers: negotiatorHeaders }).languages()
+    
+    // Filter out invalid language codes (like '*', empty strings, etc.)
+    const validLanguages = languages.filter(
+      (lang) => lang && lang !== '*' && typeof lang === 'string' && lang.length > 0
+    )
+    
+    if (validLanguages.length > 0) {
+      const matchedLocale = match(validLanguages, locales, i18n.defaultLocale)
+      // Validate the matched locale is in our allowed locales
+      if (isValidLocale(matchedLocale)) {
+        return matchedLocale
+      }
+    }
+  } catch (error) {
+    // If anything fails, fall back to default locale
+    console.error('Error determining locale:', error)
+  }
+  
+  // Always return a valid locale as fallback
+  return i18n.defaultLocale
 }
 
 function isProtectedPath(pathname: string): boolean {
