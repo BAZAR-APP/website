@@ -326,21 +326,21 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
   }
 
   // Enhanced date filtering for non-package bookings
-const getNonPackageDisabledDates = useMemo(() => {
-  if (selectedPackageType || selectedPlan?.id) return []
+  const getNonPackageDisabledDates = useMemo(() => {
+    if (selectedPackageType || selectedPlan?.id) return []
 
-  const disabledDates: Date[] = []
-  const today = startOfDay(new Date())
-  const endDate = addDays(today, 365)
+    const disabledDates: Date[] = []
+    const today = startOfDay(new Date())
+    const endDate = addDays(today, 365)
 
-  for (let date = new Date(today); date <= endDate; date = addDays(date, 1)) {
-    if (isDateUnavailable(date)) {
-      disabledDates.push(new Date(date))
+    for (let date = new Date(today); date <= endDate; date = addDays(date, 1)) {
+      if (isDateUnavailable(date)) {
+        disabledDates.push(new Date(date))
+      }
     }
-  }
 
-  return disabledDates
-}, [selectedPackageType, selectedPlan?.id, bookings, availabilities])
+    return disabledDates
+  }, [selectedPackageType, selectedPlan?.id, bookings, availabilities])
 
   // Get disabled dates for checkout calendar (non-package bookings)
   const getCheckoutDisabledDates = useMemo(() => {
@@ -434,7 +434,7 @@ const getNonPackageDisabledDates = useMemo(() => {
       ? Number(selectedPlan?.price)
       : selectedPackageType
         ? currentPrice
-        : nights * (packageInfo?.perNightCost || 0)) + bookingConfig.refundableDeposit + (chalet?.additionFeeForFullRefund || 0)
+        : nights * (packageInfo?.perNightCost || 0)) + bookingConfig.refundableDeposit
 
   useEffect(() => {
     if (selectedPlan?.id) {
@@ -498,8 +498,8 @@ const getNonPackageDisabledDates = useMemo(() => {
         {packageInfo && (
           <>
             <PricingRow
-              title= {lang === 'en' ? 'Weekend' : 'عطلة نهاية الأسبوع'}
-              subtitle= {lang==='en' ? 'Thursday to Saturday' : 'الخميس إلى السبت'}
+              title={lang === 'en' ? 'Weekend' : 'عطلة نهاية الأسبوع'}
+              subtitle={lang === 'en' ? 'Thursday to Saturday' : 'الخميس إلى السبت'}
               price={packageInfo.weekendCost}
               currency={bookingConfig.currency}
               checked={!selectedPlan?.id && selectedPackageType === PackageType.WEEKEND}
@@ -508,8 +508,8 @@ const getNonPackageDisabledDates = useMemo(() => {
               packageType={PackageType.WEEKEND}
             />
             <PricingRow
-              title= {lang==='en' ? 'Weekday' : 'أيام الأسبوع'}
-              subtitle= {lang==='en' ? 'Friday to Wednesday' : 'الجمعة إلى الأربعاء'}
+              title={lang === 'en' ? 'Weekday' : 'أيام الأسبوع'}
+              subtitle={lang === 'en' ? 'Friday to Wednesday' : 'الجمعة إلى الأربعاء'}
               price={packageInfo.weekDaysCost}
               currency={bookingConfig.currency}
               checked={!selectedPlan?.id && selectedPackageType === PackageType.WEEKDAY}
@@ -518,8 +518,8 @@ const getNonPackageDisabledDates = useMemo(() => {
               packageType={PackageType.WEEKDAY}
             />
             <PricingRow
-              title= {lang==='en' ? 'Full Week' : 'أسبوع كامل'}
-              subtitle= {lang==='en' ? '7 consecutive nights' : '7 ليال متتالية'}
+              title={lang === 'en' ? 'Full Week' : 'أسبوع كامل'}
+              subtitle={lang === 'en' ? '7 consecutive nights' : '7 ليال متتالية'}
               price={packageInfo.fullWeekCost}
               currency={bookingConfig.currency}
               checked={!selectedPlan?.id && selectedPackageType === PackageType.FULL_WEEK}
@@ -528,8 +528,8 @@ const getNonPackageDisabledDates = useMemo(() => {
               packageType={PackageType.FULL_WEEK}
             />
             <PricingRow
-              title= {lang==='en' ? 'Full Month' : 'شهر كامل'}
-              subtitle= {lang==='en' ? '30 consecutive nights' : '30 ليلة متتالية'}
+              title={lang === 'en' ? 'Full Month' : 'شهر كامل'}
+              subtitle={lang === 'en' ? '30 consecutive nights' : '30 ليلة متتالية'}
               price={packageInfo.fullMonthCost}
               currency={bookingConfig.currency}
               checked={!selectedPlan?.id && selectedPackageType === PackageType.FULL_MONTH}
@@ -658,10 +658,10 @@ const getNonPackageDisabledDates = useMemo(() => {
                       selectedDates?.checkOut
                         ? new Date(selectedDates.checkOut)
                         : (() => {
-                            const tomorrow = new Date()
-                            tomorrow.setDate(tomorrow.getDate() + 1)
-                            return tomorrow
-                          })()
+                          const tomorrow = new Date()
+                          tomorrow.setDate(tomorrow.getDate() + 1)
+                          return tomorrow
+                        })()
                     }
                     minDate={(() => {
                       if (selectedDates?.checkIn) {

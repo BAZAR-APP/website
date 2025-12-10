@@ -8,6 +8,7 @@ import Image from 'next/image'
 import Location from '@/components/Location'
 import { useParams, useRouter } from 'next/navigation'
 import CancelBooking from '@/components/Booking/CancelBooking'
+import PayRemainingModal from '@/components/Booking/PayRemainingModal'
 import useToggle from '@/lib/hooks/useToggle'
 import ModalDialog from '@/components/ModalDialog/Dialog'
 import api, { useQueryBase } from '@/lib/axios'
@@ -137,7 +138,7 @@ const AddOnsSection: React.FC<{ addOns: AddOn[] }> = React.memo(function AddOnsS
       <h2 className="font-semibold text-[25px] leading-8 text-[#19191A] mb-4">Add-ons</h2>
       {addOns.map((addOn, index) => (
         // ✅ Wrap both divs in a single parent div with a key
-        <div key={`${addOn.name}-${index}`} className="flex flex-col"> 
+        <div key={`${addOn.name}-${index}`} className="flex flex-col">
           <div className="flex items-center flex-wrap gap-2 mb-1">
             <Image src={addOn.icon || '/images/Addon.svg'} width={16} height={16} alt="Add icon" />
             <span className="text-base leading-[19px] text-[#19191A]">{addOn.name}</span>
@@ -166,6 +167,7 @@ const PaymentSection: React.FC<{
   lang: Locale
   isRefunded?: boolean
   isPaying?: boolean
+  hasBookingStarted?: boolean
 }> = React.memo(function PaymentSection({
   paymentStatus,
   totalAmount,
@@ -180,13 +182,14 @@ const PaymentSection: React.FC<{
   lang,
   isRefunded = false,
   isPaying = false,
+  hasBookingStarted = false,
 }) {
   return (
     <div className="w-full lg:max-w-[430px] max-w-full">
       <div className="sm:px-6 px-3 bg-[#F9FAFB] rounded-[16px] py-6">
         <div className="flex items-center justify-between mb-4">
           <h2 className="font-semibold md:text-[25px] text-lg md:leading-8 leading-6 text-[#19191A]">
-           { lang === 'en' ? 'Total Payments' : 'إجمالي المدفوعات' } 
+            {lang === 'en' ? 'Total Payments' : 'إجمالي المدفوعات'}
           </h2>
           <PaymentStatusBadge status={paymentStatus} />
         </div>
@@ -203,11 +206,11 @@ const PaymentSection: React.FC<{
         {securityDeposit > 0 && (
           <div className="bg-[#FCE7F3] rounded-lg py-1 px-2 my-4">
             <p className="text-[10px] text-[#EC4899] leading-relaxed">
-                {
-                    lang === 'en' ? ` A refundable security deposit of ${securityDeposit} KWD is required. This amount will
+              {
+                lang === 'en' ? ` A refundable security deposit of ${securityDeposit} KWD is required. This amount will
               be held and returned within 72 hours after checkout if no damage is reported.` : `يُطلب وديعة تأمين قابلة للاسترداد بقيمة ${securityDeposit} دينار كويتي. سيتم الاحتفاظ بهذا المبلغ وإرجاعه خلال 72 ساعة من تاريخ المغادرة في حال عدم الإبلاغ عن أي ضرر.`
-                }
-             
+              }
+
             </p>
           </div>
         )}
@@ -254,13 +257,13 @@ const PaymentSection: React.FC<{
           >
             {(() => {
               const split = calculateSplitPayment(totalAmount)
-              return isPaying 
+              return isPaying
                 ? (lang === 'en' ? 'Processing...' : 'جاري المعالجة...')
                 : `${lang === 'en' ? 'Pay Remaining Amount' : 'دفع المبلغ المتبقي'} ${split.secondPayment} KD Now`
             })()}
           </Button>
         )}
-        {paymentStatus !== 'fullPaid' && (
+        {!hasBookingStarted && (
           <Button
             intent="primary"
             className="w-full !text-sm"
@@ -272,11 +275,11 @@ const PaymentSection: React.FC<{
                 ? 'This booking refunded'
                 : 'تم استرداد هذا الحجز'
               : lang === 'en'
-              ? 'Cancel and refund amount'
-              : 'إلغاء الحجز واسترداد المبلغ'}
+                ? 'Cancel and refund amount'
+                : 'إلغاء الحجز واسترداد المبلغ'}
           </Button>
         )}
-        {!isRefunded && paymentStatus !== 'fullPaid' && (
+        {/* {!hasBookingStarted && (
           <Button
             intent="danger"
             className="w-full !text-sm"
@@ -285,21 +288,21 @@ const PaymentSection: React.FC<{
           >
             {bookingStatus === 'cancelled'
               ? lang === 'en'
-                  ? 'Booking Cancelled'
-                  : 'تم إلغاء الحجز'
+                ? 'Booking Cancelled'
+                : 'تم إلغاء الحجز'
               : lang === 'en'
-                  ? 'Cancel Booking'
-                  : 'إلغاء الحجز'}
+                ? 'Cancel Booking'
+                : 'إلغاء الحجز'}
           </Button>
-        )}
+        )} */}
       </div>
     </div>
   )
 })
 
 interface BookingDetailMessages {
-  common: { 
-    chalet_rules: { 
+  common: {
+    chalet_rules: {
       title: string;
       check_in_out: {
         check_in_label: string;
@@ -360,7 +363,7 @@ interface BookingDetailsPageClientProps {
 
 export const BookingDetailsPageClient: React.FC<BookingDetailsPageClientProps> = ({ lang, messages }) => {
   const router = useRouter()
-  const { id } = useParams() as { id: string, lang:Locale }
+  const { id } = useParams() as { id: string, lang: Locale }
   const { isOpen, toggle } = useToggle()
   const [isCancelling, setIsCancelling] = useState<boolean>(false)
   const [isPaying, setIsPaying] = useState<boolean>(false)
@@ -377,15 +380,15 @@ export const BookingDetailsPageClient: React.FC<BookingDetailsPageClientProps> =
   // Get refund status from booking store
   const { addRefundedBooking, refundedBookings } = useBookingStore()
   const userStore = useUserStore()
-  
+
   const isRefunded = useMemo(() => {
     if (refundedBookings.includes(id)) {
       return true
     }
 
     if (bookingDetails) {
-      const hasRefunds = (bookingDetails as any)?.refunds?.length > 0 || 
-                        (bookingDetails as any)?.paymentRefunds?.length > 0
+      const hasRefunds = (bookingDetails as any)?.refunds?.length > 0 ||
+        (bookingDetails as any)?.paymentRefunds?.length > 0
       if (hasRefunds) {
         return true
       }
@@ -393,9 +396,52 @@ export const BookingDetailsPageClient: React.FC<BookingDetailsPageClientProps> =
 
     return false
   }, [id, bookingDetails, refundedBookings])
+
+  // Check if booking has started (for hiding Cancel button)
+  const hasBookingStarted = useMemo(() => {
+    if (!bookingDetails?.startDate) return false
+
+    const now = new Date()
+    const startDateStr = bookingDetails.startDate
+    
+    // For hourly bookings (noOfNights === 0), check if start time has passed
+    // For date-based bookings, check if start date has passed
+    const isHourlyBooking = bookingDetails.noOfNights === 0
+    
+    if (isHourlyBooking) {
+      // For hourly bookings, compare both date and time (exact timestamp)
+      const startDate = new Date(startDateStr)
+      
+      // Compare timestamps: booking has started if current time is >= the booking start time
+      // Button should be visible until the start time, and hidden once the booking time begins
+      return now.getTime() >= startDate.getTime()
+    } else {
+      // For date-based bookings, compare the start date (ignore time)
+      // Parse the start date string
+      const startDate = new Date(startDateStr)
+      
+      // Get today's date components (year, month, day) in local timezone
+      const todayYear = now.getFullYear()
+      const todayMonth = now.getMonth()
+      const todayDay = now.getDate()
+      
+      // Get booking start date components (year, month, day) in local timezone
+      const startYear = startDate.getFullYear()
+      const startMonth = startDate.getMonth()
+      const startDay = startDate.getDate()
+      
+      // Compare dates: booking has started if today is AFTER the booking start date
+      // Button should be visible until the start date (including the start date)
+      if (todayYear > startYear) return true
+      if (todayYear < startYear) return false
+      if (todayMonth > startMonth) return true
+      if (todayMonth < startMonth) return false
+      return todayDay > startDay
+    }
+  }, [bookingDetails])
   const addOns = useMemo(() => {
     return (
-      bookingDetails?.bookingCustomizations?.map((item:any) => ({
+      bookingDetails?.bookingCustomizations?.map((item: any) => ({
         name: item.chaletCustomization?.customization?.title ?? 'Unnamed Add-On',
         price: item.totalCost ?? 0,
         icon: item.chaletCustomization?.customization?.iconPhotoUrl ?? '',
@@ -406,32 +452,32 @@ export const BookingDetailsPageClient: React.FC<BookingDetailsPageClientProps> =
 
   const priceBreakdown = useMemo(() => {
     if (!bookingDetails) return []
-    
+
     const breakdown: PriceBreakdownItem[] = []
-    
+
     // Calculate components that make up grandTotal
-    // grandTotal = addonsTotal + packageAmount + romanticWeekend(25) + cancellationFee
+    // grandTotal = addonsTotal + packageAmount + romanticWeekend(25)
     // where packageAmount = baseCost + deposit (200)
-    
+
     // Individual add-ons (each one separately, matching BookingSummary)
     const addonsTotal = bookingDetails.bookingCustomizations?.reduce(
       (sum: number, item: any) => sum + (item.totalCost || 0),
       0
     ) || 0
-    
+
     bookingDetails.bookingCustomizations?.forEach((item: any) => {
       const addonCost = item.totalCost || 0
       if (addonCost > 0) {
-        const addonTitle = item.chaletCustomization?.customization?.title || 
-                          item.customization?.title || 
-                          'Unnamed Add-On'
+        const addonTitle = item.chaletCustomization?.customization?.title ||
+          item.customization?.title ||
+          'Unnamed Add-On'
         breakdown.push({
           description: addonTitle,
           amount: addonCost,
         })
       }
     })
-    
+
     // Romantic Weekend (if applicable) - 25 KWD
     const isRomanticBooking = (bookingDetails as any)?.isRomanticBookingSelected || false
     if (isRomanticBooking) {
@@ -440,42 +486,34 @@ export const BookingDetailsPageClient: React.FC<BookingDetailsPageClientProps> =
         amount: 25,
       })
     }
-    
+
     // Package Amount Breakdown (matching BookingSummary structure)
-    // In BookingSummary: grandTotal = addonsTotal + packageAmount + romanticWeekend(25) + cancellationFee
+    // In BookingSummary: grandTotal = addonsTotal + packageAmount + romanticWeekend(25)
     // packageAmount = baseCost + deposit (200)
     // Package Price = packageAmount - 200 = baseCost
     const deposit = bookingDetails.refundableDepositAmount || 200
     const cancellationFee = bookingDetails.chalet?.additionFeeForFullRefund || 0
     const romanticWeekendAmount = isRomanticBooking ? 25 : 0
-    
-    // Calculate what packageAmount would be
+
+    // Calculate what packageAmount would be (excluding cancellation fee from total)
     // packageAmount = grandTotal - addonsTotal - romanticWeekend - cancellationFee
     const calculatedPackageAmount = bookingDetails.grandTotal - addonsTotal - romanticWeekendAmount - cancellationFee
-    
+
     // Package Price = packageAmount - deposit (matching BookingSummary: packageAmount - 200)
     const packagePrice = Math.max(0, calculatedPackageAmount - deposit)
-    
+
     // Show Package Price (matching BookingSummary structure)
     if (calculatedPackageAmount > 0) {
       breakdown.push({
         description: lang === 'en' ? 'Package Price' : 'مبلغ الحزمة',
         amount: packagePrice,
       })
-      
+
       // Refundable Deposit (200) - shown in breakdown
       if (deposit > 0) {
         breakdown.push({
           description: lang === 'en' ? 'Refundable Deposit' : 'الوديعة القابلة للاسترداد',
           amount: deposit,
-        })
-      }
-      
-      // Cancelation fee - added separately to grandTotal
-      if (cancellationFee > 0) {
-        breakdown.push({
-          description: lang === 'en' ? 'Cancelation fee' : 'رسوم الإلغاء',
-          amount: cancellationFee,
         })
       }
     } else {
@@ -485,19 +523,20 @@ export const BookingDetailsPageClient: React.FC<BookingDetailsPageClientProps> =
         amount: 0,
       })
     }
-    
+
     return breakdown
   }, [bookingDetails, lang])
 
   const { isOpen: isCancelOpen, toggle: toggleCancel } = useToggle(false)
+  const { isOpen: isPayModalOpen, toggle: togglePayModal } = useToggle(false)
   const { isOpen: isConfirmCancel, toggle: confirmCancelToggle } = useToggle(false)
 
   const refundAmount = useMemo(() => {
     if (!bookingDetails) return 0
-    
+
     const securityDeposit = bookingDetails.refundableDepositAmount || 200
     let paidAmount = 0
-    
+
     if (bookingDetails.paymentStatus === 'halfPaid') {
       // User paid 50% of grandTotal
       paidAmount = bookingDetails.grandTotal / 2
@@ -505,7 +544,7 @@ export const BookingDetailsPageClient: React.FC<BookingDetailsPageClientProps> =
       // User paid 100% of grandTotal
       paidAmount = bookingDetails.grandTotal
     }
-    
+
     // Refund includes the paid amount plus the security deposit (if applicable)
     return paidAmount + securityDeposit
   }, [bookingDetails])
@@ -520,7 +559,11 @@ export const BookingDetailsPageClient: React.FC<BookingDetailsPageClientProps> =
     window.open(googleMapsUrl, '_blank')
   }, [])
 
-  const handlePayRemaining = async () => {
+  const handlePayRemaining = () => {
+    togglePayModal()
+  }
+
+  const confirmPayRemaining = async () => {
     try {
       if (!bookingDetails) {
         toast.error(lang === 'en' ? 'Booking details not available' : 'تفاصيل الحجز غير متاحة')
@@ -529,7 +572,7 @@ export const BookingDetailsPageClient: React.FC<BookingDetailsPageClientProps> =
 
       const split = calculateSplitPayment(bookingDetails.grandTotal)
       const remainingAmount = split.secondPayment
-      
+
       if (remainingAmount <= 0) {
         toast.error(lang === 'en' ? 'Invalid amount to pay' : 'مبلغ غير صالح للدفع')
         return
@@ -540,8 +583,9 @@ export const BookingDetailsPageClient: React.FC<BookingDetailsPageClientProps> =
         bookingId: bookingDetails.id,
         amount: remainingAmount,
       })
-      
+
       toast.success(lang === 'en' ? 'Payment processed successfully' : 'تم معالجة الدفع بنجاح')
+      togglePayModal()
       refetch()
     } catch (error) {
       toast.error(extractErrorMessage(error))
@@ -562,8 +606,8 @@ export const BookingDetailsPageClient: React.FC<BookingDetailsPageClientProps> =
       }
 
       const payment = bookingDetails.payments?.find((p) => p.type === 'booking')
-      const paymentId = payment?.id 
-      
+      const paymentId = payment?.id
+
       if (!paymentId) {
         toast.error('Payment information not found')
         return
@@ -572,14 +616,14 @@ export const BookingDetailsPageClient: React.FC<BookingDetailsPageClientProps> =
       setIsCancelling(true)
       await api.post(`/paymentRefund/customer`, {
         refundedAmount: bookingDetails?.grandTotal,
-        type: 'booking', 
+        type: 'booking',
         paymentId: paymentId,
       })
       toast.success('Refund full amount successfully')
-      
+
       // Store refund status in booking store to persist across refreshes
       addRefundedBooking(id)
-      
+
       refetch()
     } catch (error) {
       toast.error(extractErrorMessage(error))
@@ -614,7 +658,7 @@ export const BookingDetailsPageClient: React.FC<BookingDetailsPageClientProps> =
       const isHalfPaid = bookingDetails.paymentStatus === 'halfPaid'
       let paidAmount = grandTotal
       let remainingAmount = 0
-      
+
       if (isHalfPaid) {
         const split = calculateSplitPayment(grandTotal)
         paidAmount = split.firstPayment
@@ -733,7 +777,7 @@ export const BookingDetailsPageClient: React.FC<BookingDetailsPageClientProps> =
               }}
             />
             <AddOnsSection addOns={addOns} />
-            <ChaletRules lang={lang} messages={messages.common.chalet_rules}  />
+            <ChaletRules lang={lang} messages={messages.common.chalet_rules} />
           </div>
 
           <PaymentSection
@@ -750,6 +794,7 @@ export const BookingDetailsPageClient: React.FC<BookingDetailsPageClientProps> =
             lang={lang}
             isRefunded={isRefunded}
             isPaying={isPaying}
+            hasBookingStarted={hasBookingStarted}
           />
         </div>
       </div>
@@ -765,6 +810,15 @@ export const BookingDetailsPageClient: React.FC<BookingDetailsPageClientProps> =
         totalAmount={bookingDetails?.grandTotal}
         cancellationFee={-(bookingDetails?.chalet?.additionFeeForFullRefund || 0)}
         calculatedRefundAmount={(bookingDetails?.grandTotal || 0) - (bookingDetails?.chalet?.additionFeeForFullRefund || 0)}
+      />
+      <PayRemainingModal
+        isOpen={isPayModalOpen}
+        setIsOpen={togglePayModal}
+        onPay={confirmPayRemaining}
+        isPaying={isPaying}
+        lang={lang}
+        priceBreakdown={priceBreakdown}
+        totalAmount={bookingDetails?.grandTotal || 0}
       />
       <ModalDialog
         isOpen={isConfirmCancel}

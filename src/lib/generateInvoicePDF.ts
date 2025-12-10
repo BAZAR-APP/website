@@ -364,19 +364,20 @@ yPosition = beneficiaryY - 50;
     });
 
 
-/* ---------- Calculate display amount based on payment status ---------- */
+/* ---------- Calculate payment amount based on payment status ---------- */
 const isHalfPaid = paymentStatus === 'halfPaid';
-const displayAmount = isHalfPaid && paidAmount !== undefined ? paidAmount : totalAmount;
+// Payment amount: for half payment show paidAmount, for full payment show totalAmount
+const paymentAmount = isHalfPaid && paidAmount !== undefined ? paidAmount : totalAmount;
 
-/* ---------- row 1 : Paid Amount ---------- */
+/* ---------- row 1 : Payment (amount being paid in this transaction) ---------- */
 const row1Y = tableTopY - 25;
 
 if (lang === 'ar') {
-  const paidDesc = 'المبلغ المدفوع';
-  const paidValue = `KWD ${displayAmount}`;
+  const paymentDesc = 'الدفع';
+  const paymentValue = `KWD ${paymentAmount}`;
 
-  drawArabicText(page, paidDesc, middleX + 5, row1Y, arabicFont, fontSize, rgb(0, 0, 0));
-  page.drawText(paidValue, {
+  drawArabicText(page, paymentDesc, middleX + 5, row1Y, arabicFont, fontSize, rgb(0, 0, 0));
+  page.drawText(paymentValue, {
     x: tableLeftX + 5,
     y: row1Y,
     size: fontSize,
@@ -384,11 +385,11 @@ if (lang === 'ar') {
     color: rgb(0, 0, 0),
   });
 } else {
-  const paidDescription = 'Paid Amount';
-  const paidValue = `KWD ${displayAmount}`;
+  const paymentDescription = 'Payment';
+  const paymentValue = `KWD ${paymentAmount}`;
 
-  page.drawText(paidValue, { x: middleX + 160, y: row1Y, size: fontSize, font, color: rgb(0, 0, 0) });
-  page.drawText(paidDescription, { x: tableLeftX + 5, y: row1Y, size: fontSize, font, color: rgb(0, 0, 0) });
+  page.drawText(paymentValue, { x: middleX + 160, y: row1Y, size: fontSize, font, color: rgb(0, 0, 0) });
+  page.drawText(paymentDescription, { x: tableLeftX + 5, y: row1Y, size: fontSize, font, color: rgb(0, 0, 0) });
 }
 
 page.drawLine({
@@ -398,12 +399,12 @@ page.drawLine({
   color: rgb(0, 0, 0),
 });
 
-/* ---------- row 2 : Total ---------- */
+/* ---------- row 2 : Total (always shows the total invoice amount) ---------- */
 const row2Y = row1Y - 15;
 
 if (lang === 'ar') {
   const totalDesc = 'المجموع';
-  const totalValue = `KWD ${displayAmount}`;
+  const totalValue = `KWD ${totalAmount}`;
 
   drawArabicText(page, totalDesc, middleX + 5, row2Y, arabicFont, fontSize, rgb(0, 0, 0));
   page.drawText(totalValue, {
@@ -415,7 +416,7 @@ if (lang === 'ar') {
   });
 } else {
   const totalDescription = 'Total';
-  const totalValue = `KWD ${displayAmount}`;
+  const totalValue = `KWD ${totalAmount}`;
 
   page.drawText(totalValue, { x: middleX + 160, y: row2Y, size: fontSize, font, color: rgb(0, 0, 0) });
   page.drawText(totalDescription, { x: tableLeftX + 5, y: row2Y, size: fontSize, font, color: rgb(0, 0, 0) });
@@ -440,7 +441,7 @@ yPosition = row2Y - 15;
 
     /* ---------- download ---------- */
     const pdfBytes = await pdfDoc.save();
-    const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+    const blob = new Blob([pdfBytes as BlobPart], { type: 'application/pdf' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;

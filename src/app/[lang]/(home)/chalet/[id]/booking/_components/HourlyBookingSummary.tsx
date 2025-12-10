@@ -150,7 +150,7 @@ const HourlyBookingSummary: React.FC<HourlyBookingSummaryProps> = ({
       .filter((slot) => {
         const slotStart = new Date(date)
         slotStart.setHours(slot.hour, 0, 0, 0)
-        
+
         if (isToday && slotStart <= now) {
           return false
         }
@@ -196,7 +196,7 @@ const HourlyBookingSummary: React.FC<HourlyBookingSummaryProps> = ({
         rangeDates.forEach((date) => {
           if (date >= today && date <= todayPlus365) {
             // Use consistent key: local date string or timestamp
-            const key = date.toDateString() 
+            const key = date.toDateString()
             disabledSet.add(key)
           }
         })
@@ -205,7 +205,7 @@ const HourlyBookingSummary: React.FC<HourlyBookingSummaryProps> = ({
 
     // Convert back to Date[] for Calendar
     return Array.from(disabledSet).map((dateStr) => new Date(dateStr))
-  }, [bookings, availabilities]) 
+  }, [bookings, availabilities])
 
   const getAvailableCheckOutTimes = (): TimeSlot[] => {
     if (!selectedDate || !selectedCheckInTime) return []
@@ -257,7 +257,7 @@ const HourlyBookingSummary: React.FC<HourlyBookingSummaryProps> = ({
 
   const availableTimeSlots = selectedDate ? getAvailableTimeSlots(selectedDate) : []
   const availableCheckOutTimes = getAvailableCheckOutTimes()
-  const total = (chalet?.perHourCost ?? 0) * 6 + 200 + (chalet?.additionFeeForFullRefund || 0)
+  const total = (chalet?.perHourCost ?? 0) * 6 + 200
 
   return (
     <div className="bg-[#F9FAFB] rounded-2xl">

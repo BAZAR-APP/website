@@ -44,9 +44,8 @@ const CouponSection: React.FC<{
     />
     <span
       onClick={!isDisabled ? onApply : undefined}
-      className={`font-medium text-[14px] leading-[17px] absolute top-3.5 right-4 cursor-pointer ${
-        isDisabled ? 'text-[#B0B3B8] cursor-not-allowed' : 'text-[#29397E]'
-      }`}
+      className={`font-medium text-[14px] leading-[17px] absolute top-3.5 right-4 cursor-pointer ${isDisabled ? 'text-[#B0B3B8] cursor-not-allowed' : 'text-[#29397E]'
+        }`}
     >
       Apply
     </span>
@@ -125,8 +124,8 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
   } = useBookingStore()
 
   const isSplitPayment = getValues()?.paymentOption === 'split'
-  const grandTotal = (selectedAddonsTotal ?? 0) + Number(packageAmount) + (romanticWeekend ? 25 : 0) + (chaletDetails?.additionFeeForFullRefund || 0)
-  
+  const grandTotal = (selectedAddonsTotal ?? 0) + Number(packageAmount) + (romanticWeekend ? 25 : 0)
+
   // Calculate nights from dates if not available in store (with correct calculation)
   const calculateNightsFromDates = () => {
     if (selectedDates?.checkIn && selectedDates?.checkOut) {
@@ -141,7 +140,7 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
     }
     return noOfNights ?? 0
   }
-  
+
   const numberOfNights = calculateNightsFromDates()
   const calculatedPoints = earnPoints ? calculateLoyaltyPoints(chaletDetails?.noOfLoyalityPoints, numberOfNights, bookingType === 'hourly') : 0
   const handleApplyDiscount = async () => {
@@ -200,9 +199,9 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
   return (
     <>
       <div className="w-full md:max-w-sm rounded-lg bg-[#F9FAFB] sm:px-6 sm:py-5 p-3">
-       <h3 className="xl:text-[25px] text-lg font-semibold text-[#19191A] mb-3">
-        {lang === 'en' ? 'Booking Summary' : 'ملخص الحجز'}
-      </h3>
+        <h3 className="xl:text-[25px] text-lg font-semibold text-[#19191A] mb-3">
+          {lang === 'en' ? 'Booking Summary' : 'ملخص الحجز'}
+        </h3>
         <div className="p-0">
           <div className="relative">
             <Image
@@ -246,11 +245,11 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
             )}
 
             <div className="bg-[#FCE7F3] rounded-lg py-1 px-1.5 my-3">
-             <p className="text-[10px] text-[#EC4899] leading-relaxed">
-              {lang === 'en'
-                ? 'A refundable security deposit of 200 KWD is required. This amount will be held and returned within 72 hours after checkout if no damage is reported.'
-                : 'مطلوب وديعة تأمين قابلة للاسترداد بقيمة 200 د.ك. سيتم الاحتفاظ بالمبلغ وإرجاعه خلال 72 ساعة بعد تسجيل الخروج إذا لم يتم الإبلاغ عن أي أضرار.'}
-            </p>
+              <p className="text-[10px] text-[#EC4899] leading-relaxed">
+                {lang === 'en'
+                  ? 'A refundable security deposit of 200 KWD is required. This amount will be held and returned within 72 hours after checkout if no damage is reported.'
+                  : 'مطلوب وديعة تأمين قابلة للاسترداد بقيمة 200 د.ك. سيتم الاحتفاظ بالمبلغ وإرجاعه خلال 72 ساعة بعد تسجيل الخروج إذا لم يتم الإبلاغ عن أي أضرار.'}
+              </p>
             </div>
 
             <div className="space-y-3 text-sm pt-2 !text-[#19191A]">
@@ -278,10 +277,7 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
                       label={lang === 'en' ? 'Refundable Deposit' : 'الوديعة القابلة للاسترداد'}
                       amount="200 KWD"
                     />
-                    <PriceRowUI
-                      label={lang === 'en' ? 'Cancelation fee' : 'رسوم الإلغاء'}
-                      amount={`${chaletDetails?.additionFeeForFullRefund || 0} KWD`}
-                    />
+
                   </div>
                 </>
               )}
@@ -352,13 +348,13 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
                 loading={loading}
                 disabled={loading}
               >
-              {isSplitPayment
-                ? lang === 'en'
-                  ? 'Book Now with 50% Payment'
-                  : 'احجز الآن مع 50٪ دفعة'
-                : lang === 'en'
-                ? 'Book Now'
-                : 'احجز الآن'}
+                {isSplitPayment
+                  ? lang === 'en'
+                    ? 'Book Now with 50% Payment'
+                    : 'احجز الآن مع 50٪ دفعة'
+                  : lang === 'en'
+                    ? 'Book Now'
+                    : 'احجز الآن'}
               </Button>
             )}
           </div>
@@ -366,11 +362,11 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
       </div>
 
       {finalPayment && (
-     <p className="italic font-normal text-base leading-[19px] text-[#9EA0A2] w-full max-w-[390px] py-4">
-      {lang === 'en'
-        ? 'This is your final payment. Once completed, your booking will be fully secured.'
-        : 'هذه هي الدفعة النهائية الخاصة بك. بمجرد إكمالها، سيتم تأمين حجزك بالكامل.'}
-    </p>
+        <p className="italic font-normal text-base leading-[19px] text-[#9EA0A2] w-full max-w-[390px] py-4">
+          {lang === 'en'
+            ? 'This is your final payment. Once completed, your booking will be fully secured.'
+            : 'هذه هي الدفعة النهائية الخاصة بك. بمجرد إكمالها، سيتم تأمين حجزك بالكامل.'}
+        </p>
       )}
       {loading && <OverlayLoader open={loading} />}
     </>
