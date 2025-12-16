@@ -9,14 +9,15 @@ const NotificationLayout = async ({
   params,
 }: {
   children: React.ReactNode
-  params: Promise<{ lang: Locale }>
+  params: Promise<{ lang: string }>
 }) => {
   const { lang } = await params
-  const messages = getMessages(lang)
+  const locale = lang as Locale
+  const messages = getMessages(locale)
 
   return (
     <div className="max-w-xxl mx-auto">
-      <Header lang={lang} messages={messages.navigation}  className="bg-[#FDFDFE]" />
+      <Header lang={locale} messages={messages.navigation}  className="bg-[#FDFDFE]" />
       {children}
       <Footer messages={messages.footer} />
       <StickyChatBot />

@@ -27,14 +27,15 @@ export default async function RootLayout({
   params,
 }: {
   children: React.ReactNode
-  params: Promise<{ lang: Locale }>
+  params: Promise<{ lang: string }>
 }) {
   const { lang } = await params
-  const isRtl = lang === 'ar'
+  const locale = lang as Locale
+  const isRtl = locale === 'ar'
 
   return (
     <div
-      lang={lang}
+      lang={locale}
       dir={isRtl ? 'rtl' : 'ltr'}
       className={`${plex.variable} ${plexArabic.variable}`}
     >
