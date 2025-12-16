@@ -195,7 +195,11 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
         if (checkInDay === 6) return addDays(checkInDate, 0) // Saturday to Sunday
         return addDays(checkInDate, 2) // Fallback
       case PackageType.WEEKDAY:
-        return addDays(checkInDate, 5) // Friday to Wednesday
+        // Weekday: Sunday to Wednesday
+        // Calculate days until next Wednesday
+        const daysUntilWednesday = (3 - checkInDay + 7) % 7
+        // If it's already Wednesday, checkout is next Wednesday (7 days), otherwise this Wednesday
+        return daysUntilWednesday === 0 ? addDays(checkInDate, 7) : addDays(checkInDate, daysUntilWednesday)
       case PackageType.FULL_WEEK:
         return addDays(checkInDate, 7)
       case PackageType.FULL_MONTH:
@@ -227,8 +231,8 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
           isDayRestricted = ![4, 5, 6].includes(dayOfWeek)
           break
         case PackageType.WEEKDAY:
-          // Weekday: Friday to Wednesday (Fri=5)
-          isDayRestricted = dayOfWeek !== 5
+          // Weekday: Sunday to Wednesday (Sun=0, Mon=1, Tue=2, Wed=3)
+          isDayRestricted = ![0, 1, 2, 3].includes(dayOfWeek)
           break
         case PackageType.FULL_WEEK:
         case PackageType.FULL_MONTH:
@@ -509,7 +513,7 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
             />
             <PricingRow
               title={lang === 'en' ? 'Weekday' : 'أيام الأسبوع'}
-              subtitle={lang === 'en' ? 'Friday to Wednesday' : 'الجمعة إلى الأربعاء'}
+              subtitle={lang === 'en' ? 'Sunday to Wednesday' : 'الأحد إلى الأربعاء'}
               price={packageInfo.weekDaysCost}
               currency={bookingConfig.currency}
               checked={!selectedPlan?.id && selectedPackageType === PackageType.WEEKDAY}

@@ -108,7 +108,12 @@ const SubmitReviewDialog: React.FC<SubmitReviewDialogProps> = ({
 
       <div className="flex items-center gap-2 justify-between flex-wrap pt-4">
         <Button
-          onClick={() => {}}
+          onClick={() => {
+            if (data?.chalet?.latitude && data?.chalet?.longitude) {
+              const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${data.chalet.latitude},${data.chalet.longitude}`
+              window.open(googleMapsUrl, '_blank')
+            }
+          }}
           intent="transperent"
           className="text-sm font-medium !px-0 !py-0 text-[#29397E] underline underline-offset-2 flex gap-1 items-center"
         >

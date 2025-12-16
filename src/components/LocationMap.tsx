@@ -50,6 +50,15 @@ const HotelMap: React.FC<HotelMapProps> = ({ center, hotelInfo, lang }) => {
               <h3>{hotelInfo.name}</h3>
               <p>{hotelInfo.description}</p>
               <p>⭐ {hotelInfo.reviews} Reviews</p>
+              <button
+                onClick={() => {
+                  const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${center.lat},${center.lng}`
+                  window.open(googleMapsUrl, '_blank')
+                }}
+                className="mt-2 px-3 py-1.5 bg-[#29397E] text-white text-sm font-medium rounded hover:bg-[#1e2a5a] transition-colors"
+              >
+                {lang === 'en' ? 'View Location' : 'عرض الموقع'}
+              </button>
             </div>
           </InfoWindow>
         )}

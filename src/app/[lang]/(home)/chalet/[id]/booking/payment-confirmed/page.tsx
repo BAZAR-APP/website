@@ -290,12 +290,21 @@ const PaymentConfirmed = () => {
           />
 
           <div className="self-start py-3 flex gap-2 flex-wrap">
-            <ActionLink
-              icon={<MapPin className="w-4 h-4 text-[#29397E]" />}
-              label="View Exact Location"
-              href=""
-              trailingIcon={<ChevronRight className="w-3 h-3 text-[#29397E]" strokeWidth={3} />}
-            />
+            <button
+              onClick={() => {
+                if (data?.latitude && data?.longitude) {
+                  const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`
+                  window.open(googleMapsUrl, '_blank')
+                }
+              }}
+              className="flex gap-1 items-center cursor-pointer"
+            >
+              <MapPin className="w-4 h-4 text-[#29397E]" />
+              <span className="text-sm text-[#29397E] font-medium underline underline-offset-2">
+                View Exact Location
+              </span>
+              <ChevronRight className="w-3 h-3 text-[#29397E]" strokeWidth={3} />
+            </button>
 
             <button
               onClick={() => setIsOpen(!isOpen)}
