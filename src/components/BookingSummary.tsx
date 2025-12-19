@@ -80,11 +80,13 @@ const PaymentSplitSection: React.FC<{ finalFullAmount: number }> = ({ finalFullA
 type BookingSummaryProps = {
   showBookButton?: boolean
   showRedeemeCodeSection?: boolean
-  paidAmount?: boolean
-  remaingAmount?: boolean
+  paidAmount?: boolean | number
+  remaingAmount?: boolean | number
   earnPoints?: boolean
   finalPayment?: boolean
   lang: Locale
+  onCompletePayment?: () => void
+  isPaying?: boolean
 }
 
 const BookingSummary: React.FC<BookingSummaryProps> = ({
@@ -94,7 +96,9 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
   remaingAmount = false,
   earnPoints = true,
   finalPayment = false,
-  lang
+  lang,
+  onCompletePayment,
+  isPaying = false,
 }) => {
   const { id } = useParams()
   const { getValues, watch } = useFormContext()
@@ -143,6 +147,10 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
 
   const numberOfNights = calculateNightsFromDates()
   const calculatedPoints = earnPoints ? calculateLoyaltyPoints(chaletDetails?.noOfLoyalityPoints, numberOfNights, bookingType === 'hourly') : 0
+
+  // Hide points if split payment is selected
+  const shouldShowPoints = earnPoints && !isSplitPayment
+
   const handleApplyDiscount = async () => {
     setLoading(true)
     try {
@@ -230,7 +238,7 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
               {format(selectedDates?.checkOut, 'd MMMM yyyy')}
             </div>
 
-            {earnPoints && (
+            {shouldShowPoints && (
               <>
                 <div className="text-sm text-[#9EA0A2] mb-3">
                   You&apos;ll earn {calculatedPoints} points with this booking!
@@ -311,14 +319,14 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
             {paidAmount && (
               <div className="font-medium text-base leading-[150%] flex items-center justify-between gap-2 py-2 text-[#29397E]">
                 <span>{lang === 'en' ? 'Paid Amount' : 'المبلغ المدفوع'}</span>
-                <span>{paidAmount} KWD</span>
+                <span>{typeof paidAmount === 'number' ? `${paidAmount} KWD` : `${paidAmount} KWD`}</span>
               </div>
             )}
 
             {remaingAmount && (
               <div className="font-medium text-base leading-[150%] flex items-center justify-between gap-2 py-2 text-[#29397E]">
                 <span>{lang === 'en' ? 'Remaining Balance' : 'الرصيد المتبقي'}</span>
-                <span>{remaingAmount} KWD</span>
+                <span>{typeof remaingAmount === 'number' ? `${remaingAmount} KWD` : `${remaingAmount} KWD`}</span>
               </div>
             )}
 
@@ -344,17 +352,21 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
             {showBookButton && (
               <Button
                 className="w-full text-white mt-3.5 !px-0 rounded-lg font-medium cursor-pointer"
-                onClick={bookNow}
-                loading={loading}
-                disabled={loading}
+                onClick={finalPayment && onCompletePayment ? onCompletePayment : bookNow}
+                loading={finalPayment ? isPaying : loading}
+                disabled={finalPayment ? isPaying : loading}
               >
-                {isSplitPayment
+                {finalPayment
                   ? lang === 'en'
-                    ? 'Book Now with 50% Payment'
-                    : 'احجز الآن مع 50٪ دفعة'
-                  : lang === 'en'
-                    ? 'Book Now'
-                    : 'احجز الآن'}
+                    ? 'Complete Payment'
+                    : 'إكمال الدفع'
+                  : isSplitPayment
+                    ? lang === 'en'
+                      ? 'Book Now with 50% Payment'
+                      : 'احجز الآن مع 50٪ دفعة'
+                    : lang === 'en'
+                      ? 'Book Now'
+                      : 'احجز الآن'}
               </Button>
             )}
           </div>

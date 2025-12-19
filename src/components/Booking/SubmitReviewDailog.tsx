@@ -74,10 +74,12 @@ const SubmitReviewDialog: React.FC<SubmitReviewDialogProps> = ({
       )}
       <div className="flex items-center flex-wrap gap-3 pt-3">
         <h3 className="text-[16px] font-medium text-[#19191A]">{propertyTitle}</h3>
-        <div className="flex bg-[#E1F3FF] items-center gap-1 rounded py-1 px-1.5 max-w-[110px]">
-          <Image src="/images/Points.svg" width={16} height={16} alt="Points Icon" />
-          <span className="text-[#29397E] text-sm">{points} Points</span>
-        </div>
+        {data?.paymentStatus === 'fullPaid' && (
+          <div className="flex bg-[#E1F3FF] items-center gap-1 rounded py-1 px-1.5 max-w-[110px]">
+            <Image src="/images/Points.svg" width={16} height={16} alt="Points Icon" />
+            <span className="text-[#29397E] text-sm">{points} Points</span>
+          </div>
+        )}
       </div>
 
       <div className="text-sm text-[#8E8E93] leading-5 pt-2">
@@ -122,7 +124,7 @@ const SubmitReviewDialog: React.FC<SubmitReviewDialogProps> = ({
           <ChevronRight className="w-3 h-3 mt-0.5" strokeWidth={3} />
         </Button>
         <Button
-          onClick={() => {}}
+          onClick={() => { }}
           intent="transperent"
           className="text-sm font-medium !px-0 !py-0 text-[#29397E] underline underline-offset-2 flex gap-1 items-center"
         >
@@ -131,7 +133,7 @@ const SubmitReviewDialog: React.FC<SubmitReviewDialogProps> = ({
           <Image src="/images/Arrow.svg" width={14} height={14} alt="arrow" />
         </Button>
         <Button
-          onClick={() => {}}
+          onClick={() => { }}
           intent="transperent"
           className="text-sm font-medium !px-0 !py-0 text-[#29397E] underline flex gap-1 items-center"
         >

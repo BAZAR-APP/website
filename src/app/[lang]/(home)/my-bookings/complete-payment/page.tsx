@@ -1,23 +1,102 @@
 'use client'
 import BookingSummary from '@/components/BookingSummary'
 import PaymentForm from '@/components/PaymentForm'
-import { useParams } from 'next/navigation'
-import React from 'react'
+import { useParams, useRouter } from 'next/navigation'
+import React, { useState, useEffect } from 'react'
 import { useForm, FormProvider } from 'react-hook-form'
 import { Locale } from '../../../../../../i18n.config'
+import api, { useQueryBase } from '@/lib/axios'
+import { useSession } from 'next-auth/react'
+import { extractErrorMessage, calculateSplitPayment } from '@/lib/utils'
+import { toast } from '@/lib/toast'
+import { IBooking } from '@/lib/types/booking'
 
 const CompletePayment: React.FC = () => {
   const params = useParams() as { lang: Locale }
-    const { lang } = params
+  const { lang } = params
+  const router = useRouter()
+  const { data: session } = useSession()
+  const [isPaying, setIsPaying] = useState(false)
   const methods = useForm()
+
+  // Fetch user's current bookings to find the half-paid booking
+  const { data: bookingData, isLoading: isLoadingBookings } = useQueryBase({
+    queryKey: ['userBookings', 'current', lang],
+    url: `/booking/me?type=current&language=${lang}`,
+    staleTime: 0,
+    cacheTime: 0,
+    enabled: !!session?.user?.accessToken && !!lang,
+  })
+
+  const bookings = bookingData?.data?.bookings as IBooking[] | undefined
+  const halfPaidBooking = bookings?.find((b) => b.paymentStatus === 'halfPaid')
+
+  const handleCompletePayment = async () => {
+    if (!halfPaidBooking) {
+      toast.error(lang === 'en' ? 'No pending payment found' : 'لم يتم العثور على دفعة معلقة')
+      return
+    }
+
+    try {
+      setIsPaying(true)
+      const split = calculateSplitPayment(halfPaidBooking.grandTotal)
+      const remainingAmount = split.secondPayment
+
+      if (remainingAmount <= 0) {
+        toast.error(lang === 'en' ? 'Invalid amount to pay' : 'مبلغ غير صالح للدفع')
+        return
+      }
+
+      await api.patch('/booking/customer/payRemainingAmount', {
+        bookingId: halfPaidBooking.id,
+        amount: remainingAmount,
+      })
+
+      toast.success(lang === 'en' ? 'Payment processed successfully' : 'تم معالجة الدفع بنجاح')
+      // Redirect to booking details page
+      router.push(`/${lang}/my-bookings/${halfPaidBooking.id}`)
+    } catch (error) {
+      toast.error(extractErrorMessage(error))
+    } finally {
+      setIsPaying(false)
+    }
+  }
+
+  if (isLoadingBookings) {
+    return <div className="flex justify-center items-center h-screen">Loading...</div>
+  }
+
+  if (!halfPaidBooking) {
+    return (
+      <div className="max-w-[1800px] mx-auto lg:px-21 md:px-13 sm:px-10 px-8 py-9">
+        <div className="text-center py-12">
+          <h2 className="xl:text-[39px] md:text-2xl text-xl font-semibold text-[#19191A] mb-4">
+            {lang === 'en' ? 'No Pending Payment' : 'لا توجد دفعة معلقة'}
+          </h2>
+          <p className="text-[#484A4C] md:text-[20px] text-sm mb-8">
+            {lang === 'en'
+              ? 'You do not have any bookings with pending payments.'
+              : 'ليس لديك أي حجوزات مع دفعات معلقة.'}
+          </p>
+        </div>
+      </div>
+    )
+  }
+
+  const split = calculateSplitPayment(halfPaidBooking.grandTotal)
+  const paidAmount = split.firstPayment
+  const remainingAmount = split.secondPayment
+
   return (
     <FormProvider {...methods}>
       <div className="max-w-[1800px] mx-auto lg:px-21 md:px-13 sm:px-10 px-8 py-9">
         <h2 className="xl:text-[39px] md:text-2xl text-xl font-semibold text-[#19191A] mb-2">
-          Complete Your Payment
+          {lang === 'en' ? 'Complete Your Payment' : 'أكمل دفعتك'}
         </h2>
         <p className="text-[#484A4C] md:text-[20px] text-sm mb-8">
-          Pay the remaining amount to fully confirm your chalet booking.{' '}
+          {lang === 'en'
+            ? 'Pay the remaining amount to fully confirm your chalet booking.'
+            : 'ادفع المبلغ المتبقي لتأكيد حجز الشاليه بالكامل.'}
         </p>
         <div className="flex flex-col lg:flex-row gap-4 border-b border-[#E5E7EB] pb-3">
           <div className="flex-1">
@@ -28,12 +107,14 @@ const CompletePayment: React.FC = () => {
             <div className="sticky top-8">
               <BookingSummary
                 showBookButton={true}
-                showRedeemeCodeSection={true}
-                paidAmount={true}
-                remaingAmount={true}
+                showRedeemeCodeSection={false}
+                paidAmount={paidAmount}
+                remaingAmount={remainingAmount}
                 earnPoints={false}
                 finalPayment={true}
                 lang={lang}
+                onCompletePayment={handleCompletePayment}
+                isPaying={isPaying}
               />
             </div>
           </div>
