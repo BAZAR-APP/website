@@ -725,16 +725,18 @@ export const BookingDetailsPageClient: React.FC<BookingDetailsPageClientProps> =
               </div>
 
               <div className="space-y-4">
-                <div className="flex items-center flex-wrap gap-2 pt-3">
-                  <h3 className="text-[16px] font-medium text-[#19191A]">
+                <div className="flex items-center flex-wrap gap-3 mb-3">
+                  <h3 className="text-[16px] leading-[24px] font-medium text-[#19191A] font-inter">
                     {bookingDetails?.chalet?.title}
                   </h3>
-                  <div className="flex bg-[#E1F3FF] items-center gap-1 rounded py-1 px-1.5 max-w-[110px]">
-                    <Image src="/images/Points.svg" width={16} height={16} alt="Points Icon" />
-                    <span className="text-[#29397E] text-sm">
-                      {calculateLoyaltyPoints(bookingDetails?.chalet?.noOfLoyalityPoints, bookingDetails?.noOfNights, bookingDetails?.noOfNights === 0)} Points
-                    </span>
-                  </div>
+                  {bookingDetails?.paymentStatus === 'fullPaid' && (
+                    <div className="flex bg-[#E1F3FF] items-center gap-1 rounded py-1 px-1.5 max-w-[110px]">
+                      <Image src="/images/Points.svg" width={16} height={16} alt="Points Icon" />
+                      <span className="text-[#29397E] text-sm">
+                        {calculateLoyaltyPoints(bookingDetails?.chalet?.noOfLoyalityPoints, bookingDetails?.noOfNights, bookingDetails?.noOfNights === 0)} Points
+                      </span>
+                    </div>
+                  )}
                 </div>
 
                 <Location

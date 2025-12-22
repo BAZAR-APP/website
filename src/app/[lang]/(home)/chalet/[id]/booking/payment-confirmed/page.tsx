@@ -38,10 +38,10 @@ const PaymentConfirmed = () => {
 
   // Get the most recent booking for this chalet from user's bookings
   const bookings = bookingData?.data?.bookings as IBooking[] | undefined
-  const bookingDetails = bookings && Array.isArray(bookings) && bookings.length > 0 
+  const bookingDetails = bookings && Array.isArray(bookings) && bookings.length > 0
     ? bookings
-        .filter((b) => b.chaletId === id)
-        .sort((a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime())[0]
+      .filter((b) => b.chaletId === id)
+      .sort((a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime())[0]
     : undefined
 
   const handleDownloadInvoice = async () => {
@@ -64,7 +64,7 @@ const PaymentConfirmed = () => {
       const isHalfPaid = bookingDetails?.paymentStatus === 'halfPaid'
       let paidAmount = grandTotal
       let remainingAmount = 0
-      
+
       if (isHalfPaid) {
         const split = calculateSplitPayment(grandTotal)
         paidAmount = split.firstPayment
@@ -183,10 +183,14 @@ const PaymentConfirmed = () => {
 
   const numberOfNights = calculateNightsFromDates()
   const points = calculateLoyaltyPoints(data?.noOfLoyalityPoints, numberOfNights, bookingStore.bookingType === 'hourly')
+
+  // Only show points if booking is fully paid
+  const isFullyPaid = bookingDetails?.paymentStatus === 'fullPaid'
+  const shouldShowPoints = isFullyPaid
+
   const fullLocation = `${data.street1}, ${data.street2}, ${data.city}, ${data.state}, ${data.country}`
-  const details = `${data.maxNoOfGuests || 'N/A'} guests · ${
-    data.isEntireHomeAvailabe ? 'Entire Home' : 'Private Room'
-  } · ${data.maxNoOfBeds} beds · ${data.noOfBaths} bath`
+  const details = `${data.maxNoOfGuests || 'N/A'} guests · ${data.isEntireHomeAvailabe ? 'Entire Home' : 'Private Room'
+    } · ${data.maxNoOfBeds} beds · ${data.noOfBaths} bath`
 
   return (
     <>
@@ -210,7 +214,7 @@ const PaymentConfirmed = () => {
         />
 
         <h3 className="lg:text-[39px] md:text-3xl sm:text-2xl text-xl font-semibold py-1 leading-[47px] text-[#19191A] text-center md:pt-6 pt-3 w-full">
-           {lang === 'en' ? 'Payment Confirmed' : 'تم تأكيد الدفع'}
+          {lang === 'en' ? 'Payment Confirmed' : 'تم تأكيد الدفع'}
         </h3>
 
         <div className="lg:text-[20px] md:text-[16px] text-sm md:leading-[28px] lg:leading-[34px] leading-5 py-1 text-[#484A4C] text-center">
@@ -218,17 +222,19 @@ const PaymentConfirmed = () => {
             'Your booking is complete. Thank you for choosing us!'
           ) : (
             <>
-            <p>
-              {lang === 'en'
-                ? 'Your booking is complete. Thank you for choosing us!'
-                : 'تم اكتمال حجزك. شكرًا لاختيارك لنا!'}
-            </p>
-            <p>
-              {lang === 'en'
-                ? `You earned ${points} points. Track and redeem them in your profile anytime!`
-                : `لقد حصلت على ${points} نقطة. يمكنك تتبعها واستردادها في ملفك الشخصي في أي وقت!`}
-            </p>
-          </>
+              <p>
+                {lang === 'en'
+                  ? 'Your booking is complete. Thank you for choosing us!'
+                  : 'تم اكتمال حجزك. شكرًا لاختيارك لنا!'}
+              </p>
+              {shouldShowPoints && (
+                <p>
+                  {lang === 'en'
+                    ? `You earned ${points} points. Track and redeem them in your profile anytime!`
+                    : `لقد حصلت على ${points} نقطة. يمكنك تتبعها واستردادها في ملفك الشخصي في أي وقت!`}
+                </p>
+              )}
+            </>
           )}
         </div>
 
@@ -246,10 +252,12 @@ const PaymentConfirmed = () => {
               <h3 className="text-[16px] leading-[24px] font-medium text-[#19191A] font-inter">
                 {data.title}
               </h3>
-              <div className="flex bg-[#E1F3FF] items-center gap-1 rounded py-1 px-1.5 max-w-[108px]">
-                <Image src="/images/Points.svg" width={16} height={16} alt="Points-Icon" />
-                <span className="text-[#29397E] text-sm">{points} Points</span>
-              </div>
+              {shouldShowPoints && (
+                <div className="flex bg-[#E1F3FF] items-center gap-1 rounded py-1 px-1.5 max-w-[108px]">
+                  <Image src="/images/Points.svg" width={16} height={16} alt="Points-Icon" />
+                  <span className="text-[#29397E] text-sm">{points} Points</span>
+                </div>
+              )}
             </div>
           </div>
 
@@ -318,7 +326,7 @@ const PaymentConfirmed = () => {
             </button>
             <button
               onClick={handleDownloadInvoice}
-              className="flex gap-1 items-center cursor-pointer" 
+              className="flex gap-1 items-center cursor-pointer"
             >
               <Download className="w-4 h-4 text-[#29397E]" />
               <span className="text-sm text-[#29397E] font-medium underline underline-offset-2">
