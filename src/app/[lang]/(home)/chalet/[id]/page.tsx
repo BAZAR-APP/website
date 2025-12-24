@@ -95,7 +95,7 @@ export default async function ChaletDetailsPage({
   params: Promise<{ id: string; lang: Locale }>
 }) {
   const { id, lang } = await params
-  
+
   const messages = getMessages(lang);
 
   let data: Chalet | null = null
@@ -175,7 +175,7 @@ export default async function ChaletDetailsPage({
                   lang={lang}
                 />
                 <h2 className="md:text-[25px] text-xl font-semibold leading-[32px] text-[#19191A] mt-7">
-                {lang === 'en' ? `Where you'll sleep` : 'أين ستنام'}  
+                  {lang === 'en' ? `Where you'll sleep` : 'أين ستنام'}
                 </h2>
                 {data?.chaletRooms?.length === 0 ? (
                   <div className="text-center text-lg text-gray-500 py-10 w-full">
@@ -191,7 +191,7 @@ export default async function ChaletDetailsPage({
                   </div>
                 )}
               </div>
-              <Calender lang={lang} />
+              <Calender lang={lang} bookings={data?.bookings || []} />
             </div>
 
             <div className="lg:col-span-1">
@@ -232,7 +232,7 @@ export default async function ChaletDetailsPage({
           <>
             <ReviewsSection rating={data?.rating || 0} lang={lang} />
             <HotelMap
-            lang={lang}
+              lang={lang}
               center={{ lat: data?.latitude || hotel?.lat, lng: data?.longitude || hotel?.lng }}
               hotelInfo={{
                 name:
