@@ -18,7 +18,7 @@ import { extractErrorMessage, calculateLoyaltyPoints, calculateSplitPayment } fr
 import { toast } from '@/lib/toast'
 import { Locale } from '../../../../../../i18n.config'
 import { useBookingStore } from '../../../../../../stores/useBookingStore'
-import { generateBookingInvoicePDF } from '@/lib/generateInvoicePDF'
+import { generateInvoicePDF, InvoiceData } from '@/lib/generateInvoicePDF'
 import { useUserStore } from '../../../../../../stores/useUserStore'
 
 interface AddOn {
@@ -403,15 +403,15 @@ export const BookingDetailsPageClient: React.FC<BookingDetailsPageClientProps> =
 
     const now = new Date()
     const startDateStr = bookingDetails.startDate
-    
+
     // For hourly bookings (noOfNights === 0), check if start time has passed
     // For date-based bookings, check if start date has passed
     const isHourlyBooking = bookingDetails.noOfNights === 0
-    
+
     if (isHourlyBooking) {
       // For hourly bookings, compare both date and time (exact timestamp)
       const startDate = new Date(startDateStr)
-      
+
       // Compare timestamps: booking has started if current time is >= the booking start time
       // Button should be visible until the start time, and hidden once the booking time begins
       return now.getTime() >= startDate.getTime()
@@ -419,17 +419,17 @@ export const BookingDetailsPageClient: React.FC<BookingDetailsPageClientProps> =
       // For date-based bookings, compare the start date (ignore time)
       // Parse the start date string
       const startDate = new Date(startDateStr)
-      
+
       // Get today's date components (year, month, day) in local timezone
       const todayYear = now.getFullYear()
       const todayMonth = now.getMonth()
       const todayDay = now.getDate()
-      
+
       // Get booking start date components (year, month, day) in local timezone
       const startYear = startDate.getFullYear()
       const startMonth = startDate.getMonth()
       const startDay = startDate.getDate()
-      
+
       // Compare dates: booking has started if today is AFTER the booking start date
       // Button should be visible until the start date (including the start date)
       if (todayYear > startYear) return true
@@ -665,27 +665,54 @@ export const BookingDetailsPageClient: React.FC<BookingDetailsPageClientProps> =
         remainingAmount = split.secondPayment
       }
 
-      const invoiceData = {
-        bookingId: bookingDetails.id,
-        startDate: bookingDetails.startDate,
-        endDate: bookingDetails.endDate,
-        refundableAmount: String(bookingDetails.refundableDepositAmount || 200),
-        totalAmount: grandTotal,
-        chaletTitle: bookingDetails.chalet?.title || 'N/A',
-        hostName: bookingDetails.chalet?.host?.fullName || 'N/A',
+      const fullLocation = `${bookingDetails.chalet?.street1 || ''}, ${bookingDetails.chalet?.street2 || ''}, ${bookingDetails.chalet?.city || ''}, ${bookingDetails.chalet?.state || ''}, ${bookingDetails.chalet?.country || ''}`.replace(/^[ ,]+|[ ,]+$/g, '')
+      console.log(bookingDetails, "bookingDetails");
+
+      const customizationItems = bookingDetails.bookingCustomizations?.map((item: any) => ({
+        title: item.chaletCustomization?.customization?.title ?? 'Unnamed Add-On',
+        price: item.totalCost ?? 0
+      })) || [];
+
+      const invoiceData: InvoiceData = {
+        invoiceNo: bookingDetails.id,
+        issuedOn: format(new Date(bookingDetails.createdAt || Date.now()), 'dd/MM/yyyy'),
+        dueOn: format(new Date(bookingDetails.startDate), 'dd/MM/yyyy'),
         guestName: userStore.user?.name || 'Guest Name',
-        guestPhone: userStore.user?.phone || '+96512341234',
         guestEmail: userStore.user?.email || 'guest@example.com',
-        createdAt: bookingDetails.createdAt || new Date().toISOString(),
-        paymentStatus: bookingDetails.paymentStatus,
+        guestPhone: userStore.user?.phone || '+96512341234',
+        address: 'Kuwait',
+        chaletTitle: bookingDetails.chalet?.title || 'N/A',
+        chaletImage: bookingDetails.chalet?.photoURL || '',
+        chaletAddress: fullLocation,
+        startDate: format(new Date(bookingDetails.startDate), 'dd MMM yyyy'),
+        endDate: format(new Date(bookingDetails.endDate), 'dd MMM yyyy'),
+        startTime: format(new Date(bookingDetails.startDate), 'hh:mm a'),
+        endTime: format(new Date(bookingDetails.endDate), 'hh:mm a'),
+        guests: bookingDetails.noOfGuests,
+        location: bookingDetails.chalet?.city || 'N/A',
+        items: priceBreakdown.map(item => ({
+          label: item.description,
+          amount: item.amount
+        })),
+        customization: customizationItems,
+        totalAmount: grandTotal,
+        paymentStatus: isHalfPaid ? 'half' : 'paid',
         paidAmount: paidAmount,
-        remainingAmount: remainingAmount,
+        noOfNights: bookingDetails.noOfNights || 0,
+        perNightCost: (bookingDetails as any).perNightCost || (bookingDetails.grandTotal / (bookingDetails.noOfNights || 1)),
+        refundableDepositAmount: bookingDetails.refundableDepositAmount || 200
       }
 
-      await generateBookingInvoicePDF(invoiceData, lang)
+
+
+      console.log('[Download] invoiceData prepared:', invoiceData);
+
+      await generateInvoicePDF(invoiceData, lang)
+
+      console.log('[Download] generateInvoicePDF finished.');
       toast.success(lang === 'en' ? 'Invoice downloaded successfully!' : 'تم تنزيل الفاتورة بنجاح!')
     } catch (error) {
-      console.error('Error downloading invoice:', error)
+      console.error('[Download] Error downloading invoice:', error)
       toast.error(lang === 'en' ? 'Failed to download invoice.' : 'فشل تنزيل الفاتورة.')
     }
   }
