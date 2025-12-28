@@ -194,11 +194,12 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
         isPartialPayment: isSplitPayment,
         ...(isDiscountApplied && { couponCode: discountCode }),
       }
+
       await api.post('/booking', body)
       setSelectedDiscount(null)
       // resetBooking()
       router.replace(`/chalet/${id}/booking/payment-confirmed`)
-    } catch (error) {
+    } catch (error: any) {
       toast.error(extractErrorMessage(error))
     } finally {
       setLoading(false)

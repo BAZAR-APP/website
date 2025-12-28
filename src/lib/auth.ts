@@ -19,20 +19,23 @@ const cookiePrefix = useSecureCookies ? "__Secure-" : ""
 // Helper function to validate current user
 async function validateCurrentUser(accessToken: string) {
   try {
-    const response = await apiClient.get('/users/currentUser', {
+    const apiUrl = process.env.NEXT_PUBLIC_NESTJS_API_URL
+    const response = await apiClient.get(`${apiUrl}/users/currentUser`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
     })
     return { isValid: true, userData: response.data }
   } catch (error) {
+    console.error('Validation error:', error)
     return { isValid: false, userData: null }
   }
 }
 
-// Helper function to check if user role is customer
+// Helper function to check if user role is customer or admin
 function isCustomerRole(role: string): boolean {
-  return role?.toLowerCase() === 'customer'
+  const allowedRoles = ['customer', 'admin']
+  return allowedRoles.includes(role?.toLowerCase())
 }
 
 export const authOptions: NextAuthOptions = {
@@ -46,8 +49,15 @@ export const authOptions: NextAuthOptions = {
         countryCode: { label: 'countryCode' },
       },
       async authorize(credentials) {
+        const apiUrl = process.env.NEXT_PUBLIC_NESTJS_API_URL
+
+        if (!apiUrl) {
+          throw new Error('NEXT_PUBLIC_NESTJS_API_URL is not defined in environment variables')
+        }
+
         try {
-          const response = await apiClient.post('/auth/signIn', {
+          // Explicitly use the full URL to ensure we hit the correct backend
+          const response = await apiClient.post(`${apiUrl}/auth/signIn`, {
             phoneNumber: credentials?.phoneNumber,
             callingCode: credentials?.callingCode,
             countryCode: credentials?.countryCode,
@@ -68,6 +78,7 @@ export const authOptions: NextAuthOptions = {
 
             // Check if user role is customer
             const userRole = validation.userData?.role || user.role
+            
             if (!isCustomerRole(userRole)) {
               throw new Error('Access denied. Only customers can login to this application.')
             }

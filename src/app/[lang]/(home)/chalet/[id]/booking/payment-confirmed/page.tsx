@@ -11,7 +11,8 @@ import { Chalet } from '../../../../../../../../types/chalets'
 import { SocialLinkShare } from '@/components'
 import { useUserStore } from '../../../../../../../../stores/useUserStore'
 import { useBookingStore } from '../../../../../../../../stores/useBookingStore'
-import { generateBookingInvoicePDF, InvoiceData } from '@/lib/generateInvoicePDF'
+import { generateInvoicePDF, InvoiceData } from '@/lib/generateInvoicePDF'
+import { format } from 'date-fns'
 import api, { useQueryBase } from '@/lib/axios'
 import { IBooking } from '@/lib/types/booking'
 
@@ -71,24 +72,41 @@ const PaymentConfirmed = () => {
         remainingAmount = split.secondPayment
       }
 
+      const fullLocation = `${data.street1 || ''}, ${data.street2 || ''}, ${data.city || ''}, ${data.state || ''}, ${data.country || ''}`.replace(/^[ ,]+|[ ,]+$/g, '')
+
       const invoiceData: InvoiceData = {
-        bookingId: actualBookingId,
-        startDate: bookingDetails?.startDate || bookingStore.selectedDates.checkIn,
-        endDate: bookingDetails?.endDate || bookingStore.selectedDates.checkOut,
-        refundableAmount: '200',
-        totalAmount: grandTotal,
-        chaletTitle: data.title || 'N/A',
-        hostName: data.host?.fullName || 'N/A',
+        invoiceNo: actualBookingId,
+        issuedOn: format(new Date(bookingDetails?.createdAt || Date.now()), 'dd/MM/yyyy'),
+        dueOn: format(new Date(bookingDetails?.startDate || bookingStore.selectedDates.checkIn), 'dd/MM/yyyy'),
         guestName: userStore.user?.name || 'Guest Name',
-        guestPhone: userStore.user?.phone || '+96512341234',
         guestEmail: userStore.user?.email || 'guest@example.com',
-        createdAt: bookingDetails?.createdAt || new Date().toISOString(),
-        paymentStatus: (bookingDetails?.paymentStatus || 'fullPaid') as 'fullPaid' | 'halfPaid',
+        guestPhone: userStore.user?.phone || '+96512341234',
+        address: 'Kuwait',
+        chaletTitle: data.title || 'N/A',
+        chaletImage: data.photoURL || '',
+        chaletAddress: fullLocation,
+        startDate: format(new Date(bookingDetails?.startDate || bookingStore.selectedDates.checkIn), 'dd MMM yyyy'),
+        endDate: format(new Date(bookingDetails?.endDate || bookingStore.selectedDates.checkOut), 'dd MMM yyyy'),
+        startTime: format(new Date(bookingDetails?.startDate || bookingStore.selectedDates.checkIn), 'hh:mm a'),
+        endTime: format(new Date(bookingDetails?.endDate || bookingStore.selectedDates.checkOut), 'hh:mm a'),
+        guests: bookingDetails?.noOfGuests || 1,
+        location: data.city || 'N/A',
+        items: [
+          { label: lang === 'en' ? 'Booking Amount' : 'مبلغ الحجز', amount: grandTotal },
+          { label: lang === 'en' ? 'Refundable Security Deposit' : 'تأمين قابل للاسترداد', amount: 200 }
+        ],
+        customization: [], // Add customizations if available in store/details
+        totalAmount: grandTotal + 200,
+        paymentStatus: isHalfPaid ? 'half' : 'paid',
         paidAmount: paidAmount,
-        remainingAmount: remainingAmount,
+        noOfNights: bookingStore.noOfNights || 0,
+        perNightCost: Number(bookingStore.packageAmount) / (bookingStore.noOfNights || 1),
+        refundableDepositAmount: 200
       };
 
-      await generateBookingInvoicePDF(invoiceData, lang);
+      console.log('Invoice Data:', invoiceData);
+
+      await generateInvoicePDF(invoiceData, lang);
       toast.success(lang === 'en' ? 'Invoice downloaded successfully!' : 'تم تنزيل الفاتورة بنجاح!');
     } catch (error) {
       console.error('Error downloading invoice:', error);
@@ -106,24 +124,39 @@ const PaymentConfirmed = () => {
           const paidAmount = split.firstPayment
           const remainingAmount = split.secondPayment
 
+          const fullLocation = `${data.street1 || ''}, ${data.street2 || ''}, ${data.city || ''}, ${data.state || ''}, ${data.country || ''}`.replace(/^[ ,]+|[ ,]+$/g, '')
+
           const invoiceData: InvoiceData = {
-            bookingId: bookingDetails.id,
-            startDate: bookingDetails.startDate,
-            endDate: bookingDetails.endDate,
-            refundableAmount: '200',
-            totalAmount: grandTotal,
-            chaletTitle: data.title || 'N/A',
-            hostName: data.host?.fullName || 'N/A',
+            invoiceNo: bookingDetails.id,
+            issuedOn: format(new Date(bookingDetails.createdAt || Date.now()), 'dd/MM/yyyy'),
+            dueOn: format(new Date(bookingDetails.startDate), 'dd/MM/yyyy'),
             guestName: userStore.user?.name || 'Guest Name',
-            guestPhone: userStore.user?.phone || '+96512341234',
             guestEmail: userStore.user?.email || 'guest@example.com',
-            createdAt: bookingDetails.createdAt || new Date().toISOString(),
-            paymentStatus: 'halfPaid',
+            guestPhone: userStore.user?.phone || '+96512341234',
+            address: 'Kuwait',
+            chaletTitle: data.title || 'N/A',
+            chaletImage: data.photoURL || '',
+            chaletAddress: fullLocation,
+            startDate: format(new Date(bookingDetails.startDate), 'dd MMM yyyy'),
+            endDate: format(new Date(bookingDetails.endDate), 'dd MMM yyyy'),
+            startTime: format(new Date(bookingDetails.startDate), 'hh:mm a'),
+            endTime: format(new Date(bookingDetails.endDate), 'hh:mm a'),
+            guests: bookingDetails.noOfGuests,
+            location: data.city || 'N/A',
+            items: [
+              { label: lang === 'en' ? 'Booking Amount' : 'مبلغ الحجز', amount: grandTotal },
+              { label: lang === 'en' ? 'Refundable Security Deposit' : 'تأمين قابل للاسترداد', amount: 200 }
+            ],
+            customization: [],
+            totalAmount: grandTotal + 200,
+            paymentStatus: 'half',
             paidAmount: paidAmount,
-            remainingAmount: remainingAmount,
+            noOfNights: bookingDetails.noOfNights || 0,
+            perNightCost: (bookingDetails as any).perNightCost || (bookingDetails.grandTotal / (bookingDetails.noOfNights || 1)),
+            refundableDepositAmount: 200
           };
 
-          await generateBookingInvoicePDF(invoiceData, lang);
+          await generateInvoicePDF(invoiceData, lang);
           setInvoiceGenerated(true);
         } catch (error) {
           console.error('Error auto-generating invoice:', error);

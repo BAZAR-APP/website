@@ -98,7 +98,6 @@ const HourlyBookingSummary: React.FC<HourlyBookingSummaryProps> = ({
   const checkInPopUp = useToggle()
   const checkOutPopUp = useToggle()
   const datePopUp = useToggle()
-
   const router = useRouter()
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
   const [selectedCheckInTime, setSelectedCheckInTime] = useState<string | null>(null)
@@ -182,28 +181,44 @@ const HourlyBookingSummary: React.FC<HourlyBookingSummaryProps> = ({
     const disabledSet = new Set<string>()
     const today = startOfDay(new Date())
 
-    const todayPlus365 = addDays(today, 365)
-    for (let i = 0; i < 365; i++) {
-      const checkDate = addDays(today, i)
-      const availableSlots = getAvailableTimeSlots(checkDate)
-      if (availableSlots.length === 0) {
-        disabledSet.add(checkDate.toISOString().split('T')[0])
+    // 1. Check only days that have existing bookings
+    // This is more efficient than a blind loop and avoids hardcoded limits
+    const bookingDates = new Set<string>()
+    bookings.forEach((booking) => {
+      const start = new Date(booking.startDate)
+      const end = new Date(booking.endDate)
+
+      // Expand range to cover all affected days
+      let current = startOfDay(start)
+      const last = startOfDay(end)
+      while (current <= last) {
+        bookingDates.add(current.toISOString().split('T')[0])
+        current = addDays(current, 1)
       }
-    }
+    })
+
+    bookingDates.forEach((dateStr) => {
+      const checkDate = new Date(dateStr)
+      if (checkDate >= today) {
+        const availableSlots = getAvailableTimeSlots(checkDate)
+        if (availableSlots.length === 0) {
+          disabledSet.add(dateStr)
+        }
+      }
+    })
+
+    // 2. Add explicitly blocked dates from availabilities
     availabilities.forEach((avail) => {
       if (!avail.isAvailable) {
         const rangeDates = expandDateRange(avail.startDate, avail.endDate)
         rangeDates.forEach((date) => {
-          if (date >= today && date <= todayPlus365) {
-            // Use consistent key: local date string or timestamp
-            const key = date.toDateString()
-            disabledSet.add(key)
+          if (startOfDay(date) >= today) {
+            disabledSet.add(date.toISOString().split('T')[0])
           }
         })
       }
     })
 
-    // Convert back to Date[] for Calendar
     return Array.from(disabledSet).map((dateStr) => new Date(dateStr))
   }, [bookings, availabilities])
 

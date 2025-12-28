@@ -154,6 +154,9 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
   const router = useRouter()
   const [selectedPackageType, setSelectedPackageType] = useState<PackageType | null>(null)
 
+  useEffect(() => {
+  }, [bookings, availabilities])
+
   const { id } = useParams()
   const {
     selectedPlan,
@@ -274,28 +277,65 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
   }
 
   const getDisabledDatesArray = useMemo(() => {
-    if (!selectedPackageType) return []
-
     const disabledDates: Date[] = []
-    const today = new Date()
-    const endDate = addDays(today, 365) // Check next 365 days
+    const today = startOfDay(new Date())
 
-    for (let date = new Date(today); date <= endDate; date = addDays(date, 1)) {
-      if (getDateRestrictions.isDateDisabled(date)) {
-        disabledDates.push(new Date(date))
+    // 1. Collect all dates from existing bookings
+    bookings.forEach((booking) => {
+      const start = new Date(booking.startDate)
+      const end = new Date(booking.endDate)
+      let current = startOfDay(start)
+      const last = startOfDay(end)
+
+      while (current <= last) {
+        if (current >= today) {
+          // If a package is selected, we check if the WHOLE package fits starting at this date
+          if (selectedPackageType) {
+            if (getDateRestrictions.isDateDisabled(current)) {
+              disabledDates.push(new Date(current))
+            }
+          } else {
+            // If no package, we just mark it as booked (handled by isDateUnavailable usually, 
+            // but here we are building an array for the calendar prop)
+            disabledDates.push(new Date(current))
+          }
+        }
+        current = addDays(current, 1)
       }
-    }
+    })
+
+    // 2. Collect from availabilities
+    availabilities.forEach((avail) => {
+      if (!avail.isAvailable) {
+        const rangeDates = expandDateRange(avail.startDate, avail.endDate)
+        rangeDates.forEach((date) => {
+          if (startOfDay(date) >= today) {
+            disabledDates.push(new Date(date))
+          }
+        })
+      }
+    })
 
     return disabledDates
-  }, [selectedPackageType, getDateRestrictions])
+  }, [selectedPackageType, getDateRestrictions, bookings, availabilities])
 
   const firstEnabledDate = useMemo(() => {
     if (!selectedPackageType) return null
 
-    const today = new Date()
-    const endDate = addDays(today, 365)
+    const today = startOfDay(new Date())
+    const maxBookingDate = bookings.length > 0
+      ? new Date(Math.max(...bookings.map(b => new Date(b.endDate).getTime())))
+      : today
+    const maxAvailDate = availabilities.length > 0
+      ? new Date(Math.max(...availabilities.map(a => new Date(a.endDate).getTime())))
+      : today
 
-    for (let date = new Date(today); date <= endDate; date = addDays(date, 1)) {
+    // Check up to 10 years as a hard safety limit, but effectively it will find something much sooner
+    const safeLimit = addDays(today, 3650)
+    const endDate = new Date(Math.max(maxBookingDate.getTime(), maxAvailDate.getTime(), addDays(today, 365).getTime()))
+    const finalEnd = isBefore(endDate, safeLimit) ? endDate : safeLimit
+
+    for (let date = new Date(today); date <= finalEnd; date = addDays(date, 1)) {
       const isDisabled = getDisabledDatesArray.some((disabled) => isSameDay(disabled, date))
 
       if (!isDisabled) {
@@ -304,7 +344,7 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
     }
 
     return null
-  }, [selectedPackageType, getDisabledDatesArray, selectedPlan])
+  }, [selectedPackageType, getDisabledDatesArray, selectedPlan, bookings, availabilities])
 
   // Check if a date is UNAVAILABLE (due to booking OR availability block)
   const isDateUnavailable = (date: Date): boolean => {
@@ -335,13 +375,30 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
 
     const disabledDates: Date[] = []
     const today = startOfDay(new Date())
-    const endDate = addDays(today, 365)
 
-    for (let date = new Date(today); date <= endDate; date = addDays(date, 1)) {
-      if (isDateUnavailable(date)) {
-        disabledDates.push(new Date(date))
+    // Instead of a loop for N days, we only care about days that have existing bookings or blocks
+    const relevantDates = new Set<string>()
+    bookings.forEach(b => {
+      let curr = startOfDay(new Date(b.startDate))
+      const last = startOfDay(new Date(b.endDate))
+      while (curr <= last) {
+        relevantDates.add(curr.toISOString().split('T')[0])
+        curr = addDays(curr, 1)
       }
-    }
+    })
+    availabilities.forEach(a => {
+      if (!a.isAvailable) {
+        const range = expandDateRange(a.startDate, a.endDate)
+        range.forEach(d => relevantDates.add(startOfDay(d).toISOString().split('T')[0]))
+      }
+    })
+
+    relevantDates.forEach(dateStr => {
+      const d = new Date(dateStr)
+      if (d >= today && isDateUnavailable(d)) {
+        disabledDates.push(d)
+      }
+    })
 
     return disabledDates
   }, [selectedPackageType, selectedPlan?.id, bookings, availabilities])
@@ -351,12 +408,25 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
     if (selectedPackageType || selectedPlan?.id) return []
 
     const disabledDates: Date[] = []
-    const today = new Date()
-    const endDate = addDays(today, 365)
-    const checkInDate = selectedDates?.checkIn ? new Date(selectedDates.checkIn) : today
+    const today = startOfDay(new Date())
+    const checkInDate = selectedDates?.checkIn ? startOfDay(new Date(selectedDates.checkIn)) : today
+
+    // Calculate a dynamic max date based on existing bookings/availabilities
+    const maxDataDate = bookings.length > 0
+      ? new Date(Math.max(...bookings.map(b => new Date(b.endDate).getTime())))
+      : today
+    const maxAvailDate = availabilities.length > 0
+      ? new Date(Math.max(...availabilities.map(a => new Date(a.endDate).getTime())))
+      : today
+
+    // Check up to 5 years as a safe dynamic range if there's no data, 
+    // or slightly beyond the last booking
+    const endDate = addDays(new Date(Math.max(maxDataDate.getTime(), maxAvailDate.getTime())), 30)
+    const safetyLimit = addDays(today, 1825) // 5 years safety
+    const finalEnd = isBefore(endDate, safetyLimit) ? (isBefore(endDate, addDays(today, 365)) ? addDays(today, 365) : endDate) : safetyLimit
 
     // For checkout, we need to disable dates that would create conflicts
-    for (let date = new Date(today); date <= endDate; date = addDays(date, 1)) {
+    for (let date = new Date(today); date <= finalEnd; date = addDays(date, 1)) {
       // Skip dates before check-in
       if (isBefore(date, checkInDate) || isEqual(date, checkInDate)) {
         disabledDates.push(new Date(date))
@@ -370,7 +440,7 @@ const BookingWidget: React.FC<BookingWidgetProps> = ({
     }
 
     return disabledDates
-  }, [selectedPackageType, selectedPlan?.id, selectedDates?.checkIn, bookings])
+  }, [selectedPackageType, selectedPlan?.id, selectedDates?.checkIn, bookings, availabilities])
 
   const calculateNights = () => {
     if (selectedDates?.checkIn && selectedDates?.checkOut) {
