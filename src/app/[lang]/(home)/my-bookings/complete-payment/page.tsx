@@ -10,6 +10,7 @@ import { useSession } from 'next-auth/react'
 import { extractErrorMessage, calculateSplitPayment } from '@/lib/utils'
 import { toast } from '@/lib/toast'
 import { IBooking } from '@/lib/types/booking'
+import { useKnetPayment } from '@/lib/hooks/useKnetPayment'
 
 const CompletePayment: React.FC = () => {
   const params = useParams() as { lang: Locale }
@@ -18,6 +19,7 @@ const CompletePayment: React.FC = () => {
   const { data: session } = useSession()
   const [isPaying, setIsPaying] = useState(false)
   const methods = useForm()
+  const { initiatePayment: initiateKnetPayment } = useKnetPayment()
 
   // Fetch user's current bookings to find the half-paid booking
   const { data: bookingData, isLoading: isLoadingBookings } = useQueryBase({
@@ -47,17 +49,18 @@ const CompletePayment: React.FC = () => {
         return
       }
 
-      await api.patch('/booking/customer/payRemainingAmount', {
-        bookingId: halfPaidBooking.id,
-        amount: remainingAmount,
-      })
+      // Initiate KNET payment for remaining balance
+      await initiateKnetPayment(
+        halfPaidBooking.id,
+        remainingAmount,
+        'split', // This is the second split payment
+      )
 
-      toast.success(lang === 'en' ? 'Payment processed successfully' : 'تم معالجة الدفع بنجاح')
-      // Redirect to booking details page
-      router.push(`/${lang}/my-bookings/${halfPaidBooking.id}`)
+      // Note: User will be redirected to KNET payment page
+      // After payment, KNET will redirect to success/failed page
     } catch (error) {
+      console.error('Payment error:', error)
       toast.error(extractErrorMessage(error))
-    } finally {
       setIsPaying(false)
     }
   }

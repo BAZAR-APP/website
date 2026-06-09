@@ -17,6 +17,7 @@ import { useFormContext } from 'react-hook-form'
 import { useUserStore } from '../../stores/useUserStore'
 import OverlayLoader from './OverlayLoader'
 import { Locale } from '../../i18n.config'
+import { useKnetPayment } from '@/lib/hooks/useKnetPayment'
 
 // Extracted common text styles
 const textStyles = {
@@ -104,6 +105,7 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
   const { getValues, watch } = useFormContext()
   const { setSelectedDiscount } = useUserStore()
   const router = useRouter()
+  const { initiatePayment: initiateKnetPayment } = useKnetPayment()
   const selectedAddons: Customization[] = watch('addons') || []
   const selectedAddonsTotal = watch('selectedAddonsTotal')
   const romanticWeekend = watch('romanticWeekend')
@@ -195,11 +197,33 @@ const BookingSummary: React.FC<BookingSummaryProps> = ({
         ...(isDiscountApplied && { couponCode: discountCode }),
       }
 
-      await api.post('/booking', body)
+      // Step 1: Create the booking
+      const bookingResponse = await api.post('/booking', body)
+      const bookingId = bookingResponse.data?.data?.id || bookingResponse.data?.id
+
+      if (!bookingId) {
+        throw new Error(lang === 'en' ? 'Failed to create booking' : 'فشل في إنشاء الحجز')
+      }
+
+      // Step 2: Calculate amount to pay
+      const finalAmount = isDiscountApplied ? discountedTotal : grandTotal
+      const amountToPay = isSplitPayment
+        ? calculateSplitPayment(finalAmount).firstPayment
+        : finalAmount
+
+      // Step 3: Initiate KNET payment
+      // The hook will handle redirecting to KNET payment page
+      await initiateKnetPayment(
+        bookingId,
+        amountToPay,
+        isSplitPayment ? 'split' : 'full',
+      )
+
       setSelectedDiscount(null)
-      // resetBooking()
-      router.replace(`/chalet/${id}/booking/payment-confirmed`)
+      // Note: User will be redirected to KNET payment page
+      // After payment, KNET will redirect to success/failed page
     } catch (error: any) {
+      console.error('Booking error:', error)
       toast.error(extractErrorMessage(error))
     } finally {
       setLoading(false)
