@@ -264,7 +264,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
 
       {addNowBooking && bookingType !== 'hourly' && (
         <div
-          className="flex flex-col my-5 py-6 items-start md:px-6 px-4 w-full lg:w-[528px] lg:h-[194px] h-auto isolate rounded-xl bg-[url('/images/FlowerImg.jpg')] bg-cover bg-center"
+          className="flex flex-col my-5 py-6 items-start md:px-6 px-4 w-full lg:w-132 lg:min-h-48.5 h-auto isolate rounded-xl bg-[url('/images/FlowerImg.jpg')] bg-cover bg-center"
           style={{
             backgroundBlendMode: 'overlay',
             backgroundColor: 'rgba(0, 0, 0, 0.5)',

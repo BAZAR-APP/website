@@ -7,6 +7,7 @@ import RedeemDiscountDailog from '@/components/RedeemDiscountDailog'
 import clsx from 'clsx'
 import ModalDialog from '@/components/ModalDialog/Dialog'
 import { Discount } from '../../../../types/user'
+import { Skeleton } from '@/components/Skeletons/Skeleton'
 
 const AvailableDiscounts: FC<{
   onClose?: (open: boolean) => void
@@ -17,7 +18,7 @@ const AvailableDiscounts: FC<{
   const [selectedDiscount, setSelectedDiscount] = React.useState<any>(null)
   const [redeemStep, setRedeemStep] = React.useState<'select' | 'confirm' | 'copy'>('select')
   const params = useParams()
-  const { data } = useQueryBase({
+  const { data, isPending: isLoadingPoints } = useQueryBase({
     queryKey: ['loyaltyPoints'],
     url: `/loyaltyPoints/redeemable`,
     cacheTime: 0,
@@ -25,13 +26,14 @@ const AvailableDiscounts: FC<{
   })
   const userloyaltyPoints = data?.data as Discount[]
 
-  const { data: loyaltyRewards } = useQueryBase({
+  const { data: loyaltyRewards, isPending: isLoadingRewards } = useQueryBase({
     queryKey: ['loyaltyRewards'],
     url: `/loyaltyRewards?language=${params?.lang}`,
     cacheTime: 0,
     staleTime: 0,
   })
   const availbleDiscounts = loyaltyRewards?.data?.data as Discount[]
+  const isLoading = isLoadingPoints || isLoadingRewards
 
   const content = (
     <div
@@ -41,40 +43,44 @@ const AvailableDiscounts: FC<{
         'grid grid-cols-2 sm:grid-cols-2 xl:grid-cols-2 gap-4 md:mt-8 mt-4 pb-4': showUserDisocunts,
       })}
     >
-      {(showUserDisocunts ? userloyaltyPoints : availbleDiscounts)?.map((discount, index) => {
-      const iconKey: 'discount' | 'free' =
-        discount?.rewardType?.toLowerCase() === 'discount'
-          ? 'discount'
-          : 'free'
-      return (
-        <DiscountCard
-          key={discount?.name + index}
-          title={discount?.name}
-          points={discount?.pointsRequired}
-          onRedeemClick={() => {
-            setSelectedDiscount({
-              label: discount?.name,
-              points: discount.pointsRequired,
-              icon: renderIcons[iconKey],
-              couponCode: discount?.couponCode,
-              discountPercent: discount?.discountPercent,
-              id: discount?.id,
-            })
-            setRedeemStep('confirm')
-            setIsRedeemOpen(true)
-            setIsOpen(false)
-          }}
-          value={iconKey}
-          disabled={
-            showUserDisocunts
-              ? false
-              : !userloyaltyPoints?.some(
-                  (userDiscount: Discount) => userDiscount.id === discount.id,
-                )
-          }
-        />
-      )
-    })}
+      {isLoading ? (
+        <>
+          {[...Array(6)].map((_, i) => (
+            <Skeleton key={i} className="w-full h-[200px] rounded-xl" />
+          ))}
+        </>
+      ) : (
+        availbleDiscounts?.map((discount, index) => {
+        const iconKey: 'discount' | 'free' =
+          discount?.rewardType?.toLowerCase() === 'discount'
+            ? 'discount'
+            : 'free'
+        return (
+          <DiscountCard
+            key={discount?.name + index}
+            title={discount?.name}
+            points={discount?.pointsRequired}
+            onRedeemClick={() => {
+              setSelectedDiscount({
+                label: discount?.name,
+                points: discount.pointsRequired,
+                icon: renderIcons[iconKey],
+                couponCode: discount?.couponCode,
+                discountPercent: discount?.discountPercent,
+                id: discount?.id,
+              })
+              setRedeemStep('confirm')
+              setIsRedeemOpen(true)
+              setIsOpen(false)
+            }}
+            value={iconKey}
+            disabled={!userloyaltyPoints?.some(
+              (userDiscount: Discount) => userDiscount.id === discount.id,
+            )}
+          />
+        )
+        })
+      )}
     </div>
   )
 
