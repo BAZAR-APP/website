@@ -50,8 +50,8 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ onClick, chalet, isMember =
     >
       <div className="w-full h-[184px]">
         <Image
-          src={chalet?.photoURL}
-          alt={chalet?.title}
+          src={chalet?.photoURL || '/images/AppPlaceHolder.png'}
+          alt={chalet?.title || ''}
           className="w-full h-full object-cover rounded-[12px]"
           width={400}
           height={300}

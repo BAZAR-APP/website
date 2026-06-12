@@ -5,8 +5,8 @@ import Link from 'next/link'
 import { useRouter, useParams, useSearchParams } from 'next/navigation'
 import { XCircle } from 'lucide-react'
 import Button from '@/components/Button/Button'
-import { Locale } from '../../../i18n.config'
 import { toast } from '@/lib/toast'
+import { Locale } from '../../../../../i18n.config'
 
 const PaymentFailed: React.FC = () => {
   const router = useRouter()

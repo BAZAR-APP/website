@@ -5,10 +5,10 @@ import Link from 'next/link'
 import { useRouter, useParams, useSearchParams } from 'next/navigation'
 import { CheckCircle } from 'lucide-react'
 import Button from '@/components/Button/Button'
-import { Locale } from '../../../i18n.config'
 import api from '@/lib/axios'
 import { toast } from '@/lib/toast'
-import { useBookingStore } from '../../../stores/useBookingStore'
+import { useBookingStore } from '../../../../../stores/useBookingStore'
+import { Locale } from '../../../../../i18n.config'
 
 const PaymentSuccess: React.FC = () => {
   const router = useRouter()

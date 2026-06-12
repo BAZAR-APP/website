@@ -2,8 +2,8 @@ import { useState, useCallback } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import { toast } from '@/lib/toast'
 import { initiateKnetPayment } from '@/lib/services/knetPaymentService'
-import { Locale } from '../../i18n.config'
 import { extractErrorMessage } from '@/lib/utils'
+import { Locale } from '../../../i18n.config'
 
 interface UseKnetPaymentOptions {
   onSuccess?: () => void
